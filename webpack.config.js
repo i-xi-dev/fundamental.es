@@ -2,7 +2,9 @@ import path from "node:path";
 
 export default {
   mode: "development",
-  entry: "./src/index.ts",
+  entry: {
+    "/": "./src/index.ts",
+  },
   output: {
     filename: "index.js",
     path: path.join(process.cwd(), "dist"),
