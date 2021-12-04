@@ -8,6 +8,7 @@
 interface ByteDecoder {
   /**
    * Converts a string into a byte sequence.
+   * 
    * @param encoded - An encoded string to decode.
    * @returns A decoded byte sequence.
    */
@@ -20,6 +21,7 @@ interface ByteDecoder {
 interface ByteEncoder {
   /**
    * Converts a byte sequence into a string.
+   * 
    * @param toEncode - A byte sequence to encode.
    * @returns An encoded string.
    */
