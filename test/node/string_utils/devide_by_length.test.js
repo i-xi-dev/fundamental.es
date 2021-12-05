@@ -26,13 +26,13 @@ describe("devideByLength", () => {
     assert.throws(() => {
       StringUtils.devideByLength("");
     }, {
-      message: "segmentLength must be integer",
+      message: "segmentLength must be positive integer",
     });
 
     assert.throws(() => {
       StringUtils.devideByLength("",0);
     }, {
-      message: "segmentLength must be positive",
+      message: "segmentLength must be positive integer",
     });
 
   });

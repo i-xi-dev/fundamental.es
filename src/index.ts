@@ -9,10 +9,9 @@ export type {
   ByteDecoderStreamRegulator,
   ByteEncoderStreamRegulator,
 } from "./byte_encoding";
-export type {
-  DigestAlgorithm,
-} from "./digest_algorithm";
+export type { DigestAlgorithm } from "./digest_algorithm";
 
+export { NumberUtils } from "./number_utils";
 export { StringUtils } from "./string_utils";
 export { Uint8 } from "./uint8";
 export { ByteFormat } from "./byte_format";
