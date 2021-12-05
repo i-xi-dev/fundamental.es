@@ -59,14 +59,6 @@ type Options = {
   separator?: string,
 };
 
-const DefaultOptions: ResolvedOptions = Object.freeze({
-  paddedLength: 2,
-  upperCase: true,
-  prefix: "",
-  suffix: "",
-  separator: "",
-});
-
 /**
  * 基数に応じた前方ゼロ埋め結果の最小文字列長を返却
  * 
@@ -87,7 +79,7 @@ function minPaddedLengthOf(radix: Radix): number {
   }
 }
 
-function resolveOptions(radix: Radix, options: Options | ResolvedOptions = DefaultOptions): ResolvedOptions {
+function resolveOptions(radix: Radix, options: Options | ResolvedOptions = {}): ResolvedOptions {
   const minPaddedLength: number = minPaddedLengthOf(radix);
   const paddedLength: number = (typeof options.paddedLength === "number") ? options.paddedLength : minPaddedLength;
   if (Number.isSafeInteger(paddedLength) !== true) {
@@ -97,10 +89,10 @@ function resolveOptions(radix: Radix, options: Options | ResolvedOptions = Defau
     throw new RangeError("paddedLength");
   }
 
-  const upperCase: boolean = (typeof options.upperCase === "boolean") ? options.upperCase : DefaultOptions.upperCase;
-  const prefix: string = (typeof options.prefix === "string") ? options.prefix : DefaultOptions.prefix;
-  const suffix: string = (typeof options.suffix === "string") ? options.suffix : DefaultOptions.suffix;
-  const separator: string = (typeof options.separator === "string") ? options.separator : DefaultOptions.separator;
+  const upperCase: boolean = (typeof options.upperCase === "boolean") ? options.upperCase : true;
+  const prefix: string = (typeof options.prefix === "string") ? options.prefix : "";
+  const suffix: string = (typeof options.suffix === "string") ? options.suffix : "";
+  const separator: string = (typeof options.separator === "string") ? options.separator : "";
 
   return {
     paddedLength,
@@ -150,7 +142,7 @@ class ByteFormat {
 
   #byteRegex: RegExp;// "g"等を持たせないよう注意
 
-  constructor(radix: Radix, options?: Options) {
+  constructor(radix: Radix = 16, options?: Options) {
     if (isRadix(radix) !== true) {
       throw new TypeError("invalid radix");
     }
@@ -164,6 +156,9 @@ class ByteFormat {
     let byteStringArray: string[];
     if (this.#options.separator.length > 0) {
       byteStringArray = toParse.split(this.#options.separator);
+      if (byteStringArray.length === 1 && byteStringArray[0] === "") {
+        return new Uint8Array(0);
+      }
     }
     else {
       const elementLength = this.#options.paddedLength + this.#options.prefix.length + this.#options.suffix.length;
@@ -191,18 +186,22 @@ class ByteFormat {
   #parseByte(formatted: string): uint8 {
     let work = formatted;
 
-    if (work.startsWith(this.#options.prefix)) {
-      work = work.substring(this.#options.prefix.length);
-    }
-    else {
-      throw new TypeError("unprefixed");
+    if (this.#options.prefix.length > 0) {
+      if (work.startsWith(this.#options.prefix)) {
+        work = work.substring(this.#options.prefix.length);
+      }
+      else {
+        throw new TypeError("unprefixed");
+      }
     }
 
-    if (work.endsWith(this.#options.suffix)) {
-      work = work.substring(0, (work.length - this.#options.suffix.length));
-    }
-    else {
-      throw new TypeError("unsuffixed");
+    if (this.#options.suffix.length > 0) {
+      if (work.endsWith(this.#options.suffix)) {
+        work = work.substring(0, (work.length - this.#options.suffix.length));
+      }
+      else {
+        throw new TypeError("unsuffixed");
+      }
     }
 
     if (this.#byteRegex.test(work) !== true) {
@@ -240,6 +239,4 @@ export type {
   Options as ByteFormatOptions,
 };
 
-export {
-  ByteFormat,
-};
+export { ByteFormat };
