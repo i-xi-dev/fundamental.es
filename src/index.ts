@@ -9,7 +9,8 @@ export type {
   DigestAlgorithm,
 } from "./digest_algorithm";
 
-export { isUint8 } from "./uint8";
+export { StringUtils } from "./string_utils";
+export { Uint8 } from "./uint8";
 export {
   ByteDecoderStream,
   ByteEncoderStream,
