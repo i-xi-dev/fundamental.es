@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { StringUtils } from "../../../dist/index.js";
 
-describe("devideByLength", () => {
+describe("StringUtils.devideByLength", () => {
   it("devideByLength(string,number)", () => {
     assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",1)), `[]`);
     assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",1)), `["a"]`);

@@ -14,6 +14,7 @@ export type { DigestAlgorithm } from "./digest_algorithm";
 export { NumberUtils } from "./number_utils";
 export { StringUtils } from "./string_utils";
 export { Uint8 } from "./uint8";
+export { ProgressEvent } from "./progress_event";
 export { ByteFormat } from "./byte_format";
 export {
   ByteDecoderStream,

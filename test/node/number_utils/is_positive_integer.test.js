@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { NumberUtils } from "../../../dist/index.js";
 
-describe("isPositiveInteger", () => {
+describe("NumberUtils.isPositiveInteger", () => {
   it("isPositiveInteger(number)", () => {
     assert.strictEqual(NumberUtils.isPositiveInteger(-1), false);
     assert.strictEqual(NumberUtils.isPositiveInteger(-0), false);

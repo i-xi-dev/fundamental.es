@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { ByteFormat } from "../../../dist/index.js";
 
-describe("parse", () => {
+describe("ByteFormat.prototype.parse", () => {
   it("new ByteFormat()/parse(string)", () => {
     const format = new ByteFormat();
 

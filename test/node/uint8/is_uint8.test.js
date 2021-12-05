@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { Uint8 } from "../../../dist/index.js";
 
-describe("isUint8", () => {
+describe("Uint8.isUint8", () => {
   it("isUint8(number)", () => {
     assert.strictEqual(Uint8.isUint8(-1), false);
     assert.strictEqual(Uint8.isUint8(-0), true);
