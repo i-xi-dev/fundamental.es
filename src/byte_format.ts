@@ -235,6 +235,11 @@ class ByteFormat {
 }
 Object.freeze(ByteFormat);
 
+export type {
+  Radix as ByteFormatRadix,
+  Options as ByteFormatOptions,
+};
+
 export {
   ByteFormat,
 };
