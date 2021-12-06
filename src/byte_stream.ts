@@ -1,13 +1,13 @@
 //
 
+import {
+  AbortError,
+  TimeoutError,
+} from "./error";
 import { NumberUtils } from "./number_utils";
+import { ProgressEvent } from "./progress_event"; // XXX
 
 type ResolvedOptions = {
-  /**
-   * 読取ProgressEventのターゲット
-   */
-  progressListener: EventTarget | null,
-
   /**
    * 中断シグナル
    * （絶え間なく読めるストリームの場合、すべて読み取るまで中断されない）
@@ -19,45 +19,23 @@ type ResolvedOptions = {
    * （絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない）
    */
   timeout: number,
-
-  /**
-   * 見積サイズが明示されている場合に、見積サイズと実サイズの不一致を許容するか否か
-   */
-  acceptSizeMismatch: boolean,
 };
 
 type Options = {
-  /** @see {@link ResolvedOptions.progressListener} */
-  progressListener?: EventTarget,
-
   /** @see {@link ResolvedOptions.signal} */
   signal?: AbortSignal,
 
   /** @see {@link ResolvedOptions.timeout} */
   timeout?: number,
-
-  /** @see {@link ResolvedOptions.acceptSizeMismatch} */
-  acceptSizeMismatch?: boolean,
 };
 
-const DefaultOptions = Object.freeze({
-  progressListener: null,
-  signal: null,
-  timeout: Number.POSITIVE_INFINITY,
-  acceptSizeMismatch: true,
-});
-
-function resolveOptions(options: Options | ResolvedOptions = DefaultOptions): ResolvedOptions {
-  const progressListener = (options.progressListener instanceof EventTarget) ? options.progressListener : DefaultOptions.progressListener;
-  const signal = (options.signal instanceof AbortSignal) ? options.signal : DefaultOptions.signal;
-  const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : DefaultOptions.timeout;
-  const acceptSizeMismatch: boolean = (typeof options.acceptSizeMismatch === "boolean") ? options.acceptSizeMismatch : false;
+function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
+  const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
+  const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
 
   return {
-    progressListener,
     signal,
     timeout,
-    acceptSizeMismatch,
   };
 }
 
@@ -65,25 +43,6 @@ function resolveOptions(options: Options | ResolvedOptions = DefaultOptions): Re
  * 読み取るストリームのサイズを明示しなかった場合のバッファーサイズ
  */
 const DEFAULT_BUFFER_SIZE = 1_048_576;
-
-/**
- * イベントターゲットにプログレスイベントを発火する
- * 
- * @param target イベントターゲット
- * @param eventName イベント名
- * @param loadedByteCount 読み取ったバイト数
- * @param totalByteCount 読み取り対象の総バイト数
- */
-function notify(target: EventTarget | null, eventName: string, loadedByteCount: number, totalByteCount?: number): void {
-  if (target instanceof EventTarget) {
-    const event: ProgressEvent = new ProgressEvent(eventName, {
-      lengthComputable: (totalByteCount !== undefined),
-      loaded: loadedByteCount,
-      total: totalByteCount,
-    });
-    target.dispatchEvent(event);
-  }
-}
 
 /**
  * 可読ストリームを読み取り、チャンクを返却する非同期ジェネレーターを返却
@@ -123,11 +82,7 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 }
 // XXX 最後に連結すべき（おそらくそのうちArrayBufferの長さ可変がES仕様になる）
 
-class ByteStreamReader {
-
-  constructor() {
-    Object.freeze(this);
-  }
+class ByteStreamReader extends EventTarget {
 
   async read(stream: ReadableStream<Uint8Array>, totalByteCount?: number, options?: Options | ResolvedOptions): Promise<Uint8Array> {
     let bufferSize: number;
@@ -151,7 +106,7 @@ class ByteStreamReader {
 
     if (resolvedOptions.signal instanceof AbortSignal) {
       if (resolvedOptions.signal.aborted === true) {
-        throw new Error("AbortError: already aborted");
+        throw new AbortError("already aborted");
       }
 
       resolvedOptions.signal.addEventListener("abort", (): void => {
@@ -159,6 +114,7 @@ class ByteStreamReader {
         void reader.cancel().catch(); // XXX closeで良い？
       }, {
         once: true,
+        passive: true,
       });
     }
 
@@ -167,33 +123,33 @@ class ByteStreamReader {
 
     let loadedByteCount = 0;
     for await (const chunkBytes of chunkGenerator) {
-      if (resolvedOptions.acceptSizeMismatch !== true) {
-        if ((typeof totalByteCount === "number") && ((loadedByteCount + chunkBytes.byteLength) > totalByteCount)) {
-          // 見積サイズに対して超過
-          throw new Error("DataError: size too long");
-        }
-      }
+      // if (resolvedOptions.acceptSizeMismatch !== true) {
+      //   if ((typeof totalByteCount === "number") && ((loadedByteCount + chunkBytes.byteLength) > totalByteCount)) {
+      //     // 見積サイズに対して超過
+      //     throw new Error("size too long");
+      //   }
+      // }
 
       const elapsed = performance.now() - startTime;
       if (elapsed >= resolvedOptions.timeout) {
-        throw new Error("TimeoutError: elapsed:" + elapsed.toString(10) + ", loaded:" + loadedByteCount.toString(10));
+        throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
       }
 
       buffer = addToBuffer(buffer, loadedByteCount, chunkBytes);
       loadedByteCount = loadedByteCount + chunkBytes.byteLength;
 
-      notify(resolvedOptions.progressListener, "progress", loadedByteCount, totalByteCount);
+      this.#fireProgressEvent("progress", loadedByteCount, totalByteCount);
     }
     if (resolvedOptions.signal?.aborted === true) {
-      throw new Error("AbortError: aborted");
+      throw new AbortError("aborted");
     }
 
-    if (resolvedOptions.acceptSizeMismatch !== true) {
-      if ((typeof totalByteCount === "number") && (loadedByteCount < totalByteCount)) {
-        // 見積サイズに対して不足
-        throw new Error("DataError: size too short");
-      }
-    }
+    // if (resolvedOptions.acceptSizeMismatch !== true) {
+    //   if ((typeof totalByteCount === "number") && (loadedByteCount < totalByteCount)) {
+    //     // 見積サイズに対して不足
+    //     throw new Error("size too short");
+    //   }
+    // }
 
     let totalBytes: Uint8Array;
     if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
@@ -205,5 +161,20 @@ class ByteStreamReader {
 
     return totalBytes;
   }
+
+  #fireProgressEvent(name: string, loadedByteCount: number, totalByteCount?: number): void {
+    const event = new ProgressEvent(name, {
+      lengthComputable: (totalByteCount !== undefined),
+      loaded: loadedByteCount,
+      total: totalByteCount,
+    });
+    this.dispatchEvent(event);
+  }
 }
 Object.freeze(ByteStreamReader);
+
+export type {
+  Options as ByteStreamReadOptions,
+};
+
+export { ByteStreamReader };
