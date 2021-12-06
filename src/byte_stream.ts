@@ -5,7 +5,7 @@ import {
   TimeoutError,
 } from "./error";
 import { NumberUtils } from "./number_utils";
-import { ProgressEvent } from "./progress_event"; // XXX
+import { ProgressEvent } from "./progress_event"; // XXX Nodeのみ用
 
 type ResolvedOptions = {
   /**
@@ -19,6 +19,8 @@ type ResolvedOptions = {
    * （絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない）
    */
   timeout: number,
+
+  truncateUnused: boolean,
 };
 
 type Options = {
@@ -27,15 +29,19 @@ type Options = {
 
   /** @see {@link ResolvedOptions.timeout} */
   timeout?: number,
+
+  truncateUnused?: boolean,
 };
 
 function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
   const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
   const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
+  const truncateUnused = (typeof options.truncateUnused === "boolean") ? options.truncateUnused : true;
 
   return {
     signal,
     timeout,
+    truncateUnused,
   };
 }
 
@@ -153,7 +159,12 @@ class ByteStreamReader extends EventTarget {
 
     let totalBytes: Uint8Array;
     if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
-      totalBytes = buffer.subarray(0, loadedByteCount);// XXX こっちが良い？ return buffer.buffer.slice(0, loadedByteCount);
+      if (resolvedOptions.truncateUnused === true) {
+        totalBytes = buffer.slice(0, loadedByteCount);
+      }
+      else {
+        totalBytes = buffer.subarray(0, loadedByteCount);
+      }
     }
     else {
       totalBytes = buffer;

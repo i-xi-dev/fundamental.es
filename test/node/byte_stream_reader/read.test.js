@@ -72,6 +72,39 @@ describe("ByteStreamReader.prototype.read", async () => {
     //   message: "Stream size too short"
     // });
 
+    const stream5 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
+    const bytes5 = await reader.read(Readable.toWeb(stream5), 1024);
+    assert.strictEqual(bytes5.byteLength, 128);
+    assert.strictEqual(bytes5.buffer.byteLength, 128);
+
+    const stream6 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
+    const bytes6 = await reader.read(Readable.toWeb(stream6), 32);
+    assert.strictEqual(bytes6.byteLength, 128);
+    assert.strictEqual(bytes6.buffer.byteLength, 128);
+
+  });
+
+  it("read(ReadableStream, number, {truncateUnused:false})", async () => {
+    const stream0 = fs.createReadStream("./test/_data/0.txt", { highWaterMark: 64 });
+    const bytes0 = await reader.read(Readable.toWeb(stream0), 0, {truncateUnused:false});
+    assert.strictEqual(bytes0.byteLength, 0);
+    assert.strictEqual(bytes0.buffer.byteLength, 0);
+
+    const stream = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
+    const bytes = await reader.read(Readable.toWeb(stream), 128, {truncateUnused:false});
+    assert.strictEqual(bytes.byteLength, 128);
+    assert.strictEqual(bytes.buffer.byteLength, 128);
+
+    const stream5 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
+    const bytes5 = await reader.read(Readable.toWeb(stream5), 1024, {truncateUnused:false});
+    assert.strictEqual(bytes5.byteLength, 128);
+    assert.strictEqual(bytes5.buffer.byteLength, 1024);
+
+    const stream6 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
+    const bytes6 = await reader.read(Readable.toWeb(stream6), 32, {truncateUnused:false});
+    assert.strictEqual(bytes6.byteLength, 128);
+    assert.strictEqual(bytes6.buffer.byteLength, 10485760);
+
   });
 
   it("read(ReadableStream, number, {signal:AbortSignal})", async () => {

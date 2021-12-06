@@ -38,10 +38,91 @@ function devideByLength(str: string, segmentLength: number, paddingUnit?: string
 }
 
 /**
+ * 範囲パターン
+ */
+const RangePattern = Object.freeze({
+  /** {@link https://infra.spec.whatwg.org/#ascii-whitespace ASCII whitespace} */
+  ASCII_WHITESPACE: "\\u0009\\u000A\\u000C\\u000D\\u0020",
+
+  /** {@link https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point HTTP quoted-string token code point} */
+  HTTP_QUOTED_STRING_TOKEN: "\\u0009\\u0020-\\u007E\\u0080-\\u00FF",
+
+  /** {@link https://fetch.spec.whatwg.org/#http-tab-or-space HTTP tab or space} */
+  HTTP_TAB_OR_SPACE: "\\u0009\\u0020",
+
+  /** {@link https://mimesniff.spec.whatwg.org/#http-token-code-point HTTP token code point} */
+  HTTP_TOKEN: "\\u0021\\u0023-\\u0027\\u002A\\u002B\\u002D\\u002E0-9A-Za-z\\u005E\\u005F\\u0060\\u007C\\u007E",
+
+  /** {@link https://fetch.spec.whatwg.org/#http-whitespace HTTP whitespace} */
+  HTTP_WHITESPACE: "\\u0009\\u000A\\u000D\\u0020",
+});
+type RangePattern = typeof RangePattern[keyof typeof RangePattern];
+
+/**
+ * 文字列先頭から収集対象の連続を取得し返却
+ *     存在しない場合、空文字列を返却
+ * 
+ * @param str - 文字列
+ * @param rangePattern - 収集対象の範囲パターン
+ * @returns 結果
+ */
+function collectStart(str: string, rangePattern: RangePattern): string {
+  const regex = new RegExp("^[" + rangePattern + "]+");
+  const results = regex.exec(str);
+  if (results === null) {
+    return "";
+  }
+  return results[0] as string;
+}
+
+/**
+ * 文字列がrangePatternの範囲のみからなる文字列
+ * であるか否かを返却
+ * 
+ * @param str - 文字列
+ * @param rangePattern - 範囲パターン
+ * @returns 結果
+ */
+function match(str: string, rangePattern: RangePattern): boolean {
+  const regex = new RegExp("^[" + rangePattern + "]*$");
+  return regex.test(str);
+}
+
+/**
+ * 文字列から先頭および末尾のrangePatternの範囲の部分文字列を削除した文字列を返却
+ * 
+ * @param str - 文字列
+ * @param rangePattern - 削除対象の範囲パターン
+ * @returns 文字列
+ */
+function trim(str: string, rangePattern: RangePattern): string {
+  const regex = new RegExp("(^[" + rangePattern + "]+|[" + rangePattern + "]+$)", "g");
+  // return str.replaceAll(regex, "");
+  return str.replace(regex, "");
+}
+
+/**
+ * 文字列から末尾のrangePatternの範囲の部分文字列を削除した文字列を返却
+ * 
+ * @param str - 文字列
+ * @param rangePattern - 削除対象の範囲パターン
+ * @returns 文字列
+ */
+function trimEnd(str: string, rangePattern: RangePattern): string {
+  const regex = new RegExp("[" + rangePattern + "]+$");
+  return str.replace(regex, "");
+}
+
+/**
  * The utilities for string processing.
  */
 const StringUtils = Object.freeze({
+  RangePattern,
+  collectStart,
   devideByLength,
+  match,
+  trim,
+  trimEnd,
 });
 
 export { StringUtils };
