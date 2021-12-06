@@ -10,6 +10,7 @@ export type {
   ByteEncoderStreamRegulator,
 } from "./byte_encoding";
 export type { DigestAlgorithm } from "./digest_algorithm";
+export type { ByteStreamReadOptions } from "./byte_stream";
 
 export {
   AbortError,
@@ -24,3 +25,4 @@ export {
   ByteDecoderStream,
   ByteEncoderStream,
 } from "./byte_encoding";
+export { ByteStreamReader } from "./byte_stream";
