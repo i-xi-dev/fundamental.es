@@ -8,7 +8,7 @@ interface DigestAlgorithm {
    * Computes the digest for the byte sequence.
    * 
    * @param input - The input to compute the digest.
-   * @returns The {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise Promise} that
+   * @returns The {@link [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)} that
    *     fulfills with a computed digest.
    */
   compute: (input: Uint8Array) => Promise<Uint8Array>;

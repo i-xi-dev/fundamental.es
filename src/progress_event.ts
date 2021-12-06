@@ -5,22 +5,11 @@ import { NumberUtils } from "./number_utils";
 /**
  * ProgressEvent for non-browser enviorments
  * 
- * Implements the {@link https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent ProgressEvent} interface.
+ * Implements the {@link [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent)} interface.
  */
 class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
-  /**
-   * 進捗状況を計測可能か否か
-   */
   #lengthComputable: boolean;
-
-  /**
-   * 実行済の実行量
-   */
   #loaded: number;
-
-  /**
-   * 合計の実行量
-   */
   #total: number;
 
   /**
@@ -36,21 +25,21 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   }
 
   /**
-   * 進捗状況を計測可能か否か
+   * @see {@link [ProgressEvent.lengthComputable](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/lengthComputable)}
    */
   get lengthComputable(): boolean {
     return this.#lengthComputable;
   }
 
   /**
-   * 実行済の実行量
+   * @see {@link [ProgressEvent.loaded](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/loaded)}
    */
   get loaded(): number {
     return this.#loaded;
   }
 
   /**
-   * 合計の実行量
+   * @see {@link [ProgressEvent.total](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/total)}
    */
   get total(): number {
     return this.#total;

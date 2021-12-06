@@ -20,7 +20,7 @@ type ResolvedOptions = {
    */
   timeout: number,
 
-  truncateUnused: boolean,
+  // truncateUnused: boolean,
 };
 
 type Options = {
@@ -30,18 +30,18 @@ type Options = {
   /** @see {@link ResolvedOptions.timeout} */
   timeout?: number,
 
-  truncateUnused?: boolean,
+  // truncateUnused?: boolean,
 };
 
 function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
   const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
   const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
-  const truncateUnused = (typeof options.truncateUnused === "boolean") ? options.truncateUnused : true;
+  // const truncateUnused = (typeof options.truncateUnused === "boolean") ? options.truncateUnused : true;
 
   return {
     signal,
     timeout,
-    truncateUnused,
+    // truncateUnused,
   };
 }
 
@@ -159,12 +159,12 @@ class ByteStreamReader extends EventTarget {
 
     let totalBytes: Uint8Array;
     if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
-      if (resolvedOptions.truncateUnused === true) {
-        totalBytes = buffer.slice(0, loadedByteCount);
-      }
-      else {
-        totalBytes = buffer.subarray(0, loadedByteCount);
-      }
+      // if (resolvedOptions.truncateUnused === true) {
+      totalBytes = buffer.slice(0, loadedByteCount);
+      // }
+      // else {
+      //  totalBytes = buffer.subarray(0, loadedByteCount);
+      // }
     }
     else {
       totalBytes = buffer;
