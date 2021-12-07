@@ -19,7 +19,10 @@ export {
 export { NumberUtils } from "./number_utils";
 export { StringUtils } from "./string_utils";
 export { Uint8 } from "./uint8";
-export { ProgressEvent } from "./progress_event";
+export {
+  ProgressEvent,
+  ProgressNotifier,
+} from "./progress_notifier";
 export { ByteFormat } from "./byte_format";
 export {
   ByteDecoderStream,

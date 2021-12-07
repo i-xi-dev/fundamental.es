@@ -1,3 +1,3 @@
 # @i-xi-dev/fundamental
 
-test
+This is not for direct usage.

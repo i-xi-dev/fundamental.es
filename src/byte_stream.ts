@@ -5,7 +5,7 @@ import {
   TimeoutError,
 } from "./error";
 import { NumberUtils } from "./number_utils";
-import { ProgressEvent } from "./progress_event"; // XXX Nodeのみ用
+import { ProgressNotifier } from "./progress_notifier";
 
 type ResolvedOptions = {
   /**
@@ -88,79 +88,8 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 }
 // XXX 最後に連結すべき（おそらくそのうちArrayBufferの長さ可変がES仕様になる）
 
-//TODO 外に出す
-class ProgressNotifier {
-  #target: EventTarget | null;
-  #lastProgressNotified: number;
-
-  constructor(target: EventTarget | null) {
-    this.#target = target;
-    this.#lastProgressNotified = Number.MIN_VALUE;
-    Object.freeze(this);
-  }
-
-  #notify(name: string, loaded: number, total?: number): void {
-    if (this.#target instanceof EventTarget) {
-      const event = new ProgressEvent(name, {
-        lengthComputable: (total !== undefined),
-        loaded,
-        total,
-      });
-      this.#target.dispatchEvent(event);
-    }
-  }
-
-  /*
-XXX
-
-loadstart 必ず1回
-↓
-progress 最低1回
-↓
-abort | load | error | timeout 排他的にどれかが1回
-↓
-loadend 必ず1回
-  */
-
-  notifyStart(loaded: number, total?: number): void {
-    this.#notify("loadstart", loaded, total);
-  }
-
-  notifyEnd(loaded: number, total?: number): void {
-    this.#notify("loadend", loaded, total);
-  }
-
-  notifyAborted(loaded: number, total?: number): void {
-    this.#notify("abort", loaded, total);
-  }
-
-  notifyTimeout(loaded: number, total?: number): void {
-    this.#notify("timeout", loaded, total);
-  }
-
-  notifyFailed(loaded: number, total?: number): void {
-    this.#notify("error", loaded, total);
-  }
-
-  notifyCompleted(loaded: number, total?: number): void {
-    this.#notify("load", loaded, total);
-  }
-
-  notifyProgress(loaded: number, total?: number): void {
-    const now = performance.now();
-    if ((this.#lastProgressNotified + 50) > now) {
-      return;
-    }
-    this.#lastProgressNotified = now;
-    this.#notify("progress", loaded, total);
-  }
-}
-Object.freeze(ProgressNotifier);
-
 // ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
-// が、
-// ・loadstart発火前にrejectすることがある
-// ・他にも何か相違があるかも
+// が、loadstart発火前にrejectすることがある
 class ByteStreamReader {
 
   async read(stream: ReadableStream<Uint8Array>, totalByteCount?: number, options?: Options | ResolvedOptions): Promise<Uint8Array> {
