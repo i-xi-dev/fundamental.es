@@ -20,7 +20,7 @@ type ResolvedOptions = {
    */
   timeout: number,
 
-  // truncateUnused: boolean,
+  progressEventTarget: EventTarget | null,
 };
 
 type Options = {
@@ -30,18 +30,18 @@ type Options = {
   /** @see {@link ResolvedOptions.timeout} */
   timeout?: number,
 
-  // truncateUnused?: boolean,
+  progressEventTarget?: EventTarget,
 };
 
 function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
   const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
   const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
-  // const truncateUnused = (typeof options.truncateUnused === "boolean") ? options.truncateUnused : true;
+  const progressEventTarget = (options.progressEventTarget instanceof EventTarget) ? options.progressEventTarget : null;
 
   return {
     signal,
     timeout,
-    // truncateUnused,
+    progressEventTarget,
   };
 }
 
@@ -88,7 +88,80 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 }
 // XXX 最後に連結すべき（おそらくそのうちArrayBufferの長さ可変がES仕様になる）
 
-class ByteStreamReader extends EventTarget {
+//TODO 外に出す
+class ProgressNotifier {
+  #target: EventTarget | null;
+  #lastProgressNotified: number;
+
+  constructor(target: EventTarget | null) {
+    this.#target = target;
+    this.#lastProgressNotified = Number.MIN_VALUE;
+    Object.freeze(this);
+  }
+
+  #notify(name: string, loaded: number, total?: number): void {
+    if (this.#target instanceof EventTarget) {
+      const event = new ProgressEvent(name, {
+        lengthComputable: (total !== undefined),
+        loaded,
+        total,
+      });
+      this.#target.dispatchEvent(event);
+    }
+  }
+
+  /*
+XXX
+
+loadstart 必ず1回
+↓
+progress 最低1回
+↓
+abort | load | error | timeout 排他的にどれかが1回
+↓
+loadend 必ず1回
+  */
+
+  notifyStart(loaded: number, total?: number): void {
+    this.#notify("loadstart", loaded, total);
+  }
+
+  notifyEnd(loaded: number, total?: number): void {
+    this.#notify("loadend", loaded, total);
+  }
+
+  notifyAborted(loaded: number, total?: number): void {
+    this.#notify("abort", loaded, total);
+  }
+
+  notifyTimeout(loaded: number, total?: number): void {
+    this.#notify("timeout", loaded, total);
+  }
+
+  notifyFailed(loaded: number, total?: number): void {
+    this.#notify("error", loaded, total);
+  }
+
+  notifyCompleted(loaded: number, total?: number): void {
+    this.#notify("load", loaded, total);
+  }
+
+  notifyProgress(loaded: number, total?: number): void {
+    const now = performance.now();
+    if ((this.#lastProgressNotified + 50) > now) {
+      return;
+    }
+    this.#lastProgressNotified = now;
+    this.#notify("progress", loaded, total);
+  }
+}
+Object.freeze(ProgressNotifier);
+
+// ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
+// が、
+// ・loadstart発火前にrejectすることがある
+// ・他にも何か相違があるかも
+class ByteStreamReader {
 
   async read(stream: ReadableStream<Uint8Array>, totalByteCount?: number, options?: Options | ResolvedOptions): Promise<Uint8Array> {
     let bufferSize: number;
@@ -106,80 +179,77 @@ class ByteStreamReader extends EventTarget {
     }
 
     const resolvedOptions: ResolvedOptions = resolveOptions(options);
-
-    const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
-    const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(reader);
-
-    if (resolvedOptions.signal instanceof AbortSignal) {
-      if (resolvedOptions.signal.aborted === true) {
-        throw new AbortError("already aborted");
-      }
-
-      resolvedOptions.signal.addEventListener("abort", (): void => {
-        // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
-        void reader.cancel().catch(); // XXX closeで良い？
-      }, {
-        once: true,
-        passive: true,
-      });
-    }
-
-    const startTime = performance.now();
-    let buffer: Uint8Array = new Uint8Array(bufferSize);
+    const progressNotifier = new ProgressNotifier(resolvedOptions.progressEventTarget);
 
     let loadedByteCount = 0;
-    for await (const chunkBytes of chunkGenerator) {
-      // if (resolvedOptions.acceptSizeMismatch !== true) {
-      //   if ((typeof totalByteCount === "number") && ((loadedByteCount + chunkBytes.byteLength) > totalByteCount)) {
-      //     // 見積サイズに対して超過
-      //     throw new Error("size too long");
-      //   }
-      // }
+    try {
+      const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
+      const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(reader);
 
-      const elapsed = performance.now() - startTime;
-      if (elapsed >= resolvedOptions.timeout) {
-        throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
+      if (resolvedOptions.signal instanceof AbortSignal) {
+        if (resolvedOptions.signal.aborted === true) {
+          throw new AbortError("already aborted");
+        }
+
+        resolvedOptions.signal.addEventListener("abort", (): void => {
+        // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
+          void reader.cancel().catch(); // XXX closeで良い？
+        }, {
+          once: true,
+          passive: true,
+        });
       }
 
-      buffer = addToBuffer(buffer, loadedByteCount, chunkBytes);
-      loadedByteCount = loadedByteCount + chunkBytes.byteLength;
+      const startTime = performance.now();
+      let buffer: Uint8Array = new Uint8Array(bufferSize);
 
-      this.#fireProgressEvent("progress", loadedByteCount, totalByteCount);
+      progressNotifier.notifyStart(0, totalByteCount);
+
+      for await (const chunkBytes of chunkGenerator) {
+
+        const elapsed = performance.now() - startTime;
+        if (elapsed >= resolvedOptions.timeout) {
+          progressNotifier.notifyTimeout(loadedByteCount, totalByteCount);
+          throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
+        }
+
+        buffer = addToBuffer(buffer, loadedByteCount, chunkBytes);
+        loadedByteCount = loadedByteCount + chunkBytes.byteLength;
+
+        progressNotifier.notifyProgress(loadedByteCount, totalByteCount);
+      }
+      if (resolvedOptions.signal?.aborted === true) {
+        progressNotifier.notifyAborted(loadedByteCount, totalByteCount);
+        throw new AbortError("aborted");
+      }
+
+      let totalBytes: Uint8Array;
+      if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
+        // totalBytes = buffer.subarray(0, loadedByteCount);
+        totalBytes = buffer.slice(0, loadedByteCount);
+      }
+      else {
+        totalBytes = buffer;
+      }
+
+      progressNotifier.notifyCompleted(loadedByteCount, totalByteCount);
+      return totalBytes;
     }
-    if (resolvedOptions.signal?.aborted === true) {
-      throw new AbortError("aborted");
+    catch (exception) {
+      if (exception instanceof AbortError) {
+        //
+      }
+      else if (exception instanceof TimeoutError) {
+        //
+      }
+      else {
+        progressNotifier.notifyFailed(loadedByteCount, totalByteCount);
+      }
+      throw exception;
     }
-
-    // if (resolvedOptions.acceptSizeMismatch !== true) {
-    //   if ((typeof totalByteCount === "number") && (loadedByteCount < totalByteCount)) {
-    //     // 見積サイズに対して不足
-    //     throw new Error("size too short");
-    //   }
-    // }
-
-    let totalBytes: Uint8Array;
-    if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
-      // if (resolvedOptions.truncateUnused === true) {
-      totalBytes = buffer.slice(0, loadedByteCount);
-      // }
-      // else {
-      //  totalBytes = buffer.subarray(0, loadedByteCount);
-      // }
+    finally {
+      progressNotifier.notifyEnd(loadedByteCount, totalByteCount);
     }
-    else {
-      totalBytes = buffer;
-    }
-
-    return totalBytes;
-  }
-
-  #fireProgressEvent(name: string, loadedByteCount: number, totalByteCount?: number): void {
-    const event = new ProgressEvent(name, {
-      lengthComputable: (totalByteCount !== undefined),
-      loaded: loadedByteCount,
-      total: totalByteCount,
-    });
-    this.dispatchEvent(event);
   }
 }
 Object.freeze(ByteStreamReader);

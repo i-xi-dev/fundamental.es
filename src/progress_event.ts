@@ -3,7 +3,7 @@
 import { NumberUtils } from "./number_utils";
 
 /**
- * ProgressEvent for non-browser enviorments
+ * The `ProgressEvent` for Node.js
  * 
  * Implements the {@link [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent)} interface.
  */
@@ -14,7 +14,7 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
 
   /**
    * @param type - The name of the event.
-   * @param init - The ProgressEventInit object.
+   * @param init - The `ProgressEventInit` object.
    */
   constructor(type: string, init?: ProgressEventInit) {
     super(type, init);

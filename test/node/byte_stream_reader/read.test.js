@@ -191,96 +191,220 @@ describe("ByteStreamReader.prototype.read", async () => {
 
   // });
 
-  it("read(ReadableStream, number) - ProgressEvent", async () => {
+  it("read(ReadableStream, number, {progressEventTarget:EventTarget})", async () => {
     const reader2 = new ByteStreamReader();
     let es = [];
-    reader2.addEventListener("progress", (e) => {
-      es.push({
-        loaded: e.loaded,
-        total: e.total,
-        lengthComputable: e.lengthComputable,
-      });
+    const et1 = new EventTarget();
+    et1.addEventListener("progress", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("loadstart", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("loadend", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("abort", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("timeout", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("error", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("load", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
     });
 
     const stream = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
-    const bytes = await reader2.read(Readable.toWeb(stream), undefined);
+    const bytes = await reader2.read(Readable.toWeb(stream), undefined, {progressEventTarget:et1});
     assert.strictEqual(bytes.byteLength, 128);
     let i = 0;
     for (const e of es) {
-      i = i + 64;
       assert.strictEqual(e.total, 0);
       assert.strictEqual(e.lengthComputable, false);
       assert.strictEqual(e.loaded, i);
+      if (["loadstart","progress"].includes(e.type)) {
+        i = i + 64;
+      }
     }
 
     const reader3 = new ByteStreamReader();
     let es2 = [];
-    reader3.addEventListener("progress", (e) => {
-      es2.push({
-        loaded: e.loaded,
-        total: e.total,
-        lengthComputable: e.lengthComputable,
-      });
+    const et2 = new EventTarget();
+    et2.addEventListener("progress", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("loadstart", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("loadend", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("abort", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("timeout", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("error", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("load", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
     });
 
     const stream2 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
-    const bytes2 = await reader3.read(Readable.toWeb(stream2), 128);
+    const bytes2 = await reader3.read(Readable.toWeb(stream2), 128, {progressEventTarget:et2});
     assert.strictEqual(bytes2.byteLength, 128);
     let i2 = 0;
     for (const e of es2) {
-      console.log(e);
-      i2 = i2 + 64;
       assert.strictEqual(e.total, 128);
       assert.strictEqual(e.lengthComputable, true);
       assert.strictEqual(e.loaded, i2);
+      if (["loadstart","progress"].includes(e.type)) {
+        i2 = i2 + 64;
+      }
     }
 
   });
 
-  it("read(ReadableStream, number) - ProgressEvent (size mismatch)", async () => {
+  it("read(ReadableStream, number, {progressEventTarget:EventTarget}) - size mismatch", async () => {
     const reader2 = new ByteStreamReader();
     let es = [];
-    reader2.addEventListener("progress", (e) => {
-      es.push({
-        loaded: e.loaded,
-        total: e.total,
-        lengthComputable: e.lengthComputable,
-      });
+    const et1 = new EventTarget();
+    et1.addEventListener("progress", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("loadstart", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("loadend", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("abort", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("timeout", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("error", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
+    });
+    et1.addEventListener("load", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es.push(i);
     });
 
     const stream = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
-    const bytes = await reader2.read(Readable.toWeb(stream), 256);
+    const bytes = await reader2.read(Readable.toWeb(stream), 256, {progressEventTarget:et1});
     assert.strictEqual(bytes.byteLength, 128);
     let i = 0;
     for (const e of es) {
-      i = i + 64;
       assert.strictEqual(e.total, 256);
       assert.strictEqual(e.lengthComputable, true);
       assert.strictEqual(e.loaded, i);
+      if (["loadstart","progress"].includes(e.type)) {
+        i = i + 64;
+      }
     }
 
     const reader3 = new ByteStreamReader();
     let es2 = [];
-    reader3.addEventListener("progress", (e) => {
-      es2.push({
-        loaded: e.loaded,
-        total: e.total,
-        lengthComputable: e.lengthComputable,
-      });
+    const et2 = new EventTarget();
+    et2.addEventListener("progress", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("loadstart", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("loadend", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("abort", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("timeout", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("error", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
+    });
+    et2.addEventListener("load", (e) => {
+      const i = {type: e.type,loaded: e.loaded,total: e.total,lengthComputable: e.lengthComputable,};
+      console.log(i);
+      es2.push(i);
     });
 
     const stream2 = fs.createReadStream("./test/_data/128.txt", { highWaterMark: 64 });
-    const bytes2 = await reader3.read(Readable.toWeb(stream2), 64);
+    const bytes2 = await reader3.read(Readable.toWeb(stream2), 64, {progressEventTarget:et2});
     assert.strictEqual(bytes2.byteLength, 128);
     let i2 = 0;
     for (const e of es2) {
-      console.log(e);
-      i2 = i2 + 64;
       assert.strictEqual(e.total, 64);
       assert.strictEqual(e.lengthComputable, true);
       assert.strictEqual(e.loaded, i2);
+      if (["loadstart","progress"].includes(e.type)) {
+        i2 = i2 + 64;
+      }
     }
 
   });
+
+  //TODO abort, timeout, error, loadend
 
 });

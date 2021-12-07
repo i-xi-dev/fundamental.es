@@ -106,8 +106,8 @@ function resolveOptions(radix: Radix, options: Options | ResolvedOptions = {}): 
 /**
  * 文字列がフォーマットオプションに合致しているか否かを返却
  * 
- * @param radix フォーマット結果の基数
- * @param resolvedOptions フォーマッターオプション
+ * @param radix - フォーマット結果の基数
+ * @param resolvedOptions - フォーマッターオプション
  * @returns 文字列がフォーマットオプションに合致しているか否か
  */
 function createByteRegex(radix: Radix, resolvedOptions: ResolvedOptions): RegExp {
@@ -180,7 +180,7 @@ class ByteFormat {
   /**
    * 文字列を8-bit符号なし整数にパースし返却
    * 
-   * @param formatted 文字列
+   * @param formatted - 文字列
    * @returns 8-bit符号なし整数
    */
   #parseByte(formatted: string): uint8 {
