@@ -48,14 +48,14 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
 const pe = (globalThis.ProgressEvent) ? globalThis.ProgressEvent : _ProgressEvent;
 
 const ProgressNotifierState = Object.freeze({
-  BEFORE_START: Symbol(),
-  IN_PROGRESS: Symbol(),
-  DONE: Symbol(),
-  AFTER_END: Symbol(),
+  BEFORE_START: Symbol("ProgressNotifierState.BEFORE_START"),
+  IN_PROGRESS: Symbol("ProgressNotifierState.IN_PROGRESS"),
+  DONE: Symbol("ProgressNotifierState.DONE"),
+  AFTER_END: Symbol("ProgressNotifierState.AFTER_END"),
 });
 type ProgressNotifierState = typeof ProgressNotifierState[keyof typeof ProgressNotifierState];
 
-  /*
+/*
 loadstart 必ず1回
 ↓
 progress 最低1回
@@ -64,78 +64,89 @@ abort | load | error | timeout 排他的にどれかが1回
 ↓
 loadend 必ず1回
   */
+// XXX invalid stateはエラーにする？
 class ProgressNotifier {
-  #target: EventTarget | null;
+  #total?: number;
+  #target: EventTarget;
   #lastProgressNotified: number;
   #state: ProgressNotifierState;
 
-  constructor(target: EventTarget | null) {
-    this.#target = target;
+  constructor(total?: number, target?: EventTarget) {
+    this.#total = total;
+    if (target instanceof EventTarget) {
+      this.#target = target;
+    }
+    else {
+      this.#target = new EventTarget();
+    }
     this.#lastProgressNotified = Number.MIN_VALUE;
     this.#state = ProgressNotifierState.BEFORE_START;
     Object.seal(this);
   }
 
-  notifyStart(loaded: number, total?: number): void {
-    if (this.#state === ProgressNotifierState.BEFORE_START) {
-      this.#notify("loadstart", loaded, total);
-      this.#state = ProgressNotifierState.IN_PROGRESS;
-    }
-    //XXX エラーにする？
+  get target(): EventTarget {
+    return this.#target;
   }
 
-  notifyProgress(loaded: number, total?: number): void {
+  notifyStart(loaded: number): void {
+    if (this.#state === ProgressNotifierState.BEFORE_START) {
+      this.#notify("loadstart", loaded);
+      this.#state = ProgressNotifierState.IN_PROGRESS;
+    }
+  }
+
+  notifyProgress(loaded: number): void {
     if (this.#state === ProgressNotifierState.IN_PROGRESS) {
       const now = performance.now();
       if ((this.#lastProgressNotified + 50) > now) {
         return;
       }
       this.#lastProgressNotified = now;
-      this.#notify("progress", loaded, total);
+      this.#notify("progress", loaded);
     }
   }
 
-  notifyCompleted(loaded: number, total?: number): void {
+  notifyCompleted(loaded: number): void {
     if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("load", loaded, total);
+      this.#notify("load", loaded);
       this.#state = ProgressNotifierState.DONE;
     }
   }
 
-  notifyAborted(loaded: number, total?: number): void {
+  notifyAborted(loaded: number): void {
     if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("abort", loaded, total);
+      this.#notify("abort", loaded);
       this.#state = ProgressNotifierState.DONE;
     }
   }
 
-  notifyTimeout(loaded: number, total?: number): void {
+  notifyTimeout(loaded: number): void {
     if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("timeout", loaded, total);
+      this.#notify("timeout", loaded);
       this.#state = ProgressNotifierState.DONE;
     }
   }
 
-  notifyFailed(loaded: number, total?: number): void {
+  notifyFailed(loaded: number): void {
     if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("error", loaded, total);
+      this.#notify("error", loaded);
       this.#state = ProgressNotifierState.DONE;
     }
   }
 
-  notifyEnd(loaded: number, total?: number): void {
+  notifyEnd(loaded: number): void {
     if (this.#state === ProgressNotifierState.DONE) {
-      this.#notify("loadend", loaded, total);
+      this.#notify("loadend", loaded);
       this.#state = ProgressNotifierState.AFTER_END;
     }
   }
 
-  #notify(name: string, loaded: number, total?: number): void {
+  #notify(name: string, loaded: number): void {
     if (this.#target instanceof EventTarget) {
-      const event = new ProgressEvent(name, {
-        lengthComputable: (total !== undefined),
+      const event = new pe(name, {
+        lengthComputable: ((typeof this.#total === "number") && (this.#total > 0)),
         loaded,
-        total,
+        total: this.#total,
       });
       this.#target.dispatchEvent(event);
     }

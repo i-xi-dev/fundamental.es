@@ -107,20 +107,20 @@ class ByteStreamReader {
       throw new TypeError("totalByteCount");
     }
 
-    const resolvedOptions: ResolvedOptions = resolveOptions(options);
-    const progressNotifier = new ProgressNotifier(resolvedOptions.progressEventTarget);
+    const { progressEventTarget, signal, timeout } : ResolvedOptions = resolveOptions(options);
+    const progressNotifier = new ProgressNotifier(totalByteCount, progressEventTarget ?? undefined);
 
     let loadedByteCount = 0;
     try {
       const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
       const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(reader);
 
-      if (resolvedOptions.signal instanceof AbortSignal) {
-        if (resolvedOptions.signal.aborted === true) {
+      if (signal instanceof AbortSignal) {
+        if (signal.aborted === true) {
           throw new AbortError("already aborted");
         }
 
-        resolvedOptions.signal.addEventListener("abort", (): void => {
+        signal.addEventListener("abort", (): void => {
         // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
           void reader.cancel().catch(); // XXX closeで良い？
         }, {
@@ -132,28 +132,28 @@ class ByteStreamReader {
       const startTime = performance.now();
       let buffer: Uint8Array = new Uint8Array(bufferSize);
 
-      progressNotifier.notifyStart(0, totalByteCount);
+      progressNotifier.notifyStart(0);
 
       for await (const chunkBytes of chunkGenerator) {
 
         const elapsed = performance.now() - startTime;
-        if (elapsed >= resolvedOptions.timeout) {
-          progressNotifier.notifyTimeout(loadedByteCount, totalByteCount);
+        if (elapsed >= timeout) {
+          progressNotifier.notifyTimeout(loadedByteCount);
           throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
         }
 
         buffer = addToBuffer(buffer, loadedByteCount, chunkBytes);
         loadedByteCount = loadedByteCount + chunkBytes.byteLength;
 
-        progressNotifier.notifyProgress(loadedByteCount, totalByteCount);
+        progressNotifier.notifyProgress(loadedByteCount);
       }
-      if (resolvedOptions.signal?.aborted === true) {
-        progressNotifier.notifyAborted(loadedByteCount, totalByteCount);
+      if (signal?.aborted === true) {
+        progressNotifier.notifyAborted(loadedByteCount);
         throw new AbortError("aborted");
       }
 
       let totalBytes: Uint8Array;
-      if ((totalByteCount === undefined) || (buffer.byteLength > loadedByteCount)) {
+      if (buffer.byteLength !== loadedByteCount) {
         // totalBytes = buffer.subarray(0, loadedByteCount);
         totalBytes = buffer.slice(0, loadedByteCount);
       }
@@ -161,7 +161,7 @@ class ByteStreamReader {
         totalBytes = buffer;
       }
 
-      progressNotifier.notifyCompleted(loadedByteCount, totalByteCount);
+      progressNotifier.notifyCompleted(loadedByteCount);
       return totalBytes;
     }
     catch (exception) {
@@ -172,12 +172,12 @@ class ByteStreamReader {
         //
       }
       else {
-        progressNotifier.notifyFailed(loadedByteCount, totalByteCount);
+        progressNotifier.notifyFailed(loadedByteCount);
       }
       throw exception;
     }
     finally {
-      progressNotifier.notifyEnd(loadedByteCount, totalByteCount);
+      progressNotifier.notifyEnd(loadedByteCount);
     }
   }
 }
