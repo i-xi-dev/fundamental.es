@@ -20,7 +20,7 @@ type ResolvedOptions = {
    */
   timeout: number,
 
-  progressEventTarget: EventTarget | null,
+  progressEventTarget?: EventTarget,
 };
 
 type Options = {
@@ -36,7 +36,7 @@ type Options = {
 function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
   const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
   const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
-  const progressEventTarget = (options.progressEventTarget instanceof EventTarget) ? options.progressEventTarget : null;
+  const progressEventTarget = (options.progressEventTarget instanceof EventTarget) ? options.progressEventTarget : undefined;
 
   return {
     signal,
@@ -108,7 +108,10 @@ class ByteStreamReader {
     }
 
     const { progressEventTarget, signal, timeout } : ResolvedOptions = resolveOptions(options);
-    const progressNotifier = new ProgressNotifier(totalByteCount, progressEventTarget ?? undefined);
+    const progressNotifier = new ProgressNotifier({
+      total: totalByteCount,
+      target: progressEventTarget,
+    });
 
     let loadedByteCount = 0;
     try {
@@ -138,7 +141,7 @@ class ByteStreamReader {
 
         const elapsed = performance.now() - startTime;
         if (elapsed >= timeout) {
-          progressNotifier.notifyTimeout(loadedByteCount);
+          progressNotifier.notifyExpired(loadedByteCount);
           throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
         }
 
