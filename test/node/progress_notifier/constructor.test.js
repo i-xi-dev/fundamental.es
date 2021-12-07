@@ -20,8 +20,8 @@ describe("ProgressNotifier", () => {
 
   });
 
-  it("new ProgressNotifier(number)", () => {
-    const i1 = new ProgressNotifier(10);
+  it("new ProgressNotifier({total:number})", () => {
+    const i1 = new ProgressNotifier({total:10});
     const t1 = i1.target;
     const r1 = [];
     t1.addEventListener("loadstart", (e) => {r1.push(e);});
@@ -38,8 +38,8 @@ describe("ProgressNotifier", () => {
 
   });
 
-  it("new ProgressNotifier(0)", () => {
-    const i1 = new ProgressNotifier(0);
+  it("new ProgressNotifier({total:0})", () => {
+    const i1 = new ProgressNotifier({total:0});
     const t1 = i1.target;
     const r1 = [];
     t1.addEventListener("loadstart", (e) => {r1.push(e);});
@@ -52,11 +52,11 @@ describe("ProgressNotifier", () => {
     i1.notifyStart(1);
     assert.strictEqual(r1[0].loaded, 1);
     assert.strictEqual(r1[0].total, 0);
-    assert.strictEqual(r1[0].lengthComputable, false);
+    assert.strictEqual(r1[0].lengthComputable, true);
 
   });
 
-  it("new ProgressNotifier(undefined, EventTarget)", () => {
+  it("new ProgressNotifier({target:EventTarget})", () => {
     const t1 = new EventTarget();
     const r1 = [];
     t1.addEventListener("loadstart", (e) => {r1.push(e);});
@@ -66,7 +66,7 @@ describe("ProgressNotifier", () => {
     t1.addEventListener("abort", (e) => {r1.push(e);});
     t1.addEventListener("timeout", (e) => {r1.push(e);});
     t1.addEventListener("progress", (e) => {r1.push(e);});
-    const i1 = new ProgressNotifier(undefined, t1);
+    const i1 = new ProgressNotifier({target:t1});
     i1.notifyStart(1);
     assert.strictEqual(r1[0].loaded, 1);
     assert.strictEqual(r1[0].total, 0);
@@ -74,7 +74,7 @@ describe("ProgressNotifier", () => {
 
   });
 
-  it("new ProgressNotifier(number, EventTarget)", () => {
+  it("new ProgressNotifier({total:number,target:EventTarget})", () => {
     const t1 = new EventTarget();
     const r1 = [];
     t1.addEventListener("loadstart", (e) => {r1.push(e);});
@@ -84,7 +84,7 @@ describe("ProgressNotifier", () => {
     t1.addEventListener("abort", (e) => {r1.push(e);});
     t1.addEventListener("timeout", (e) => {r1.push(e);});
     t1.addEventListener("progress", (e) => {r1.push(e);});
-    const i1 = new ProgressNotifier(10, t1);
+    const i1 = new ProgressNotifier({total:10,target:t1});
     i1.notifyStart(1);
     assert.strictEqual(r1[0].loaded, 1);
     assert.strictEqual(r1[0].total, 10);
@@ -92,7 +92,7 @@ describe("ProgressNotifier", () => {
 
   });
 
-  it("new ProgressNotifier(0, EventTarget)", () => {
+  it("new ProgressNotifier({total:0,target:EventTarget})", () => {
     const t1 = new EventTarget();
     const r1 = [];
     t1.addEventListener("loadstart", (e) => {r1.push(e);});
@@ -102,11 +102,11 @@ describe("ProgressNotifier", () => {
     t1.addEventListener("abort", (e) => {r1.push(e);});
     t1.addEventListener("timeout", (e) => {r1.push(e);});
     t1.addEventListener("progress", (e) => {r1.push(e);});
-    const i1 = new ProgressNotifier(0, t1);
+    const i1 = new ProgressNotifier({total:0,target:t1});
     i1.notifyStart(1);
     assert.strictEqual(r1[0].loaded, 1);
     assert.strictEqual(r1[0].total, 0);
-    assert.strictEqual(r1[0].lengthComputable, false);
+    assert.strictEqual(r1[0].lengthComputable, true);
 
   });
 
