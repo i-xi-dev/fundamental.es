@@ -4,46 +4,10 @@ import {
   AbortError,
   TimeoutError,
 } from "./error";
-import { NumberUtils } from "./number_utils";
-import { ProgressNotifier } from "./progress_notifier";
-
-type ResolvedOptions = {
-  /**
-   * 中断シグナル
-   * （絶え間なく読めるストリームの場合、すべて読み取るまで中断されない）
-   */
-  signal: AbortSignal | null,
-
-  /**
-   * タイムアウト（ミリ秒）
-   * （絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない）
-   */
-  timeout: number,
-
-  progressEventTarget?: EventTarget,
-};
-
-type Options = {
-  /** @see {@link ResolvedOptions.signal} */
-  signal?: AbortSignal,
-
-  /** @see {@link ResolvedOptions.timeout} */
-  timeout?: number,
-
-  progressEventTarget?: EventTarget,
-};
-
-function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
-  const signal = (options.signal instanceof AbortSignal) ? options.signal : null;
-  const timeout = ((typeof options.timeout === "number") && NumberUtils.isPositiveInteger(options.timeout)) ? options.timeout : Number.POSITIVE_INFINITY;
-  const progressEventTarget = (options.progressEventTarget instanceof EventTarget) ? options.progressEventTarget : undefined;
-
-  return {
-    signal,
-    timeout,
-    progressEventTarget,
-  };
-}
+import {
+  ProgressOptions,
+  Progress,
+} from "./progress";
 
 /**
  * 読み取るストリームのサイズを明示しなかった場合のバッファーサイズ
@@ -88,43 +52,41 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 }
 // XXX 最後に連結すべき（おそらくそのうちArrayBufferの長さ可変がES仕様になる）
 
+
+// 中断シグナル:（絶え間なく読めるストリームの場合、すべて読み取るまで中断されない）
+// タイムアウト:（絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない）
+
 // ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
 // が、loadstart発火前にrejectすることがある
-class ByteStreamReader {
+class _ByteStreamReader extends Progress {
+  #stream: ReadableStream<Uint8Array>;
+  #bufferSize: number;
 
-  async read(stream: ReadableStream<Uint8Array>, totalByteCount?: number, options?: Options | ResolvedOptions): Promise<Uint8Array> {
-    let bufferSize: number;
-    if (typeof totalByteCount === "number") {
-      if (NumberUtils.isNonNegativeInteger(totalByteCount) !== true) {
-        throw new TypeError("totalByteCount");
-      }
-      bufferSize = totalByteCount;
-    }
-    else if (totalByteCount === undefined) {
-      bufferSize = DEFAULT_BUFFER_SIZE;
-    }
-    else {
-      throw new TypeError("totalByteCount");
+  constructor(stream: ReadableStream<Uint8Array>, options?: ProgressOptions) {
+    super(options);
+
+    this.#stream = stream;
+    this.#bufferSize = (typeof this.total === "number") ? this.total : DEFAULT_BUFFER_SIZE;
+
+    Object.seal(this);
+  }
+
+  async read(): Promise<Uint8Array> {
+    if (this._isBeforeStart() !== true) {
+      throw new Error("invalid state");
     }
 
-    const { progressEventTarget, signal, timeout } : ResolvedOptions = resolveOptions(options);
-    const progressNotifier = new ProgressNotifier({
-      total: totalByteCount,
-      target: progressEventTarget,
-    });
-
-    let loadedByteCount = 0;
     try {
-      const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
+      const reader: ReadableStreamDefaultReader<Uint8Array> = this.#stream.getReader();
       const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(reader);
 
-      if (signal instanceof AbortSignal) {
-        if (signal.aborted === true) {
+      if (this._signal instanceof AbortSignal) {
+        if (this._signal.aborted === true) {
           throw new AbortError("already aborted");
         }
 
-        signal.addEventListener("abort", (): void => {
-        // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
+        this._signal.addEventListener("abort", (): void => {
+        // this.#stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
           void reader.cancel().catch(); // XXX closeで良い？
         }, {
           once: true,
@@ -132,39 +94,32 @@ class ByteStreamReader {
         });
       }
 
-      const startTime = performance.now();
-      let buffer: Uint8Array = new Uint8Array(bufferSize);
-
-      progressNotifier.notifyStart(0);
+      let buffer: Uint8Array = new Uint8Array(this.#bufferSize);
+      this.start();
 
       for await (const chunkBytes of chunkGenerator) {
-
-        const elapsed = performance.now() - startTime;
-        if (elapsed >= timeout) {
-          progressNotifier.notifyExpired(loadedByteCount);
-          throw new TimeoutError(`elapsed: ${ elapsed.toString(10) }, loaded: ${ loadedByteCount.toString(10) }`);
+        if (this.isExpired()) {
+          throw new TimeoutError(`timeout`);// TODO abort()の中にできる？
         }
 
-        buffer = addToBuffer(buffer, loadedByteCount, chunkBytes);
-        loadedByteCount = loadedByteCount + chunkBytes.byteLength;
-
-        progressNotifier.notifyProgress(loadedByteCount);
+        buffer = addToBuffer(buffer, this.value, chunkBytes);
+        this.update(this.value + chunkBytes.byteLength);
       }
-      if (signal?.aborted === true) {
-        progressNotifier.notifyAborted(loadedByteCount);
-        throw new AbortError("aborted");
+      if (this._signal?.aborted === true) {
+        this.abort();
+        throw new AbortError("aborted");// TODO abort()の中にできる？
       }
 
       let totalBytes: Uint8Array;
-      if (buffer.byteLength !== loadedByteCount) {
-        // totalBytes = buffer.subarray(0, loadedByteCount);
-        totalBytes = buffer.slice(0, loadedByteCount);
+      if (buffer.byteLength !== this.value) {
+        // totalBytes = buffer.subarray(0, this.value);
+        totalBytes = buffer.slice(0, this.value);
       }
       else {
         totalBytes = buffer;
       }
 
-      progressNotifier.notifyCompleted(loadedByteCount);
+      this.complete();
       return totalBytes;
     }
     catch (exception) {
@@ -175,19 +130,21 @@ class ByteStreamReader {
         //
       }
       else {
-        progressNotifier.notifyFailed(loadedByteCount);
+        this.fail();
       }
       throw exception;
     }
     finally {
-      progressNotifier.notifyEnd(loadedByteCount);
+      this.end();
     }
   }
 }
-Object.freeze(ByteStreamReader);
+Object.freeze(_ByteStreamReader);
 
-export type {
-  Options as ByteStreamReadOptions,
-};
+class ByteStreamReader {
+  create(stream: ReadableStream<Uint8Array>, options?: ProgressOptions): _ByteStreamReader {
+    return new _ByteStreamReader(stream, options);
+  }
+}
 
 export { ByteStreamReader };

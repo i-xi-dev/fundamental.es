@@ -1,4 +1,5 @@
 export type { uint8 } from "./uint8";
+export type { ProgressOptions } from "./progress";
 export type {
   ByteFormatOptions,
   ByteFormatRadix,
@@ -10,7 +11,6 @@ export type {
   ByteEncoderStreamRegulator,
 } from "./byte_encoding";
 export type { DigestAlgorithm } from "./digest_algorithm";
-export type { ByteStreamReadOptions } from "./byte_stream";
 
 export {
   AbortError,
@@ -19,10 +19,7 @@ export {
 export { NumberUtils } from "./number_utils";
 export { StringUtils } from "./string_utils";
 export { Uint8 } from "./uint8";
-export {
-  ProgressEvent,
-  ProgressNotifier,
-} from "./progress_notifier";
+export { Progress } from "./progress";
 export { ByteFormat } from "./byte_format";
 export {
   ByteDecoderStream,

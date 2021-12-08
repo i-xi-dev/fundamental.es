@@ -49,9 +49,10 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
 }
 const pe = (globalThis.ProgressEvent) ? globalThis.ProgressEvent : _ProgressEvent;
 
-type ProgressNotifierOptions = {
+type ProgressOptions = {
   total?: number,
-  target?: EventTarget,
+  timeout?: number,
+  signal?: AbortSignal,
 };
 
 const ProgressNotifierState = Object.freeze({
@@ -63,10 +64,10 @@ const ProgressNotifierState = Object.freeze({
 type ProgressNotifierState = typeof ProgressNotifierState[keyof typeof ProgressNotifierState];
 
 /**
- * `ProgressEvent`の発火ヘルパー
+ * 進捗
  * 
  * 
- * ## 発火順管理
+ * ## `ProgressEvent`の発火順管理
  * 
  * 有効な発火順は下表の通り（xhrやFileReaderの仕様を参考にした）
  * ※異なる順で発火させようとした場合は無視する //XXX エラーにすべき？
@@ -92,105 +93,149 @@ type ProgressNotifierState = typeof ProgressNotifierState[keyof typeof ProgressN
  * | `0` | `true` | `0` |
  * | 1以上 | `true` | コンストラクタに渡した`total`と同じ |
  */
-class ProgressNotifier {
-  #total?: number;
-  #lengthComputable: boolean;
-  #target: EventTarget;
-  #lastProgressNotified: number;
+class Progress extends EventTarget {
   #state: ProgressNotifierState;
+  #total?: number;
+  #indeterminate: boolean;
+  #value: number;
+  #lastProgressNotified: number;
+  #timeout: number;
+  #startedAt: number;
+  #signal?: AbortSignal;
 
   /**
-   * Creates a new `ProgressNotifier`.
+   * Creates a new `Progress`.
    * 
-   * @param param0 - あ
-   * @param param0.total - あ
-   * @param param0.target - あ
+   * @param param0 - 
    */
-  constructor({ total, target } : ProgressNotifierOptions = {}) {
-    this.#total = total;
-    this.#lengthComputable = ((typeof this.#total === "number") && (this.#total >= 0));
-    if (target instanceof EventTarget) {
-      this.#target = target;
-    }
-    else {
-      this.#target = new EventTarget();
-    }
-    this.#lastProgressNotified = Number.MIN_VALUE;
-    this.#state = ProgressNotifierState.BEFORE_START;
-    Object.seal(this);
-  }
+  constructor({ total, timeout, signal } : ProgressOptions = {}) {
+    super();
 
-  get target(): EventTarget {
-    return this.#target;
-  }
-
-  notifyStart(loaded: number): void {
-    if (this.#state === ProgressNotifierState.BEFORE_START) {
-      this.#notify("loadstart", loaded);
-      this.#state = ProgressNotifierState.IN_PROGRESS;
-    }
-  }
-
-  notifyProgress(loaded: number): void {
-    if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      const now = performance.now();
-      if ((this.#lastProgressNotified + 50) > now) {
-        return;
+    if (typeof this.total === "number") {
+      if (NumberUtils.isNonNegativeInteger(total) !== true) {
+        throw new TypeError("total");
       }
-      this.#lastProgressNotified = now;
-      this.#notify("progress", loaded);
     }
+    else if (this.total !== undefined) {
+      throw new TypeError("total");
+    }
+
+    this.#state = ProgressNotifierState.BEFORE_START;
+    this.#total = total;
+    this.#indeterminate = !((typeof this.#total === "number") && (this.#total >= 0));
+    this.#value = 0;
+    this.#lastProgressNotified = Number.MIN_VALUE;
+    this.#timeout = (typeof timeout === "number") && NumberUtils.isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
+    this.#startedAt = 0;
+    this.#signal = signal;
   }
 
-  notifyCompleted(loaded: number): void {
-    if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("load", loaded);
-      this.#state = ProgressNotifierState.DONE;
-    }
+  get total(): number | undefined {
+    return this.#total;
   }
 
-  notifyAborted(loaded: number): void {
-    if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("abort", loaded);
-      this.#state = ProgressNotifierState.DONE;
-    }
+  get indeterminate(): boolean {
+    return this.#indeterminate;
   }
 
-  notifyExpired(loaded: number): void {
-    if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("timeout", loaded);
-      this.#state = ProgressNotifierState.DONE;
-    }
+  get value(): number {
+    return this.#value;
   }
 
-  notifyFailed(loaded: number): void {
-    if (this.#state === ProgressNotifierState.IN_PROGRESS) {
-      this.#notify("error", loaded);
-      this.#state = ProgressNotifierState.DONE;
+  get percentage(): number {
+    if (this.#indeterminate === true) {
+      return 0;
     }
+    return this.#value / (this.#total as number) * 100;
   }
 
-  notifyEnd(loaded: number): void {
-    if (this.#state === ProgressNotifierState.DONE) {
-      this.#notify("loadend", loaded);
-      this.#state = ProgressNotifierState.AFTER_END;
-    }
+  protected get _signal(): AbortSignal | undefined {
+    return this.#signal;
   }
 
-  #notify(name: string, loaded: number): void {
-    if (this.#target instanceof EventTarget) {
-      const event = new pe(name, {
-        lengthComputable: this.#lengthComputable,
-        loaded,
-        total: this.#total, // undefinedの場合ProgressEvent側で0となる
-      });
-      this.#target.dispatchEvent(event);
+  protected _isBeforeStart(): boolean {
+    return (this.#state === ProgressNotifierState.BEFORE_START);
+  }
+
+  start(): void {
+    console.assert(this._isBeforeStart(), "invalid state");
+
+    this.#startedAt = performance.now();
+    this.#notify("loadstart");
+    this.#state = ProgressNotifierState.IN_PROGRESS;
+  }
+
+  update(value: number): void {
+    console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
+
+    this.#value = value;
+    const now = performance.now();
+    if ((this.#lastProgressNotified + 50) > now) {
+      return;
     }
+    this.#lastProgressNotified = now;
+    this.#notify("progress");
+  }
+
+  complete(): void {
+    console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
+
+    this.#notify("load");
+    this.#state = ProgressNotifierState.DONE;
+  }
+
+  isExpired(): boolean {
+    const elapsed = performance.now() - this.#startedAt;
+    if (elapsed >= this.#timeout) {
+      this.#expire();
+      return true;
+    }
+    return false;
+  }
+
+  #expire(): void {
+    console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
+
+    this.#notify("timeout");
+    this.#state = ProgressNotifierState.DONE;
+  }
+
+  abort(): void {
+    console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
+
+    this.#notify("abort");
+    this.#state = ProgressNotifierState.DONE;
+  }
+
+  fail(): void {
+    console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
+
+    this.#notify("error");
+    this.#state = ProgressNotifierState.DONE;
+  }
+
+  end(): void {
+    console.assert(this.#state === ProgressNotifierState.DONE, "invalid state");
+
+    this.#notify("loadend");
+    this.#state = ProgressNotifierState.AFTER_END;
+  }
+
+  #notify(name: string): void {
+    const event = new pe(name, {
+      lengthComputable: this.#indeterminate !== true,
+      loaded: this.#value,
+      total: this.#total, // undefinedの場合ProgressEvent側で0となる
+    });
+    this.dispatchEvent(event);
   }
 }
-Object.freeze(ProgressNotifier);
+Object.freeze(Progress);
+
+export type {
+  ProgressOptions,
+};
 
 export {
-  pe as ProgressEvent,
-  ProgressNotifier,
+  Progress,
 };
