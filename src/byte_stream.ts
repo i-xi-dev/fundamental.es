@@ -1,11 +1,7 @@
 //
 
 import {
-  AbortError,
-  TimeoutError,
-} from "./error";
-import {
-  ProgressOptions,
+  type ProgressOptions,
   Progress,
 } from "./progress";
 
@@ -58,93 +54,51 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 
 // ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
 // が、loadstart発火前にrejectすることがある
-class _ByteStreamReader extends Progress {
+class ByteStreamReader extends Progress<Uint8Array> {
   #stream: ReadableStream<Uint8Array>;
+  #reader: ReadableStreamDefaultReader<Uint8Array>;
   #bufferSize: number;
 
-  constructor(stream: ReadableStream<Uint8Array>, options?: ProgressOptions) {
+  private constructor(stream: ReadableStream<Uint8Array>, options?: ProgressOptions) {
     super(options);
 
     this.#stream = stream;
+    this.#reader = this.#stream.getReader();
     this.#bufferSize = (typeof this.total === "number") ? this.total : DEFAULT_BUFFER_SIZE;
 
     Object.seal(this);
   }
 
-  async read(): Promise<Uint8Array> {
-    if (this._isBeforeStart() !== true) {
-      throw new Error("invalid state");
+  static create(stream: ReadableStream<Uint8Array>, options?: ProgressOptions): ByteStreamReader {
+    return new ByteStreamReader(stream, options);
+  }
+
+  protected override _onAbortRequested(): void {
+    // this.#stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
+    void this.#reader.cancel().catch(); // XXX closeで良い？
+  }
+
+  async readAsUint8Array(): Promise<Uint8Array> {
+    const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(this.#reader);
+    let buffer: Uint8Array = new Uint8Array(this.#bufferSize);
+
+    const transfer = (chunkBytes: Uint8Array): number => {
+      buffer = addToBuffer(buffer, this.current, chunkBytes);
+      return chunkBytes.byteLength;
+    };
+
+    await this._initiate(chunkGenerator, transfer);
+
+    if (buffer.byteLength !== this.current) {
+      // return buffer.subarray(0, this.value);
+      return buffer.slice(0, this.current);
     }
-
-    try {
-      const reader: ReadableStreamDefaultReader<Uint8Array> = this.#stream.getReader();
-      const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(reader);
-
-      if (this._signal instanceof AbortSignal) {
-        if (this._signal.aborted === true) {
-          throw new AbortError("already aborted");
-        }
-
-        this._signal.addEventListener("abort", (): void => {
-        // this.#stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
-          void reader.cancel().catch(); // XXX closeで良い？
-        }, {
-          once: true,
-          passive: true,
-        });
-      }
-
-      let buffer: Uint8Array = new Uint8Array(this.#bufferSize);
-      this.start();
-
-      for await (const chunkBytes of chunkGenerator) {
-        if (this.isExpired()) {
-          throw new TimeoutError(`timeout`);// TODO abort()の中にできる？
-        }
-
-        buffer = addToBuffer(buffer, this.value, chunkBytes);
-        this.update(this.value + chunkBytes.byteLength);
-      }
-      if (this._signal?.aborted === true) {
-        this.abort();
-        throw new AbortError("aborted");// TODO abort()の中にできる？
-      }
-
-      let totalBytes: Uint8Array;
-      if (buffer.byteLength !== this.value) {
-        // totalBytes = buffer.subarray(0, this.value);
-        totalBytes = buffer.slice(0, this.value);
-      }
-      else {
-        totalBytes = buffer;
-      }
-
-      this.complete();
-      return totalBytes;
-    }
-    catch (exception) {
-      if (exception instanceof AbortError) {
-        //
-      }
-      else if (exception instanceof TimeoutError) {
-        //
-      }
-      else {
-        this.fail();
-      }
-      throw exception;
-    }
-    finally {
-      this.end();
+    else {
+      return buffer;
     }
   }
-}
-Object.freeze(_ByteStreamReader);
 
-class ByteStreamReader {
-  create(stream: ReadableStream<Uint8Array>, options?: ProgressOptions): _ByteStreamReader {
-    return new _ByteStreamReader(stream, options);
-  }
 }
+Object.freeze(ByteStreamReader);
 
 export { ByteStreamReader };

@@ -1,5 +1,9 @@
 //
 
+import {
+  AbortError,
+  TimeoutError,
+} from "./error";
 import { NumberUtils } from "./number_utils";
 
 /**
@@ -93,37 +97,35 @@ type ProgressNotifierState = typeof ProgressNotifierState[keyof typeof ProgressN
  * | `0` | `true` | `0` |
  * | 1以上 | `true` | コンストラクタに渡した`total`と同じ |
  */
-class Progress extends EventTarget {
+abstract class Progress<T> extends EventTarget {
   #state: ProgressNotifierState;
-  #total?: number;
-  #indeterminate: boolean;
-  #value: number;
+  readonly #totalCount?: number;
+  #currentCount: number;
   #lastProgressNotified: number;
-  #timeout: number;
+  readonly #timeout: number;
   #startedAt: number;
-  #signal?: AbortSignal;
+  readonly #signal?: AbortSignal;
 
   /**
    * Creates a new `Progress`.
    * 
    * @param param0 - 
    */
-  constructor({ total, timeout, signal } : ProgressOptions = {}) {
+  protected constructor({ total, timeout, signal } : ProgressOptions = {}) {
     super();
 
-    if (typeof this.total === "number") {
+    if (typeof total === "number") {
       if (NumberUtils.isNonNegativeInteger(total) !== true) {
         throw new TypeError("total");
       }
     }
-    else if (this.total !== undefined) {
+    else if (total !== undefined) {
       throw new TypeError("total");
     }
 
     this.#state = ProgressNotifierState.BEFORE_START;
-    this.#total = total;
-    this.#indeterminate = !((typeof this.#total === "number") && (this.#total >= 0));
-    this.#value = 0;
+    this.#totalCount = total;
+    this.#currentCount = 0;
     this.#lastProgressNotified = Number.MIN_VALUE;
     this.#timeout = (typeof timeout === "number") && NumberUtils.isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
     this.#startedAt = 0;
@@ -131,44 +133,96 @@ class Progress extends EventTarget {
   }
 
   get total(): number | undefined {
-    return this.#total;
+    return this.#totalCount;
+  }
+
+  get current(): number {
+    return this.#currentCount;
   }
 
   get indeterminate(): boolean {
-    return this.#indeterminate;
-  }
-
-  get value(): number {
-    return this.#value;
+    return !((typeof this.#totalCount === "number") && (this.#totalCount >= 0));
   }
 
   get percentage(): number {
-    if (this.#indeterminate === true) {
+    if (this.indeterminate === true) {
       return 0;
     }
-    return this.#value / (this.#total as number) * 100;
+    return this.#currentCount / (this.#totalCount as number) * 100;
   }
 
-  protected get _signal(): AbortSignal | undefined {
-    return this.#signal;
+  isAborted(): boolean { // get abortedにすると、一度aborted===trueで条件分岐した後、falseで不変と推論される
+    return (this.#signal?.aborted === true);
   }
 
-  protected _isBeforeStart(): boolean {
-    return (this.#state === ProgressNotifierState.BEFORE_START);
+  protected async _initiate(asyncGenerator: AsyncGenerator<T, void, void>, transfer: (input: T) => number): Promise<void> {
+    if (this.#state !== ProgressNotifierState.BEFORE_START) {
+      throw new Error("invalid state");
+    }
+
+    if (this.isAborted()) {
+      throw new AbortError("already aborted");
+    }
+
+    if (this.#signal instanceof AbortSignal) {
+      this.#signal.addEventListener("abort", (): void => {
+        this._onAbortRequested();
+      }, {
+        once: true,
+        passive: true,
+      });
+    }
+
+    try {
+      this.#start();
+
+      for await (const chunk of asyncGenerator) {
+        if (this.#isExpired()) {
+          throw new TimeoutError(`timeout`);
+        }
+        const transferredCount = transfer(chunk);
+        this.#addCount(transferredCount);
+      }
+      if (this.isAborted()) {
+        this.#abort();
+        throw new AbortError("aborted");
+      }
+
+      this.#complete();
+    }
+    catch (exception) {
+      if (exception instanceof AbortError) {
+        //
+      }
+      else if (exception instanceof TimeoutError) {
+        //
+      }
+      else {
+        this.#fail();
+      }
+      throw exception;
+    }
+    finally {
+      this.#end();
+    }
   }
 
-  start(): void {
-    console.assert(this._isBeforeStart(), "invalid state");
+  protected _onAbortRequested(): void {
+    return;
+  }
+
+  #start(): void {
+    console.assert(this.#state === ProgressNotifierState.BEFORE_START, "invalid state");
 
     this.#startedAt = performance.now();
     this.#notify("loadstart");
     this.#state = ProgressNotifierState.IN_PROGRESS;
   }
 
-  update(value: number): void {
+  #addCount(countToAdd: number): void {
     console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
 
-    this.#value = value;
+    this.#currentCount = this.#currentCount + countToAdd;
     const now = performance.now();
     if ((this.#lastProgressNotified + 50) > now) {
       return;
@@ -177,14 +231,14 @@ class Progress extends EventTarget {
     this.#notify("progress");
   }
 
-  complete(): void {
+  #complete(): void {
     console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
 
     this.#notify("load");
     this.#state = ProgressNotifierState.DONE;
   }
 
-  isExpired(): boolean {
+  #isExpired(): boolean {
     const elapsed = performance.now() - this.#startedAt;
     if (elapsed >= this.#timeout) {
       this.#expire();
@@ -200,21 +254,21 @@ class Progress extends EventTarget {
     this.#state = ProgressNotifierState.DONE;
   }
 
-  abort(): void {
+  #abort(): void {
     console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
 
     this.#notify("abort");
     this.#state = ProgressNotifierState.DONE;
   }
 
-  fail(): void {
+  #fail(): void {
     console.assert(this.#state === ProgressNotifierState.IN_PROGRESS, "invalid state");
 
     this.#notify("error");
     this.#state = ProgressNotifierState.DONE;
   }
 
-  end(): void {
+  #end(): void {
     console.assert(this.#state === ProgressNotifierState.DONE, "invalid state");
 
     this.#notify("loadend");
@@ -223,9 +277,9 @@ class Progress extends EventTarget {
 
   #notify(name: string): void {
     const event = new pe(name, {
-      lengthComputable: this.#indeterminate !== true,
-      loaded: this.#value,
-      total: this.#total, // undefinedの場合ProgressEvent側で0となる
+      lengthComputable: this.indeterminate !== true,
+      loaded: this.#currentCount,
+      total: this.#totalCount, // undefinedの場合ProgressEvent側で0となる
     });
     this.dispatchEvent(event);
   }

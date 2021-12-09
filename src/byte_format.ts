@@ -2,7 +2,7 @@
 
 import { StringUtils } from "./string_utils";
 import {
-  uint8,
+  type uint8,
   // Uint8,
 } from "./uint8";
 
