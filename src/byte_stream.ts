@@ -1,9 +1,9 @@
 //
 
 import {
-  type ProgressOptions,
-  Progress,
-} from "./progress";
+  type TransferOptions,
+  TransferProgress,
+} from "./transfer_progress";
 
 /**
  * 読み取るストリームのサイズを明示しなかった場合のバッファーサイズ
@@ -54,47 +54,47 @@ function addToBuffer(buffer: Uint8Array, loadedByteCount: number, chunkBytes: Ui
 
 // ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
 // が、loadstart発火前にrejectすることがある
-class ByteStreamReader extends Progress<Uint8Array> {
+class ByteStreamReader extends TransferProgress<Uint8Array> {
   #stream: ReadableStream<Uint8Array>;
   #reader: ReadableStreamDefaultReader<Uint8Array>;
-  #bufferSize: number;
+  #buffer: Uint8Array;
 
-  private constructor(stream: ReadableStream<Uint8Array>, options?: ProgressOptions) {
+  private constructor(stream: ReadableStream<Uint8Array>, options?: TransferOptions) {
     super(options);
 
     this.#stream = stream;
     this.#reader = this.#stream.getReader();
-    this.#bufferSize = (typeof this.total === "number") ? this.total : DEFAULT_BUFFER_SIZE;
+    const bufferSize = (typeof this.total === "number") ? this.total : DEFAULT_BUFFER_SIZE;
+    this.#buffer = new Uint8Array(bufferSize);
 
     Object.seal(this);
   }
 
-  static create(stream: ReadableStream<Uint8Array>, options?: ProgressOptions): ByteStreamReader {
+  static create(stream: ReadableStream<Uint8Array>, options?: TransferOptions): ByteStreamReader {
     return new ByteStreamReader(stream, options);
   }
 
-  protected override _onAbortRequested(): void {
+  protected override _terminate(): void {
     // this.#stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
     void this.#reader.cancel().catch(); // XXX closeで良い？
   }
 
+  protected override _transfer(chunkBytes: Uint8Array): number {
+    this.#buffer = addToBuffer(this.#buffer, this.loaded, chunkBytes);
+    return chunkBytes.byteLength;
+  }
+
   async readAsUint8Array(): Promise<Uint8Array> {
     const chunkGenerator: AsyncGenerator<Uint8Array, void, void> = createChunkGenerator(this.#reader);
-    let buffer: Uint8Array = new Uint8Array(this.#bufferSize);
 
-    const transfer = (chunkBytes: Uint8Array): number => {
-      buffer = addToBuffer(buffer, this.current, chunkBytes);
-      return chunkBytes.byteLength;
-    };
+    await this._initiate(chunkGenerator);
 
-    await this._initiate(chunkGenerator, transfer);
-
-    if (buffer.byteLength !== this.current) {
-      // return buffer.subarray(0, this.value);
-      return buffer.slice(0, this.current);
+    if (this.#buffer.byteLength !== this.loaded) {
+      // return buffer.subarray(0, this.loaded);
+      return this.#buffer.slice(0, this.loaded);
     }
     else {
-      return buffer;
+      return this.#buffer;
     }
   }
 
