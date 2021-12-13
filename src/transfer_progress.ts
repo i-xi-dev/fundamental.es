@@ -13,21 +13,17 @@ type TransferOptions = {
   signal?: AbortSignal,
 };
 
-type Indicator = {
+type TransferProgressIndicator = {
   loadedUnitCount: number,
   totalUnitCount?: number,
 };
 
-async function asyncLoad<T>(asyncGenerator: AsyncGenerator<T, void, void>, transfer: (input: T) => number, indicator: Indicator, signal: AbortSignal): Promise<void> {
-  for await (const chunk of asyncGenerator) {
-    const transferredCount = transfer(chunk);
-    indicator.loadedUnitCount = indicator.loadedUnitCount + transferredCount;
-
-    if (signal.aborted === true) {
-      break;
-    }
-  }
-}
+type Transferrer<T, U> = {
+  chunkGenerator: AsyncGenerator<T, void, void>,
+  transferChunk: (chunk: T, indicator: TransferProgressIndicator) => void,
+  terminate: () => void,
+  transferredResult: (indicator: TransferProgressIndicator) => U,
+};
 
 /**
  * 進捗
@@ -59,7 +55,7 @@ async function asyncLoad<T>(asyncGenerator: AsyncGenerator<T, void, void>, trans
  * | `0` | `true` | `0` |
  * | 1以上 | `true` | コンストラクタに渡した`total`と同じ |
  */
-abstract class TransferProgress<T> extends EventTarget {
+class TransferProgress<T, U = T> extends EventTarget {
   readonly #params: {
     used: boolean,
     timerId: number | null,
@@ -67,17 +63,20 @@ abstract class TransferProgress<T> extends EventTarget {
     abortSignaled: boolean,
     lastProgressNotifiedAt: number,
   };
-  readonly #indicator: Indicator;
+  readonly #transferrer: Transferrer<T, U>;
+  readonly #indicator: TransferProgressIndicator;
   readonly #timeout: number;
   readonly #signal?: AbortSignal;
-  readonly #internalController: AbortController;
 
   /**
    * Creates a new `TransferProgress`.
    * 
    * @param param0 - 
    */
-  protected constructor({ total, timeout, signal } : TransferOptions = {}) {
+  constructor(
+    transferrer: Transferrer<T, U>,
+    { total, timeout, signal } : TransferOptions = {}
+  ) {
     super();
 
     if (typeof total === "number") {
@@ -96,11 +95,12 @@ abstract class TransferProgress<T> extends EventTarget {
       abortSignaled: false,
       lastProgressNotifiedAt: Number.MIN_VALUE,
     });
-    this.#indicator = new Proxy<Indicator>({
+    this.#transferrer = transferrer;
+    this.#indicator = new Proxy<TransferProgressIndicator>({
       loadedUnitCount: 0,
       totalUnitCount: total,
     }, {
-      set: (obj: Indicator, prop: string, value: number): boolean => {
+      set: (obj: TransferProgressIndicator, prop: string, value: number): boolean => {
         if (prop === "loadedUnitCount") {
           obj[prop] = value;
           this.#notifyProgress();
@@ -111,7 +111,6 @@ abstract class TransferProgress<T> extends EventTarget {
     });
     this.#timeout = (typeof timeout === "number") && NumberUtils.isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
     this.#signal = signal;
-    this.#internalController = new AbortController();
   }
 
   get total(): number | undefined {
@@ -130,19 +129,13 @@ abstract class TransferProgress<T> extends EventTarget {
     return (typeof this.#indicator.totalUnitCount === "number") ? (this.#indicator.loadedUnitCount / this.#indicator.totalUnitCount * 100) : 0;
   }
 
-  protected abstract _terminate(): void;
-
-  protected abstract _transfer(input: T): number;
-
-  protected async _initiate(asyncGenerator: AsyncGenerator<T, void, void>): Promise<void> {
+  async initiate(): Promise<U> {
     const onExpired: () => void = () => {
-      this._terminate();
-      this.#internalController.abort();
+      this.#transferrer.terminate();
       this.#params.timeoutExceeded = true;
     };
     const onAborted: () => void = () => {
-      this._terminate();
-      this.#internalController.abort();
+      this.#transferrer.terminate();
       this.#params.abortSignaled = true;
     };
 
@@ -168,8 +161,10 @@ abstract class TransferProgress<T> extends EventTarget {
 
     try {
       this.#notifyStarted();
-      const transfer = (input: T): number => this._transfer(input);
-      await asyncLoad<T>(asyncGenerator, transfer, this.#indicator, this.#internalController.signal);
+
+      for await (const chunk of this.#transferrer.chunkGenerator) {
+        this.#transferrer.transferChunk(chunk, this.#indicator);
+      }
 
       if (this.#params.timeoutExceeded === true) {
         throw new TimeoutError("timeout");
@@ -180,6 +175,7 @@ abstract class TransferProgress<T> extends EventTarget {
       }
 
       this.#notifyCompleted();
+      return this.#transferrer.transferredResult(this.#indicator);
     }
     catch (exception) {
       if (exception instanceof AbortError) {
@@ -250,6 +246,8 @@ abstract class TransferProgress<T> extends EventTarget {
 Object.freeze(TransferProgress);
 
 export type {
+  TransferProgressIndicator,
+  Transferrer,
   TransferOptions,
 };
 

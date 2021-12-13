@@ -25,4 +25,4 @@ export {
   ByteEncoderStream,
 } from "./byte_encoding";
 export { TransferProgress } from "./transfer_progress";
-export { ByteStreamReader } from "./byte_stream";
+export { ByteStreamReader } from "./byte_stream_reader";
