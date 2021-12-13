@@ -73,10 +73,7 @@ class TransferProgress<T, U = T> extends EventTarget {
    * 
    * @param param0 - 
    */
-  constructor(
-    transferrer: Transferrer<T, U>,
-    { total, timeout, signal } : TransferOptions = {}
-  ) {
+  constructor(transferrer: Transferrer<T, U>, { total, timeout, signal } : TransferOptions = {}) {
     super();
 
     if (typeof total === "number") {
@@ -122,7 +119,7 @@ class TransferProgress<T, U = T> extends EventTarget {
   }
 
   get indeterminate(): boolean {
-    return (typeof this.#indicator.totalUnitCount === "number");
+    return (typeof this.#indicator.totalUnitCount === "number") !== true;
   }
 
   get percentage(): number {
