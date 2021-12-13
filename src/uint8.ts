@@ -49,8 +49,7 @@ const Uint8 = Object.freeze({
   isUint8,
 });
 
-export type {
-  uint8,
+export {
+  type uint8,
+  Uint8,
 };
-
-export { Uint8 };

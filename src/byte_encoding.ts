@@ -106,14 +106,11 @@ abstract class ByteEncoderStream implements TransformStream {
 }
 Object.freeze(ByteEncoderStream);
 
-export type {
-  ByteDecoder,
-  ByteEncoder,
-  ByteDecoderStreamRegulator,
-  ByteEncoderStreamRegulator,
-};
-
 export {
+  type ByteDecoder,
+  type ByteEncoder,
+  type ByteDecoderStreamRegulator,
+  type ByteEncoderStreamRegulator,
   ByteDecoderStream,
   ByteEncoderStream,
 };

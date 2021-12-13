@@ -14,4 +14,6 @@ interface DigestAlgorithm {
   compute: (input: Uint8Array) => Promise<Uint8Array>;
 }
 
-export type { DigestAlgorithm };
+export {
+  type DigestAlgorithm,
+};

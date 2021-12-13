@@ -242,12 +242,9 @@ class TransferProgress<T, U = T> extends EventTarget {
 }
 Object.freeze(TransferProgress);
 
-export type {
-  TransferProgressIndicator,
-  Transferrer,
-  TransferOptions,
-};
-
 export {
+  type TransferProgressIndicator,
+  type Transferrer,
+  type TransferOptions,
   TransferProgress,
 };
