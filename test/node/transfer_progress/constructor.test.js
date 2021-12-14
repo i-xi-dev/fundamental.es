@@ -16,15 +16,15 @@ describe("TransferProgress", async () => {
     const p = new TransferProgress({
       chunkGenerator: createChunkGenerator(),
 
-      transferChunk(chunkStr, indicator) {
+      transferChunk(chunkStr) {
         buffer = buffer + chunkStr;
-        indicator.loadedUnitCount = indicator.loadedUnitCount + chunkStr.length;
+        return buffer.length;
       },
 
       terminate() {
       },
 
-      transferredResult(indicator) {
+      transferredResult() {
         return buffer;
       },
     });
@@ -49,15 +49,15 @@ describe("TransferProgress", async () => {
     const p = new TransferProgress({
       chunkGenerator: createChunkGenerator(),
 
-      transferChunk(chunkStr, indicator) {
+      transferChunk(chunkStr) {
         buffer = buffer + chunkStr;
-        indicator.loadedUnitCount = indicator.loadedUnitCount + chunkStr.length;
+        return buffer.length;
       },
 
       terminate() {
       },
 
-      transferredResult(indicator) {
+      transferredResult() {
         return buffer;
       },
     }, {
@@ -92,14 +92,14 @@ describe("TransferProgress", async () => {
     const p = new TransferProgress({
       chunkGenerator: createChunkGenerator(),
 
-      transferChunk(chunkStr, indicator) {
+      transferChunk() {
         throw new Error("xxxxx");
       },
 
       terminate() {
       },
 
-      transferredResult(indicator) {
+      transferredResult() {
         return buffer;
       },
     });

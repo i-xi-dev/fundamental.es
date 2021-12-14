@@ -20,9 +20,9 @@ type TransferProgressIndicator = {
 
 type Transferrer<T, U> = {
   chunkGenerator: AsyncGenerator<T, void, void>,
-  transferChunk: (chunk: T, indicator: TransferProgressIndicator) => void,
+  transferChunk: (chunk: T) => number,
   terminate: () => void,
-  transferredResult: (indicator: TransferProgressIndicator) => U,
+  transferredResult: () => U,
 };
 
 /**
@@ -160,7 +160,7 @@ class TransferProgress<T, U = T> extends EventTarget {
       this.#notifyStarted();
 
       for await (const chunk of this.#transferrer.chunkGenerator) {
-        this.#transferrer.transferChunk(chunk, this.#indicator);
+        this.#indicator.loadedUnitCount = this.#transferrer.transferChunk(chunk);
       }
 
       if (this.#params.timeoutExceeded === true) {
@@ -172,7 +172,7 @@ class TransferProgress<T, U = T> extends EventTarget {
       }
 
       this.#notifyCompleted();
-      return this.#transferrer.transferredResult(this.#indicator);
+      return this.#transferrer.transferredResult();
     }
     catch (exception) {
       if (exception instanceof AbortError) {
@@ -243,7 +243,6 @@ class TransferProgress<T, U = T> extends EventTarget {
 Object.freeze(TransferProgress);
 
 export {
-  type TransferProgressIndicator,
   type Transferrer,
   type TransferOptions,
   TransferProgress,

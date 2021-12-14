@@ -23,6 +23,7 @@ export {
   ByteDecoderStream,
   ByteEncoderStream,
 } from "./byte_encoding";
+export { ByteBuffer } from "./byte_buffer";
 export { StreamUtils } from "./stream_utils";
 export {
   type DigestAlgorithm,
