@@ -1,6 +1,7 @@
 //
 
 import { NumberUtils } from "./number_utils";
+import { StreamUtils } from "./stream_utils";
 import {
   type TransferOptions,
   type TransferProgressIndicator,
@@ -11,21 +12,6 @@ import {
  * 読み取るストリームのサイズを明示しなかった場合のバッファーサイズ
  */
 const DEFAULT_BUFFER_SIZE = 1_048_576;
-
-/**
- * 可読ストリームを読み取り、チャンクを返却する非同期ジェネレーターを返却
- * 
- * @experimental
- * @param reader 可読ストリームのリーダー
- * @returns チャンクを返却する非同期ジェネレーター
- */
-async function* createChunkGenerator(reader: ReadableStreamDefaultReader<Uint8Array>): AsyncGenerator<Uint8Array, void, void> {
-  // XXX ReadableStreamBYOBReaderにする？ Deno,Safari,Firefoxが未実装 2021-08
-  // XXX ReadableStream自体が[Symbol.asyncIterator]を持つ。
-  for (let i = await reader.read(); (i.done !== true); i = await reader.read()) {
-    yield i.value;
-  }
-}
 
 /**
  * bufferのloadedByteCountの位置にchunkBytesをセットする
@@ -65,7 +51,7 @@ const ByteStreamReader = {
     let buffer: Uint8Array = new Uint8Array(bufferSize);
 
     return new TransferProgress<Uint8Array>({
-      chunkGenerator: createChunkGenerator(reader),
+      chunkGenerator: StreamUtils.streamToAsyncGenerator<Uint8Array>(reader),
 
       transferChunk(chunkBytes: Uint8Array, indicator: TransferProgressIndicator): void {
         buffer = addToBuffer(buffer, indicator.loadedUnitCount, chunkBytes);
@@ -96,4 +82,6 @@ const ByteStreamReader = {
 };
 Object.freeze(ByteStreamReader);
 
-export { ByteStreamReader };
+export {
+  ByteStreamReader,
+};
