@@ -1,7 +1,16 @@
 //
 
 function decode(buffer: BufferSource = new Uint8Array(0)): string {
-  const bytes = new Uint8Array((buffer instanceof ArrayBuffer) ? buffer : buffer.buffer);
+  let bytes: Uint8Array;
+  if (ArrayBuffer.isView(buffer)) {
+    bytes = new Uint8Array(buffer.buffer);
+  }
+  else if (buffer instanceof ArrayBuffer) {
+    bytes = new Uint8Array(buffer);
+  }
+  else {
+    throw new TypeError("buffer")
+  }
 
   // A: Bの2倍以上遅い（Node.js）
   // let chars: string = "";
