@@ -1,6 +1,6 @@
 //
 
-function decode(buffer: BufferSource): string {
+function decode(buffer: BufferSource = new Uint8Array(0)): string {
   const bytes = new Uint8Array((buffer instanceof ArrayBuffer) ? buffer : buffer.buffer);
 
   // A: Bの2倍以上遅い（Node.js）
@@ -21,7 +21,7 @@ function isIsomorphicEncoded(value: string): boolean {
   return /^[\u{0}-\u{FF}]*$/u.test(value);
 }
 
-function encode(input: string): Uint8Array {
+function encode(input = ""): Uint8Array {
   if (isIsomorphicEncoded(input) !== true) {
     throw new TypeError("input");
   }

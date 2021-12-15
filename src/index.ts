@@ -33,4 +33,3 @@ export {
   type TransferOptions,
   TransferProgress,
 } from "./transfer_progress";
-export { ByteStreamReader } from "./byte_stream_reader";

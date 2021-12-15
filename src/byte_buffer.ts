@@ -33,11 +33,11 @@ class ByteBuffer {
     this.#position = this.#position + bytes.byteLength;
   }
 
-  subarray(begin: number = 0, end: number = this.#position): Uint8Array {
+  subarray(begin = 0, end: number = this.#position): Uint8Array {
     return this.#buffer.subarray(begin, end);
   }
 
-  slice(begin: number = 0, end: number = this.#position): Uint8Array {
+  slice(begin = 0, end: number = this.#position): Uint8Array {
     return this.#buffer.slice(begin, end);
   }
 }
