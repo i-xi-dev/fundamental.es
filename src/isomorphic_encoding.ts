@@ -1,15 +1,15 @@
 //
 
-function decode(buffer: BufferSource = new Uint8Array(0)): string {
+function decode(input: BufferSource = new Uint8Array(0)): string {
   let bytes: Uint8Array;
-  if (ArrayBuffer.isView(buffer)) {
-    bytes = new Uint8Array(buffer.buffer);
+  if (ArrayBuffer.isView(input)) {
+    bytes = new Uint8Array(input.buffer);
   }
-  else if (buffer instanceof ArrayBuffer) {
-    bytes = new Uint8Array(buffer);
+  else if (input instanceof ArrayBuffer) {
+    bytes = new Uint8Array(input);
   }
   else {
-    throw new TypeError("buffer")
+    throw new TypeError("buffer");
   }
 
   // A: Bの2倍以上遅い（Node.js）

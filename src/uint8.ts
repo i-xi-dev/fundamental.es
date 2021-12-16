@@ -5,12 +5,12 @@
 /**
  * The minimum value of 8-bit unsigned integer.
  */
-const MIN_UINT8 = 0x0;
+const MIN_VALUE = 0x0;
 
 /**
  * The maximum value of 8-bit unsigned integer.
  */
-const MAX_UINT8 = 0xFF;
+const MAX_VALUE = 0xFF;
 
 /**
  * The type of 8-bit unsigned integer.
@@ -40,7 +40,7 @@ type uint8 = 0x0 | 0x1 | 0x2 | 0x3 | 0x4 | 0x5 | 0x6 | 0x7 | 0x8 | 0x9 | 0xA | 0
  */
 function isUint8(value: unknown): value is uint8 {
   if (typeof value === "number") {
-    return (Number.isSafeInteger(value) && (value >= MIN_UINT8) && (value <= MAX_UINT8));
+    return (Number.isSafeInteger(value) && (value >= MIN_VALUE) && (value <= MAX_VALUE));
   }
   return false;
 }
