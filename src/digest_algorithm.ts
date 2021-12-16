@@ -11,7 +11,7 @@ interface DigestAlgorithm {
    * @returns The {@link [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)} that
    *     fulfills with a computed digest.
    */
-  compute: (input: Uint8Array) => Promise<Uint8Array>;
+  compute: (input: BufferSource) => Promise<Uint8Array>;
 }
 
 export {

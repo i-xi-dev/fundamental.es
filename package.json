@@ -1,6 +1,6 @@
 {
   "name": "@i-xi-dev/fundamental",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "This is not for direct usage.",
   "type": "module",
   "main": "./dist/index.js",
