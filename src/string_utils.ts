@@ -113,11 +113,79 @@ function trimEnd(str: string, rangePattern: RangePattern): string {
   return str.replace(regex, "");
 }
 
+type HttpQuotedString = {
+  value: string,
+  length: number,
+};
+
+/**
+ * 文字列の先頭のHTTP quoted stringを取得し返却
+ *     仕様は https://fetch.spec.whatwg.org/#collect-an-http-quoted-string
+ * 
+ * - value: 引用符で括られていた値。エスケープ文字は取り除いて返す
+ * - length: 取得した文字数。（終了引用符までを含む）
+ * 
+ * @param input - 先頭がU+0022の文字列
+ * @returns 結果
+ */
+function collectHttpQuotedStringStart(input: string): HttpQuotedString {
+  // 2.
+  let value = "";
+
+  // 3.
+  if (input.startsWith('"') !== true) {
+    return {
+      value,
+      length: 0,
+    };
+  }
+
+  // 4.
+  const text2 = input.substring(1);
+
+  // 5.
+  let escaped = false;
+  let i = 0;
+  for (i = 0; i < text2.length; i++) {
+    const c: string = text2[i] as string;
+
+    if (escaped === true) {
+      value = value + c;
+      escaped = false;
+      continue;
+    }
+    else {
+      if (c === '"') {
+        i++;
+        break;
+      }
+      else if (c === "\\") {
+        escaped = true;
+        continue;
+      }
+      else {
+        value = value + c;
+        continue;
+      }
+    }
+  }
+
+  if (escaped === true) {
+    value = value + "\\";
+  }
+
+  return {
+    value,
+    length: (i + 1),
+  };
+}
+
 /**
  * The utilities for string processing.
  */
 const StringUtils = Object.freeze({
   RangePattern,
+  collectHttpQuotedStringStart,
   collectStart,
   devideByLength,
   match,
