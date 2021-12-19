@@ -5,7 +5,10 @@ export {
   TimeoutError,
 } from "./error";
 export { NumberUtils } from "./number_utils";
-export { StringUtils } from "./string_utils";
+export {
+  type CollectResult,
+  StringUtils,
+} from "./string_utils";
 export {
   type uint8,
   Uint8,

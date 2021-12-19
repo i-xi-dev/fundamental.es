@@ -66,7 +66,7 @@ type RangePattern = typeof RangePattern[keyof typeof RangePattern];
  * @param rangePattern - 収集対象の範囲パターン
  * @returns 結果
  */
-function collectStart(str: string, rangePattern: RangePattern): string {
+function collect(str: string, rangePattern: RangePattern): string {
   const regex = new RegExp("^[" + rangePattern + "]+");
   const results = regex.exec(str);
   if (results === null) {
@@ -113,30 +113,31 @@ function trimEnd(str: string, rangePattern: RangePattern): string {
   return str.replace(regex, "");
 }
 
-type HttpQuotedString = {
-  value: string,
-  length: number,
+type CollectResult = {
+  collected: string,
+  progression: number,
+  following?: boolean,
 };
 
 /**
  * 文字列の先頭のHTTP quoted stringを取得し返却
  *     仕様は https://fetch.spec.whatwg.org/#collect-an-http-quoted-string
  * 
- * - value: 引用符で括られていた値。エスケープ文字は取り除いて返す
- * - length: 取得した文字数。（終了引用符までを含む）
+ * - collected: 引用符で括られていた値。エスケープ文字は取り除いて返す
+ * - progression: 取得した文字数。（終了引用符までを含む）
  * 
  * @param input - 先頭がU+0022の文字列
  * @returns 結果
  */
-function collectHttpQuotedStringStart(input: string): HttpQuotedString {
+function collectHttpQuotedString(input: string): CollectResult {
   // 2.
   let value = "";
 
   // 3.
   if (input.startsWith('"') !== true) {
     return {
-      value,
-      length: 0,
+      collected: value,
+      progression: 0,
     };
   }
 
@@ -175,8 +176,8 @@ function collectHttpQuotedStringStart(input: string): HttpQuotedString {
   }
 
   return {
-    value,
-    length: (i + 1),
+    collected: value,
+    progression: (i + 1),
   };
 }
 
@@ -185,12 +186,15 @@ function collectHttpQuotedStringStart(input: string): HttpQuotedString {
  */
 const StringUtils = Object.freeze({
   RangePattern,
-  collectHttpQuotedStringStart,
-  collectStart,
+  collect,
+  collectHttpQuotedString,
   devideByLength,
   match,
   trim,
   trimEnd,
 });
 
-export { StringUtils };
+export {
+  type CollectResult,
+  StringUtils,
+};
