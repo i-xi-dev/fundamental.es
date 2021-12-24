@@ -9,7 +9,17 @@ import { ProgressEvent } from "./progress_event";
 
 type TransferOptions = {
   total?: number,
+
+  /**
+   * タイムアウト
+   * ※絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない
+   */
   timeout?: number,
+
+  /**
+   * 中止通達
+   * ※絶え間なく読めるストリームの場合、すべて読み取るまで中断されない
+   */
   signal?: AbortSignal,
 };
 
@@ -40,6 +50,9 @@ type Transferrer<T, U> = {
  * | `"progress"` | 最低1回 |
  * | `"load"`, `"abort"`, `"timeout"`, `"error"` | 排他的にどれかが1回 |
  * | `"loadend"` | 1回のみ |
+ * 
+ * ※ProgressEventの発火に関する仕様は、XHRおよびFileReaderの仕様を参考にした
+ * ※が、loadstart発火前にrejectする場合あり
  * 
  * 
  * ## `ProgressEvent`の`total`と`lengthComputable`の設定
