@@ -120,7 +120,7 @@ class TransferProgress<T, U = T> extends EventTarget {
           this.#notifyProgress();
           return true;
         }
-        return false;
+        return false; // カバレッジがUncoveredになるがテスト不可能
       },
     });
     this.#timeout = (typeof timeout === "number") && NumberUtils.isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
@@ -206,7 +206,7 @@ class TransferProgress<T, U = T> extends EventTarget {
       }
       throw exception;
     }
-    finally {
+    finally { // カバレッジがUncoveredになるが理由不明
       this.#notifyEnded();
 
       if (this.#params.timerId) {

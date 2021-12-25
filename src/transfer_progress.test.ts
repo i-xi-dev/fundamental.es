@@ -88,6 +88,63 @@ describe("TransferProgress", () => {
     expect(p.indeterminate).toBe(false);
     expect(p.percentage).toBe(100);
 
+    await expect(async () => {
+      await p.initiate();
+    }).rejects.toThrowError({
+      name: "Error",
+      message: "invalid state",
+    });
+
+  });
+
+  it("TransferProgress(Object, {total:number}) - error", () => {
+    expect(() => {
+      let buffer = "";
+      const p = new TransferProgress({
+        chunkGenerator: createChunkGenerator(),
+
+        transferChunk(chunkStr) {
+          buffer = buffer + chunkStr;
+          return buffer.length;
+        },
+
+        terminate() {
+        },
+
+        transferredResult() {
+          return buffer;
+        },
+      }, {
+        total: -1,
+      });
+    }).toThrowError({
+      name: "TypeError",
+      message: "total",
+    });
+
+    expect(() => {
+      let buffer = "";
+      const p = new TransferProgress({
+        chunkGenerator: createChunkGenerator(),
+
+        transferChunk(chunkStr) {
+          buffer = buffer + chunkStr;
+          return buffer.length;
+        },
+
+        terminate() {
+        },
+
+        transferredResult() {
+          return buffer;
+        },
+      }, {
+        total: "100" as unknown as number,
+      });
+    }).toThrowError({
+      name: "TypeError",
+      message: "total",
+    });
   });
 
   it("TransferProgress(Object, {timeout:number})", async () => {
@@ -115,6 +172,11 @@ describe("TransferProgress", () => {
     expect(p.indeterminate).toBe(true);
     expect(p.percentage).toBe(0);
 
+    let timeouted = false;
+    p.addEventListener("timeout", () => {
+      timeouted = true;
+    });
+
     let r;
     await expect(async () => {
       r = await p.initiate();
@@ -128,6 +190,8 @@ describe("TransferProgress", () => {
     expect(p.loaded).toBe(8);
     expect(p.indeterminate).toBe(true);
     expect(p.percentage).toBe(0);
+
+    expect(timeouted).toBe(true);
 
   });
 
@@ -157,6 +221,11 @@ describe("TransferProgress", () => {
     expect(p.indeterminate).toBe(true);
     expect(p.percentage).toBe(0);
 
+    let aborted = false;
+    p.addEventListener("abort", () => {
+      aborted = true;
+    });
+
     setTimeout(() => {
       ac.abort();
     }, 250);
@@ -173,6 +242,8 @@ describe("TransferProgress", () => {
     expect(p.loaded).toBe(8);
     expect(p.indeterminate).toBe(true);
     expect(p.percentage).toBe(0);
+
+    expect(aborted).toBe(true);
 
   });
 
@@ -220,10 +291,56 @@ describe("TransferProgress", () => {
   });
 
   it("TransferProgress(Object)/addEventListener()", async () => {
+    let buffer = "";
+    const p = new TransferProgress({
+      chunkGenerator: createChunkGenerator(),
 
+      transferChunk(chunkStr) {
+        buffer = buffer + chunkStr;
+        return buffer.length;
+      },
 
+      terminate() {
+      },
 
+      transferredResult() {
+        return buffer;
+      },
+    });
 
+    let loadstarted = false;
+    p.addEventListener("loadstart", () => {
+      loadstarted = true;
+    });
+    let load = 0;
+    p.addEventListener("load", () => {
+      load++;
+    });
+    let aborted = false;
+    p.addEventListener("abort", () => {
+      aborted = true;
+    });
+    let timeouted = false;
+    p.addEventListener("timeout", () => {
+      timeouted = true;
+    });
+    let errorRaised = false;
+    p.addEventListener("error", () => {
+      errorRaised = true;
+    });
+    let loadended = false;
+    p.addEventListener("loadend", () => {
+      loadended = true;
+    });
+
+    await p.initiate();
+
+    expect(loadstarted).toBe(true);
+    expect(load >= 1).toBe(true);
+    expect(aborted).toBe(false);
+    expect(timeouted).toBe(false);
+    expect(errorRaised).toBe(false);
+    expect(loadended).toBe(true);
 
   });
 

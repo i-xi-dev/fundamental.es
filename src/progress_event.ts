@@ -47,6 +47,6 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
     return this.#total;
   }
 }
-const pe = (globalThis.ProgressEvent) ? globalThis.ProgressEvent : _ProgressEvent;
+const pe = (globalThis.ProgressEvent) ? globalThis.ProgressEvent : _ProgressEvent;// カバレッジがUncoveredになるがテスト不可能
 
 export { pe as ProgressEvent };
