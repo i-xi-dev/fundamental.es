@@ -73,12 +73,12 @@ describe("StringUtils.devideByLength", () => {
     expect(JSON.stringify(StringUtils.devideByLength("ab",4))).toBe(`["ab"]`);
     expect(JSON.stringify(StringUtils.devideByLength("abc",4))).toBe(`["abc"]`);
 
-    // expect(() => {
-    //   StringUtils.devideByLength("");
-    // }).toThrowError({
-    //   name: "TypeError",
-    //   message: "segmentLength must be positive integer",
-    // });
+    expect(() => {
+      StringUtils.devideByLength("", undefined as unknown as number);
+    }).toThrowError({
+      name: "TypeError",
+      message: "segmentLength must be positive integer",
+    });
 
     expect(() => {
       StringUtils.devideByLength("",0);

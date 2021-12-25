@@ -74,8 +74,8 @@ function minPaddedLengthOf(radix: Radix): number {
     return 3;
   case 16:
     return 2;
-  default:
-    return -1;
+  // default:
+  //   return -1 as never;
   }
 }
 
@@ -144,7 +144,7 @@ class ByteFormat {
 
   constructor(radix: Radix = 16, options?: Options) {
     if (isRadix(radix) !== true) {
-      throw new TypeError("invalid radix");
+      throw new TypeError("radix");
     }
     this.#radix = radix;
     this.#options = resolveOptions(this.#radix, options);
