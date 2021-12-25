@@ -1,10 +1,9 @@
-import assert from "node:assert";
 import { ReadableStream } from "node:stream/web";
-import { StreamUtils } from "../../../dist/index.js";
+import { StreamUtils } from "./stream_utils";
 
 describe("StreamUtils.streamToAsyncGenerator", () => {
   it("streamToAsyncGenerator(ReadableStreamDefaultReader)", async () => {
-    let ti;
+    let ti: NodeJS.Timeout;
     const s = new ReadableStream({
       start(controller) {
         let c = 0;
@@ -28,7 +27,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       result.push(chunk);
     }
 
-    assert.strictEqual(result.join(""), "01020304050607080910");
+    expect(result.join("")).toBe("01020304050607080910");
 
   });
 
