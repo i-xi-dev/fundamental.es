@@ -13,6 +13,10 @@ type TransferOptions = {
   /**
    * タイムアウト
    * ※絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない
+   * 
+   * ※ストリームの場合
+   *    ・ストリームを停止すれば良い
+   *    ので、実装しても無意味か
    */
   timeout?: number,
 
@@ -173,6 +177,9 @@ class TransferProgress<T, U = T> extends EventTarget {
       this.#notifyStarted();
 
       for await (const chunk of this.#transferrer.chunkGenerator) {
+        if ((this.#params.timeoutExceeded === true) || (this.#params.abortSignaled === true)) {
+          break;
+        }
         this.#indicator.loadedUnitCount = this.#transferrer.transferChunk(chunk);
       }
 

@@ -1,4 +1,3 @@
-import { performance } from "node:perf_hooks"; // globalThisがnodeのと違うのでimportしないと使えない
 import { IsomorphicEncoding } from "./isomorphic_encoding";
 
 describe("IsomorphicEncoding.decode", () => {
