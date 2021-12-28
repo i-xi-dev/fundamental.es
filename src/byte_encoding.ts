@@ -33,7 +33,7 @@ interface ByteDecoderStreamRegulator {
   flush(): string;
 }
 
-abstract class ByteDecoderStream implements TransformStream {
+abstract class ByteDecoderStream implements TransformStream<string, Uint8Array> {
   readonly #stream: TransformStream<string, Uint8Array>;
 
   constructor(decoder: ByteDecoder, regulator: ByteDecoderStreamRegulator) {
@@ -72,7 +72,7 @@ interface ByteEncoderStreamRegulator {
   flush(): Uint8Array;
 }
 
-abstract class ByteEncoderStream implements TransformStream {
+abstract class ByteEncoderStream implements TransformStream<Uint8Array, string> {
   readonly #stream: TransformStream<Uint8Array, string>;
 
   constructor(encoder: ByteEncoder, regulator: ByteEncoderStreamRegulator) {
