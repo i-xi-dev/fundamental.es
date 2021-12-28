@@ -18,6 +18,8 @@ export {
   type ByteFormatOptions,
   type ByteFormatRadix,
   ByteFormat,
+  BytesFormatter,
+  BytesParser,
 } from "./byte_format";
 export {
   type ByteDecoder,

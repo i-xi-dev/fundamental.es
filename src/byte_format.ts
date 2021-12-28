@@ -22,6 +22,9 @@ function isRadix(value: unknown): value is Radix {
  * オプション
  */
 type ResolvedOptions = {
+  /** 基数 */
+  radix: Radix,
+
   /** 前方埋め結果の文字列長 */
   paddedLength: number,
 
@@ -43,6 +46,9 @@ type ResolvedOptions = {
  * 未設定を許可
  */
 type Options = {
+  /** @see {@link ResolvedOptions.radix} */
+  radix?: Radix,
+
   /** @see {@link ResolvedOptions.paddedLength} */
   paddedLength?: number,
 
@@ -79,40 +85,57 @@ function minPaddedLengthOf(radix: Radix): number {
   }
 }
 
-function resolveOptions(radix: Radix, options: Options | ResolvedOptions = {}): ResolvedOptions {
-  const minPaddedLength: number = minPaddedLengthOf(radix);
-  const paddedLength: number = (typeof options.paddedLength === "number") ? options.paddedLength : minPaddedLength;
-  if (Number.isSafeInteger(paddedLength) !== true) {
+function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
+  const radixIsValid: boolean = isRadix(options.radix) || (options.radix === undefined);
+  if (radixIsValid !== true) {
+    throw new TypeError("radix");
+  }
+  const radix: Radix = isRadix(options.radix) ? options.radix as Radix : 16;
+
+  const paddedLengthIsValid: boolean = Number.isSafeInteger(options.paddedLength) || (options.paddedLength === undefined);
+  if (paddedLengthIsValid !== true) {
     throw new TypeError("paddedLength");
   }
+  const minPaddedLength: number = minPaddedLengthOf(radix);
+  const paddedLength: number = Number.isSafeInteger(options.paddedLength) ? options.paddedLength as number : minPaddedLength;
   if (paddedLength < minPaddedLength) {
     throw new RangeError("paddedLength");
   }
 
-  const upperCase: boolean = (typeof options.upperCase === "boolean") ? options.upperCase : true;
-  const prefix: string = (typeof options.prefix === "string") ? options.prefix : "";
-  const suffix: string = (typeof options.suffix === "string") ? options.suffix : "";
-  const separator: string = (typeof options.separator === "string") ? options.separator : "";
+  const upperCaseIsValid: boolean = (typeof options.upperCase === "boolean");
+  const prefixIsValid: boolean = (typeof options.prefix === "string");
+  const suffixIsValid: boolean = (typeof options.suffix === "string");
+  const separatorIsValid: boolean = (typeof options.separator === "string");
+  const isFrozen: boolean = Object.isFrozen(options);
 
-  return {
+  if (radixIsValid && paddedLengthIsValid && upperCaseIsValid && suffixIsValid && separatorIsValid && isFrozen) {
+    return options as ResolvedOptions;
+  }
+
+  const upperCase: boolean = upperCaseIsValid ? options.upperCase as boolean : true;
+  const prefix: string = prefixIsValid ? options.prefix as string : "";
+  const suffix: string = suffixIsValid ? options.suffix as string : "";
+  const separator: string = separatorIsValid ? options.separator as string : "";
+
+  return Object.freeze({
+    radix,
     paddedLength,
     upperCase,
     prefix,
     suffix,
     separator,
-  };
+  });
 }
 
 /**
  * 文字列がフォーマットオプションに合致しているか否かを返却
  * 
- * @param radix - フォーマット結果の基数
  * @param resolvedOptions - フォーマッターオプション
  * @returns 文字列がフォーマットオプションに合致しているか否か
  */
-function createByteRegex(radix: Radix, resolvedOptions: ResolvedOptions): RegExp {
+function createByteRegex(resolvedOptions: ResolvedOptions): RegExp {
   let charsPattern: string;
-  switch (radix) {
+  switch (resolvedOptions.radix) {
   case 2:
     charsPattern = "[01]";
     break;
@@ -126,14 +149,94 @@ function createByteRegex(radix: Radix, resolvedOptions: ResolvedOptions): RegExp
     charsPattern = "[0-9A-Fa-f]";
     break;
   }
-  const bodyLength = minPaddedLengthOf(radix);
+  const bodyLength = minPaddedLengthOf(resolvedOptions.radix);
   const paddingLength = resolvedOptions.paddedLength - bodyLength;
   const paddingPattern = (paddingLength > 0) ? `[0]{${ paddingLength }}` : "";
   return new RegExp(`^${ paddingPattern }${ charsPattern }{${ bodyLength }}$`);
 }
 
-class ByteFormat {
-  #radix: Radix;
+/**
+ * 文字列を8-bit符号なし整数にパースし返却
+ * 
+ * @param formatted - 文字列
+ * @returns 8-bit符号なし整数
+ */
+function parseByte(formatted: string, options: ResolvedOptions, byteRegex: RegExp): uint8 {
+  let work = formatted;
+
+  if (options.prefix.length > 0) {
+    if (work.startsWith(options.prefix)) {
+      work = work.substring(options.prefix.length);
+    }
+    else {
+      throw new TypeError("unprefixed");
+    }
+  }
+
+  if (options.suffix.length > 0) {
+    if (work.endsWith(options.suffix)) {
+      work = work.substring(0, (work.length - options.suffix.length));
+    }
+    else {
+      throw new TypeError("unsuffixed");
+    }
+  }
+
+  if (byteRegex.test(work) !== true) {
+    throw new TypeError(`parse error: ${work}`);
+  }
+
+  const integer = Number.parseInt(work, options.radix);
+  // if (Uint8.isUint8(integer)) {
+  return integer as uint8; // regex.testがtrueならuint8のはず
+  // }
+  // else 
+}
+
+function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Uint8Array {
+  let byteStringArray: string[];
+  if (options.separator.length > 0) {
+    byteStringArray = toParse.split(options.separator);
+    if (byteStringArray.length === 1 && byteStringArray[0] === "") {
+      return new Uint8Array(0);
+    }
+  }
+  else {
+    const elementLength = options.paddedLength + options.prefix.length + options.suffix.length;
+    byteStringArray = StringUtils.devideByLength(toParse, elementLength);
+  }
+
+  return Uint8Array.from(byteStringArray, (byteString) => {
+    return parseByte(byteString, options, byteRegex);
+  });
+}
+
+/**
+ * 8-bit符号なし整数を文字列にフォーマットし返却
+ * 
+ * @param byte 8-bit符号なし整数
+ * @param radix フォーマット結果の基数
+ * @param resolvedOptions フォーマッターオプション
+ * @returns 文字列
+ */
+function formatByte(byte: uint8, options: ResolvedOptions): string {
+  let str = byte.toString(options.radix);
+  if (options.upperCase === true) {
+    str = str.toUpperCase();
+  }
+  str = str.padStart(options.paddedLength, "0");
+  return options.prefix + str + options.suffix;
+}
+
+function format(bytes: Uint8Array, options: ResolvedOptions): string {
+  const byteStringArray = [ ...bytes ].map((byte) => {
+    return formatByte(byte as uint8, options);
+  });
+  return byteStringArray.join(options.separator);
+}
+
+class Parser {
+  static #parserCache: WeakMap<ResolvedOptions, Parser> = new WeakMap();
 
   /**
    * 未設定項目を埋めたオプション
@@ -142,100 +245,72 @@ class ByteFormat {
 
   #byteRegex: RegExp;// "g"等を持たせないよう注意
 
-  constructor(radix: Radix = 16, options?: Options) {
-    if (isRadix(radix) !== true) {
-      throw new TypeError("radix");
-    }
-    this.#radix = radix;
-    this.#options = resolveOptions(this.#radix, options);
-    this.#byteRegex = createByteRegex(this.#radix, this.#options);
+  constructor(options?: Options) {
+    this.#options = resolveOptions(options);
+    this.#byteRegex = createByteRegex(this.#options);
     Object.freeze(this);
   }
 
   parse(toParse: string): Uint8Array {
-    let byteStringArray: string[];
-    if (this.#options.separator.length > 0) {
-      byteStringArray = toParse.split(this.#options.separator);
-      if (byteStringArray.length === 1 && byteStringArray[0] === "") {
-        return new Uint8Array(0);
-      }
-    }
-    else {
-      const elementLength = this.#options.paddedLength + this.#options.prefix.length + this.#options.suffix.length;
-      byteStringArray = StringUtils.devideByLength(toParse, elementLength);
-    }
+    return parse(toParse, this.#options, this.#byteRegex);
+  }
 
-    return Uint8Array.from(byteStringArray, (byteString) => {
-      return this.#parseByte(byteString);
-    });
+  static get(options?: Options): Parser {
+    const resolvedOptions = resolveOptions(options);
+    if (Parser.#parserCache.has(resolvedOptions) !== true) {
+      Parser.#parserCache.set(resolvedOptions, new Parser(resolvedOptions));
+    }
+    return Parser.#parserCache.get(resolvedOptions) as Parser;
+  }
+}
+Object.freeze(Parser);
+
+class Formatter {
+  static #formatterCache: WeakMap<ResolvedOptions, Formatter> = new WeakMap();
+
+  /**
+   * 未設定項目を埋めたオプション
+   */
+  #options: ResolvedOptions;
+
+  constructor(options?: Options) {
+    this.#options = resolveOptions(options);
+    Object.freeze(this);
   }
 
   format(bytes: Uint8Array): string {
-    const byteStringArray = [ ...bytes ].map((byte) => {
-      return this.#formatByte(byte as uint8);
-    });
-    return byteStringArray.join(this.#options.separator);
+    return format(bytes, this.#options);
   }
 
-  /**
-   * 文字列を8-bit符号なし整数にパースし返却
-   * 
-   * @param formatted - 文字列
-   * @returns 8-bit符号なし整数
-   */
-  #parseByte(formatted: string): uint8 {
-    let work = formatted;
-
-    if (this.#options.prefix.length > 0) {
-      if (work.startsWith(this.#options.prefix)) {
-        work = work.substring(this.#options.prefix.length);
-      }
-      else {
-        throw new TypeError("unprefixed");
-      }
+  static get(options?: Options): Formatter {
+    const resolvedOptions = resolveOptions(options);
+    if (Formatter.#formatterCache.has(resolvedOptions) !== true) {
+      Formatter.#formatterCache.set(resolvedOptions, new Formatter(resolvedOptions));
     }
-
-    if (this.#options.suffix.length > 0) {
-      if (work.endsWith(this.#options.suffix)) {
-        work = work.substring(0, (work.length - this.#options.suffix.length));
-      }
-      else {
-        throw new TypeError("unsuffixed");
-      }
-    }
-
-    if (this.#byteRegex.test(work) !== true) {
-      throw new TypeError(`parse error: ${work}`);
-    }
-
-    const integer = Number.parseInt(work, this.#radix);
-    // if (Uint8.isUint8(integer)) {
-    return integer as uint8; // regex.testがtrueならuint8のはず
-    // }
-    // else 
-  }
-
-  /**
-   * 8-bit符号なし整数を文字列にフォーマットし返却
-   * 
-   * @param byte 8-bit符号なし整数
-   * @param radix フォーマット結果の基数
-   * @param resolvedOptions フォーマッターオプション
-   * @returns 文字列
-   */
-  #formatByte(byte: uint8): string {
-    let str = byte.toString(this.#radix);
-    if (this.#options.upperCase === true) {
-      str = str.toUpperCase();
-    }
-    str = str.padStart(this.#options.paddedLength, "0");
-    return this.#options.prefix + str + this.#options.suffix;
+    return Formatter.#formatterCache.get(resolvedOptions) as Formatter;
   }
 }
-Object.freeze(ByteFormat);
+Object.freeze(Formatter);
+
+const ByteFormat = Object.freeze({
+  parse(toParse: string, options?: Options): Uint8Array {
+    const resolvedOptions = resolveOptions(options);
+    const byteRegex = createByteRegex(resolvedOptions);
+    return parse(toParse, resolvedOptions, byteRegex);
+  },
+
+  format(bytes: Uint8Array, options?: Options): string {
+    const resolvedOptions = resolveOptions(options);
+    return format(bytes, resolvedOptions);
+  },
+
+  resolveOptions,
+});
 
 export {
   type Radix as ByteFormatRadix,
   type Options as ByteFormatOptions,
+  Parser as BytesParser,
+  Formatter as BytesFormatter,
   ByteFormat,
 };
