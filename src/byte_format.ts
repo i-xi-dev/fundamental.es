@@ -90,7 +90,7 @@ function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOption
   if (radixIsValid !== true) {
     throw new TypeError("radix");
   }
-  const radix: Radix = isRadix(options.radix) ? options.radix as Radix : 16;
+  const radix: Radix = isRadix(options.radix) ? options.radix  : 16;
 
   const paddedLengthIsValid: boolean = Number.isSafeInteger(options.paddedLength) || (options.paddedLength === undefined);
   if (paddedLengthIsValid !== true) {
