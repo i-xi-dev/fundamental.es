@@ -33,6 +33,7 @@ export { ByteBuffer } from "./byte_buffer";
 export { StreamUtils } from "./stream_utils";
 export {
   type DigestAlgorithm,
+  // Sha256,
 } from "./digest_algorithm";
 export {
   type TransferOptions,
