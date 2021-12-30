@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { ByteFormat, BytesFormatter, BytesParser } from "../../node/index.mjs";
+import { ByteFormat, BytesFormatter, BytesParser } from "../../dist/index.js";
 
 describe("ByteFormat.format", () => {
   it("format(Uint8Array)", () => {

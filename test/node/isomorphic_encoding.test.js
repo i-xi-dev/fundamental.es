@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { IsomorphicEncoding } from "../../node/index.mjs";
+import { IsomorphicEncoding } from "../../dist/index.js";
 
 describe("IsomorphicEncoding.decode", () => {
   it("decode()", () => {

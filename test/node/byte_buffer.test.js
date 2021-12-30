@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { ByteBuffer } from "../../node/index.mjs";
+import { ByteBuffer } from "../../dist/index.js";
 
 describe("ByteBuffer", () => {
   it("new ByteBuffer()/capacity/position/put()", () => {

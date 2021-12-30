@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { AbortError, TimeoutError } from "../../node/index.mjs";
+import { AbortError, TimeoutError } from "../../dist/index.js";
 
 describe("AbortError", () => {
   it("new AbortError()", () => {

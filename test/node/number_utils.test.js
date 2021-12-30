@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { NumberUtils } from "../../node/index.mjs";
+import { NumberUtils } from "../../dist/index.js";
 
 describe("NumberUtils.isNonNegativeInteger", () => {
   it("isNonNegativeInteger(number)", () => {

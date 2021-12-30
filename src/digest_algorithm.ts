@@ -14,34 +14,54 @@ interface DigestAlgorithm {
   compute: (input: Uint8Array) => Promise<Uint8Array>;
 }
 
-// async function getSubtleCrypto(): Promise<SubtleCrypto> {
-//   if (globalThis.crypto) {
-//     return globalThis.crypto.subtle;
-//   }
-//   else {
-//     const nodeMod = "node:crypto"; // 直接import("node:*")とするとdenoでエラー
-//     const { webcrypto } = await import(nodeMod); // webpackでバンドルするとimportしなくなる
-//     return webcrypto.subtle;
-//   }
-// }
+/**
+ * SHA-256 digest algorithm
+ */
+const Sha256: DigestAlgorithm = Object.freeze({
+  /**
+   * Computes the SHA-256 digest for the byte sequence.
+   * 
+   * @see {@link DigestAlgorithm.compute}
+   */
+  async compute(input: Uint8Array): Promise<Uint8Array> {
+    const bytes = await globalThis.crypto.subtle.digest("SHA-256", input);
+    return new Uint8Array(bytes);
+  },
+});
 
-// /**
-//  * SHA-256 digest algorithm
-//  */
-// const Sha256: DigestAlgorithm = Object.freeze({
-//   /**
-//    * Computes the SHA-256 digest for the byte sequence.
-//    * 
-//    * @see {@link DigestAlgorithm.compute}
-//    */
-//   async compute(input: Uint8Array): Promise<Uint8Array> {
-//     const subtleCrypto = await getSubtleCrypto();
-//     const bytes = await subtleCrypto.digest("SHA-256", input);
-//     return new Uint8Array(bytes);
-//   },
-// });
+/**
+ * SHA-384 digest algorithm
+ */
+const Sha384: DigestAlgorithm = Object.freeze({
+  /**
+   * Computes the SHA-384 digest for the byte sequence.
+   * 
+   * @see {@link DigestAlgorithm.compute}
+   */
+  async compute(input: Uint8Array): Promise<Uint8Array> {
+    const bytes = await globalThis.crypto.subtle.digest("SHA-384", input);
+    return new Uint8Array(bytes);
+  },
+});
+
+/**
+ * SHA-512 digest algorithm
+ */
+const Sha512: DigestAlgorithm = Object.freeze({
+  /**
+   * Computes the SHA-512 digest for the byte sequence.
+   * 
+   * @see {@link DigestAlgorithm.compute}
+   */
+  async compute(input: Uint8Array): Promise<Uint8Array> {
+    const bytes = await globalThis.crypto.subtle.digest("SHA-512", input);
+    return new Uint8Array(bytes);
+  },
+});
 
 export {
   type DigestAlgorithm,
-  // Sha256,
+  Sha256,
+  Sha384,
+  Sha512,
 };
