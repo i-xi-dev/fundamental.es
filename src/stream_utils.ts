@@ -9,8 +9,13 @@
  * @returns チャンクを返却する非同期ジェネレーター
  */
 async function* streamToAsyncGenerator<T>(streamReader: ReadableStreamDefaultReader<T>): AsyncGenerator<T, void, void> {
-  for (let i = await streamReader.read(); (i.done !== true); i = await streamReader.read()) {
-    yield i.value;
+  try {
+    for (let i = await streamReader.read(); (i.done !== true); i = await streamReader.read()) {
+      yield i.value;
+    }
+  }
+  catch (exception) {
+    return;
   }
 }
 
