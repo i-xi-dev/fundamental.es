@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { Uint8 } from "./uint8";
+import { Uint8 } from "../../dist/index.js";
 
 describe("Uint8.isUint8", () => {
   it("isUint8(number)", () => {

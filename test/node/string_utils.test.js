@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { StringUtils } from "./string_utils";
+import { StringUtils } from "../../dist/index.js";
 
 describe("StringUtils.collectHttpQuotedString", () => {
   it("collectHttpQuotedString(string)", () => {
@@ -75,7 +75,7 @@ describe("StringUtils.devideByLength", () => {
     assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",4)), `["abc"]`);
 
     assert.throws(() => {
-      StringUtils.devideByLength("", undefined as unknown as number);
+      StringUtils.devideByLength("");
     }, {
       name: "TypeError",
       message: "segmentLength must be positive integer",

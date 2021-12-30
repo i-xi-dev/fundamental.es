@@ -1,24 +1,25 @@
+import assert from "node:assert";
 import { NumberUtils } from "./number_utils";
 
 describe("NumberUtils.isNonNegativeInteger", () => {
   it("isNonNegativeInteger(number)", () => {
-    expect(NumberUtils.isNonNegativeInteger(-1)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(-0)).toBe(true);
-    expect(NumberUtils.isNonNegativeInteger(0)).toBe(true);
-    expect(NumberUtils.isNonNegativeInteger(1)).toBe(true);
-    expect(NumberUtils.isNonNegativeInteger(Number.MAX_SAFE_INTEGER)).toBe(true);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(-1), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(-0), true);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(0), true);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(1), true);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MAX_SAFE_INTEGER), true);
 
-    expect(NumberUtils.isNonNegativeInteger(1.1)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.NaN)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER)).toBe(false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(1.1), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NaN), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER), false);
 
   });
 
   it("isNonNegativeInteger(*)", () => {
-    expect(NumberUtils.isNonNegativeInteger("1")).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(true)).toBe(false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger("1"), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(true), false);
 
   });
 
@@ -26,23 +27,23 @@ describe("NumberUtils.isNonNegativeInteger", () => {
 
 describe("NumberUtils.isPositiveInteger", () => {
   it("isPositiveInteger(number)", () => {
-    expect(NumberUtils.isPositiveInteger(-1)).toBe(false);
-    expect(NumberUtils.isPositiveInteger(-0)).toBe(false);
-    expect(NumberUtils.isPositiveInteger(0)).toBe(false);
-    expect(NumberUtils.isPositiveInteger(1)).toBe(true);
-    expect(NumberUtils.isPositiveInteger(Number.MAX_SAFE_INTEGER)).toBe(true);
+    assert.strictEqual(NumberUtils.isPositiveInteger(-1), false);
+    assert.strictEqual(NumberUtils.isPositiveInteger(-0), false);
+    assert.strictEqual(NumberUtils.isPositiveInteger(0), false);
+    assert.strictEqual(NumberUtils.isPositiveInteger(1), true);
+    assert.strictEqual(NumberUtils.isPositiveInteger(Number.MAX_SAFE_INTEGER), true);
 
-    expect(NumberUtils.isNonNegativeInteger(1.1)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.NaN)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY)).toBe(false);
-    expect(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER)).toBe(false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(1.1), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NaN), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY), false);
+    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER), false);
 
   });
 
   it("isPositiveInteger(*)", () => {
-    expect(NumberUtils.isPositiveInteger("1")).toBe(false);
-    expect(NumberUtils.isPositiveInteger(true)).toBe(false);
+    assert.strictEqual(NumberUtils.isPositiveInteger("1"), false);
+    assert.strictEqual(NumberUtils.isPositiveInteger(true), false);
 
   });
 

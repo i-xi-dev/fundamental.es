@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { TransferProgress } from "./transfer_progress";
+import { TransferProgress } from "../../dist/index.js";
 
 async function* createChunkGenerator() {
   for (let i = 0; i < 10; i++) {
@@ -7,15 +7,15 @@ async function* createChunkGenerator() {
   }
 }
 
-function wait(ms: number) {
-  return new Promise<void>((resolve) => {
+function wait(ms) {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, ms);
   });
 }
 
-async function* createChunkGenerator2(interval: number) {
+async function* createChunkGenerator2(interval) {
   for (let i = 0; i < 10; i++) {
     await wait(interval);
     yield i.toString(10).padStart(4, "0");
@@ -140,7 +140,7 @@ describe("TransferProgress", () => {
           return buffer;
         },
       }, {
-        total: "100" as unknown as number,
+        total: "100",
       });
     }, {
       name: "TypeError",

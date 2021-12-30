@@ -1,12 +1,12 @@
 import assert from "node:assert";
 import { ReadableStream } from "node:stream/web";
-import { StreamUtils } from "./stream_utils";
+import { StreamUtils } from "../../dist/index.js";
 
 describe("StreamUtils.streamToAsyncGenerator", () => {
   it("streamToAsyncGenerator(ReadableStreamDefaultReader)", async () => {
-    let ti: NodeJS.Timeout;
+    let ti;
     const s = new ReadableStream({
-      start(controller: ReadableStreamDefaultController) {
+      start(controller) {
         let c = 0;
         ti = setInterval(() => {
           if (c >= 10) {
