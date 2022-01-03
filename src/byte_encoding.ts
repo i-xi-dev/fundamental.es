@@ -57,10 +57,16 @@ abstract class ByteDecoderStream implements TransformStream<string, Uint8Array> 
     };
   }
 
+  /**
+   * @see [TransformStream.writable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/writable)
+   */
   get writable(): WritableStream<string> {
     return this.#stream.writable;
   }
 
+  /**
+   * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
+   */
   get readable(): ReadableStream<Uint8Array> {
     return this.#stream.readable;
   }
@@ -96,10 +102,16 @@ abstract class ByteEncoderStream implements TransformStream<Uint8Array, string> 
     };
   }
 
+  /**
+   * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
+   */
   get writable(): WritableStream<Uint8Array> {
     return this.#stream.writable;
   }
 
+  /**
+   * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
+   */
   get readable(): ReadableStream<string> {
     return this.#stream.readable;
   }
