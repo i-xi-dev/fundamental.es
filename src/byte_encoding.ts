@@ -103,7 +103,7 @@ abstract class ByteEncoderStream implements TransformStream<Uint8Array, string> 
   }
 
   /**
-   * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
+   * @see [TransformStream.writable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/writable)
    */
   get writable(): WritableStream<Uint8Array> {
     return this.#stream.writable;
