@@ -13,6 +13,7 @@ export {
   type uint8,
   Uint8,
 } from "./uint8";
+export { SizedMap } from "./collections";
 export { IsomorphicEncoding } from "./isomorphic_encoding";
 export {
   type ByteFormatOptions,
