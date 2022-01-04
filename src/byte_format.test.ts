@@ -220,13 +220,12 @@ describe("BytesFormatter.get", () => {
   });
 
   it("get(Object)", () => {
-    const op = ByteFormat.resolveOptions({radix:10});
-    const format = BytesFormatter.get(op);
+    const format = BytesFormatter.get({radix:10});
 
     assert.strictEqual(format.format(Uint8Array.of()), "");
     assert.strictEqual(format.format(Uint8Array.of(255,254,253,252,0,1,2,3)), "255254253252000001002003");
 
-    const format2 = BytesFormatter.get(op);
+    const format2 = BytesFormatter.get({radix:10});
     assert.strictEqual(format, format2);
 
   });
@@ -358,13 +357,12 @@ describe("BytesParser.get", () => {
   });
 
   it("get(Object)", () => {
-    const op = ByteFormat.resolveOptions({radix:10});
-    const format = BytesParser.get(op);
+    const format = BytesParser.get({radix:10});
 
     assert.strictEqual(JSON.stringify(Array.from(format.parse(""))), "[]");
     assert.strictEqual(JSON.stringify(Array.from(format.parse("255254253252000001002003"))), "[255,254,253,252,0,1,2,3]");
 
-    const format2 = BytesParser.get(op);
+    const format2 = BytesParser.get({radix:10});
     assert.strictEqual(format, format2);
 
   });

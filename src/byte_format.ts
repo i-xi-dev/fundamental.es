@@ -1,10 +1,12 @@
 //
 
+import { NumberUtils } from "./number_utils";
 import { StringUtils } from "./string_utils";
 import {
   type uint8,
   // Uint8,
 } from "./uint8";
+import { SizedMap } from "./collections";
 
 /**
  * フォーマッターで対応する基数
@@ -42,10 +44,9 @@ type ResolvedOptions = {
 };
 
 /**
- * オプション
- * 未設定を許可
+ * The object with the following optional fields.
  */
-type Options = {
+type ByteFormatOptions = {
   /** @see {@link ResolvedOptions.radix} */
   radix?: Radix,
 
@@ -85,15 +86,27 @@ function minPaddedLengthOf(radix: Radix): number {
   }
 }
 
-function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOptions {
-  const radixIsValid: boolean = isRadix(options.radix) || (options.radix === undefined);
-  if (radixIsValid !== true) {
+/**
+ * 
+ * @param options - 
+ * @returns 
+ * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+ * @throws {TypeError} The `options.paddedLength` is not positive integer.
+ * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+ */
+function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): ResolvedOptions {
+  if (isRadix(options.radix) || (options.radix === undefined)) {
+    // ok
+  }
+  else {
     throw new TypeError("radix");
   }
   const radix: Radix = isRadix(options.radix) ? options.radix  : 16;
 
-  const paddedLengthIsValid: boolean = Number.isSafeInteger(options.paddedLength) || (options.paddedLength === undefined);
-  if (paddedLengthIsValid !== true) {
+  if (NumberUtils.isPositiveInteger(options.paddedLength) || (options.paddedLength === undefined)) {
+    // ok
+  }
+  else {
     throw new TypeError("paddedLength");
   }
   const minPaddedLength: number = minPaddedLengthOf(radix);
@@ -102,20 +115,37 @@ function resolveOptions(options: Options | ResolvedOptions = {}): ResolvedOption
     throw new RangeError("paddedLength");
   }
 
-  const upperCaseIsValid: boolean = (typeof options.upperCase === "boolean");
-  const prefixIsValid: boolean = (typeof options.prefix === "string");
-  const suffixIsValid: boolean = (typeof options.suffix === "string");
-  const separatorIsValid: boolean = (typeof options.separator === "string");
-  const isFrozen: boolean = Object.isFrozen(options);
-
-  if (radixIsValid && paddedLengthIsValid && upperCaseIsValid && suffixIsValid && separatorIsValid && isFrozen) {
-    return options as ResolvedOptions;
+  let upperCase: boolean;
+  if (typeof options.upperCase === "boolean") {
+    upperCase = options.upperCase;
+  }
+  else {
+    upperCase = true;
   }
 
-  const upperCase: boolean = upperCaseIsValid ? options.upperCase as boolean : true;
-  const prefix: string = prefixIsValid ? options.prefix as string : "";
-  const suffix: string = suffixIsValid ? options.suffix as string : "";
-  const separator: string = separatorIsValid ? options.separator as string : "";
+  let prefix: string;
+  if (typeof options.prefix === "string") {
+    prefix = options.prefix;
+  }
+  else {
+    prefix = "";
+  }
+
+  let suffix: string;
+  if (typeof options.suffix === "string") {
+    suffix = options.suffix;
+  }
+  else {
+    suffix = "";
+  }
+
+  let separator: string;
+  if (typeof options.separator === "string") {
+    separator = options.separator;
+  }
+  else {
+    separator = "";
+  }
 
   return Object.freeze({
     radix,
@@ -160,6 +190,7 @@ function createByteRegex(resolvedOptions: ResolvedOptions): RegExp {
  * 
  * @param formatted - 文字列
  * @returns 8-bit符号なし整数
+ * @throws {TypeError} The `formatted` does not match the specified format.
  */
 function parseByte(formatted: string, options: ResolvedOptions, byteRegex: RegExp): uint8 {
   let work = formatted;
@@ -193,6 +224,14 @@ function parseByte(formatted: string, options: ResolvedOptions, byteRegex: RegEx
   // else 
 }
 
+/**
+ * 
+ * @param toParse 
+ * @param options 
+ * @param byteRegex 
+ * @returns 
+ * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
+ */
 function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Uint8Array {
   let byteStringArray: string[];
   if (options.separator.length > 0) {
@@ -236,7 +275,11 @@ function format(bytes: Uint8Array, options: ResolvedOptions): string {
 }
 
 class Parser {
-  static #parserCache: WeakMap<ResolvedOptions, Parser> = new WeakMap();
+  /**
+   * インスタンスのキャッシュ
+   * static getで使用
+   */
+  static #pool: SizedMap<string, Parser> = new SizedMap(1);
 
   /**
    * 未設定項目を埋めたオプション
@@ -245,35 +288,72 @@ class Parser {
 
   #byteRegex: RegExp;// "g"等を持たせないよう注意
 
-  constructor(options?: Options) {
+  /**
+   * 
+   * @param options 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  constructor(options?: ByteFormatOptions) {
     this.#options = resolveOptions(options);
     this.#byteRegex = createByteRegex(this.#options);
     Object.freeze(this);
   }
 
+  /**
+   * 
+   * @param toParse 
+   * @returns 
+   * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
+   */
   parse(toParse: string): Uint8Array {
     return parse(toParse, this.#options, this.#byteRegex);
   }
 
-  static get(options?: Options): Parser {
+  /**
+   * 
+   * @param options 
+   * @returns 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  static get(options?: ByteFormatOptions): Parser {
     const resolvedOptions = resolveOptions(options);
-    if (Parser.#parserCache.has(resolvedOptions) !== true) {
-      Parser.#parserCache.set(resolvedOptions, new Parser(resolvedOptions));
+
+    const poolKey = JSON.stringify(resolvedOptions);
+    let parser = Parser.#pool.get(poolKey);
+    if (parser) {
+      return parser;
     }
-    return Parser.#parserCache.get(resolvedOptions) as Parser;
+    parser = new Parser(resolvedOptions);
+    Parser.#pool.set(poolKey, parser);
+    return parser;
   }
 }
 Object.freeze(Parser);
 
 class Formatter {
-  static #formatterCache: WeakMap<ResolvedOptions, Formatter> = new WeakMap();
+  /**
+   * インスタンスのキャッシュ
+   * static getで使用
+   */
+  static #pool: SizedMap<string, Formatter> = new SizedMap(1);
 
   /**
    * 未設定項目を埋めたオプション
    */
   #options: ResolvedOptions;
 
-  constructor(options?: Options) {
+  /**
+   * 
+   * @param options 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  constructor(options?: ByteFormatOptions) {
     this.#options = resolveOptions(options);
     Object.freeze(this);
   }
@@ -282,34 +362,68 @@ class Formatter {
     return format(bytes, this.#options);
   }
 
-  static get(options?: Options): Formatter {
+  /**
+   * 
+   * @param options 
+   * @returns 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  static get(options?: ByteFormatOptions): Formatter {
     const resolvedOptions = resolveOptions(options);
-    if (Formatter.#formatterCache.has(resolvedOptions) !== true) {
-      Formatter.#formatterCache.set(resolvedOptions, new Formatter(resolvedOptions));
+
+    const poolKey = JSON.stringify(resolvedOptions);
+    let formatter = Formatter.#pool.get(poolKey);
+    if (formatter) {
+      return formatter;
     }
-    return Formatter.#formatterCache.get(resolvedOptions) as Formatter;
+    formatter = new Formatter(resolvedOptions);
+    Formatter.#pool.set(poolKey, formatter);
+    return formatter;
   }
 }
 Object.freeze(Formatter);
 
+interface ByteFormat {
+  /**
+   * 
+   * @param toParse 
+   * @param options 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
+   */
+  parse(toParse: string, options?: ByteFormatOptions): Uint8Array;
+
+  /**
+   * 
+   * @param bytes 
+   * @param options 
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  format(bytes: Uint8Array, options?: ByteFormatOptions): string;
+}
+
 const ByteFormat = Object.freeze({
-  parse(toParse: string, options?: Options): Uint8Array {
+  parse(toParse: string, options?: ByteFormatOptions): Uint8Array {
     const resolvedOptions = resolveOptions(options);
     const byteRegex = createByteRegex(resolvedOptions);
     return parse(toParse, resolvedOptions, byteRegex);
   },
 
-  format(bytes: Uint8Array, options?: Options): string {
+  format(bytes: Uint8Array, options?: ByteFormatOptions): string {
     const resolvedOptions = resolveOptions(options);
     return format(bytes, resolvedOptions);
   },
-
-  resolveOptions,
-});
+}) as ByteFormat;
 
 export {
   type Radix as ByteFormatRadix,
-  type Options as ByteFormatOptions,
+  type ByteFormatOptions,
   Parser as BytesParser,
   Formatter as BytesFormatter,
   ByteFormat,
