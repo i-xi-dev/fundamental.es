@@ -47,22 +47,48 @@ type ResolvedOptions = {
  * The object with the following optional fields.
  */
 type ByteFormatOptions = {
-  /** @see {@link ResolvedOptions.radix} */
+  /**
+   * The radix of the formatted string.
+   * 2, 8, 10, and 16 are available values.
+   * The default is `16`.
+   */
   radix?: Radix,
 
-  /** @see {@link ResolvedOptions.paddedLength} */
+  /**
+   * The length of the `"0"` padded formatted string for each byte.
+   * The default is determined by `radix`.
+   * 
+   * | `radix` | default of `paddedLength` |
+   * | ---: | ---: |
+   * | `16` | `2` |
+   * | `10` | `3` |
+   * | `8` | `3` |
+   * | `2` | `8` |
+   */
   paddedLength?: number,
 
-  /** @see {@link ResolvedOptions.upperCase} */
+  /**
+   * Whether the formatted string is uppercase or not.
+   * The default is `true`.
+   */
   upperCase?: boolean,
 
-  /** @see {@link ResolvedOptions.prefix} */
+  /**
+   * The prefix of the formatted string for each byte.
+   * The default is `""`.
+   */
   prefix?: string,
 
-  /** @see {@link ResolvedOptions.suffix} */
+  /**
+   * The suffix of the formatted string for each byte.
+   * The default is `""`.
+   */
   suffix?: string,
 
-  /** @see {@link ResolvedOptions.separator} */
+  /**
+   * The separator between the formatted strings of each byte.
+   * The default is `""`.
+   */
   separator?: string,
 };
 
