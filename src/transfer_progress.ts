@@ -7,22 +7,22 @@ import {
 import { NumberUtils } from "./number_utils";
 import { ProgressEvent } from "./progress_event";
 
+/**
+ * The options for the `TransferProgress` with the following optional fields.
+ */
 type TransferOptions = {
+  /**
+   * The size to transfer, in units that depends on the `TransferProgress`.
+   */
   total?: number,
 
   /**
-   * タイムアウト
-   * ※絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない
-   * 
-   * ※ストリームの場合
-   *    ・ストリームを停止すれば良い
-   *    ので、実装しても無意味か
+   * The number of milliseconds it takes for the `TransferProgress` to end automatically.
    */
-  timeout?: number,
+  timeout?: number, // XXX ジェネレーターを終了させればいいので、不要か
 
   /**
-   * 中止通達
-   * ※絶え間なく読めるストリームの場合、すべて読み取るまで中断されない
+   * The `AbortSignal` object.
    */
   signal?: AbortSignal,
 };
@@ -163,10 +163,12 @@ class TransferProgress<T, U = T> extends EventTarget {
     }
 
     if (Number.isFinite(this.#timeout)) {
+      // ただし、絶え間なく読めるストリームの場合、すべて読み取るまでタイムアウトされない
       this.#params.timerId = globalThis.setTimeout(onExpired, this.#timeout) as unknown as number;
     }
 
     if (this.#signal instanceof AbortSignal) {
+      // ただし、絶え間なく読めるストリームの場合、すべて読み取るまで中断されない
       this.#signal.addEventListener("abort", onAborted, {
         once: true,
         passive: true,
