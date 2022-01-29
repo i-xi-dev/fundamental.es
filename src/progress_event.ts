@@ -5,7 +5,7 @@ import { NumberUtils } from "./number_utils";
 /**
  * The `ProgressEvent` for Node.js
  * 
- * Implements the {@link [ProgressEvent](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent)} interface.
+ * Implements the [`ProgressEvent`](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) interface.
  */
 class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   #lengthComputable: boolean;
@@ -27,21 +27,21 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   }
 
   /**
-   * @see {@link [ProgressEvent.lengthComputable](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/lengthComputable)}
+   * @see [ProgressEvent.lengthComputable](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/lengthComputable)
    */
   get lengthComputable(): boolean {
     return this.#lengthComputable;
   }
 
   /**
-   * @see {@link [ProgressEvent.loaded](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/loaded)}
+   * @see [ProgressEvent.loaded](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/loaded)
    */
   get loaded(): number {
     return this.#loaded;
   }
 
   /**
-   * @see {@link [ProgressEvent.total](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/total)}
+   * @see [ProgressEvent.total](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/total)
    */
   get total(): number {
     return this.#total;

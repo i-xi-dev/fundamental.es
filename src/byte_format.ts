@@ -185,6 +185,7 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
 
 /**
  * 文字列がフォーマットオプションに合致しているか否かを返却
+ * ただし、upperCaseは無視する
  * 
  * @param resolvedOptions - フォーマッターオプション
  * @returns 文字列がフォーマットオプションに合致しているか否か
