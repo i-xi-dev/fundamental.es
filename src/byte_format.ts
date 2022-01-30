@@ -30,8 +30,8 @@ type ResolvedOptions = {
   /** 前方埋め結果の文字列長 */
   paddedLength: number,
 
-  /** 16進数のa-fを大文字にするか否か */
-  upperCase: boolean,
+  /** 16進数のa-fを小文字にするか否か */
+  lowerCase: boolean,
 
   /** 各バイトのプレフィックス */
   prefix: string,
@@ -69,7 +69,16 @@ type ByteFormatOptions = {
 
   /**
    * Whether the formatted string is uppercase or not.
+   * The default is `false`.
+   */
+  lowerCase?: boolean,
+
+  /**
+   * Whether the formatted string is uppercase or not.
    * The default is `true`.
+   * `upperCase` is ignored if `lowerCase` is specified.
+   * 
+   * @deprecated
    */
   upperCase?: boolean,
 
@@ -141,12 +150,22 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
     throw new RangeError("paddedLength");
   }
 
-  let upperCase: boolean;
-  if (typeof options.upperCase === "boolean") {
-    upperCase = options.upperCase;
+  let lowerCase: boolean;
+  if (("upperCase" in options) && (("lowerCase" in options) !== true)) {
+    if (typeof options.upperCase === "boolean") {
+      lowerCase = !options.upperCase;
+    }
+    else {
+      lowerCase = false;
+    }
   }
   else {
-    upperCase = true;
+    if (typeof options.lowerCase === "boolean") {
+      lowerCase = options.lowerCase;
+    }
+    else {
+      lowerCase = false;
+    }
   }
 
   let prefix: string;
@@ -176,7 +195,7 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
   return Object.freeze({
     radix,
     paddedLength,
-    upperCase,
+    lowerCase,
     prefix,
     suffix,
     separator,
@@ -287,7 +306,7 @@ function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Ui
  */
 function formatByte(byte: uint8, options: ResolvedOptions): string {
   let str = byte.toString(options.radix);
-  if (options.upperCase === true) {
+  if (options.lowerCase !== true) {
     str = str.toUpperCase();
   }
   str = str.padStart(options.paddedLength, "0");

@@ -63,6 +63,24 @@ describe("ByteFormat.format", () => {
 
   });
 
+  it("format(Uint8Array, {lowerCase:true})", () => {
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(), {lowerCase:true}), "");
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:true}), "fffefdfc00010203");
+
+  });
+
+  it("format(Uint8Array, {lowerCase:false,upperCase:false})", () => {
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(), {lowerCase:false,upperCase:false}), "");
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:false,upperCase:false}), "FFFEFDFC00010203");
+
+  });
+
+  it("format(Uint8Array, {lowerCase:true,upperCase:true})", () => {
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(), {lowerCase:true,upperCase:true}), "");
+    assert.strictEqual(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:true,upperCase:true}), "fffefdfc00010203");
+
+  });
+
   it("new ByteFormat(16, {paddedLength:4})/format(Uint8Array)", () => {
     assert.strictEqual(ByteFormat.format(Uint8Array.of(), {paddedLength:4}), "");
     assert.strictEqual(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {paddedLength:4}), "00FF00FE00FD00FC0000000100020003");
@@ -153,6 +171,13 @@ describe("ByteFormat.parse", () => {
     assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("", {upperCase:false}))), "[]");
     assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("FFFEFDFC00010203", {upperCase:false}))), "[255,254,253,252,0,1,2,3]");
     assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("fffefdfc00010203", {upperCase:false}))), "[255,254,253,252,0,1,2,3]");
+
+  });
+
+  it("parse(string, {lowerCase:true})", () => {
+    assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("", {lowerCase:true}))), "[]");
+    assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("FFFEFDFC00010203", {lowerCase:true}))), "[255,254,253,252,0,1,2,3]");
+    assert.strictEqual(JSON.stringify(Array.from(ByteFormat.parse("fffefdfc00010203", {lowerCase:true}))), "[255,254,253,252,0,1,2,3]");
 
   });
 
@@ -299,6 +324,14 @@ describe("BytesFormatter.prototype.format", () => {
 
   });
 
+  it("new BytesFormatter({lowerCase:true})/format(Uint8Array)", () => {
+    const format = new BytesFormatter({lowerCase:true});
+
+    assert.strictEqual(format.format(Uint8Array.of()), "");
+    assert.strictEqual(format.format(Uint8Array.of(255,254,253,252,0,1,2,3)), "fffefdfc00010203");
+
+  });
+
   it("new BytesFormatter({paddedLength:4})/format(Uint8Array)", () => {
     const format = new BytesFormatter({paddedLength:4});
 
@@ -420,6 +453,15 @@ describe("BytesParser.prototype.parse", () => {
 
   it("new BytesParser({upperCase:false})/parse(string)", () => {
     const format = new BytesParser({upperCase:false});
+
+    assert.strictEqual(JSON.stringify(Array.from(format.parse(""))), "[]");
+    assert.strictEqual(JSON.stringify(Array.from(format.parse("FFFEFDFC00010203"))), "[255,254,253,252,0,1,2,3]");
+    assert.strictEqual(JSON.stringify(Array.from(format.parse("fffefdfc00010203"))), "[255,254,253,252,0,1,2,3]");
+
+  });
+
+  it("new BytesParser({lowerCase:true})/parse(string)", () => {
+    const format = new BytesParser({lowerCase:true});
 
     assert.strictEqual(JSON.stringify(Array.from(format.parse(""))), "[]");
     assert.strictEqual(JSON.stringify(Array.from(format.parse("FFFEFDFC00010203"))), "[255,254,253,252,0,1,2,3]");
