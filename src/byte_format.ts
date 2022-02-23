@@ -4,7 +4,7 @@ import { isPositiveInteger } from "./number_utils";
 import { devideByLength } from "./string_utils";
 import {
   type uint8,
-  // Uint8,
+  // isUint8,
 } from "./uint8";
 import { SizedMap } from "./collections";
 
@@ -264,7 +264,7 @@ function parseByte(formatted: string, options: ResolvedOptions, byteRegex: RegEx
   }
 
   const integer = Number.parseInt(work, options.radix);
-  // if (Uint8.isUint8(integer)) {
+  // if (isUint8(integer)) {
   return integer as uint8; // regex.testがtrueならuint8のはず
   // }
   // else 

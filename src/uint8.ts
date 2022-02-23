@@ -45,11 +45,7 @@ function isUint8(value: unknown): value is uint8 {
   return false;
 }
 
-const Uint8 = Object.freeze({
-  isUint8,
-});
-
 export {
   type uint8,
-  Uint8,
+  isUint8,
 };

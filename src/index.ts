@@ -20,7 +20,7 @@ export {
 } from "./string_utils";
 export {
   type uint8,
-  Uint8,
+  isUint8,
 } from "./uint8";
 export { SizedMap } from "./collections";
 export { IsomorphicEncoding } from "./isomorphic_encoding";
@@ -47,6 +47,10 @@ export {
   Sha384,
   Sha512,
 } from "./digest_algorithm";
+export {
+  type codepoint,
+  isCodePoint,
+} from "./code_point";
 export {
   type TransferOptions,
   TransferProgress,
