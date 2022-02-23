@@ -42,3 +42,4 @@ export {
   type TransferOptions,
   TransferProgress,
 } from "./transfer_progress";
+export { PubSubBroker } from "./pubsub_broker";
