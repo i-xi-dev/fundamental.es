@@ -1,40 +1,37 @@
-import assert from "node:assert";
+import { expect } from '@esm-bundle/chai';
 import { IsomorphicEncoding } from "./isomorphic_encoding";
 
 describe("IsomorphicEncoding.decode", () => {
   it("decode()", () => {
-    assert.strictEqual(IsomorphicEncoding.decode(), "");
+    expect(IsomorphicEncoding.decode()).to.equal("");
 
   });
 
   it("decode(ArrayBuffer)", () => {
-    assert.strictEqual(IsomorphicEncoding.decode(new ArrayBuffer(0)), "");
-    assert.strictEqual(IsomorphicEncoding.decode(Uint8Array.of(0x41,0x42,0x43,0x44).buffer), "ABCD");
+    expect(IsomorphicEncoding.decode(new ArrayBuffer(0))).to.equal("");
+    expect(IsomorphicEncoding.decode(Uint8Array.of(0x41,0x42,0x43,0x44).buffer)).to.equal("ABCD");
 
   });
 
   it("decode(Uint8Array)", () => {
-    assert.strictEqual(IsomorphicEncoding.decode(Uint8Array.of()), "");
-    assert.strictEqual(IsomorphicEncoding.decode(Uint8Array.of(0x41,0x42,0x43,0x44)), "ABCD");
-    assert.strictEqual(IsomorphicEncoding.decode(Uint8Array.of(0x0,0xFF)), "\u0000\u00FF");
+    expect(IsomorphicEncoding.decode(Uint8Array.of())).to.equal("");
+    expect(IsomorphicEncoding.decode(Uint8Array.of(0x41,0x42,0x43,0x44))).to.equal("ABCD");
+    expect(IsomorphicEncoding.decode(Uint8Array.of(0x0,0xFF))).to.equal("\u0000\u00FF");
 
     //const c = 120000000;
     const c = 1200000;
     const t = "\u0000".repeat(c);
     const bf = performance.now();
-    assert.strictEqual(IsomorphicEncoding.decode(new Uint8Array(c)), t);
+    expect(IsomorphicEncoding.decode(new Uint8Array(c))).to.equal(t);
     console.log(performance.now() - bf);
 
   });
 
   it("decode(*)", () => {
 
-    assert.throws(() => {
+    expect(() => {
       IsomorphicEncoding.decode([] as unknown as Uint8Array);
-    }, {
-      name: "TypeError",
-      message: "buffer",
-    });
+    }).to.throw(TypeError, "buffer").with.property("name", "TypeError");
 
   });
 
@@ -42,14 +39,14 @@ describe("IsomorphicEncoding.decode", () => {
 
 describe("IsomorphicEncoding.encode", () => {
   it("encode()", () => {
-    assert.strictEqual(JSON.stringify([...IsomorphicEncoding.encode()]), "[]");
+    expect(JSON.stringify([...IsomorphicEncoding.encode()])).to.equal("[]");
 
   });
 
   it("encode(string)", () => {
-    assert.strictEqual(JSON.stringify([...IsomorphicEncoding.encode("")]), "[]");
-    assert.strictEqual(JSON.stringify([...IsomorphicEncoding.encode("ABCD")]), "[65,66,67,68]");
-    assert.strictEqual(JSON.stringify([...IsomorphicEncoding.encode("\u0000\u00FF")]), "[0,255]");
+    expect(JSON.stringify([...IsomorphicEncoding.encode("")])).to.equal("[]");
+    expect(JSON.stringify([...IsomorphicEncoding.encode("ABCD")])).to.equal("[65,66,67,68]");
+    expect(JSON.stringify([...IsomorphicEncoding.encode("\u0000\u00FF")])).to.equal("[0,255]");
 
     //const c = 12000000; もう1桁増やすと自環境では実行できない
     const c = 1200000;
@@ -57,14 +54,11 @@ describe("IsomorphicEncoding.encode", () => {
     const bf = performance.now();
     const rs = JSON.stringify([...IsomorphicEncoding.encode(t)]);
     console.log(performance.now() - bf);
-    assert.strictEqual(rs, JSON.stringify([...new Uint8Array(c)]));
+    expect(rs).to.equal(JSON.stringify([...new Uint8Array(c)]));
 
-    assert.throws(() => {
+    expect(() => {
       IsomorphicEncoding.encode("\u0100");
-    }, {
-      name: "TypeError",
-      message: "input",
-    });
+    }).to.throw(TypeError, "input").with.property("name", "TypeError");
 
   });
 

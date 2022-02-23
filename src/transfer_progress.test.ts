@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import { expect } from '@esm-bundle/chai';
 import { TransferProgress } from "./transfer_progress";
 
 async function* createChunkGenerator() {
@@ -41,18 +41,18 @@ describe("TransferProgress", () => {
       },
     });
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
     const r = await p.initiate();
-    assert.strictEqual(r, "0000000100020003000400050006000700080009");
+    expect(r).to.equal("0000000100020003000400050006000700080009");
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 40);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(40);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
   });
 
@@ -76,30 +76,31 @@ describe("TransferProgress", () => {
       total: 40,
     });
 
-    assert.strictEqual(p.total, 40);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, false);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(40);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(false);
+    expect(p.percentage).to.equal(0);
 
     const r = await p.initiate();
-    assert.strictEqual(r, "0000000100020003000400050006000700080009");
+    expect(r).to.equal("0000000100020003000400050006000700080009");
 
-    assert.strictEqual(p.total, 40);
-    assert.strictEqual(p.loaded, 40);
-    assert.strictEqual(p.indeterminate, false);
-    assert.strictEqual(p.percentage, 100);
+    expect(p.total).to.equal(40);
+    expect(p.loaded).to.equal(40);
+    expect(p.indeterminate).to.equal(false);
+    expect(p.percentage).to.equal(100);
 
-    await assert.rejects(async () => {
+    try {
       await p.initiate();
-    }, {
-      name: "Error",
-      message: "invalid state",
-    });
+    }catch(e){
+      const err = e as Error;
+      expect(err.name).to.equal("Error");
+      expect(err.message).to.equal("invalid state");
+    }
 
   });
 
   it("TransferProgress(Object, {total:number}) - error", () => {
-    assert.throws(() => {
+    expect(() => {
       let buffer = "";
       const p = new TransferProgress({
         chunkGenerator: createChunkGenerator(),
@@ -118,12 +119,9 @@ describe("TransferProgress", () => {
       }, {
         total: -1,
       });
-    }, {
-      name: "TypeError",
-      message: "total",
-    });
+    }).to.throw(TypeError, "total").with.property("name", "TypeError");
 
-    assert.throws(() => {
+    expect(() => {
       let buffer = "";
       const p = new TransferProgress({
         chunkGenerator: createChunkGenerator(),
@@ -142,10 +140,7 @@ describe("TransferProgress", () => {
       }, {
         total: "100" as unknown as number,
       });
-    }, {
-      name: "TypeError",
-      message: "total",
-    });
+    }).to.throw(TypeError, "total").with.property("name", "TypeError");
 
   });
 
@@ -169,10 +164,10 @@ describe("TransferProgress", () => {
       timeout: 250,
     });
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
     let timeouted = false;
     p.addEventListener("timeout", () => {
@@ -180,20 +175,21 @@ describe("TransferProgress", () => {
     });
 
     let r;
-    await assert.rejects(async () => {
+    try {
       r = await p.initiate();
-    }, {
-      name: "TimeoutError",
-      message: "timeout",
-    });
-    //assert.strictEqual(r, "00000001"); //TODO 中断しても結果を取れるようにすべき？？
+    }catch(e){
+      const err = e as Error;
+      expect(err.name).to.equal("TimeoutError");
+      expect(err.message).to.equal("timeout");
+    }
+    //expect(r).to.equal("00000001"); //TODO 中断しても結果を取れるようにすべき？？
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 8);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(8);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
-    assert.strictEqual(timeouted, true);
+    expect(timeouted).to.equal(true);
 
   });
 
@@ -218,10 +214,10 @@ describe("TransferProgress", () => {
       signal: ac.signal,
     });
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
     let aborted = false;
     p.addEventListener("abort", () => {
@@ -232,20 +228,21 @@ describe("TransferProgress", () => {
       ac.abort();
     }, 250);
     let r;
-    await assert.rejects(async () => {
+    try {
       r = await p.initiate();
-    }, {
-      name: "AbortError",
-      message: "aborted",
-    });
-    //assert.strictEqual(r, "00000001"); //TODO 中断しても結果を取れるようにすべき？？
+    }catch(e){
+      const err = e as Error;
+      expect(err.name).to.equal("AbortError");
+      expect(err.message).to.equal("aborted");
+    }
+    //expect(r).to.equal("00000001"); //TODO 中断しても結果を取れるようにすべき？？
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 8);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(8);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
-    assert.strictEqual(aborted, true);
+    expect(aborted).to.equal(true);
 
   });
 
@@ -271,24 +268,25 @@ describe("TransferProgress", () => {
       signal: ac.signal,
     });
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
     let r;
-    await assert.rejects(async () => {
+    try {
       r = await p.initiate();
-    }, {
-      name: "AbortError",
-      message: "already aborted",
-    });
-    //assert.strictEqual(r, ""); //TODO 中断しても結果を取れるようにすべき？？
+    }catch(e){
+      const err = e as Error;
+      expect(err.name).to.equal("AbortError");
+      expect(err.message).to.equal("already aborted");
+    }
+    //expect(r).to.equal(""); //TODO 中断しても結果を取れるようにすべき？？
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
   });
 
@@ -337,12 +335,12 @@ describe("TransferProgress", () => {
 
     await p.initiate();
 
-    assert.strictEqual(loadstarted, true);
-    assert.strictEqual(load >= 1, true);
-    assert.strictEqual(aborted, false);
-    assert.strictEqual(timeouted, false);
-    assert.strictEqual(errorRaised, false);
-    assert.strictEqual(loadended, true);
+    expect(loadstarted).to.equal(true);
+    expect(load >= 1).to.equal(true);
+    expect(aborted).to.equal(false);
+    expect(timeouted).to.equal(false);
+    expect(errorRaised).to.equal(false);
+    expect(loadended).to.equal(true);
 
   });
 
@@ -363,10 +361,10 @@ describe("TransferProgress", () => {
       },
     });
 
-    assert.strictEqual(p.total, undefined);
-    assert.strictEqual(p.loaded, 0);
-    assert.strictEqual(p.indeterminate, true);
-    assert.strictEqual(p.percentage, 0);
+    expect(p.total).to.equal(undefined);
+    expect(p.loaded).to.equal(0);
+    expect(p.indeterminate).to.equal(true);
+    expect(p.percentage).to.equal(0);
 
     let errorRaised = false;
     p.addEventListener("error", () => {
@@ -377,15 +375,16 @@ describe("TransferProgress", () => {
       loadended = true;
     });
 
-    await assert.rejects(async () => {
+    try {
       await p.initiate();
-    }, {
-      name: "Error",
-      message: "test-ex",
-    });
+    }catch(e){
+      const err = e as Error;
+      expect(err.name).to.equal("Error");
+      expect(err.message).to.equal("test-ex");
+    }
 
-    assert.strictEqual(errorRaised, true);
-    assert.strictEqual(loadended, true);
+    expect(errorRaised).to.equal(true);
+    expect(loadended).to.equal(true);
 
   });
 

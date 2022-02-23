@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import { expect } from '@esm-bundle/chai';
 import { ReadableStream } from "node:stream/web";
 import { StreamUtils } from "./stream_utils";
 
@@ -28,7 +28,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       result.push(chunk);
     }
 
-    assert.strictEqual(result.join(""), "01020304050607080910");
+    expect(result.join("")).to.equal("01020304050607080910");
 
   });
 
@@ -62,7 +62,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       result.push(chunk);
     }
 
-    assert.strictEqual(result.join(""), "0102030405");
+    expect(result.join("")).to.equal("0102030405");
 
   });
 
@@ -100,7 +100,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       console.log(e);
     }
 
-    assert.strictEqual(result.join(""), "0102030405");
+    expect(result.join("")).to.equal("0102030405");
 
   });
 

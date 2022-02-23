@@ -1,25 +1,25 @@
-import assert from "node:assert";
+import { expect } from '@esm-bundle/chai';
 import { NumberUtils } from "./number_utils";
 
 describe("NumberUtils.isNonNegativeInteger", () => {
   it("isNonNegativeInteger(number)", () => {
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(-1), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(-0), true);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(0), true);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(1), true);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MAX_SAFE_INTEGER), true);
+    expect(NumberUtils.isNonNegativeInteger(-1)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(-0)).to.equal(true);
+    expect(NumberUtils.isNonNegativeInteger(0)).to.equal(true);
+    expect(NumberUtils.isNonNegativeInteger(1)).to.equal(true);
+    expect(NumberUtils.isNonNegativeInteger(Number.MAX_SAFE_INTEGER)).to.equal(true);
 
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(1.1), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NaN), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER), false);
+    expect(NumberUtils.isNonNegativeInteger(1.1)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.NaN)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER)).to.equal(false);
 
   });
 
   it("isNonNegativeInteger(*)", () => {
-    assert.strictEqual(NumberUtils.isNonNegativeInteger("1"), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(true), false);
+    expect(NumberUtils.isNonNegativeInteger("1")).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(true)).to.equal(false);
 
   });
 
@@ -27,23 +27,23 @@ describe("NumberUtils.isNonNegativeInteger", () => {
 
 describe("NumberUtils.isPositiveInteger", () => {
   it("isPositiveInteger(number)", () => {
-    assert.strictEqual(NumberUtils.isPositiveInteger(-1), false);
-    assert.strictEqual(NumberUtils.isPositiveInteger(-0), false);
-    assert.strictEqual(NumberUtils.isPositiveInteger(0), false);
-    assert.strictEqual(NumberUtils.isPositiveInteger(1), true);
-    assert.strictEqual(NumberUtils.isPositiveInteger(Number.MAX_SAFE_INTEGER), true);
+    expect(NumberUtils.isPositiveInteger(-1)).to.equal(false);
+    expect(NumberUtils.isPositiveInteger(-0)).to.equal(false);
+    expect(NumberUtils.isPositiveInteger(0)).to.equal(false);
+    expect(NumberUtils.isPositiveInteger(1)).to.equal(true);
+    expect(NumberUtils.isPositiveInteger(Number.MAX_SAFE_INTEGER)).to.equal(true);
 
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(1.1), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NaN), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY), false);
-    assert.strictEqual(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER), false);
+    expect(NumberUtils.isNonNegativeInteger(1.1)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.NaN)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.POSITIVE_INFINITY)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.NEGATIVE_INFINITY)).to.equal(false);
+    expect(NumberUtils.isNonNegativeInteger(Number.MIN_SAFE_INTEGER)).to.equal(false);
 
   });
 
   it("isPositiveInteger(*)", () => {
-    assert.strictEqual(NumberUtils.isPositiveInteger("1"), false);
-    assert.strictEqual(NumberUtils.isPositiveInteger(true), false);
+    expect(NumberUtils.isPositiveInteger("1")).to.equal(false);
+    expect(NumberUtils.isPositiveInteger(true)).to.equal(false);
 
   });
 

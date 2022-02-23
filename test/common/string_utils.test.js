@@ -1,23 +1,23 @@
-import assert from "node:assert";
+import { expect } from '@esm-bundle/chai';
 import { StringUtils } from "../../dist/index.js";
 
 describe("StringUtils.collectHttpQuotedString", () => {
   it("collectHttpQuotedString(string)", () => {
     const r1 = StringUtils.collectHttpQuotedString("");
-    assert.strictEqual(r1.collected, "");
-    assert.strictEqual(r1.progression, 0);
+    expect(r1.collected).to.equal("");
+    expect(r1.progression).to.equal(0);
 
     const r2 = StringUtils.collectHttpQuotedString('"\\');
-    assert.strictEqual(r2.collected, "\u005C");
-    assert.strictEqual(r2.progression, 2);
+    expect(r2.collected).to.equal("\u005C");
+    expect(r2.progression).to.equal(2);
 
     const r3 = StringUtils.collectHttpQuotedString('"Hello" World');
-    assert.strictEqual(r3.collected, "Hello");
-    assert.strictEqual(r3.progression, 7);
+    expect(r3.collected).to.equal("Hello");
+    expect(r3.progression).to.equal(7);
 
     const r4 = StringUtils.collectHttpQuotedString('"Hello \\\\ World\\""');
-    assert.strictEqual(r4.collected, 'Hello \u005C World"');
-    assert.strictEqual(r4.progression, 18);
+    expect(r4.collected).to.equal('Hello \u005C World"');
+    expect(r4.progression).to.equal(18);
 
   });
 
@@ -25,28 +25,28 @@ describe("StringUtils.collectHttpQuotedString", () => {
 
 describe("StringUtils.collect", () => {
   it("collect(string, string)", () => {
-    assert.strictEqual(StringUtils.collect("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
+    expect(StringUtils.collect("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
 
-    assert.strictEqual(StringUtils.collect("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
+    expect(StringUtils.collect("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
 
-    assert.strictEqual(StringUtils.collect("\u0008X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("\tX\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\t");
-    assert.strictEqual(StringUtils.collect("\u000AX\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("\u001FX\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect(" X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), " ");
-    assert.strictEqual(StringUtils.collect("\u0021X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.collect("aXa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
+    expect(StringUtils.collect("\u0008X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("\tX\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\t");
+    expect(StringUtils.collect("\u000AX\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("\u001FX\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect(" X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(" ");
+    expect(StringUtils.collect("\u0021X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.collect("aXa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
 
-    assert.strictEqual(StringUtils.collect("\t      \t    X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\t      \t    ");
-    assert.strictEqual(StringUtils.collect("X\t      \t    X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
+    expect(StringUtils.collect("\t      \t    X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
+    expect(StringUtils.collect("X\t      \t    X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
 
   });
 
@@ -54,76 +54,64 @@ describe("StringUtils.collect", () => {
 
 describe("StringUtils.devideByLength", () => {
   it("devideByLength(string,number)", () => {
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",1)), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",1)), `["a"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",1)), `["a","b"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",1)), `["a","b","c"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",1))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",1))).to.equal(`["a"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",1))).to.equal(`["a","b"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",1))).to.equal(`["a","b","c"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",2)), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",2)), `["a"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",2)), `["ab"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",2)), `["ab","c"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",2))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",2))).to.equal(`["a"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",2))).to.equal(`["ab"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",2))).to.equal(`["ab","c"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",3)), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",3)), `["a"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",3)), `["ab"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",3)), `["abc"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",3))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",3))).to.equal(`["a"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",3))).to.equal(`["ab"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",3))).to.equal(`["abc"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",4)), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",4)), `["a"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",4)), `["ab"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",4)), `["abc"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",4))).to.equal( `[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",4))).to.equal(`["a"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",4))).to.equal(`["ab"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",4))).to.equal(`["abc"]`);
 
-    assert.throws(() => {
+    expect(() => {
       StringUtils.devideByLength("");
-    }, {
-      name: "TypeError",
-      message: "segmentLength must be positive integer",
-    });
+    }).to.throw(TypeError, "segmentLength must be positive integer").with.property("name", "TypeError");
 
-    assert.throws(() => {
-      StringUtils.devideByLength("",0);
-    }, {
-      name: "TypeError",
-      message: "segmentLength must be positive integer",
-    });
+    expect(() => {
+      StringUtils.devideByLength("", 0);
+    }).to.throw(TypeError, "segmentLength must be positive integer").with.property("name", "TypeError");
 
   });
 
   it("devideByLength(string, number, string)", () => {
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",1,"-")), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",1,"-")), `["a"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",1,"-")), `["a","b"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",1,"-")), `["a","b","c"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",1,"-"))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",1,"-"))).to.equal(`["a"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",1,"-"))).to.equal(`["a","b"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",1,"-"))).to.equal(`["a","b","c"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",2,"-")), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",2,"-")), `["a-"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",2,"-")), `["ab"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",2,"-")), `["ab","c-"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",2,"-"))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",2,"-"))).to.equal(`["a-"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",2,"-"))).to.equal(`["ab"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",2,"-"))).to.equal(`["ab","c-"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",3,"-")), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",3,"-")), `["a--"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",3,"-")), `["ab-"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",3,"-")), `["abc"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",3,"-"))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",3,"-"))).to.equal(`["a--"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",3,"-"))).to.equal(`["ab-"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",3,"-"))).to.equal(`["abc"]`);
 
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("",4,"-")), `[]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("a",4,"-")), `["a---"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("ab",4,"-")), `["ab--"]`);
-    assert.strictEqual(JSON.stringify(StringUtils.devideByLength("abc",4,"-")), `["abc-"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("",4,"-"))).to.equal(`[]`);
+    expect(JSON.stringify(StringUtils.devideByLength("a",4,"-"))).to.equal(`["a---"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("ab",4,"-"))).to.equal(`["ab--"]`);
+    expect(JSON.stringify(StringUtils.devideByLength("abc",4,"-"))).to.equal(`["abc-"]`);
 
-    assert.throws(() => {
-      StringUtils.devideByLength("",1,"");
-    }, {
-      name: "TypeError",
-      message: "paddingUnit must be a code unit",
-    });
+    expect(() => {
+      StringUtils.devideByLength("", 1, "");
+    }).to.throw(TypeError, "paddingUnit must be a code unit").with.property("name", "TypeError");
 
-    assert.throws(() => {
-      StringUtils.devideByLength("",1,"--");
-    }, {
-      name: "TypeError",
-      message: "paddingUnit must be a code unit",
-    });
+    expect(() => {
+      StringUtils.devideByLength("", 1, "--");
+    }).to.throw(TypeError, "paddingUnit must be a code unit").with.property("name", "TypeError");
 
   });
 
@@ -131,16 +119,16 @@ describe("StringUtils.devideByLength", () => {
 
 describe("StringUtils.match", () => {
   it("match(string, string)", () => {
-    assert.strictEqual(StringUtils.match("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), true);
-    assert.strictEqual(StringUtils.match("\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), false);
-    assert.strictEqual(StringUtils.match("\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), true);
-    assert.strictEqual(StringUtils.match("\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), false);
-    assert.strictEqual(StringUtils.match("\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), false);
-    assert.strictEqual(StringUtils.match(" ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), true);
-    assert.strictEqual(StringUtils.match("\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), false);
-    assert.strictEqual(StringUtils.match("a", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), false);
+    expect(StringUtils.match("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(StringUtils.match("\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(StringUtils.match("\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(StringUtils.match("\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(StringUtils.match("\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(StringUtils.match(" ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(StringUtils.match("\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(StringUtils.match("a", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(false);
 
-    assert.strictEqual(StringUtils.match("\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), true);
+    expect(StringUtils.match("\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal(true);
 
   });
 
@@ -148,17 +136,17 @@ describe("StringUtils.match", () => {
 
 describe("StringUtils.trimEnd", () => {
   it("trimEnd(string, string)", () => {
-    assert.strictEqual(StringUtils.trimEnd("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.trimEnd("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u0008");
-    assert.strictEqual(StringUtils.trimEnd("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trimEnd("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u000A");
-    assert.strictEqual(StringUtils.trimEnd("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u001F");
-    assert.strictEqual(StringUtils.trimEnd("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trimEnd("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u0021");
-    assert.strictEqual(StringUtils.trimEnd("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "Xa");
+    expect(StringUtils.trimEnd("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.trimEnd("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
+    expect(StringUtils.trimEnd("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trimEnd("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
+    expect(StringUtils.trimEnd("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
+    expect(StringUtils.trimEnd("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trimEnd("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
+    expect(StringUtils.trimEnd("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("Xa");
 
-    assert.strictEqual(StringUtils.trimEnd("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trimEnd("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\t      \t    X");
+    expect(StringUtils.trimEnd("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trimEnd("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
 
   });
 
@@ -166,29 +154,29 @@ describe("StringUtils.trimEnd", () => {
 
 describe("StringUtils.trim", () => {
   it("trim(string, string)", () => {
-    assert.strictEqual(StringUtils.trim("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "");
-    assert.strictEqual(StringUtils.trim("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u0008");
-    assert.strictEqual(StringUtils.trim("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u000A");
-    assert.strictEqual(StringUtils.trim("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u001F");
-    assert.strictEqual(StringUtils.trim("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\u0021");
-    assert.strictEqual(StringUtils.trim("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "Xa");
+    expect(StringUtils.trim("", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(StringUtils.trim("X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
+    expect(StringUtils.trim("X\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("X\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
+    expect(StringUtils.trim("X\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
+    expect(StringUtils.trim("X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
+    expect(StringUtils.trim("Xa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("Xa");
 
-    assert.strictEqual(StringUtils.trim("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\t      \t    X");
+    expect(StringUtils.trim("X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
 
 
-    assert.strictEqual(StringUtils.trim("\u0008X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\u0008X\u0008");
-    assert.strictEqual(StringUtils.trim("\tX\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("\u000AX\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\u000AX\u000A");
-    assert.strictEqual(StringUtils.trim("\u001FX\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\u001FX\u001F");
-    assert.strictEqual(StringUtils.trim(" X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("\u0021X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "\u0021X\u0021");
-    assert.strictEqual(StringUtils.trim("aXa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "aXa");
+    expect(StringUtils.trim("\u0008X\u0008", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\u0008X\u0008");
+    expect(StringUtils.trim("\tX\t", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("\u000AX\u000A", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\u000AX\u000A");
+    expect(StringUtils.trim("\u001FX\u001F", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\u001FX\u001F");
+    expect(StringUtils.trim(" X ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("\u0021X\u0021", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\u0021X\u0021");
+    expect(StringUtils.trim("aXa", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("aXa");
 
-    assert.strictEqual(StringUtils.trim("\t      \t    X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X");
-    assert.strictEqual(StringUtils.trim("X\t      \t    X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE), "X\t      \t    X\t      \t    X");
+    expect(StringUtils.trim("\t      \t    X\t      \t    ", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(StringUtils.trim("X\t      \t    X\t      \t    X", StringUtils.RangePattern.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X\t      \t    X");
 
   });
 
