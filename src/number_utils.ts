@@ -26,12 +26,7 @@ function isPositiveInteger(value: unknown): boolean {
   return false;
 }
 
-/**
- * The utilities for number processing.
- */
-const NumberUtils = Object.freeze({
+export {
   isNonNegativeInteger,
   isPositiveInteger,
-});
-
-export { NumberUtils };
+};

@@ -1,7 +1,7 @@
 //
 
-import { NumberUtils } from "./number_utils";
-import { StringUtils } from "./string_utils";
+import { isPositiveInteger } from "./number_utils";
+import { devideByLength } from "./string_utils";
 import {
   type uint8,
   // Uint8,
@@ -138,7 +138,7 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
   }
   const radix: Radix = isRadix(options.radix) ? options.radix  : 16;
 
-  if (NumberUtils.isPositiveInteger(options.paddedLength) || (options.paddedLength === undefined)) {
+  if (isPositiveInteger(options.paddedLength) || (options.paddedLength === undefined)) {
     // ok
   }
   else {
@@ -288,7 +288,7 @@ function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Ui
   }
   else {
     const elementLength = options.paddedLength + options.prefix.length + options.suffix.length;
-    byteStringArray = StringUtils.devideByLength(toParse, elementLength);
+    byteStringArray = devideByLength(toParse, elementLength);
   }
 
   return Uint8Array.from(byteStringArray, (byteString) => {

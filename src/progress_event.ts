@@ -1,6 +1,6 @@
 //
 
-import { NumberUtils } from "./number_utils";
+import { isNonNegativeInteger } from "./number_utils";
 
 /**
  * The `ProgressEvent` for Node.js
@@ -22,8 +22,8 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
     super(type, init);
 
     this.#lengthComputable = (init && (typeof init.lengthComputable === "boolean")) ? init.lengthComputable : false;
-    this.#loaded = (init && (typeof init.loaded === "number") && NumberUtils.isNonNegativeInteger(init.loaded)) ? init.loaded : 0;
-    this.#total = (init && (typeof init.total === "number") && NumberUtils.isNonNegativeInteger(init.total)) ? init.total : 0;
+    this.#loaded = (init && (typeof init.loaded === "number") && isNonNegativeInteger(init.loaded)) ? init.loaded : 0;
+    this.#total = (init && (typeof init.total === "number") && isNonNegativeInteger(init.total)) ? init.total : 0;
   }
 
   /**

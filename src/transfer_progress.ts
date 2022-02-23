@@ -4,7 +4,7 @@ import {
   AbortError,
   TimeoutError,
 } from "./error";
-import { NumberUtils } from "./number_utils";
+import { isNonNegativeInteger } from "./number_utils";
 import { ProgressEvent } from "./progress_event";
 
 /**
@@ -94,7 +94,7 @@ class TransferProgress<T, U = T> extends EventTarget {
     super();
 
     if (typeof total === "number") {
-      if (NumberUtils.isNonNegativeInteger(total) !== true) {
+      if (isNonNegativeInteger(total) !== true) {
         throw new TypeError("total");
       }
     }
@@ -123,7 +123,7 @@ class TransferProgress<T, U = T> extends EventTarget {
         return false; // カバレッジがUncoveredになるがテスト不可能
       },
     });
-    this.#timeout = (typeof timeout === "number") && NumberUtils.isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
+    this.#timeout = (typeof timeout === "number") && isNonNegativeInteger(timeout) ? timeout : Number.POSITIVE_INFINITY;
     this.#signal = signal;
   }
 

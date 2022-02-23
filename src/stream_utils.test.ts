@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { ReadableStream } from "node:stream/web";
-import { StreamUtils } from "./stream_utils";
+import { streamToAsyncGenerator } from "./stream_utils";
 
-describe("StreamUtils.streamToAsyncGenerator", () => {
+describe("streamToAsyncGenerator", () => {
   it("streamToAsyncGenerator(ReadableStreamDefaultReader)", async () => {
     let ti: NodeJS.Timeout;
     const s = new ReadableStream({
@@ -22,7 +22,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     for await (const chunk of chunks) {
       result.push(chunk);
@@ -51,7 +51,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     let i = 0;
     for await (const chunk of chunks) {
@@ -85,7 +85,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     let i = 0;
     try {

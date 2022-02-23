@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { StreamUtils } from "../../dist/index.js";
+import { streamToAsyncGenerator } from "../../dist/index.js";
 
 if (globalThis.process) {
   const streamWeb = await import("node:stream/web");
   globalThis.ReadableStream = streamWeb.ReadableStream;
 }
 
-describe("StreamUtils.streamToAsyncGenerator", () => {
+describe("streamToAsyncGenerator", () => {
   it("streamToAsyncGenerator(ReadableStreamDefaultReader)", async () => {
     let ti;
     const s = new ReadableStream({
@@ -26,7 +26,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     for await (const chunk of chunks) {
       result.push(chunk);
@@ -55,7 +55,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     let i = 0;
     for await (const chunk of chunks) {
@@ -89,7 +89,7 @@ describe("StreamUtils.streamToAsyncGenerator", () => {
       },
     });
 
-    const chunks = StreamUtils.streamToAsyncGenerator(s.getReader());
+    const chunks = streamToAsyncGenerator(s.getReader());
     const result = [];
     let i = 0;
     try {

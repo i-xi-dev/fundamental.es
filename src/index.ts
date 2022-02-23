@@ -4,10 +4,19 @@ export {
   AbortError,
   TimeoutError,
 } from "./error";
-export { NumberUtils } from "./number_utils";
+export {
+  isNonNegativeInteger,
+  isPositiveInteger,
+} from "./number_utils";
 export {
   type CollectResult,
-  StringUtils,
+  RangePattern,
+  collectPattern,
+  collectHttpQuotedString,
+  devideByLength,
+  matchPattern,
+  trimPattern,
+  trimPatternEnd,
 } from "./string_utils";
 export {
   type uint8,
@@ -31,7 +40,7 @@ export {
   ByteEncoderStream,
 } from "./byte_encoding";
 export { ByteBuffer } from "./byte_buffer";
-export { StreamUtils } from "./stream_utils";
+export { streamToAsyncGenerator } from "./stream_utils";
 export {
   type DigestAlgorithm,
   Sha256,

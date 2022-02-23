@@ -1,13 +1,13 @@
 //
 
-import { NumberUtils } from "./number_utils";
+import { isPositiveInteger } from "./number_utils";
 
 class SizedMap<K, V> extends Map<K, V> {
   #maxSize: number;
 
   constructor(maxSize: number) {
     super();
-    if (NumberUtils.isPositiveInteger(maxSize) !== true) {
+    if (isPositiveInteger(maxSize) !== true) {
       throw new TypeError("maxSize");
     }
     this.#maxSize = maxSize;

@@ -19,8 +19,6 @@ async function* streamToAsyncGenerator<T>(streamReader: ReadableStreamDefaultRea
   }
 }
 
-const StreamUtils = Object.freeze({
+export {
   streamToAsyncGenerator,
-});
-
-export { StreamUtils };
+};
