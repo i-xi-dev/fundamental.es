@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4-fix.0",
-    "@esm-bundle/chai-as-promised": "^7.1.1",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
