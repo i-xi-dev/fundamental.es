@@ -9,12 +9,19 @@ export {
   isPositiveInteger,
 } from "./number_utils";
 export {
+  type codepoint,
+  type rune,
   type CollectResult,
+  UnicodeCategory,
   RangePattern,
   collectPattern,
   collectHttpQuotedString,
   devideByLength,
+  isCodePoint,
+  isRune,
   matchPattern,
+  runeFromCodePoint,
+  runeToCodePoint,
   trimPattern,
   trimPatternEnd,
 } from "./string_utils";
@@ -47,10 +54,6 @@ export {
   Sha384,
   Sha512,
 } from "./digest_algorithm";
-export {
-  type codepoint,
-  isCodePoint,
-} from "./code_point";
 export {
   type TransferOptions,
   TransferProgress,

@@ -2,6 +2,102 @@
 
 import { isPositiveInteger } from "./number_utils";
 
+type codepoint = number; // 0x10FFFF個を列挙するとか馬鹿げているので、ただのnumberの別名とする
+
+/**
+ * Determines whether the passed value is an Unicode code point.
+ * 
+ * @param value - The value to be tested
+ * @returns Whether the passed value is an Unicode code point.
+ */
+function isCodePoint(value: unknown): value is codepoint {
+  if (typeof value === "number") {
+    return (Number.isSafeInteger(value) && (value >= 0x0) && (value <= 0x10FFFF));
+  }
+  return false;
+}
+
+// XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
+type rune = string; // 0x10FFFF個を列挙するとか馬鹿げているので、ただのstringの別名とする
+
+function isRune(value: unknown): value is rune {
+  if (typeof value !== "string") {
+    return false;
+  }
+  if (value.length > 2) {
+    return false;
+  }
+  const runes = [ ...value ];
+  if (runes.length !== 1) {
+    return false;
+  }
+  return true;
+}
+
+function runeFromCodePoint(codePoint: codepoint): rune {
+  if (isCodePoint(codePoint) !== true) {
+    throw new TypeError("codePoint");
+  }
+  return String.fromCodePoint(codePoint);
+}
+
+function runeToCodePoint(rune: rune): codepoint {
+  if (isRune(rune) !== true) {
+    throw new TypeError("rune");
+  }
+  return rune.codePointAt(0) as codepoint;
+}
+
+const UnicodeCategory = {
+  LETTER: "L",
+  LETTER_UPPERCASE: "Lu",
+  LETTER_LOWERCASE: "Ll",
+  LETTER_TITLECASE: "Lt",
+  LETTER_MODIFIER: "Lm",
+  LETTER_OTHER: "Lo",
+  MARK: "M",
+  MARK_NONSPACING: "Mn",
+  MARK_SPACING_COMBINING: "Mc",
+  MARK_ENCLOSING: "Me",
+  NUMBER: "N",
+  NUMBER_DECIMAL_DIGIT: "Nd",
+  NUMBER_LETTER: "Nl",
+  NUMBER_OTHER: "No",
+  PUNCTUATION: "P",
+  PUNCTUATION_CONNECTOR: "Pc",
+  PUNCTUATION_DASH: "Pd",
+  PUNCTUATION_OPEN: "Ps",
+  PUNCTUATION_CLOSE: "Pe",
+  PUNCTUATION_INITIAL_QUOTE: "Pi",
+  PUNCTUATION_FINAL_QUOTE: "Pf",
+  PUNCTUATION_OTHER: "Po",
+  SYMBOL: "S",
+  SYMBOL_MATH: "Sm",
+  SYMBOL_CURRENCY: "Sc",
+  SYMBOL_MODIFIER: "Sk",
+  SYMBOL_OTHER: "So",
+  SEPARATOR: "Z",
+  SEPARATOR_SPACE: "Zs",
+  SEPARATOR_LINE: "Zl",
+  SEPARATOR_PARAGRAPH: "Zp",
+  OTHER: "C",
+  OTHER_CONTROL: "Cc",
+  OTHER_FORMAT: "Cf",
+  OTHER_SURROGATE: "Cs",
+  OTHER_PRIVATE_USE: "Co",
+  OTHER_NOT_ASSIGNED: "Cn",
+} as const;
+type UnicodeCategory = typeof UnicodeCategory[keyof typeof UnicodeCategory];
+
+//TODO matchCategories, containsCategories
+
+//TODO matchScripts, containsScripts
+
+
+
+
+
+
 /**
  * 文字列を、指定したUTF-16コードユニット数ごとに分割し返却
  *     ※サロゲートペア、合成文字が分割される可能性あり
@@ -37,6 +133,7 @@ function devideByLength(input: string, segmentLength: number, paddingUnit?: stri
   return segments;
 }
 
+//TODO 名前変える
 /**
  * 範囲パターン
  */
@@ -183,12 +280,19 @@ function collectHttpQuotedString(input: string): CollectResult {
 }
 
 export {
+  type codepoint,
+  type rune,
   type CollectResult,
+  UnicodeCategory,
   RangePattern,
   collectPattern,
   collectHttpQuotedString,
   devideByLength,
+  isCodePoint,
+  isRune,
   matchPattern,
+  runeFromCodePoint,
+  runeToCodePoint,
   trimPattern,
   trimPatternEnd,
 };

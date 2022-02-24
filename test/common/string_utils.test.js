@@ -4,10 +4,121 @@ import {
   collectPattern,
   collectHttpQuotedString,
   devideByLength,
+  isCodePoint,
+  isRune,
   matchPattern,
+  runeFromCodePoint,
+  runeToCodePoint,
   trimPattern,
   trimPatternEnd,
 } from "../../dist/index.js";
+
+describe("isCodePoint", () => {
+  it("isCodePoint(number)", () => {
+    expect(isCodePoint(-1)).to.equal(false);
+    expect(isCodePoint(-0)).to.equal(true);
+    expect(isCodePoint(0)).to.equal(true);
+    expect(isCodePoint(1_114_111)).to.equal(true);
+    expect(isCodePoint(1_114_112)).to.equal(false);
+    expect(isCodePoint(0.1)).to.equal(false);
+
+  });
+
+  it("isCodePoint(any)", () => {
+    expect(isCodePoint("0")).to.equal(false);
+    expect(isCodePoint("1114111")).to.equal(false);
+    expect(isCodePoint(true)).to.equal(false);
+    expect(isCodePoint({})).to.equal(false);
+    expect(isCodePoint([])).to.equal(false);
+    expect(isCodePoint([0])).to.equal(false);
+    expect(isCodePoint(undefined)).to.equal(false);
+    expect(isCodePoint(null)).to.equal(false);
+
+  });
+
+});
+
+describe("isRune", () => {
+  it("isRune(string)", () => {
+    expect(isRune("")).to.equal(false);
+    expect(isRune("\u0000")).to.equal(true);
+    expect(isRune("\uFFFF")).to.equal(true);
+    expect(isRune("a")).to.equal(true);
+    expect(isRune("あ")).to.equal(true);
+    expect(isRune("\u{10FFFF}")).to.equal(true);
+    expect(isRune("\uD800")).to.equal(true);
+    expect(isRune("\uD800\uDC00")).to.equal(true);
+    expect(isRune("\uD7FF\uDC00")).to.equal(false);
+    expect(isRune("aa")).to.equal(false);
+    expect(isRune("aaa")).to.equal(false);
+
+  });
+
+  it("isRune(any)", () => {
+    expect(isRune()).to.equal(false);
+    expect(isRune(1)).to.equal(false);
+
+  });
+
+});
+
+describe("runeFromCodePoint", () => {
+  it("runeFromCodePoint(number)", () => {
+    expect(runeFromCodePoint(0)).to.equal("\u0000");
+    expect(runeFromCodePoint(0x10FFFF)).to.equal("\u{10FFFF}");
+    expect(runeFromCodePoint(0xD800)).to.equal("\uD800");
+
+    expect(() => {
+      runeFromCodePoint(-1);
+    }).to.throw(TypeError, "codePoint").with.property("name", "TypeError");
+
+    expect(() => {
+      runeFromCodePoint(0x110000);
+    }).to.throw(TypeError, "codePoint").with.property("name", "TypeError");
+
+  });
+
+  it("runeFromCodePoint(any)", () => {
+    expect(() => {
+      runeFromCodePoint();
+    }).to.throw(TypeError, "codePoint").with.property("name", "TypeError");
+
+    expect(() => {
+      runeFromCodePoint("0");
+    }).to.throw(TypeError, "codePoint").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("runeToCodePoint", () => {
+  it("runeToCodePoint(string)", () => {
+    expect(runeToCodePoint("\u0000")).to.equal(0x0);
+    expect(runeToCodePoint("\u{10FFFF}")).to.equal(0x10FFFF);
+    expect(runeToCodePoint("\uD800")).to.equal(0xD800);
+
+    expect(() => {
+      runeToCodePoint("");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+    expect(() => {
+      runeToCodePoint("aa");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("runeToCodePoint(any)", () => {
+    expect(() => {
+      runeToCodePoint();
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+    expect(() => {
+      runeToCodePoint(0);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
 
 describe("collectHttpQuotedString", () => {
   it("collectHttpQuotedString(string)", () => {
