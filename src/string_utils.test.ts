@@ -2,15 +2,15 @@ import { expect } from '@esm-bundle/chai';
 import {
   CodePointRange,
   UnicodeCategory,
-  collectPattern,
+  collectStart,
   collectHttpQuotedString,
   contains,
-  devideByLength,
   isCodePoint,
   isRune,
   matches,
   runeFromCodePoint,
   runeToCodePoint,
+  segment,
   trim,
   trimEnd,
   trimStart,
@@ -399,6 +399,187 @@ describe("trimEnd", () => {
 
 });
 
+describe("collectStart", () => {
+  it("collectStart(string, CodePointRange)", () => {
+    expect(collectStart("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("Xa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+
+    expect(collectStart("X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+
+    expect(collectStart("\u0008X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\tX\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\t");
+    expect(collectStart("\u000AX\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\u001FX\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart(" X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(" ");
+    expect(collectStart("\u0021X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("aXa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+
+    expect(collectStart("\t      \t    X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
+    expect(collectStart("X\t      \t    X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+
+  });
+
+  it("collectStart(string, UnicodeCategory[])", () => {
+    expect(collectStart("", [ UnicodeCategory.LETTER ])).to.equal("");
+
+    expect(collectStart("a5b", [ UnicodeCategory.LETTER ])).to.equal("a");
+    expect(collectStart("15b", [ UnicodeCategory.LETTER ])).to.equal("");
+    expect(collectStart("-5b", [ UnicodeCategory.LETTER ])).to.equal("");
+    expect(collectStart("a15b", [ UnicodeCategory.LETTER ])).to.equal("a");
+    expect(collectStart("a1-5b", [ UnicodeCategory.LETTER ])).to.equal("a");
+
+    expect(collectStart("a5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a5b");
+    expect(collectStart("15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("15b");
+    expect(collectStart("-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
+    expect(collectStart("a15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a15b");
+    expect(collectStart("a1-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a1");
+
+  });
+
+  it("collectStart(string, any)", () => {
+    expect(() => {
+      collectStart("a", []);
+    }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
+
+    expect(() => {
+      collectStart("a", undefined as unknown as CodePointRange);
+    }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
+
+    expect(() => {
+      collectStart("a", [[] as unknown as [number]]);
+    }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
+
+    expect(() => {
+      collectStart("a", [[1,2,3] as unknown as [number]]);
+    }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("segment", () => {
+  it("segment(string, Object)", () => {
+    expect(JSON.stringify(segment("", {count:1, unit:"char"}))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:1, unit:"char"}))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:1, unit:"char"}))).to.equal(`["a","b"]`);
+    expect(JSON.stringify(segment("abc", {count:1, unit:"char"}))).to.equal(`["a","b","c"]`);
+
+    expect(JSON.stringify(segment("", {count:2, unit:"char"}))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:2, unit:"char"}))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:2, unit:"char"}))).to.equal(`["ab"]`);
+    expect(JSON.stringify(segment("abc", {count:2, unit:"char"}))).to.equal(`["ab","c"]`);
+
+    expect(JSON.stringify(segment("", {count:3, unit:"char"}))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:3, unit:"char"}))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:3, unit:"char"}))).to.equal(`["ab"]`);
+    expect(JSON.stringify(segment("abc", {count:3, unit:"char"}))).to.equal(`["abc"]`);
+
+    expect(JSON.stringify(segment("", {count:4, unit:"char"}))).to.equal( `[]`);
+    expect(JSON.stringify(segment("a", {count:4, unit:"char"}))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:4, unit:"char"}))).to.equal(`["ab"]`);
+    expect(JSON.stringify(segment("abc", {count:4, unit:"char"}))).to.equal(`["abc"]`);
+
+    expect(JSON.stringify(segment("", {count:1, unit:"rune"}))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:1, unit:"rune"}))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:1, unit:"rune"}))).to.equal(`["a","b"]`);
+    expect(JSON.stringify(segment("abc", {count:1, unit:"rune"}))).to.equal(`["a","b","c"]`);
+    expect(JSON.stringify(segment("\u{10000}", {count:1, unit:"rune"}))).to.equal(`["\u{10000}"]`);
+    expect(JSON.stringify(segment("\u{10000}b", {count:1, unit:"rune"}))).to.equal(`["\u{10000}","b"]`);
+    expect(JSON.stringify(segment("a\u{10000}c", {count:1, unit:"rune"}))).to.equal(`["a","\u{10000}","c"]`);
+
+    expect(() => {
+      segment("", {count:undefined as unknown as number, unit:"char"});
+    }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1.5, unit:"char"});
+    }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", 0 as unknown as {count:number,unit:"char"});
+    }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:0, unit:"char"});
+    }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1, unit:"x" as unknown as "char"});
+    }).to.throw(TypeError, "by.unit").with.property("name", "TypeError");
+
+  });
+
+  it("segment(any, Object)", () => {
+    expect(() => {
+      segment(1 as unknown as string, {count:1, unit:"char"});
+    }).to.throw(TypeError, "input").with.property("name", "TypeError");
+
+  });
+
+  it("segment(string, Object, string)", () => {
+    expect(JSON.stringify(segment("", {count:1, unit:"char"},"-"))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:1, unit:"char"},"-"))).to.equal(`["a"]`);
+    expect(JSON.stringify(segment("ab", {count:1, unit:"char"},"-"))).to.equal(`["a","b"]`);
+    expect(JSON.stringify(segment("abc", {count:1, unit:"char"},"-"))).to.equal(`["a","b","c"]`);
+
+    expect(JSON.stringify(segment("", {count:2, unit:"char"},"-"))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:2, unit:"char"},"-"))).to.equal(`["a-"]`);
+    expect(JSON.stringify(segment("ab", {count:2, unit:"char"},"-"))).to.equal(`["ab"]`);
+    expect(JSON.stringify(segment("abc", {count:2, unit:"char"},"-"))).to.equal(`["ab","c-"]`);
+
+    expect(JSON.stringify(segment("", {count:3, unit:"char"},"-"))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:3, unit:"char"},"-"))).to.equal(`["a--"]`);
+    expect(JSON.stringify(segment("ab", {count:3, unit:"char"},"-"))).to.equal(`["ab-"]`);
+    expect(JSON.stringify(segment("abc", {count:3, unit:"char"},"-"))).to.equal(`["abc"]`);
+
+    expect(JSON.stringify(segment("", {count:4, unit:"char"},"-"))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:4, unit:"char"},"-"))).to.equal(`["a---"]`);
+    expect(JSON.stringify(segment("ab", {count:4, unit:"char"},"-"))).to.equal(`["ab--"]`);
+    expect(JSON.stringify(segment("abc", {count:4, unit:"char"},"-"))).to.equal(`["abc-"]`);
+
+    expect(JSON.stringify(segment("", {count:3, unit:"rune"},"\u{10001}"))).to.equal(`[]`);
+    expect(JSON.stringify(segment("a", {count:3, unit:"rune"},"\u{10001}"))).to.equal(`["a\u{10001}\u{10001}"]`);
+    expect(JSON.stringify(segment("a\u{10000}", {count:3, unit:"rune"},"\u{10001}"))).to.equal(`["a\u{10000}\u{10001}"]`);
+    expect(JSON.stringify(segment("a\u{10000}c", {count:3, unit:"rune"},"\u{10001}"))).to.equal(`["a\u{10000}c"]`);
+    expect(JSON.stringify(segment("a\u{10000}c\u{10000}", {count:3, unit:"rune"},"\u{10001}"))).to.equal(`["a\u{10000}c","\u{10000}\u{10001}\u{10001}"]`);
+
+    expect(() => {
+      segment("", {count:1, unit:"char"}, "");
+    }).to.throw(TypeError, "paddingChar must be a code unit").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1, unit:"char"}, "--");
+    }).to.throw(TypeError, "paddingChar must be a code unit").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1, unit:"rune"}, "");
+    }).to.throw(TypeError, "paddingRune must be a code point").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1, unit:"rune"}, "--");
+    }).to.throw(TypeError, "paddingRune must be a code point").with.property("name", "TypeError");
+
+    expect(() => {
+      segment("", {count:1, unit:"rune"}, "\u{10000}\u{10001}");
+    }).to.throw(TypeError, "paddingRune must be a code point").with.property("name", "TypeError");
+
+  });
+
+  it("segment(string, Object, any)", () => {
+    expect(() => {
+      segment("", {count:1, unit:"char"}, 1 as unknown as string);
+    }).to.throw(TypeError, "padding").with.property("name", "TypeError");
+
+  });
+
+});
 
 
 
@@ -410,118 +591,25 @@ describe("trimEnd", () => {
 
 
 
-// describe("collectHttpQuotedString", () => {
-//   it("collectHttpQuotedString(string)", () => {
-//     const r1 = collectHttpQuotedString("");
-//     expect(r1.collected).to.equal("");
-//     expect(r1.progression).to.equal(0);
 
-//     const r2 = collectHttpQuotedString('"\\');
-//     expect(r2.collected).to.equal("\u005C");
-//     expect(r2.progression).to.equal(2);
+describe("collectHttpQuotedString", () => {
+  it("collectHttpQuotedString(string)", () => {
+    const r1 = collectHttpQuotedString("");
+    expect(r1.collected).to.equal("");
+    expect(r1.progression).to.equal(0);
 
-//     const r3 = collectHttpQuotedString('"Hello" World');
-//     expect(r3.collected).to.equal("Hello");
-//     expect(r3.progression).to.equal(7);
+    const r2 = collectHttpQuotedString('"\\');
+    expect(r2.collected).to.equal("\u005C");
+    expect(r2.progression).to.equal(2);
 
-//     const r4 = collectHttpQuotedString('"Hello \\\\ World\\""');
-//     expect(r4.collected).to.equal('Hello \u005C World"');
-//     expect(r4.progression).to.equal(18);
+    const r3 = collectHttpQuotedString('"Hello" World');
+    expect(r3.collected).to.equal("Hello");
+    expect(r3.progression).to.equal(7);
 
-//   });
+    const r4 = collectHttpQuotedString('"Hello \\\\ World\\""');
+    expect(r4.collected).to.equal('Hello \u005C World"');
+    expect(r4.progression).to.equal(18);
 
-// });
+  });
 
-// describe("collectPattern", () => {
-//   it("collectPattern(string, string)", () => {
-//     expect(collectPattern("", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\u0008", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\t", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\u000A", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\u001F", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X ", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\u0021", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("Xa", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-
-//     expect(collectPattern("X\t      \t    ", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("X\t      \t    X", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-
-//     expect(collectPattern("\u0008X\u0008", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("\tX\t", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\t");
-//     expect(collectPattern("\u000AX\u000A", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("\u001FX\u001F", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern(" X ", RangePattern.HTTP_TAB_OR_SPACE)).to.equal(" ");
-//     expect(collectPattern("\u0021X\u0021", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-//     expect(collectPattern("aXa", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-
-//     expect(collectPattern("\t      \t    X\t      \t    ", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
-//     expect(collectPattern("X\t      \t    X\t      \t    X", RangePattern.HTTP_TAB_OR_SPACE)).to.equal("");
-
-//   });
-
-// });
-
-// describe("devideByLength", () => {
-//   it("devideByLength(string,number)", () => {
-//     expect(JSON.stringify(devideByLength("",1))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",1))).to.equal(`["a"]`);
-//     expect(JSON.stringify(devideByLength("ab",1))).to.equal(`["a","b"]`);
-//     expect(JSON.stringify(devideByLength("abc",1))).to.equal(`["a","b","c"]`);
-
-//     expect(JSON.stringify(devideByLength("",2))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",2))).to.equal(`["a"]`);
-//     expect(JSON.stringify(devideByLength("ab",2))).to.equal(`["ab"]`);
-//     expect(JSON.stringify(devideByLength("abc",2))).to.equal(`["ab","c"]`);
-
-//     expect(JSON.stringify(devideByLength("",3))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",3))).to.equal(`["a"]`);
-//     expect(JSON.stringify(devideByLength("ab",3))).to.equal(`["ab"]`);
-//     expect(JSON.stringify(devideByLength("abc",3))).to.equal(`["abc"]`);
-
-//     expect(JSON.stringify(devideByLength("",4))).to.equal( `[]`);
-//     expect(JSON.stringify(devideByLength("a",4))).to.equal(`["a"]`);
-//     expect(JSON.stringify(devideByLength("ab",4))).to.equal(`["ab"]`);
-//     expect(JSON.stringify(devideByLength("abc",4))).to.equal(`["abc"]`);
-
-//     expect(() => {
-//       devideByLength("", undefined as unknown as number);
-//     }).to.throw(TypeError, "segmentLength must be positive integer").with.property("name", "TypeError");
-
-//     expect(() => {
-//       devideByLength("", 0);
-//     }).to.throw(TypeError, "segmentLength must be positive integer").with.property("name", "TypeError");
-
-//   });
-
-//   it("devideByLength(string, number, string)", () => {
-//     expect(JSON.stringify(devideByLength("",1,"-"))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",1,"-"))).to.equal(`["a"]`);
-//     expect(JSON.stringify(devideByLength("ab",1,"-"))).to.equal(`["a","b"]`);
-//     expect(JSON.stringify(devideByLength("abc",1,"-"))).to.equal(`["a","b","c"]`);
-
-//     expect(JSON.stringify(devideByLength("",2,"-"))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",2,"-"))).to.equal(`["a-"]`);
-//     expect(JSON.stringify(devideByLength("ab",2,"-"))).to.equal(`["ab"]`);
-//     expect(JSON.stringify(devideByLength("abc",2,"-"))).to.equal(`["ab","c-"]`);
-
-//     expect(JSON.stringify(devideByLength("",3,"-"))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",3,"-"))).to.equal(`["a--"]`);
-//     expect(JSON.stringify(devideByLength("ab",3,"-"))).to.equal(`["ab-"]`);
-//     expect(JSON.stringify(devideByLength("abc",3,"-"))).to.equal(`["abc"]`);
-
-//     expect(JSON.stringify(devideByLength("",4,"-"))).to.equal(`[]`);
-//     expect(JSON.stringify(devideByLength("a",4,"-"))).to.equal(`["a---"]`);
-//     expect(JSON.stringify(devideByLength("ab",4,"-"))).to.equal(`["ab--"]`);
-//     expect(JSON.stringify(devideByLength("abc",4,"-"))).to.equal(`["abc-"]`);
-
-//     expect(() => {
-//       devideByLength("", 1, "");
-//     }).to.throw(TypeError, "paddingUnit must be a code unit").with.property("name", "TypeError");
-
-//     expect(() => {
-//       devideByLength("", 1, "--");
-//     }).to.throw(TypeError, "paddingUnit must be a code unit").with.property("name", "TypeError");
-
-//   });
-
-// });
+});

@@ -1,7 +1,10 @@
 //
 
 import { isPositiveInteger } from "./number_utils";
-import { devideByLength } from "./string_utils";
+import {
+  UnitToCount,
+  segment,
+} from "./string_utils";
 import {
   type uint8,
   // isUint8,
@@ -288,7 +291,10 @@ function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Ui
   }
   else {
     const elementLength = options.paddedLength + options.prefix.length + options.suffix.length;
-    byteStringArray = devideByLength(toParse, elementLength);
+    byteStringArray = segment(toParse, {
+      count: elementLength,
+      unit: UnitToCount.CHAR,
+    });
   }
 
   return Uint8Array.from(byteStringArray, (byteString) => {

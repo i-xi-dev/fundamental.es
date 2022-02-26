@@ -92,6 +92,15 @@ function _trimEnd(input: string, patternSource: string): string {
   return input.replace(new RegExp(`[${ patternSource }]+$`, "u"), "");
 }
 
+// patternSource空文字列は許容しない
+function _collectStart(input: string, patternSource: string): string {
+  const results = (new RegExp(`^[${ patternSource }]+`, "u")).exec(input);
+  if (results === null) {
+    return "";
+  }
+  return results[0] as string;
+}
+
 const CodePointRange = {
   /** [ASCII whitespace](https://infra.spec.whatwg.org/#ascii-whitespace) */
   ASCII_WHITESPACE: [
@@ -153,17 +162,16 @@ function _isCodePointRange(value: unknown): value is CodePointRange {
   return false;
 }
 
-function _rangeToRegexPattern(range: CodePointRange) {
+function _rangeToRegexPattern(range: CodePointRange): string {
   // if (_isCodePointRange(range)) {
-    return range.map((part) => {
-      if (part.length === 2) {
-        return `\\u{${ part[0].toString(16) }}-\\u{${ part[1].toString(16) }}`
-      }
-      else if (part.length === 1) {
-        return `\\u{${ part[0].toString(16) }}`
-      }
-      return "" as never;
-    }).join("");
+  return range.map((part) => {
+    if (part.length === 2) {
+      return `\\u{${ part[0].toString(16) }}-\\u{${ part[1].toString(16) }}`;
+    }
+    else {
+      return `\\u{${ part[0].toString(16) }}`;
+    }
+  }).join("");
   // }
   // throw new TypeError("range");
 }
@@ -228,11 +236,13 @@ function _isUnicodeCategoryArray(value: unknown): value is Array<UnicodeCategory
 
 function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
   // if (_isUnicodeCategoryArray(categories)) {
-    return categories.map((category) => `\\p{gc=${ category }}`).join("");
+  return categories.map((category) => `\\p{gc=${ category }}`).join("");
   // }
   // throw new TypeError("categories");
 }
 
+
+// TODO TextScript, _scriptsToRegexPattern
 
 
 
@@ -298,18 +308,47 @@ function trimEnd(input: string, searchObject: CodePointRange | Array<UnicodeCate
   }
 }
 
-//TODO matchScripts, containsScripts
+function collectStart(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
+  if (_isCodePointRange(searchObject)) {
+    return _collectStart(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _collectStart(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
 
+const UnitToCount = {
+  CHAR: "char",
+  RUNE: "rune",
+  // GRAPHEME: "grapheme",
+} as const;
+type UnitToCount = typeof UnitToCount[keyof typeof UnitToCount];
 
+function segment(input: string, by: { count: number, unit: UnitToCount }, padding?: string): Array<string> {
+  if (typeof input !== "string") {
+    throw new TypeError("input");
+  }
+  if ((typeof by?.count !== "number") || (isPositiveInteger(by.count) !== true)) {
+    throw new TypeError("by.count");
+  }
+  if (Object.values(UnitToCount).includes(by?.unit) !== true) {
+    throw new TypeError("by.unit");
+  }
+  if ((typeof padding !== "string") && (padding !== undefined)) {
+    throw new TypeError("padding");
+  }
 
-
-
-
-
-
-
-
-
+  if (by.unit === UnitToCount.CHAR) {
+    return _devideByCharCount(input, by.count, padding);
+  }
+  else if (by.unit === UnitToCount.RUNE) {
+    return _devideByRuneCount(input, by.count, padding);
+  }
+  return [] as never;
+}
 
 /**
  * 文字列を、指定したUTF-16コードユニット数ごとに分割し返却
@@ -317,15 +356,12 @@ function trimEnd(input: string, searchObject: CodePointRange | Array<UnicodeCate
  * 
  * @param input - 分割する文字列
  * @param segmentLength - 分割単位とするUTF-16コードユニット数
- * @param paddingUnit - 分割結果の配列の最後の要素がunitGroupSizeに満たない場合、最後の要素の末尾を埋める文字列
+ * @param paddingChar - 分割結果の配列の最後の要素がunitGroupSizeに満たない場合、最後の要素の末尾を埋める文字列
  * @returns strをunitGroupSize UTF-16コードユニットごとに分割した文字列配列
  */
-function devideByLength(input: string, segmentLength: number, paddingUnit?: string): Array<string> {
-  if (isPositiveInteger(segmentLength) !== true) {
-    throw new TypeError("segmentLength must be positive integer");
-  }
-  if ((typeof paddingUnit === "string") && (paddingUnit.length !== 1)) {
-    throw new TypeError("paddingUnit must be a code unit");
+function _devideByCharCount(input: string, segmentLength: number, paddingChar?: string): Array<string> {
+  if ((typeof paddingChar === "string") && (paddingChar.length !== 1)) {
+    throw new TypeError("paddingChar must be a code unit");
   }
 
   const segemntsCount = Math.ceil(input.length / segmentLength);
@@ -336,10 +372,35 @@ function devideByLength(input: string, segmentLength: number, paddingUnit?: stri
     pos = pos + segmentLength;
   }
 
-  if (typeof paddingUnit === "string") {
+  if (typeof paddingChar === "string") {
     const lastSegment = segments[segments.length - 1];
     if (lastSegment) {
-      segments[segments.length - 1] = lastSegment.padEnd(segmentLength, paddingUnit);
+      segments[segments.length - 1] = lastSegment.padEnd(segmentLength, paddingChar);
+    }
+  }
+
+  return segments;
+}
+
+function _devideByRuneCount(input: string, segmentLength: number, paddingRune?: rune): Array<string> {
+  if ((typeof paddingRune === "string") && (isRune(paddingRune) !== true)) {
+    throw new TypeError("paddingRune must be a code point");
+  }
+
+  const runes = [ ...input ];
+  const segemntsCount = Math.ceil(runes.length / segmentLength);
+  const segments: Array<string> = new Array<string>(segemntsCount);
+  let pos = 0;
+  for (let i = 0; i < segemntsCount; i++) {
+    segments[i] = runes.slice(pos, pos + segmentLength).join("");
+    pos = pos + segmentLength;
+  }
+
+  if (typeof paddingRune === "string") {
+    const lastSegment = segments[segments.length - 1];
+    if (lastSegment) {
+      const lastSegmentRuneCount = [ ...lastSegment ].length;
+      segments[segments.length - 1] = lastSegment +  paddingRune.repeat(segmentLength - lastSegmentRuneCount);
     }
   }
 
@@ -348,22 +409,9 @@ function devideByLength(input: string, segmentLength: number, paddingUnit?: stri
 
 
 
-/**
- * 文字列先頭から収集対象の連続を取得し返却
- *     存在しない場合、空文字列を返却
- * 
- * @param input - 文字列
- * @param pattern - 収集対象の範囲パターン
- * @returns 結果
- */
-function collectPattern(input: string, pattern: string): string {
-  const regex = new RegExp("^[" + pattern + "]+");
-  const results = regex.exec(input);
-  if (results === null) {
-    return "";
-  }
-  return results[0] as string;
-}
+
+
+// TODO 名前変える
 
 type CollectResult = {
   collected: string,
@@ -440,15 +488,16 @@ export {
   type CollectResult,
   CodePointRange,
   UnicodeCategory,
-  collectPattern,
+  UnitToCount,
+  collectStart,
   collectHttpQuotedString,
   contains,
-  devideByLength,
   isCodePoint,
   isRune,
   matches,
   runeFromCodePoint,
   runeToCodePoint,
+  segment,
   trim,
   trimEnd,
   trimStart,
