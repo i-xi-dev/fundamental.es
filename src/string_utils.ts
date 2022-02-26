@@ -48,6 +48,129 @@ function runeToCodePoint(rune: rune): codepoint {
   return rune.codePointAt(0) as codepoint;
 }
 
+// function matchPattern(input: string, patternSource: string): boolean {
+//   return (new RegExp(`^(?:${ patternSource })$`, "u")).test(input);
+// }
+
+// patternSource空文字列は許容しない
+function _matches(input: string, patternSource: string): boolean {
+  return (new RegExp(`^[${ patternSource }]*$`, "u")).test(input);
+}
+
+// // patternSource空文字列は許容しない
+// function _exactMatches(input: string, patternSource: string): boolean {
+//   return (new RegExp(`^[${ patternSource }]+$`, "u")).test(input);
+// }
+
+// // patternSource空文字列は許容しない
+// function _startsWith(input: string, patternSource: string): boolean {
+//   return (new RegExp(`^[${ patternSource }]`, "u")).test(input);
+// }
+
+// // patternSource空文字列は許容しない
+// function _endsWith(input: string, patternSource: string): boolean {
+//   return (new RegExp(`[${ patternSource }]$`, "u")).test(input);
+// }
+
+// patternSource空文字列は許容しない
+function _contains(input: string, patternSource: string): boolean {
+  return (new RegExp(`[${ patternSource }]`, "u")).test(input);
+}
+
+// patternSource空文字列は許容しない
+function _trim(input: string, patternSource: string): string {
+  return input.replace(new RegExp(`(?:^[${ patternSource }]+|[${ patternSource }]+$)`, "gu"), "");
+}
+
+// patternSource空文字列は許容しない
+function _trimStart(input: string, patternSource: string): string {
+  return input.replace(new RegExp(`^[${ patternSource }]+`, "u"), "");
+}
+
+// patternSource空文字列は許容しない
+function _trimEnd(input: string, patternSource: string): string {
+  return input.replace(new RegExp(`[${ patternSource }]+$`, "u"), "");
+}
+
+const CodePointRange = {
+  /** [ASCII whitespace](https://infra.spec.whatwg.org/#ascii-whitespace) */
+  ASCII_WHITESPACE: [
+    [ 0x9 ],
+    [ 0xA ],
+    [ 0xC ],
+    [ 0xD ],
+    [ 0x20 ],
+  ],
+
+  /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
+  HTTP_QUOTED_STRING_TOKEN: [
+    [ 0x9 ],
+    [ 0x20, 0x7E ],
+    [ 0x80, 0xFF ],
+  ],
+
+  /** [HTTP tab or space](https://fetch.spec.whatwg.org/#http-tab-or-space) */
+  HTTP_TAB_OR_SPACE: [
+    [ 0x9 ],
+    [ 0x20 ],
+  ],
+
+  /** [HTTP token code point](https://mimesniff.spec.whatwg.org/#http-token-code-point) */
+  HTTP_TOKEN: [
+    [ 0x21 ],
+    [ 0x23, 0x27 ],
+    [ 0x2A ],
+    [ 0x2B ],
+    [ 0x2D ],
+    [ 0x2E ],
+    [ 0x30, 0x39 ],
+    [ 0x41, 0x5A ],
+    [ 0x5E, 0x60 ],
+    [ 0x61, 0x7A ],
+    [ 0x7C ],
+    [ 0x7E ],
+  ],
+
+  /** [HTTP whitespace](https://fetch.spec.whatwg.org/#http-whitespace) */
+  HTTP_WHITESPACE: [
+    [ 0x9 ],
+    [ 0xA ],
+    [ 0xD ],
+    [ 0x20 ],
+  ],
+} as const;
+type CodePointRange = typeof CodePointRange[keyof typeof CodePointRange] | Array<[ codepoint ] | [ codepoint, codepoint ]>;
+
+function _isCodePointRange(value: unknown): value is CodePointRange {
+  if (Array.isArray(value) && (value.length > 0)) {
+    return value.every((part) => {
+      if (Array.isArray(part) && (part.length === 1 || part.length === 2)) {
+        return part.every((i) => isCodePoint(i));
+      }
+      return false;
+    });
+  }
+  return false;
+}
+
+function _rangeToRegexPattern(range: CodePointRange) {
+  // if (_isCodePointRange(range)) {
+    return range.map((part) => {
+      if (part.length === 2) {
+        return `\\u{${ part[0].toString(16) }}-\\u{${ part[1].toString(16) }}`
+      }
+      else if (part.length === 1) {
+        return `\\u{${ part[0].toString(16) }}`
+      }
+      return "" as never;
+    }).join("");
+  // }
+  // throw new TypeError("range");
+}
+
+/**
+ * Unicode category of a character
+ */
 const UnicodeCategory = {
   LETTER: "L",
   LETTER_UPPERCASE: "Lu",
@@ -89,9 +212,99 @@ const UnicodeCategory = {
 } as const;
 type UnicodeCategory = typeof UnicodeCategory[keyof typeof UnicodeCategory];
 
-//TODO matchCategories, containsCategories
+function _isUnicodeCategory(value: unknown): value is UnicodeCategory {
+  if (typeof value === "string") {
+    return (Object.values(UnicodeCategory) as string[]).includes(value);
+  }
+  return false;
+}
+
+function _isUnicodeCategoryArray(value: unknown): value is Array<UnicodeCategory> {
+  if (Array.isArray(value) && (value.length > 0)) {
+    return value.every((i) => _isUnicodeCategory(i));
+  }
+  return false;
+}
+
+function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
+  // if (_isUnicodeCategoryArray(categories)) {
+    return categories.map((category) => `\\p{gc=${ category }}`).join("");
+  // }
+  // throw new TypeError("categories");
+}
+
+
+
+
+
+
+function matches(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): boolean {
+  if (_isCodePointRange(searchObject)) {
+    return _matches(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _matches(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
+
+function contains(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): boolean {
+  if (_isCodePointRange(searchObject)) {
+    return _contains(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _contains(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
+
+function trim(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
+  if (_isCodePointRange(searchObject)) {
+    return _trim(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _trim(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
+
+function trimStart(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
+  if (_isCodePointRange(searchObject)) {
+    return _trimStart(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _trimStart(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
+
+function trimEnd(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
+  if (_isCodePointRange(searchObject)) {
+    return _trimEnd(input, _rangeToRegexPattern(searchObject));
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _trimEnd(input, _categoriesToRegexPattern(searchObject));
+  }
+  else {
+    throw new TypeError("searchObject");
+  }
+}
 
 //TODO matchScripts, containsScripts
+
+
+
+
+
+
 
 
 
@@ -133,27 +346,7 @@ function devideByLength(input: string, segmentLength: number, paddingUnit?: stri
   return segments;
 }
 
-//TODO 名前変える
-/**
- * 範囲パターン
- */
-const RangePattern = Object.freeze({
-  /** [ASCII whitespace](https://infra.spec.whatwg.org/#ascii-whitespace) */
-  ASCII_WHITESPACE: "\\u0009\\u000A\\u000C\\u000D\\u0020",
 
-  /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
-  HTTP_QUOTED_STRING_TOKEN: "\\u0009\\u0020-\\u007E\\u0080-\\u00FF",
-
-  /** [HTTP tab or space](https://fetch.spec.whatwg.org/#http-tab-or-space) */
-  HTTP_TAB_OR_SPACE: "\\u0009\\u0020",
-
-  /** [HTTP token code point](https://mimesniff.spec.whatwg.org/#http-token-code-point) */
-  HTTP_TOKEN: "\\u0021\\u0023-\\u0027\\u002A\\u002B\\u002D\\u002E0-9A-Za-z\\u005E\\u005F\\u0060\\u007C\\u007E",
-
-  /** [HTTP whitespace](https://fetch.spec.whatwg.org/#http-whitespace) */
-  HTTP_WHITESPACE: "\\u0009\\u000A\\u000D\\u0020",
-});
-type RangePattern = typeof RangePattern[keyof typeof RangePattern];
 
 /**
  * 文字列先頭から収集対象の連続を取得し返却
@@ -163,51 +356,13 @@ type RangePattern = typeof RangePattern[keyof typeof RangePattern];
  * @param pattern - 収集対象の範囲パターン
  * @returns 結果
  */
-function collectPattern(input: string, pattern: RangePattern): string {
+function collectPattern(input: string, pattern: string): string {
   const regex = new RegExp("^[" + pattern + "]+");
   const results = regex.exec(input);
   if (results === null) {
     return "";
   }
   return results[0] as string;
-}
-
-/**
- * 文字列がrangePatternの範囲のみからなる文字列
- * であるか否かを返却
- * 
- * @param input - 文字列
- * @param pattern - 範囲パターン
- * @returns 結果
- */
-function matchPattern(input: string, pattern: RangePattern): boolean {
-  const regex = new RegExp("^[" + pattern + "]*$");
-  return regex.test(input);
-}
-
-/**
- * 文字列から先頭および末尾のrangePatternの範囲の部分文字列を削除した文字列を返却
- * 
- * @param input - 文字列
- * @param pattern - 削除対象の範囲パターン
- * @returns 文字列
- */
-function trimPattern(input: string, pattern: RangePattern): string {
-  const regex = new RegExp("(^[" + pattern + "]+|[" + pattern + "]+$)", "g");
-  // return input.replaceAll(regex, "");
-  return input.replace(regex, "");
-}
-
-/**
- * 文字列から末尾のrangePatternの範囲の部分文字列を削除した文字列を返却
- * 
- * @param input - 文字列
- * @param pattern - 削除対象の範囲パターン
- * @returns 文字列
- */
-function trimPatternEnd(input: string, pattern: RangePattern): string {
-  const regex = new RegExp("[" + pattern + "]+$");
-  return input.replace(regex, "");
 }
 
 type CollectResult = {
@@ -283,16 +438,18 @@ export {
   type codepoint,
   type rune,
   type CollectResult,
+  CodePointRange,
   UnicodeCategory,
-  RangePattern,
   collectPattern,
   collectHttpQuotedString,
+  contains,
   devideByLength,
   isCodePoint,
   isRune,
-  matchPattern,
+  matches,
   runeFromCodePoint,
   runeToCodePoint,
-  trimPattern,
-  trimPatternEnd,
+  trim,
+  trimEnd,
+  trimStart,
 };
