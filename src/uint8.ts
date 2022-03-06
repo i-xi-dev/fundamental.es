@@ -45,7 +45,15 @@ function isUint8(value: unknown): value is uint8 {
   return false;
 }
 
+function isArrayOfUint8(value: unknown): value is Array<uint8> {
+  if (Array.isArray(value)) {
+    return value.every((i) => isUint8(i));
+  }
+  return false;
+}
+
 export {
   type uint8,
+  isArrayOfUint8,
   isUint8,
 };

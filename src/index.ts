@@ -29,6 +29,7 @@ export {
 } from "./string_utils";
 export {
   type uint8,
+  isArrayOfUint8,
   isUint8,
 } from "./uint8";
 export { SizedMap } from "./collections";
