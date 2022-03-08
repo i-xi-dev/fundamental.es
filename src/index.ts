@@ -8,12 +8,12 @@ export {
   isNonNegativeInteger,
   isPositiveInteger,
 } from "./number_utils";
+export { UnicodeCategory } from "./unicode";
 export {
   type codepoint,
   type rune,
   type CollectResult,
   CodePointRange,
-  UnicodeCategory,
   collectStart,
   collectHttpQuotedString,
   contains,

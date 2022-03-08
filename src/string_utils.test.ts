@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
+import { UnicodeCategory } from "./unicode";
 import {
   CodePointRange,
-  UnicodeCategory,
   collectStart,
   collectHttpQuotedString,
   contains,
