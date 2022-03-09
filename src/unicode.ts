@@ -3,7 +3,7 @@
 /**
  * Unicode category of a character
  */
- const UnicodeCategory = {
+const UnicodeCategory = {
   LETTER: "L",
   LETTER_UPPERCASE: "Lu",
   LETTER_LOWERCASE: "Ll",

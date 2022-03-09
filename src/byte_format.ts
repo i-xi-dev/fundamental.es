@@ -77,15 +77,6 @@ type ByteFormatOptions = {
   lowerCase?: boolean,
 
   /**
-   * Whether the formatted string is uppercase or not.
-   * The default is `true`.
-   * `upperCase` is ignored if `lowerCase` is specified.
-   * 
-   * @deprecated
-   */
-  upperCase?: boolean,
-
-  /**
    * The prefix of the formatted string for each byte.
    * The default is `""`.
    */
@@ -154,21 +145,11 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
   }
 
   let lowerCase: boolean;
-  if (("upperCase" in options) && (("lowerCase" in options) !== true)) {
-    if (typeof options.upperCase === "boolean") {
-      lowerCase = !options.upperCase;
-    }
-    else {
-      lowerCase = false;
-    }
+  if (typeof options.lowerCase === "boolean") {
+    lowerCase = options.lowerCase;
   }
   else {
-    if (typeof options.lowerCase === "boolean") {
-      lowerCase = options.lowerCase;
-    }
-    else {
-      lowerCase = false;
-    }
+    lowerCase = false;
   }
 
   let prefix: string;

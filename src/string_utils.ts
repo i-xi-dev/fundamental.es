@@ -52,18 +52,18 @@ function runeToCodePoint(rune: rune): codepoint {
   return rune.codePointAt(0) as codepoint;
 }
 
-function _runeIsInCategory(rune: rune, category: UnicodeCategory): boolean {
-  if (isRune(rune) !== true) {
-    throw new TypeError("rune");
-  }
-  const regex = new RegExp(`^[\\p{gc=${ category }}]$`, "u");
-  return regex.test(rune);
-}
+// function _runeIsInCategory(rune: rune, category: UnicodeCategory): boolean {
+//   if (isRune(rune) !== true) {
+//     throw new TypeError("rune");
+//   }
+//   const regex = new RegExp(`^[\\p{gc=${ category }}]$`, "u");
+//   return regex.test(rune);
+// }
 
-//TODO
-function runeIsSurrogate(rune: rune): boolean {
-  return _runeIsInCategory(rune, UnicodeCategory.OTHER_SURROGATE);
-}
+// TODO
+// function runeIsSurrogate(rune: rune): boolean {
+//   return _runeIsInCategory(rune, UnicodeCategory.OTHER_SURROGATE);
+// }
 
 // function matchPattern(input: string, patternSource: string): boolean {
 //   return (new RegExp(`^(?:${ patternSource })$`, "u")).test(input);

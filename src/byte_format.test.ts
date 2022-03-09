@@ -48,27 +48,9 @@ describe("ByteFormat.format", () => {
 
   });
 
-  it("format(Uint8Array, {upperCase:false})", () => {
-    expect(ByteFormat.format(Uint8Array.of(), {upperCase:false})).to.equal("");
-    expect(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {upperCase:false})).to.equal("fffefdfc00010203");
-
-  });
-
   it("format(Uint8Array, {lowerCase:true})", () => {
     expect(ByteFormat.format(Uint8Array.of(), {lowerCase:true})).to.equal("");
     expect(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:true})).to.equal("fffefdfc00010203");
-
-  });
-
-  it("format(Uint8Array, {lowerCase:false,upperCase:false})", () => {
-    expect(ByteFormat.format(Uint8Array.of(), {lowerCase:false,upperCase:false})).to.equal("");
-    expect(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:false,upperCase:false})).to.equal("FFFEFDFC00010203");
-
-  });
-
-  it("format(Uint8Array, {lowerCase:true,upperCase:true})", () => {
-    expect(ByteFormat.format(Uint8Array.of(), {lowerCase:true,upperCase:true})).to.equal("");
-    expect(ByteFormat.format(Uint8Array.of(255,254,253,252,0,1,2,3), {lowerCase:true,upperCase:true})).to.equal("fffefdfc00010203");
 
   });
 
@@ -143,13 +125,6 @@ describe("ByteFormat.parse", () => {
   it("parse(string, {radix:2})", () => {
     expect(JSON.stringify(Array.from(ByteFormat.parse("", {radix:2})))).to.equal("[]");
     expect(JSON.stringify(Array.from(ByteFormat.parse("1111111111111110111111011111110000000000000000010000001000000011", {radix:2})))).to.equal("[255,254,253,252,0,1,2,3]");
-
-  });
-
-  it("parse(string, {upperCase:false})", () => {
-    expect(JSON.stringify(Array.from(ByteFormat.parse("", {upperCase:false})))).to.equal("[]");
-    expect(JSON.stringify(Array.from(ByteFormat.parse("FFFEFDFC00010203", {upperCase:false})))).to.equal("[255,254,253,252,0,1,2,3]");
-    expect(JSON.stringify(Array.from(ByteFormat.parse("fffefdfc00010203", {upperCase:false})))).to.equal("[255,254,253,252,0,1,2,3]");
 
   });
 
@@ -277,14 +252,6 @@ describe("BytesFormatter.prototype.format", () => {
 
   });
 
-  it("new BytesFormatter({upperCase:false})/format(Uint8Array)", () => {
-    const format = new BytesFormatter({upperCase:false});
-
-    expect(format.format(Uint8Array.of())).to.equal("");
-    expect(format.format(Uint8Array.of(255,254,253,252,0,1,2,3))).to.equal("fffefdfc00010203");
-
-  });
-
   it("new BytesFormatter({lowerCase:true})/format(Uint8Array)", () => {
     const format = new BytesFormatter({lowerCase:true});
 
@@ -400,15 +367,6 @@ describe("BytesParser.prototype.parse", () => {
 
     expect(JSON.stringify(Array.from(format.parse("")))).to.equal("[]");
     expect(JSON.stringify(Array.from(format.parse("1111111111111110111111011111110000000000000000010000001000000011")))).to.equal("[255,254,253,252,0,1,2,3]");
-
-  });
-
-  it("new BytesParser({upperCase:false})/parse(string)", () => {
-    const format = new BytesParser({upperCase:false});
-
-    expect(JSON.stringify(Array.from(format.parse("")))).to.equal("[]");
-    expect(JSON.stringify(Array.from(format.parse("FFFEFDFC00010203")))).to.equal("[255,254,253,252,0,1,2,3]");
-    expect(JSON.stringify(Array.from(format.parse("fffefdfc00010203")))).to.equal("[255,254,253,252,0,1,2,3]");
 
   });
 
