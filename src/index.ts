@@ -21,6 +21,7 @@ export {
   isRune,
   matches,
   runeFromCodePoint,
+  runeIsControl,
   runeIsSurrogate,
   runeToCodePoint,
   segment,

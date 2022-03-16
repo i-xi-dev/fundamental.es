@@ -64,6 +64,10 @@ function runeIsSurrogate(rune: rune): boolean {
   return _runeIsInCategory(rune, UnicodeCategory.OTHER_SURROGATE);
 }
 
+function runeIsControl(rune: rune): boolean {
+  return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
+}
+
 // function matchPattern(input: string, patternSource: string): boolean {
 //   return (new RegExp(`^(?:${ patternSource })$`, "u")).test(input);
 // }
@@ -453,6 +457,7 @@ export {
   isRune,
   matches,
   runeFromCodePoint,
+  runeIsControl,
   runeIsSurrogate,
   runeToCodePoint,
   segment,

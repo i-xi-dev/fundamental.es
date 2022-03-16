@@ -9,6 +9,7 @@ import {
   isRune,
   matches,
   runeFromCodePoint,
+  runeIsControl,
   runeIsSurrogate,
   runeToCodePoint,
   segment,
@@ -144,6 +145,33 @@ describe("runeIsSurrogate", () => {
   it("runeIsSurrogate(any)", () => {
     expect(() => {
       runeIsSurrogate(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("runeIsControl", () => {
+  it("runeIsControl(string)", () => {
+    expect(runeIsControl("\u0000")).to.equal(true);
+    expect(runeIsControl("\u001F")).to.equal(true);
+    expect(runeIsControl("\u0020")).to.equal(false);
+    expect(runeIsControl("\u007E")).to.equal(false);
+    expect(runeIsControl("\u007F")).to.equal(true);
+    expect(runeIsControl("\u0080")).to.equal(true);
+    expect(runeIsControl("\u009F")).to.equal(true);
+    expect(runeIsControl("\u00A0")).to.equal(false);
+    expect(runeIsControl("\u{10FFFF}")).to.equal(false);
+
+    expect(() => {
+      runeIsControl("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("runeIsControl(any)", () => {
+    expect(() => {
+      runeIsControl(0 as unknown as string);
     }).to.throw(TypeError, "rune").with.property("name", "TypeError");
 
   });
