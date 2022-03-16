@@ -5,68 +5,12 @@ import {
   UnicodeCategory,
   _isUnicodeCategoryArray,
 } from "./unicode";
-
-type codepoint = number; // 0x10FFFF個を列挙するとか馬鹿げているので、ただのnumberの別名とする
-
-/**
- * Determines whether the passed value is an Unicode code point.
- * 
- * @param value - The value to be tested
- * @returns Whether the passed value is an Unicode code point.
- */
-function isCodePoint(value: unknown): value is codepoint {
-  if (typeof value === "number") {
-    return (Number.isSafeInteger(value) && (value >= 0x0) && (value <= 0x10FFFF));
-  }
-  return false;
-}
-
-// XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
-type rune = string; // 0x10FFFF個を列挙するとか馬鹿げているので、ただのstringの別名とする
-
-function isRune(value: unknown): value is rune {
-  if (typeof value !== "string") {
-    return false;
-  }
-  if (value.length > 2) {
-    return false;
-  }
-  const runes = [ ...value ];
-  if (runes.length !== 1) {
-    return false;
-  }
-  return true;
-}
-
-function runeFromCodePoint(codePoint: codepoint): rune {
-  if (isCodePoint(codePoint) !== true) {
-    throw new TypeError("codePoint");
-  }
-  return String.fromCodePoint(codePoint);
-}
-
-function runeToCodePoint(rune: rune): codepoint {
-  if (isRune(rune) !== true) {
-    throw new TypeError("rune");
-  }
-  return rune.codePointAt(0) as codepoint;
-}
-
-function _runeIsInCategory(rune: rune, category: UnicodeCategory): boolean {
-  if (isRune(rune) !== true) {
-    throw new TypeError("rune");
-  }
-  const regex = new RegExp(`^[\\p{gc=${ category }}]$`, "u");
-  return regex.test(rune);
-}
-
-function runeIsSurrogate(rune: rune): boolean {
-  return _runeIsInCategory(rune, UnicodeCategory.OTHER_SURROGATE);
-}
-
-function runeIsControl(rune: rune): boolean {
-  return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
-}
+import {
+  type codepoint,
+  type rune,
+  CodePoint,
+  Rune,
+} from "./rune";
 
 // function matchPattern(input: string, patternSource: string): boolean {
 //   return (new RegExp(`^(?:${ patternSource })$`, "u")).test(input);
@@ -174,7 +118,7 @@ function _isCodePointRange(value: unknown): value is CodePointRange {
   if (Array.isArray(value) && (value.length > 0)) {
     return value.every((part) => {
       if (Array.isArray(part) && (part.length === 1 || part.length === 2)) {
-        return part.every((i) => isCodePoint(i));
+        return part.every((i) => CodePoint.isCodePoint(i));
       }
       return false;
     });
@@ -345,7 +289,7 @@ function _devideByCharCount(input: string, segmentLength: number, paddingChar?: 
 }
 
 function _devideByRuneCount(input: string, segmentLength: number, paddingRune?: rune): Array<string> {
-  if ((typeof paddingRune === "string") && (isRune(paddingRune) !== true)) {
+  if ((typeof paddingRune === "string") && (Rune.isRune(paddingRune) !== true)) {
     throw new TypeError("paddingRune must be a code point");
   }
 
@@ -453,13 +397,7 @@ export {
   collectStart,
   collectHttpQuotedString,
   contains,
-  isCodePoint,
-  isRune,
   matches,
-  runeFromCodePoint,
-  runeIsControl,
-  runeIsSurrogate,
-  runeToCodePoint,
   segment,
   trim,
   trimEnd,

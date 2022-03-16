@@ -12,18 +12,16 @@ export { UnicodeCategory } from "./unicode";
 export {
   type codepoint,
   type rune,
+  CodePoint,
+  Rune,
+} from "./rune";
+export {
   type CollectResult,
   CodePointRange,
   collectStart,
   collectHttpQuotedString,
   contains,
-  isCodePoint,
-  isRune,
   matches,
-  runeFromCodePoint,
-  runeIsControl,
-  runeIsSurrogate,
-  runeToCodePoint,
   segment,
   trim,
   trimEnd,
