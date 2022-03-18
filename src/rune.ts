@@ -61,6 +61,10 @@ namespace Rune {
     return rune.codePointAt(0) as codepoint;
   }
 
+  export function isLetter(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.LETTER);
+  }
+
   export function isControl(rune: rune): boolean {
     return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
   }

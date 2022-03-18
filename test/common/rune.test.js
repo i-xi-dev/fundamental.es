@@ -111,6 +111,30 @@ describe("toCodePoint", () => {
 
 });
 
+describe("isLetter", () => {
+  it("isLetter(string)", () => {
+    expect(Rune.isLetter("\u0000")).to.equal(false);
+    //expect(Rune.isLetter("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isLetter("a")).to.equal(true);
+    expect(Rune.isLetter("A")).to.equal(true);
+    expect(Rune.isLetter("1")).to.equal(false);
+    expect(Rune.isLetter("=")).to.equal(false);
+
+    expect(() => {
+      Rune.isLetter("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isLetter(any)", () => {
+    expect(() => {
+      Rune.isLetter(0);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
 describe("isControl", () => {
   it("isControl(string)", () => {
     expect(Rune.isControl("\u0000")).to.equal(true);
