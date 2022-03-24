@@ -184,6 +184,81 @@ describe("isNumber", () => {
 
 });
 
+describe("isPunctuation", () => {
+  it("isPunctuation(string)", () => {
+    expect(Rune.isPunctuation("\u0000")).to.equal(false);
+    //expect(Rune.isPunctuation("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isPunctuation("a")).to.equal(false);
+    expect(Rune.isPunctuation("A")).to.equal(false);
+    expect(Rune.isPunctuation("1")).to.equal(false);
+    expect(Rune.isPunctuation("=")).to.equal(false);
+    expect(Rune.isPunctuation("\u002C")).to.equal(true);
+
+    expect(() => {
+      Rune.isPunctuation("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isPunctuation(any)", () => {
+    expect(() => {
+      Rune.isPunctuation(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("isSymbol", () => {
+  it("isSymbol(string)", () => {
+    expect(Rune.isSymbol("\u0000")).to.equal(false);
+    //expect(Rune.isSymbol("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isSymbol("a")).to.equal(false);
+    expect(Rune.isSymbol("A")).to.equal(false);
+    expect(Rune.isSymbol("1")).to.equal(false);
+    expect(Rune.isSymbol("=")).to.equal(true);
+    expect(Rune.isSymbol("\u002B")).to.equal(true);
+
+    expect(() => {
+      Rune.isSymbol("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isSymbol(any)", () => {
+    expect(() => {
+      Rune.isSymbol(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("isSeparator", () => {
+  it("isSeparator(string)", () => {
+    expect(Rune.isSeparator("\u0000")).to.equal(false);
+    //expect(Rune.isSeparator("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isSeparator("a")).to.equal(false);
+    expect(Rune.isSeparator("A")).to.equal(false);
+    expect(Rune.isSeparator("1")).to.equal(false);
+    expect(Rune.isSeparator("=")).to.equal(false);
+    expect(Rune.isSeparator(" ")).to.equal(true);
+
+    expect(() => {
+      Rune.isSeparator("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isSeparator(any)", () => {
+    expect(() => {
+      Rune.isSeparator(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
 describe("isControl", () => {
   it("isControl(string)", () => {
     expect(Rune.isControl("\u0000")).to.equal(true);

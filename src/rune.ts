@@ -73,7 +73,17 @@ namespace Rune {
     return _runeIsInCategory(rune, UnicodeCategory.NUMBER);
   }
 
+  export function isPunctuation(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.PUNCTUATION);
+  }
 
+  export function isSymbol(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.SYMBOL);
+  }
+
+  export function isSeparator(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.SEPARATOR);
+  }
 
   export function isControl(rune: rune): boolean {
     return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
