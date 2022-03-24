@@ -135,6 +135,55 @@ describe("isLetter", () => {
 
 });
 
+describe("isMark", () => {
+  it("isMark(string)", () => {
+    expect(Rune.isMark("\u0000")).to.equal(false);
+    //expect(Rune.isMark("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isMark("a")).to.equal(false);
+    expect(Rune.isMark("A")).to.equal(false);
+    expect(Rune.isMark("1")).to.equal(false);
+    expect(Rune.isMark("=")).to.equal(false);
+    expect(Rune.isMark("\u0300")).to.equal(true);
+
+    expect(() => {
+      Rune.isMark("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isMark(any)", () => {
+    expect(() => {
+      Rune.isMark(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("isNumber", () => {
+  it("isNumber(string)", () => {
+    expect(Rune.isNumber("\u0000")).to.equal(false);
+    //expect(Rune.isNumber("\u{10FFFF}")).to.equal(false);
+    expect(Rune.isNumber("a")).to.equal(false);
+    expect(Rune.isNumber("A")).to.equal(false);
+    expect(Rune.isNumber("1")).to.equal(true);
+    expect(Rune.isNumber("=")).to.equal(false);
+
+    expect(() => {
+      Rune.isNumber("\u0000\u0000");
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+  it("isNumber(any)", () => {
+    expect(() => {
+      Rune.isNumber(0 as unknown as string);
+    }).to.throw(TypeError, "rune").with.property("name", "TypeError");
+
+  });
+
+});
+
 describe("isControl", () => {
   it("isControl(string)", () => {
     expect(Rune.isControl("\u0000")).to.equal(true);

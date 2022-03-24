@@ -65,6 +65,16 @@ namespace Rune {
     return _runeIsInCategory(rune, UnicodeCategory.LETTER);
   }
 
+  export function isMark(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.MARK);
+  }
+
+  export function isNumber(rune: rune): boolean {
+    return _runeIsInCategory(rune, UnicodeCategory.NUMBER);
+  }
+
+
+
   export function isControl(rune: rune): boolean {
     return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
   }
