@@ -8,6 +8,7 @@ export {
   isNonNegativeInteger,
   isPositiveInteger,
 } from "./number_utils";
+export { Script } from "./script";
 export { UnicodeCategory } from "./unicode";
 export {
   type codepoint,
