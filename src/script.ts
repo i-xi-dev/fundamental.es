@@ -2,437 +2,365 @@
 
 // 2022-03時点
 const _scripts = {
-  ADLM: "Adlm",
-  AFAK: "Afak",
-  AGHB: "Aghb",
-  AHOM: "Ahom",
-  ARAB: "Arab",
-  ARAN: "Aran",
-  ARMI: "Armi",
-  ARMN: "Armn",
-  AVST: "Avst",
-  BALI: "Bali",
-  BAMU: "Bamu",
-  BASS: "Bass",
-  BATK: "Batk",
-  BENG: "Beng",
-  BHKS: "Bhks",
-  BLIS: "Blis",
-  BOPO: "Bopo",
-  BRAH: "Brah",
-  BRAI: "Brai",
-  BUGI: "Bugi",
-  BUHD: "Buhd",
-  CAKM: "Cakm",
-  CANS: "Cans",
-  CARI: "Cari",
-  CHAM: "Cham",
-  CHER: "Cher",
-  CHRS: "Chrs",
-  CIRT: "Cirt",
-  COPT: "Copt",
-  CPMN: "Cpmn",
-  CPRT: "Cprt",
-  CYRL: "Cyrl",
-  CYRS: "Cyrs",
-  DEVA: "Deva",
-  DIAK: "Diak",
-  DOGR: "Dogr",
-  DSRT: "Dsrt",
-  DUPL: "Dupl",
-  EGYD: "Egyd",
-  EGYH: "Egyh",
-  EGYP: "Egyp",
-  ELBA: "Elba",
-  ELYM: "Elym",
-  ETHI: "Ethi",
-  GEOK: "Geok",
-  GEOR: "Geor",
-  GLAG: "Glag",
-  GONG: "Gong",
-  GONM: "Gonm",
-  GOTH: "Goth",
-  GRAN: "Gran",
-  GREK: "Grek",
-  GUJR: "Gujr",
-  GURU: "Guru",
-  HANB: "Hanb",
-  HANG: "Hang",
-  HANI: "Hani",
-  HANO: "Hano",
-  HANS: "Hans",
-  HANT: "Hant",
-  HATR: "Hatr",
-  HEBR: "Hebr",
-  HIRA: "Hira",
-  HLUW: "Hluw",
-  HMNG: "Hmng",
-  HMNP: "Hmnp",
-  HRKT: "Hrkt",
-  HUNG: "Hung",
-  INDS: "Inds",
-  ITAL: "Ital",
-  JAMO: "Jamo",
-  JAVA: "Java",
-  JPAN: "Jpan",
-  JURC: "Jurc",
-  KALI: "Kali",
-  KANA: "Kana",
-  KAWI: "Kawi",
-  KHAR: "Khar",
-  KHMR: "Khmr",
-  KHOJ: "Khoj",
-  KITL: "Kitl",
-  KITS: "Kits",
-  KNDA: "Knda",
-  KORE: "Kore",
-  KPEL: "Kpel",
-  KTHI: "Kthi",
-  LANA: "Lana",
-  LAOO: "Laoo",
-  LATF: "Latf",
-  LATG: "Latg",
-  LATN: "Latn",
-  LEKE: "Leke",
-  LEPC: "Lepc",
-  LIMB: "Limb",
-  LINA: "Lina",
-  LINB: "Linb",
-  LISU: "Lisu",
-  LOMA: "Loma",
-  LYCI: "Lyci",
-  LYDI: "Lydi",
-  MAHJ: "Mahj",
-  MAKA: "Maka",
-  MAND: "Mand",
-  MANI: "Mani",
-  MARC: "Marc",
-  MAYA: "Maya",
-  MEDF: "Medf",
-  MEND: "Mend",
-  MERC: "Merc",
-  MERO: "Mero",
-  MLYM: "Mlym",
-  MODI: "Modi",
-  MONG: "Mong",
-  MOON: "Moon",
-  MROO: "Mroo",
-  MTEI: "Mtei",
-  MULT: "Mult",
-  MYMR: "Mymr",
-  NAGM: "Nagm",
-  NAND: "Nand",
-  NARB: "Narb",
-  NBAT: "Nbat",
-  NEWA: "Newa",
-  NKDB: "Nkdb",
-  NKGB: "Nkgb",
-  NKOO: "Nkoo",
-  NSHU: "Nshu",
-  OGAM: "Ogam",
-  OLCK: "Olck",
-  ORKH: "Orkh",
-  ORYA: "Orya",
-  OSGE: "Osge",
-  OSMA: "Osma",
-  OUGR: "Ougr",
-  PALM: "Palm",
-  PAUC: "Pauc",
-  PCUN: "Pcun",
-  PELM: "Pelm",
-  PERM: "Perm",
-  PHAG: "Phag",
-  PHLI: "Phli",
-  PHLP: "Phlp",
-  PHLV: "Phlv",
-  PHNX: "Phnx",
-  PLRD: "Plrd",
-  PIQD: "Piqd",
-  PRTI: "Prti",
-  PSIN: "Psin",
-  QAAA: "Qaaa",
-  QABX: "Qabx",
-  RANJ: "Ranj",
-  RJNG: "Rjng",
-  ROHG: "Rohg",
-  RORO: "Roro",
-  RUNR: "Runr",
-  SAMR: "Samr",
-  SARA: "Sara",
-  SARB: "Sarb",
-  SAUR: "Saur",
-  SGNW: "Sgnw",
-  SHAW: "Shaw",
-  SHRD: "Shrd",
-  SHUI: "Shui",
-  SIDD: "Sidd",
-  SIND: "Sind",
-  SINH: "Sinh",
-  SOGD: "Sogd",
-  SOGO: "Sogo",
-  SORA: "Sora",
-  SOYO: "Soyo",
-  SUND: "Sund",
-  SUNU: "Sunu",
-  SYLO: "Sylo",
-  SYRC: "Syrc",
-  SYRE: "Syre",
-  SYRJ: "Syrj",
-  SYRN: "Syrn",
-  TAGB: "Tagb",
-  TAKR: "Takr",
-  TALE: "Tale",
-  TALU: "Talu",
-  TAML: "Taml",
-  TANG: "Tang",
-  TAVT: "Tavt",
-  TELU: "Telu",
-  TENG: "Teng",
-  TFNG: "Tfng",
-  TGLG: "Tglg",
-  THAA: "Thaa",
-  THAI: "Thai",
-  TIBT: "Tibt",
-  TIRH: "Tirh",
-  TNSA: "Tnsa",
-  TOTO: "Toto",
-  UGAR: "Ugar",
-  VAII: "Vaii",
-  VISP: "Visp",
-  VITH: "Vith",
-  WARA: "Wara",
-  WCHO: "Wcho",
-  WOLE: "Wole",
-  XPEO: "Xpeo",
-  XSUX: "Xsux",
-  YEZI: "Yezi",
-  YIII: "Yiii",
-  ZANB: "Zanb",
-  ZINH: "Zinh",
-  ZMTH: "Zmth",
-  ZSYE: "Zsye",
-  ZSYM: "Zsym",
-  ZXXX: "Zxxx",
-  ZYYY: "Zyyy",
-  ZZZZ: "Zzzz",
+  ADLM: "Adlm", // Adlam // Adlam
+  AFAK: "Afak", // Afaka // 
+  AGHB: "Aghb", // Caucasian Albanian // Caucasian_Albanian
+  AHOM: "Ahom", // Ahom, Tai Ahom // Ahom
+  ARAB: "Arab", // Arabic // Arabic
+  ARAN: "Aran", // Arabic (Nastaliq variant) // 
+  ARMI: "Armi", // Imperial Aramaic // Imperial_Aramaic
+  ARMN: "Armn", // Armenian // Armenian
+  AVST: "Avst", // Avestan // Avestan
+  BALI: "Bali", // Balinese // Balinese
+  BAMU: "Bamu", // Bamum // Bamum
+  BASS: "Bass", // Bassa Vah // Bassa_Vah
+  BATK: "Batk", // Batak // Batak
+  BENG: "Beng", // Bengali (Bangla) // Bengali
+  BHKS: "Bhks", // Bhaiksuki // Bhaiksuki
+  BLIS: "Blis", // Blissymbols // 
+  BOPO: "Bopo", // Bopomofo // Bopomofo
+  BRAH: "Brah", // Brahmi // Brahmi
+  BRAI: "Brai", // Braille // Braille
+  BUGI: "Bugi", // Buginese // Buginese
+  BUHD: "Buhd", // Buhid // Buhid
+  CAKM: "Cakm", // Chakma // Chakma
+  CANS: "Cans", // Unified Canadian Aboriginal Syllabics // Canadian_Aboriginal
+  CARI: "Cari", // Carian // Carian
+  CHAM: "Cham", // Cham // Cham
+  CHER: "Cher", // Cherokee // Cherokee
+  CHRS: "Chrs", // Chorasmian // Chorasmian
+  CIRT: "Cirt", // Cirth // 
+  COPT: "Copt", // Coptic // Coptic
+  CPMN: "Cpmn", // Cypro-Minoan // Cypro_Minoan
+  CPRT: "Cprt", // Cypriot syllabary // Cypriot
+  CYRL: "Cyrl", // Cyrillic // Cyrillic
+  CYRS: "Cyrs", // Cyrillic (Old Church Slavonic variant) // 
+  DEVA: "Deva", // Devanagari (Nagari) // Devanagari
+  DIAK: "Diak", // Dives Akuru // Dives_Akuru
+  DOGR: "Dogr", // Dogra // Dogra
+  DSRT: "Dsrt", // Deseret (Mormon) // Deseret
+  DUPL: "Dupl", // Duployan shorthand, Duployan stenography // Duployan
+  EGYD: "Egyd", // Egyptian demotic // 
+  EGYH: "Egyh", // Egyptian hieratic // 
+  EGYP: "Egyp", // Egyptian hieroglyphs // Egyptian_Hieroglyphs
+  ELBA: "Elba", // Elbasan // Elbasan
+  ELYM: "Elym", // Elymaic // Elymaic
+  ETHI: "Ethi", // Ethiopic (Geʻez) // Ethiopic
+  GEOK: "Geok", // Khutsuri (Asomtavruli and Nuskhuri) // Georgian
+  GEOR: "Geor", // Georgian (Mkhedruli and Mtavruli) // Georgian
+  GLAG: "Glag", // Glagolitic // Glagolitic
+  GONG: "Gong", // Gunjala Gondi // Gunjala_Gondi
+  GONM: "Gonm", // Masaram Gondi // Masaram_Gondi
+  GOTH: "Goth", // Gothic // Gothic
+  GRAN: "Gran", // Grantha // Grantha
+  GREK: "Grek", // Greek // Greek
+  GUJR: "Gujr", // Gujarati // Gujarati
+  GURU: "Guru", // Gurmukhi // Gurmukhi
+  HANB: "Hanb", // Han with Bopomofo (alias for Han + Bopomofo) // 
+  HANG: "Hang", // Hangul (Hangŭl, Hangeul) // Hangul
+  HANI: "Hani", // Han (Hanzi, Kanji, Hanja) // Han
+  HANO: "Hano", // Hanunoo (Hanunóo) // Hanunoo
+  HANS: "Hans", // Han (Simplified variant) // 
+  HANT: "Hant", // Han (Traditional variant) // 
+  HATR: "Hatr", // Hatran // Hatran
+  HEBR: "Hebr", // Hebrew // Hebrew
+  HIRA: "Hira", // Hiragana // Hiragana
+  HLUW: "Hluw", // Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs) // Anatolian_Hieroglyphs
+  HMNG: "Hmng", // Pahawh Hmong // Pahawh_Hmong
+  HMNP: "Hmnp", // Nyiakeng Puachue Hmong // Nyiakeng_Puachue_Hmong
+  HRKT: "Hrkt", // Japanese syllabaries (alias for Hiragana + Katakana) // Katakana_Or_Hiragana
+  HUNG: "Hung", // Old Hungarian (Hungarian Runic) // Old_Hungarian
+  INDS: "Inds", // Indus (Harappan) // 
+  ITAL: "Ital", // Old Italic (Etruscan, Oscan, etc.) // Old_Italic
+  JAMO: "Jamo", // Jamo (alias for Jamo subset of Hangul) // 
+  JAVA: "Java", // Javanese // Javanese
+  JPAN: "Jpan", // Japanese (alias for Han + Hiragana + Katakana) // 
+  JURC: "Jurc", // Jurchen // 
+  KALI: "Kali", // Kayah Li // Kayah_Li
+  KANA: "Kana", // Katakana // Katakana
+  KAWI: "Kawi", // Kawi // 
+  KHAR: "Khar", // Kharoshthi // Kharoshthi
+  KHMR: "Khmr", // Khmer // Khmer
+  KHOJ: "Khoj", // Khojki // Khojki
+  KITL: "Kitl", // Khitan large script // 
+  KITS: "Kits", // Khitan small script // Khitan_Small_Script
+  KNDA: "Knda", // Kannada // Kannada
+  KORE: "Kore", // Korean (alias for Hangul + Han) // 
+  KPEL: "Kpel", // Kpelle // 
+  KTHI: "Kthi", // Kaithi // Kaithi
+  LANA: "Lana", // Tai Tham (Lanna) // Tai_Tham
+  LAOO: "Laoo", // Lao // Lao
+  LATF: "Latf", // Latin (Fraktur variant) // 
+  LATG: "Latg", // Latin (Gaelic variant) // 
+  LATN: "Latn", // Latin // Latin
+  LEKE: "Leke", // Leke // 
+  LEPC: "Lepc", // Lepcha (Róng) // Lepcha
+  LIMB: "Limb", // Limbu // Limbu
+  LINA: "Lina", // Linear A // Linear_A
+  LINB: "Linb", // Linear B // Linear_B
+  LISU: "Lisu", // Lisu (Fraser) // Lisu
+  LOMA: "Loma", // Loma // 
+  LYCI: "Lyci", // Lycian // Lycian
+  LYDI: "Lydi", // Lydian // Lydian
+  MAHJ: "Mahj", // Mahajani // Mahajani
+  MAKA: "Maka", // Makasar // Makasar
+  MAND: "Mand", // Mandaic, Mandaean // Mandaic
+  MANI: "Mani", // Manichaean // Manichaean
+  MARC: "Marc", // Marchen // Marchen
+  MAYA: "Maya", // Mayan hieroglyphs // 
+  MEDF: "Medf", // Medefaidrin (Oberi Okaime, Oberi Ɔkaimɛ) // Medefaidrin
+  MEND: "Mend", // Mende Kikakui // Mende_Kikakui
+  MERC: "Merc", // Meroitic Cursive // Meroitic_Cursive
+  MERO: "Mero", // Meroitic Hieroglyphs // Meroitic_Hieroglyphs
+  MLYM: "Mlym", // Malayalam // Malayalam
+  MODI: "Modi", // Modi, Moḍī // Modi
+  MONG: "Mong", // Mongolian // Mongolian
+  MOON: "Moon", // Moon (Moon code, Moon script, Moon type) // 
+  MROO: "Mroo", // Mro, Mru // Mro
+  MTEI: "Mtei", // Meitei Mayek (Meithei, Meetei) // Meetei_Mayek
+  MULT: "Mult", // Multani // Multani
+  MYMR: "Mymr", // Myanmar (Burmese) // Myanmar
+  NAGM: "Nagm", // Nag Mundari // 
+  NAND: "Nand", // Nandinagari // Nandinagari
+  NARB: "Narb", // Old North Arabian (Ancient North Arabian) // Old_North_Arabian
+  NBAT: "Nbat", // Nabataean // Nabataean
+  NEWA: "Newa", // Newa, Newar, Newari, Nepāla lipi // Newa
+  NKDB: "Nkdb", // Naxi Dongba (na²¹ɕi³³ to³³ba²¹, Nakhi Tomba) // 
+  NKGB: "Nkgb", // Naxi Geba (na²¹ɕi³³ gʌ²¹ba²¹, 'Na-'Khi ²Ggŏ-¹baw, Nakhi Geba) // 
+  NKOO: "Nkoo", // N’Ko // Nko
+  NSHU: "Nshu", // Nüshu // Nushu
+  OGAM: "Ogam", // Ogham // Ogham
+  OLCK: "Olck", // Ol Chiki (Ol Cemet’, Ol, Santali) // Ol_Chiki
+  ORKH: "Orkh", // Old Turkic, Orkhon Runic // Old_Turkic
+  ORYA: "Orya", // Oriya (Odia) // Oriya
+  OSGE: "Osge", // Osage // Osage
+  OSMA: "Osma", // Osmanya // Osmanya
+  OUGR: "Ougr", // Old Uyghur // Old_Uyghur
+  PALM: "Palm", // Palmyrene // Palmyrene
+  PAUC: "Pauc", // Pau Cin Hau // Pau_Cin_Hau
+  PCUN: "Pcun", // Proto-Cuneiform // 
+  PELM: "Pelm", // Proto-Elamite // 
+  PERM: "Perm", // Old Permic // Old_Permic
+  PHAG: "Phag", // Phags-pa // Phags_Pa
+  PHLI: "Phli", // Inscriptional Pahlavi // Inscriptional_Pahlavi
+  PHLP: "Phlp", // Psalter Pahlavi // Psalter_Pahlavi
+  PHLV: "Phlv", // Book Pahlavi // 
+  PHNX: "Phnx", // Phoenician // Phoenician
+  PLRD: "Plrd", // Miao (Pollard) // Miao
+  PIQD: "Piqd", // Klingon (KLI pIqaD) // 
+  PRTI: "Prti", // Inscriptional Parthian // Inscriptional_Parthian
+  PSIN: "Psin", // Proto-Sinaitic // 
+  QAAA: "Qaaa", // Reserved for private use (start) // 
+  QAAB: "Qaab", //  // 
+  QAAC: "Qaac", //  // 
+  QAAD: "Qaad", //  // 
+  QAAE: "Qaae", //  // 
+  QAAF: "Qaaf", //  // 
+  QAAG: "Qaag", //  // 
+  QAAH: "Qaah", //  // 
+  QAAI: "Qaai", //  // 
+  QAAJ: "Qaaj", //  // 
+  QAAK: "Qaak", //  // 
+  QAAL: "Qaal", //  // 
+  QAAM: "Qaam", //  // 
+  QAAN: "Qaan", //  // 
+  QAAO: "Qaao", //  // 
+  QAAP: "Qaap", //  // 
+  QAAQ: "Qaaq", //  // 
+  QAAR: "Qaar", //  // 
+  QAAS: "Qaas", //  // 
+  QAAT: "Qaat", //  // 
+  QAAU: "Qaau", //  // 
+  QAAV: "Qaav", //  // 
+  QAAW: "Qaaw", //  // 
+  QAAX: "Qaax", //  // 
+  QAAY: "Qaay", //  // 
+  QAAZ: "Qaaz", //  // 
+  QABA: "Qaba", //  // 
+  QABB: "Qabb", //  // 
+  QABC: "Qabc", //  // 
+  QABD: "Qabd", //  // 
+  QABE: "Qabe", //  // 
+  QABF: "Qabf", //  // 
+  QABG: "Qabg", //  // 
+  QABH: "Qabh", //  // 
+  QABI: "Qabi", //  // 
+  QABJ: "Qabj", //  // 
+  QABK: "Qabk", //  // 
+  QABL: "Qabl", //  // 
+  QABM: "Qabm", //  // 
+  QABN: "Qabn", //  // 
+  QABO: "Qabo", //  // 
+  QABP: "Qabp", //  // 
+  QABQ: "Qabq", //  // 
+  QABR: "Qabr", //  // 
+  QABS: "Qabs", //  // 
+  QABT: "Qabt", //  // 
+  QABU: "Qabu", //  // 
+  QABV: "Qabv", //  // 
+  QABW: "Qabw", //  // 
+  QABX: "Qabx", // Reserved for private use (end) // 
+  RANJ: "Ranj", // Ranjana // 
+  RJNG: "Rjng", // Rejang (Redjang, Kaganga) // Rejang
+  ROHG: "Rohg", // Hanifi Rohingya // Hanifi_Rohingya
+  RORO: "Roro", // Rongorongo // 
+  RUNR: "Runr", // Runic // Runic
+  SAMR: "Samr", // Samaritan // Samaritan
+  SARA: "Sara", // Sarati // 
+  SARB: "Sarb", // Old South Arabian // Old_South_Arabian
+  SAUR: "Saur", // Saurashtra // Saurashtra
+  SGNW: "Sgnw", // SignWriting // SignWriting
+  SHAW: "Shaw", // Shavian (Shaw) // Shavian
+  SHRD: "Shrd", // Sharada, Śāradā // Sharada
+  SHUI: "Shui", // Shuishu // 
+  SIDD: "Sidd", // Siddham, Siddhaṃ, Siddhamātṛkā // Siddham
+  SIND: "Sind", // Khudawadi, Sindhi // Khudawadi
+  SINH: "Sinh", // Sinhala // Sinhala
+  SOGD: "Sogd", // Sogdian // Sogdian
+  SOGO: "Sogo", // Old Sogdian // Old_Sogdian
+  SORA: "Sora", // Sora Sompeng // Sora_Sompeng
+  SOYO: "Soyo", // Soyombo // Soyombo
+  SUND: "Sund", // Sundanese // Sundanese
+  SUNU: "Sunu", // Sunuwar // 
+  SYLO: "Sylo", // Syloti Nagri // Syloti_Nagri
+  SYRC: "Syrc", // Syriac // Syriac
+  SYRE: "Syre", // Syriac (Estrangelo variant) // 
+  SYRJ: "Syrj", // Syriac (Western variant) // 
+  SYRN: "Syrn", // Syriac (Eastern variant) // 
+  TAGB: "Tagb", // Tagbanwa // Tagbanwa
+  TAKR: "Takr", // Takri, Ṭākrī, Ṭāṅkrī // Takri
+  TALE: "Tale", // Tai Le // Tai_Le
+  TALU: "Talu", // New Tai Lue // New_Tai_Lue
+  TAML: "Taml", // Tamil // Tamil
+  TANG: "Tang", // Tangut // Tangut
+  TAVT: "Tavt", // Tai Viet // Tai_Viet
+  TELU: "Telu", // Telugu // Telugu
+  TENG: "Teng", // Tengwar // 
+  TFNG: "Tfng", // Tifinagh (Berber) // Tifinagh
+  TGLG: "Tglg", // Tagalog (Baybayin, Alibata) // Tagalog
+  THAA: "Thaa", // Thaana // Thaana
+  THAI: "Thai", // Thai // Thai
+  TIBT: "Tibt", // Tibetan // Tibetan
+  TIRH: "Tirh", // Tirhuta // Tirhuta
+  TNSA: "Tnsa", // Tangsa // Tangsa
+  TOTO: "Toto", // Toto // Toto
+  UGAR: "Ugar", // Ugaritic // Ugaritic
+  VAII: "Vaii", // Vai // Vai
+  VISP: "Visp", // Visible Speech // 
+  VITH: "Vith", // Vithkuqi // Vithkuqi
+  WARA: "Wara", // Warang Citi (Varang Kshiti) // Warang_Citi
+  WCHO: "Wcho", // Wancho // Wancho
+  WOLE: "Wole", // Woleai // 
+  XPEO: "Xpeo", // Old Persian // Old_Persian
+  XSUX: "Xsux", // Cuneiform, Sumero-Akkadian // Cuneiform
+  YEZI: "Yezi", // Yezidi // Yezidi
+  YIII: "Yiii", // Yi // Yi
+  ZANB: "Zanb", // Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script) // Zanabazar_Square
+  ZINH: "Zinh", // Code for inherited script // Inherited
+  ZMTH: "Zmth", // Mathematical notation // 
+  ZSYE: "Zsye", // Symbols (Emoji variant) // 
+  ZSYM: "Zsym", // Symbols // 
+  ZXXX: "Zxxx", // Code for unwritten documents // 
+  ZYYY: "Zyyy", // Code for undetermined script // Common
+  ZZZZ: "Zzzz", // Code for uncoded script // Unknown
 } as const;
 type Script = typeof _scripts[keyof typeof _scripts];
 
-const _scriptNames: Record<Script, [ name: string, alias: string ]> = Object.freeze({
-  "Adlm": [ "Adlam", "Adlam" ],
-  "Afak": [ "Afaka", "" ],
-  "Aghb": [ "Caucasian Albanian", "Caucasian_Albanian" ],
-  "Ahom": [ "Ahom, Tai Ahom", "Ahom" ],
-  "Arab": [ "Arabic", "Arabic" ],
-  "Aran": [ "Arabic (Nastaliq variant)", "" ],
-  "Armi": [ "Imperial Aramaic", "Imperial_Aramaic" ],
-  "Armn": [ "Armenian", "Armenian" ],
-  "Avst": [ "Avestan", "Avestan" ],
-  "Bali": [ "Balinese", "Balinese" ],
-  "Bamu": [ "Bamum", "Bamum" ],
-  "Bass": [ "Bassa Vah", "Bassa_Vah" ],
-  "Batk": [ "Batak", "Batak" ],
-  "Beng": [ "Bengali (Bangla)", "Bengali" ],
-  "Bhks": [ "Bhaiksuki", "Bhaiksuki" ],
-  "Blis": [ "Blissymbols", "" ],
-  "Bopo": [ "Bopomofo", "Bopomofo" ],
-  "Brah": [ "Brahmi", "Brahmi" ],
-  "Brai": [ "Braille", "Braille" ],
-  "Bugi": [ "Buginese", "Buginese" ],
-  "Buhd": [ "Buhid", "Buhid" ],
-  "Cakm": [ "Chakma", "Chakma" ],
-  "Cans": [ "Unified Canadian Aboriginal Syllabics", "Canadian_Aboriginal" ],
-  "Cari": [ "Carian", "Carian" ],
-  "Cham": [ "Cham", "Cham" ],
-  "Cher": [ "Cherokee", "Cherokee" ],
-  "Chrs": [ "Chorasmian", "Chorasmian" ],
-  "Cirt": [ "Cirth", "" ],
-  "Copt": [ "Coptic", "Coptic" ],
-  "Cpmn": [ "Cypro-Minoan", "Cypro_Minoan" ],
-  "Cprt": [ "Cypriot syllabary", "Cypriot" ],
-  "Cyrl": [ "Cyrillic", "Cyrillic" ],
-  "Cyrs": [ "Cyrillic (Old Church Slavonic variant)", "" ],
-  "Deva": [ "Devanagari (Nagari)", "Devanagari" ],
-  "Diak": [ "Dives Akuru", "Dives_Akuru" ],
-  "Dogr": [ "Dogra", "Dogra" ],
-  "Dsrt": [ "Deseret (Mormon)", "Deseret" ],
-  "Dupl": [ "Duployan shorthand, Duployan stenography", "Duployan" ],
-  "Egyd": [ "Egyptian demotic", "" ],
-  "Egyh": [ "Egyptian hieratic", "" ],
-  "Egyp": [ "Egyptian hieroglyphs", "Egyptian_Hieroglyphs" ],
-  "Elba": [ "Elbasan", "Elbasan" ],
-  "Elym": [ "Elymaic", "Elymaic" ],
-  "Ethi": [ "Ethiopic (Geʻez)", "Ethiopic" ],
-  "Geok": [ "Khutsuri (Asomtavruli and Nuskhuri)", "Georgian" ],
-  "Geor": [ "Georgian (Mkhedruli and Mtavruli)", "Georgian" ],
-  "Glag": [ "Glagolitic", "Glagolitic" ],
-  "Gong": [ "Gunjala Gondi", "Gunjala_Gondi" ],
-  "Gonm": [ "Masaram Gondi", "Masaram_Gondi" ],
-  "Goth": [ "Gothic", "Gothic" ],
-  "Gran": [ "Grantha", "Grantha" ],
-  "Grek": [ "Greek", "Greek" ],
-  "Gujr": [ "Gujarati", "Gujarati" ],
-  "Guru": [ "Gurmukhi", "Gurmukhi" ],
-  "Hanb": [ "Han with Bopomofo (alias for Han + Bopomofo)", "" ],
-  "Hang": [ "Hangul (Hangŭl, Hangeul)", "Hangul" ],
-  "Hani": [ "Han (Hanzi, Kanji, Hanja)", "Han" ],
-  "Hano": [ "Hanunoo (Hanunóo)", "Hanunoo" ],
-  "Hans": [ "Han (Simplified variant)", "" ],
-  "Hant": [ "Han (Traditional variant)", "" ],
-  "Hatr": [ "Hatran", "Hatran" ],
-  "Hebr": [ "Hebrew", "Hebrew" ],
-  "Hira": [ "Hiragana", "Hiragana" ],
-  "Hluw": [ "Anatolian Hieroglyphs (Luwian Hieroglyphs, Hittite Hieroglyphs)", "Anatolian_Hieroglyphs" ],
-  "Hmng": [ "Pahawh Hmong", "Pahawh_Hmong" ],
-  "Hmnp": [ "Nyiakeng Puachue Hmong", "Nyiakeng_Puachue_Hmong" ],
-  "Hrkt": [ "Japanese syllabaries (alias for Hiragana + Katakana)", "Katakana_Or_Hiragana" ],
-  "Hung": [ "Old Hungarian (Hungarian Runic)", "Old_Hungarian" ],
-  "Inds": [ "Indus (Harappan)", "" ],
-  "Ital": [ "Old Italic (Etruscan, Oscan, etc.)", "Old_Italic" ],
-  "Jamo": [ "Jamo (alias for Jamo subset of Hangul)", "" ],
-  "Java": [ "Javanese", "Javanese" ],
-  "Jpan": [ "Japanese (alias for Han + Hiragana + Katakana)", "" ],
-  "Jurc": [ "Jurchen", "" ],
-  "Kali": [ "Kayah Li", "Kayah_Li" ],
-  "Kana": [ "Katakana", "Katakana" ],
-  "Kawi": [ "Kawi", "" ],
-  "Khar": [ "Kharoshthi", "Kharoshthi" ],
-  "Khmr": [ "Khmer", "Khmer" ],
-  "Khoj": [ "Khojki", "Khojki" ],
-  "Kitl": [ "Khitan large script", "" ],
-  "Kits": [ "Khitan small script", "Khitan_Small_Script" ],
-  "Knda": [ "Kannada", "Kannada" ],
-  "Kore": [ "Korean (alias for Hangul + Han)", "" ],
-  "Kpel": [ "Kpelle", "" ],
-  "Kthi": [ "Kaithi", "Kaithi" ],
-  "Lana": [ "Tai Tham (Lanna)", "Tai_Tham" ],
-  "Laoo": [ "Lao", "Lao" ],
-  "Latf": [ "Latin (Fraktur variant)", "" ],
-  "Latg": [ "Latin (Gaelic variant)", "" ],
-  "Latn": [ "Latin", "Latin" ],
-  "Leke": [ "Leke", "" ],
-  "Lepc": [ "Lepcha (Róng)", "Lepcha" ],
-  "Limb": [ "Limbu", "Limbu" ],
-  "Lina": [ "Linear A", "Linear_A" ],
-  "Linb": [ "Linear B", "Linear_B" ],
-  "Lisu": [ "Lisu (Fraser)", "Lisu" ],
-  "Loma": [ "Loma", "" ],
-  "Lyci": [ "Lycian", "Lycian" ],
-  "Lydi": [ "Lydian", "Lydian" ],
-  "Mahj": [ "Mahajani", "Mahajani" ],
-  "Maka": [ "Makasar", "Makasar" ],
-  "Mand": [ "Mandaic, Mandaean", "Mandaic" ],
-  "Mani": [ "Manichaean", "Manichaean" ],
-  "Marc": [ "Marchen", "Marchen" ],
-  "Maya": [ "Mayan hieroglyphs", "" ],
-  "Medf": [ "Medefaidrin (Oberi Okaime, Oberi Ɔkaimɛ)", "Medefaidrin" ],
-  "Mend": [ "Mende Kikakui", "Mende_Kikakui" ],
-  "Merc": [ "Meroitic Cursive", "Meroitic_Cursive" ],
-  "Mero": [ "Meroitic Hieroglyphs", "Meroitic_Hieroglyphs" ],
-  "Mlym": [ "Malayalam", "Malayalam" ],
-  "Modi": [ "Modi, Moḍī", "Modi" ],
-  "Mong": [ "Mongolian", "Mongolian" ],
-  "Moon": [ "Moon (Moon code, Moon script, Moon type)", "" ],
-  "Mroo": [ "Mro, Mru", "Mro" ],
-  "Mtei": [ "Meitei Mayek (Meithei, Meetei)", "Meetei_Mayek" ],
-  "Mult": [ "Multani", "Multani" ],
-  "Mymr": [ "Myanmar (Burmese)", "Myanmar" ],
-  "Nagm": [ "Nag Mundari", "" ],
-  "Nand": [ "Nandinagari", "Nandinagari" ],
-  "Narb": [ "Old North Arabian (Ancient North Arabian)", "Old_North_Arabian" ],
-  "Nbat": [ "Nabataean", "Nabataean" ],
-  "Newa": [ "Newa, Newar, Newari, Nepāla lipi", "Newa" ],
-  "Nkdb": [ "Naxi Dongba (na²¹ɕi³³ to³³ba²¹, Nakhi Tomba)", "" ],
-  "Nkgb": [ "Naxi Geba (na²¹ɕi³³ gʌ²¹ba²¹, 'Na-'Khi ²Ggŏ-¹baw, Nakhi Geba)", "" ],
-  "Nkoo": [ "N’Ko", "Nko" ],
-  "Nshu": [ "Nüshu", "Nushu" ],
-  "Ogam": [ "Ogham", "Ogham" ],
-  "Olck": [ "Ol Chiki (Ol Cemet’, Ol, Santali)", "Ol_Chiki" ],
-  "Orkh": [ "Old Turkic, Orkhon Runic", "Old_Turkic" ],
-  "Orya": [ "Oriya (Odia)", "Oriya" ],
-  "Osge": [ "Osage", "Osage" ],
-  "Osma": [ "Osmanya", "Osmanya" ],
-  "Ougr": [ "Old Uyghur", "Old_Uyghur" ],
-  "Palm": [ "Palmyrene", "Palmyrene" ],
-  "Pauc": [ "Pau Cin Hau", "Pau_Cin_Hau" ],
-  "Pcun": [ "Proto-Cuneiform", "" ],
-  "Pelm": [ "Proto-Elamite", "" ],
-  "Perm": [ "Old Permic", "Old_Permic" ],
-  "Phag": [ "Phags-pa", "Phags_Pa" ],
-  "Phli": [ "Inscriptional Pahlavi", "Inscriptional_Pahlavi" ],
-  "Phlp": [ "Psalter Pahlavi", "Psalter_Pahlavi" ],
-  "Phlv": [ "Book Pahlavi", "" ],
-  "Phnx": [ "Phoenician", "Phoenician" ],
-  "Plrd": [ "Miao (Pollard)", "Miao" ],
-  "Piqd": [ "Klingon (KLI pIqaD)", "" ],
-  "Prti": [ "Inscriptional Parthian", "Inscriptional_Parthian" ],
-  "Psin": [ "Proto-Sinaitic", "" ],
-  "Qaaa": [ "Reserved for private use (start)", "" ],
-  "Qabx": [ "Reserved for private use (end)", "" ],
-  "Ranj": [ "Ranjana", "" ],
-  "Rjng": [ "Rejang (Redjang, Kaganga)", "Rejang" ],
-  "Rohg": [ "Hanifi Rohingya", "Hanifi_Rohingya" ],
-  "Roro": [ "Rongorongo", "" ],
-  "Runr": [ "Runic", "Runic" ],
-  "Samr": [ "Samaritan", "Samaritan" ],
-  "Sara": [ "Sarati", "" ],
-  "Sarb": [ "Old South Arabian", "Old_South_Arabian" ],
-  "Saur": [ "Saurashtra", "Saurashtra" ],
-  "Sgnw": [ "SignWriting", "SignWriting" ],
-  "Shaw": [ "Shavian (Shaw)", "Shavian" ],
-  "Shrd": [ "Sharada, Śāradā", "Sharada" ],
-  "Shui": [ "Shuishu", "" ],
-  "Sidd": [ "Siddham, Siddhaṃ, Siddhamātṛkā", "Siddham" ],
-  "Sind": [ "Khudawadi, Sindhi", "Khudawadi" ],
-  "Sinh": [ "Sinhala", "Sinhala" ],
-  "Sogd": [ "Sogdian", "Sogdian" ],
-  "Sogo": [ "Old Sogdian", "Old_Sogdian" ],
-  "Sora": [ "Sora Sompeng", "Sora_Sompeng" ],
-  "Soyo": [ "Soyombo", "Soyombo" ],
-  "Sund": [ "Sundanese", "Sundanese" ],
-  "Sunu": [ "Sunuwar", "" ],
-  "Sylo": [ "Syloti Nagri", "Syloti_Nagri" ],
-  "Syrc": [ "Syriac", "Syriac" ],
-  "Syre": [ "Syriac (Estrangelo variant)", "" ],
-  "Syrj": [ "Syriac (Western variant)", "" ],
-  "Syrn": [ "Syriac (Eastern variant)", "" ],
-  "Tagb": [ "Tagbanwa", "Tagbanwa" ],
-  "Takr": [ "Takri, Ṭākrī, Ṭāṅkrī", "Takri" ],
-  "Tale": [ "Tai Le", "Tai_Le" ],
-  "Talu": [ "New Tai Lue", "New_Tai_Lue" ],
-  "Taml": [ "Tamil", "Tamil" ],
-  "Tang": [ "Tangut", "Tangut" ],
-  "Tavt": [ "Tai Viet", "Tai_Viet" ],
-  "Telu": [ "Telugu", "Telugu" ],
-  "Teng": [ "Tengwar", "" ],
-  "Tfng": [ "Tifinagh (Berber)", "Tifinagh" ],
-  "Tglg": [ "Tagalog (Baybayin, Alibata)", "Tagalog" ],
-  "Thaa": [ "Thaana", "Thaana" ],
-  "Thai": [ "Thai", "Thai" ],
-  "Tibt": [ "Tibetan", "Tibetan" ],
-  "Tirh": [ "Tirhuta", "Tirhuta" ],
-  "Tnsa": [ "Tangsa", "Tangsa" ],
-  "Toto": [ "Toto", "Toto" ],
-  "Ugar": [ "Ugaritic", "Ugaritic" ],
-  "Vaii": [ "Vai", "Vai" ],
-  "Visp": [ "Visible Speech", "" ],
-  "Vith": [ "Vithkuqi", "Vithkuqi" ],
-  "Wara": [ "Warang Citi (Varang Kshiti)", "Warang_Citi" ],
-  "Wcho": [ "Wancho", "Wancho" ],
-  "Wole": [ "Woleai", "" ],
-  "Xpeo": [ "Old Persian", "Old_Persian" ],
-  "Xsux": [ "Cuneiform, Sumero-Akkadian", "Cuneiform" ],
-  "Yezi": [ "Yezidi", "Yezidi" ],
-  "Yiii": [ "Yi", "Yi" ],
-  "Zanb": [ "Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script)", "Zanabazar_Square" ],
-  "Zinh": [ "Code for inherited script", "Inherited" ],
-  "Zmth": [ "Mathematical notation", "" ],
-  "Zsye": [ "Symbols (Emoji variant)", "" ],
-  "Zsym": [ "Symbols", "" ],
-  "Zxxx": [ "Code for unwritten documents", "" ],
-  "Zyyy": [ "Code for undetermined script", "Common" ],
-  "Zzzz": [ "Code for uncoded script", "Unknown" ],
+const _typographicVariantMap: Record<string, Script> = Object.freeze({
+  "Aran": "Arab",
+  "Cyrs": "Cyrl",
+  "Latf": "Latn",
+  "Latg": "Latn",
+  "Syre": "Syrc",
+  "Syrj": "Syrc",
+  "Syrn": "Syrc",
 });
+
+const _notInUnicode: ReadonlyArray<Script> = Object.freeze([
+  "Afak",
+  "Blis",
+  "Cirt",
+  "Egyd",
+  "Egyh",
+  "Inds",
+  "Jurc",
+  "Kawi",
+  "Kitl",
+  "Kpel",
+  "Leke",
+  "Loma",
+  "Maya",
+  "Moon",
+  "Nagm",
+  "Nkdb",
+  "Nkgb",
+  "Pcun",
+  "Pelm",
+  "Phlv",
+  "Psin",
+  "Qaaa",
+  "Qaab",
+  "Qaac",
+  "Qaad",
+  "Qaae",
+  "Qaaf",
+  "Qaag",
+  "Qaah",
+  "Qaai",
+  "Qaaj",
+  "Qaak",
+  "Qaal",
+  "Qaam",
+  "Qaan",
+  "Qaao",
+  "Qaap",
+  "Qaaq",
+  "Qaar",
+  "Qaas",
+  "Qaat",
+  "Qaau",
+  "Qaav",
+  "Qaaw",
+  "Qaax",
+  "Qaay",
+  "Qaaz",
+  "Qaba",
+  "Qabb",
+  "Qabc",
+  "Qabd",
+  "Qabe",
+  "Qabf",
+  "Qabg",
+  "Qabh",
+  "Qabi",
+  "Qabj",
+  "Qabk",
+  "Qabl",
+  "Qabm",
+  "Qabn",
+  "Qabo",
+  "Qabp",
+  "Qabq",
+  "Qabr",
+  "Qabs",
+  "Qabt",
+  "Qabu",
+  "Qabv",
+  "Qabw",
+  "Qabx",
+  "Ranj",
+  "Roro",
+  "Sara",
+  "Shui",
+  "Sunu",
+  "Teng",
+  "Visp",
+  "Wole",
+  "Zmth",
+  "Zsym",
+  "Zsye",
+  "Zxxx",
+]);
 
 function _normalize(script: string): string | "" {
   return script.substring(0, 1).toUpperCase() + script.substring(1).toLowerCase();
@@ -456,14 +384,6 @@ namespace Script {
       return _normalize(script) as Script;
     }
     throw new TypeError("script");
-  }
-
-  export function nameOf(script: Script): string {
-    return _scriptNames[script] ? _scriptNames[script][0] : "";
-  }
-
-  export function aliasOf(script: Script): string {
-    return _scriptNames[script] ? _scriptNames[script][1] : "";
   }
 
   // disallow unkown code.
