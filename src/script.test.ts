@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { Script } from "./script";
+import { script, Script, ScriptSet } from "./script";
 
-describe("isScript", () => {
+describe("Script.isScript", () => {
   it("isScript(string)", () => {
     expect(Script.isScript("Zzzz")).to.equal(true);
     expect(Script.isScript("ZZZZ")).to.equal(true);
@@ -23,7 +23,7 @@ describe("isScript", () => {
 
 });
 
-describe("normalize", () => {
+describe("Script.normalize", () => {
   it("normalize(string)", () => {
     expect(Script.normalize("Zzzz")).to.equal("Zzzz");
     expect(Script.normalize("ZZZZ")).to.equal("Zzzz");
@@ -37,31 +37,120 @@ describe("normalize", () => {
 
 });
 
-describe("nameOf", () => {
-  it("nameOf(string)", () => {
-    expect(Script.nameOf("Zzzz")).to.equal("Code for uncoded script");
-    expect(Script.nameOf("Aaaa" as unknown as Script)).to.equal("");
+describe("Script.XXXX", () => {
+  it("normalize(string)", () => {
+    expect(Script.ZZZZ).to.equal("Zzzz");
 
   });
 
 });
 
-describe("aliasOf", () => {
-  it("aliasOf(string)", () => {
-    expect(Script.aliasOf("Zzzz")).to.equal("Unknown");
-    expect(Script.aliasOf("Aaaa" as unknown as Script)).to.equal("");
+describe("ScriptSet.fromArray", () => {
+  it("fromArray(Array)", () => {
+    expect([...ScriptSet.fromArray([]).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromArray(["Latn"]).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani"]).values()].join(",")).to.equal("Hani,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani","Hira","Kana"]).values()].join(",")).to.equal("Hani,Hira,Kana,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Jpan"]).values()].join(",")).to.equal("Jpan,Latn");
+
+    expect([...ScriptSet.fromArray([1] as unknown as Array<string>).values()].join(",")).to.equal("");
+
+  });
+
+  it("fromArray(Array, {})", () => {
+    expect([...ScriptSet.fromArray([], {}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromArray(["Latn"], {}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani"], {}).values()].join(",")).to.equal("Hani,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani","Hira","Kana"], {}).values()].join(",")).to.equal("Hani,Hira,Kana,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Jpan"], {}).values()].join(",")).to.equal("Jpan,Latn");
+
+  });
+
+  it("fromArray(Array, {compose:string})", () => {
+    expect([...ScriptSet.fromArray([], {compose:"none"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromArray(["Latn"], {compose:"none"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani"], {compose:"none"}).values()].join(",")).to.equal("Hani,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani","Hira","Kana"], {compose:"none"}).values()].join(",")).to.equal("Hani,Hira,Kana,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Jpan"], {compose:"none"}).values()].join(",")).to.equal("Jpan,Latn");
+
+    expect([...ScriptSet.fromArray([], {compose:"composition"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromArray(["Latn"], {compose:"composition"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani"], {compose:"composition"}).values()].join(",")).to.equal("Hani,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani","Hira","Kana"], {compose:"composition"}).values()].join(",")).to.equal("Jpan,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Jpan"], {compose:"composition"}).values()].join(",")).to.equal("Jpan,Latn");
+
+    expect([...ScriptSet.fromArray([], {compose:"decomposition"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromArray(["Latn"], {compose:"decomposition"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani"], {compose:"decomposition"}).values()].join(",")).to.equal("Hani,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Hani","Hira","Kana"], {compose:"decomposition"}).values()].join(",")).to.equal("Hani,Hira,Kana,Latn");
+    expect([...ScriptSet.fromArray(["Latn","Jpan"], {compose:"decomposition"}).values()].join(",")).to.equal("Hani,Hira,Kana,Latn");
 
   });
 
 });
 
-describe("ofLocale", () => {
-  it("ofLocale(Intl.Locale)", () => {
-    expect(Script.ofLocale(new Intl.Locale("en", {script:"Latn"}))).to.equal("Latn");
-    expect(Script.ofLocale(new Intl.Locale("en", {script:"LATN"}))).to.equal("Latn");
-    expect(Script.ofLocale(new Intl.Locale("en", {script:"Aaaa"}))).to.equal(undefined);
-    expect(Script.ofLocale(new Intl.Locale("en"))).to.equal(undefined);
+describe("ScriptSet.fromLocale", () => {
+  it("fromLocale(Intl.Locale)", () => {
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en")).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Latn"})).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Hani"})).values()].join(",")).to.equal("Hani");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Jpan"})).values()].join(",")).to.equal("Jpan");
 
+  });
+
+  it("fromLocale(Intl.Locale, {})", () => {
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en"), {}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Latn"}), {}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Hani"}), {}).values()].join(",")).to.equal("Hani");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Jpan"}), {}).values()].join(",")).to.equal("Jpan");
+
+  });
+
+  it("fromLocale(Intl.Locale, {compose:string})", () => {
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en"), {compose:"none"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Latn"}), {compose:"none"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Hani"}), {compose:"none"}).values()].join(",")).to.equal("Hani");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Jpan"}), {compose:"none"}).values()].join(",")).to.equal("Jpan");
+
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en"), {compose:"composition"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Latn"}), {compose:"composition"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Hani"}), {compose:"composition"}).values()].join(",")).to.equal("Hani");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Jpan"}), {compose:"composition"}).values()].join(",")).to.equal("Jpan");
+
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en"), {compose:"decomposition"}).values()].join(",")).to.equal("");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Latn"}), {compose:"decomposition"}).values()].join(",")).to.equal("Latn");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Hani"}), {compose:"decomposition"}).values()].join(",")).to.equal("Hani");
+    expect([...ScriptSet.fromLocale(new Intl.Locale("en", {script:"Jpan"}), {compose:"decomposition"}).values()].join(",")).to.equal("Hani,Hira,Kana");
+
+  });
+
+});
+
+describe("ScriptSet.prototype.add", () => {
+  it("add(string)", () => {
+    const set = ScriptSet.fromArray([]);
+    set.add("Latn");
+    expect([...set.values()].join(",")).to.equal("Latn");
+    set.add("Hani");
+    expect([...set.values()].join(",")).to.equal("Latn,Hani");
+    set.add("Latn");
+    expect([...set.values()].join(",")).to.equal("Latn,Hani");
+
+    expect(() => {
+      set.add("aaaa" as unknown as script);
+    }).to.throw(TypeError, "script").with.property("name", "TypeError");
+
+  });
+
+});
+
+describe("ScriptSet.prototype.normalize", () => {
+  it("normalize()", () => {
+    const set = ScriptSet.fromArray(["Latn","Hani"]).normalize();
+    expect([...set.values()].join(",")).to.equal("Hani,Latn");
+  });
+
+  it("normalize({})", () => {
   });
 
 });

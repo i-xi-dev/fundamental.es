@@ -263,7 +263,7 @@ function parseByte(formatted: string, options: ResolvedOptions, byteRegex: RegEx
  * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
  */
 function parse(toParse: string, options: ResolvedOptions, byteRegex: RegExp): Uint8Array {
-  let byteStringArray: string[];
+  let byteStringArray: Array<string>;
   if (options.separator.length > 0) {
     byteStringArray = toParse.split(options.separator);
     if (byteStringArray.length === 1 && byteStringArray[0] === "") {

@@ -264,137 +264,298 @@ const _scripts = {
   ZYYY: "Zyyy", // Code for undetermined script // Common
   ZZZZ: "Zzzz", // Code for uncoded script // Unknown
 } as const;
-type Script = typeof _scripts[keyof typeof _scripts];
+type script = typeof _scripts[keyof typeof _scripts];
 
-const _typographicVariantMap: Record<string, Script> = Object.freeze({
-  "Aran": "Arab",
-  "Cyrs": "Cyrl",
-  "Latf": "Latn",
-  "Latg": "Latn",
-  "Syre": "Syrc",
-  "Syrj": "Syrc",
-  "Syrn": "Syrc",
-});
+/**
+ * Scriptの集合であるScript
+ * 
+ * - キー: 集合であるScriptのコード
+ * - 値: キーの集合を構成するScriptのコードの配列
+ *    - キーのScriptに含まれている文字は、値のいずれか（基本的には1つ）のScriptに含まれる
+ * 
+ * /\p{sc=****}/u で使えないので分解するため用
+ */
+const _unionScripts: Map<script, Array<script>> = new Map([
+  [ "Hanb", [ "Bopo", "Hani" ] ],
+  [ "Jpan", [ "Hani", "Hira", "Kana" ] ],
+  [ "Kore", [ "Hang", "Hani" ] ],
 
-const _notInUnicode: ReadonlyArray<Script> = Object.freeze([
-  "Afak",
-  "Blis",
-  "Cirt",
-  "Egyd",
-  "Egyh",
-  "Inds",
-  "Jurc",
-  "Kawi",
-  "Kitl",
-  "Kpel",
-  "Leke",
-  "Loma",
-  "Maya",
-  "Moon",
-  "Nagm",
-  "Nkdb",
-  "Nkgb",
-  "Pcun",
-  "Pelm",
-  "Phlv",
-  "Psin",
-  "Qaaa",
-  "Qaab",
-  "Qaac",
-  "Qaad",
-  "Qaae",
-  "Qaaf",
-  "Qaag",
-  "Qaah",
-  "Qaai",
-  "Qaaj",
-  "Qaak",
-  "Qaal",
-  "Qaam",
-  "Qaan",
-  "Qaao",
-  "Qaap",
-  "Qaaq",
-  "Qaar",
-  "Qaas",
-  "Qaat",
-  "Qaau",
-  "Qaav",
-  "Qaaw",
-  "Qaax",
-  "Qaay",
-  "Qaaz",
-  "Qaba",
-  "Qabb",
-  "Qabc",
-  "Qabd",
-  "Qabe",
-  "Qabf",
-  "Qabg",
-  "Qabh",
-  "Qabi",
-  "Qabj",
-  "Qabk",
-  "Qabl",
-  "Qabm",
-  "Qabn",
-  "Qabo",
-  "Qabp",
-  "Qabq",
-  "Qabr",
-  "Qabs",
-  "Qabt",
-  "Qabu",
-  "Qabv",
-  "Qabw",
-  "Qabx",
-  "Ranj",
-  "Roro",
-  "Sara",
-  "Shui",
-  "Sunu",
-  "Teng",
-  "Visp",
-  "Wole",
-  "Zmth",
-  "Zsym",
-  "Zsye",
-  "Zxxx",
+  [ "Hrkt", [ "Hira", "Kana" ] ],
 ]);
 
-function _normalize(script: string): string | "" {
+// /**
+//  * あるScriptの部分集合であるScript
+//  * 
+//  * - キー: 部分集合であるScriptのコード
+//  * - 値: キーに対するスーパーセットであるScriptのコード
+//  *    - キーのScriptに含まれている文字は、値のScriptに含まれる
+//  *    - 値を同じくするどのキーのScriptに含まれておらず、値のScriptに含まれる文字は
+//  *        値のScriptのみに含まれる（固有のコード割り当ては無い）
+//  * 
+//  * Unicode的には、スーパーセットのScriptになるので、/\p{sc=****}/u では使えない
+//  * （CJK統合漢字の場合、HansとHantは同じ符号位置の文字に対する書体の違いになる）
+//  * （ハングル字母の場合、固有の符号位置を持つ文字だがscはHang）
+//  */
+// const _subsetScripts: Map<script, script> = new Map([
+//   [ "Hans", "Hani" ],
+//   [ "Hant", "Hani" ],
+//   [ "Jamo", "Hang" ],
+// ]);
+
+// /**
+//  * あるScriptのtypographic variantであるScript
+//  * 
+//  * - キー: typographic variantであるScriptのコード
+//  * - 値: キーに対する正字体であるScriptのコード
+//  * 
+//  * Unicode的には、正字体のScriptになるので、/\p{sc=****}/u では使えない
+//  * （同じ符号位置の文字に対する書体の違いになる）
+//  */
+// const _typographicVariantScripts: Map<script, script> = new Map([
+//   [ "Aran", "Arab" ],
+//   [ "Cyrs", "Cyrl" ],
+//   [ "Latf", "Latn" ],
+//   [ "Latg", "Latn" ],
+//   [ "Syre", "Syrc" ],
+//   [ "Syrj", "Syrc" ],
+//   [ "Syrn", "Syrc" ],
+// ]);
+
+// XXX 使いみちあるか？
+// ・/\p{sc=****}/u では使えない
+// const _nonUnicodeScripts: ReadonlyArray<Script> = Object.freeze([
+//   "Afak",
+//   "Blis",
+//   "Cirt",
+//   "Egyd",
+//   "Egyh",
+//   "Geok", // 一部がGeorとして収録
+//   "Inds",
+//   "Jurc",
+//   "Kawi",
+//   "Kitl",
+//   "Kpel",
+//   "Leke",
+//   "Loma",
+//   "Maya",
+//   "Moon",
+//   "Nagm",
+//   "Nkdb",
+//   "Nkgb",
+//   "Pcun",
+//   "Pelm",
+//   "Phlv",
+//   "Piqd",
+//   "Psin",
+//   "Qaaa",
+//   "Qaab",
+//   "Qaac",
+//   "Qaad",
+//   "Qaae",
+//   "Qaaf",
+//   "Qaag",
+//   "Qaah",
+//   "Qaai",
+//   "Qaaj",
+//   "Qaak",
+//   "Qaal",
+//   "Qaam",
+//   "Qaan",
+//   "Qaao",
+//   "Qaap",
+//   "Qaaq",
+//   "Qaar",
+//   "Qaas",
+//   "Qaat",
+//   "Qaau",
+//   "Qaav",
+//   "Qaaw",
+//   "Qaax",
+//   "Qaay",
+//   "Qaaz",
+//   "Qaba",
+//   "Qabb",
+//   "Qabc",
+//   "Qabd",
+//   "Qabe",
+//   "Qabf",
+//   "Qabg",
+//   "Qabh",
+//   "Qabi",
+//   "Qabj",
+//   "Qabk",
+//   "Qabl",
+//   "Qabm",
+//   "Qabn",
+//   "Qabo",
+//   "Qabp",
+//   "Qabq",
+//   "Qabr",
+//   "Qabs",
+//   "Qabt",
+//   "Qabu",
+//   "Qabv",
+//   "Qabw",
+//   "Qabx",
+//   "Ranj",
+//   "Roro",
+//   "Sara",
+//   "Shui",
+//   "Sunu",
+//   "Teng",
+//   "Visp",
+//   "Wole",
+//   "Zmth",
+//   "Zsym",
+//   "Zsye",
+//   "Zxxx",
+// ]);
+
+function _format(script: string): string {
   return script.substring(0, 1).toUpperCase() + script.substring(1).toLowerCase();
 }
 
-namespace Script {
-  export function isScript(value: unknown): value is Script {
-    if (typeof value === "string") {
-      if (/^[A-Za-z]{4}$/.test(value)) {
-        const normalized = _normalize(value);
-        if ((Object.values(_scripts) as string[]).includes(normalized)) {
-          return true;
+function _isScript(value: unknown): value is script {
+  if (typeof value === "string") {
+    if (/^[A-Za-z]{4}$/.test(value)) {
+      const formatted = _format(value);
+      if ((Object.values(_scripts) as Array<string>).includes(formatted)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function _normalize(script: string): script {
+  if (_isScript(script)) {
+    return _format(script) as script;
+  }
+  throw new TypeError("script");
+}
+
+const Script = Object.assign({
+  isScript: _isScript,
+  normalize: _normalize,
+}, _scripts);
+Object.freeze(Script);
+
+function _decompose(script: script): Array<script> {
+  const subsets = _unionScripts.get(script);
+  if (Array.isArray(subsets)) {
+    return subsets;
+  }
+  return [ script ];
+}
+
+// function _resolve(script: script): script {
+//   const supersetScript = _subsetScripts.get(script);
+//   if (supersetScript) {
+//     return supersetScript;
+//   }
+//   return script;
+// }
+
+// function _resolve(script: script): script {
+//   const orthographicScript = _typographicVariantScripts.get(script);
+//   if (orthographicScript) {
+//     return orthographicScript;
+//   }
+//   return script;
+// }
+
+function _normalizeSet(sources: Iterable<script>, options: ScriptSet.NormalizeOptions = {}): Iterable<script> {
+  const sourceSet: Set<script> = new Set(sources);
+
+  const work: Array<Array<script>> = [];
+  let composedOrDecomposed: Array<script>;
+  if (options.compose === "composition") {
+    for (const [ union, subsets ] of _unionScripts.entries()) {
+      let x = true;
+      for (const subset of subsets) {
+        x = x && sourceSet.has(subset);
+        if (x !== true) {
+          break;
+        }
+      }
+
+      if (x === true) {
+        for (const subset of subsets) {
+          sourceSet.delete(subset);
+        }
+        work.push([ union ]);
+      }
+    }
+    for (const source of sourceSet) {
+      work.push([ source ]);
+    }
+    composedOrDecomposed = work.flat();
+  }
+  else if (options.compose === "decomposition") {
+    for (const source of sourceSet) {
+      work.push(_decompose(source));
+    }
+    composedOrDecomposed = work.flat();
+  }
+  else {
+    composedOrDecomposed = [ ...sourceSet.values() ];
+  }
+
+  return composedOrDecomposed.sort();
+}
+
+class ScriptSet extends Set<script> {
+  private constructor(scripts?: Iterable<script>) {
+    super(scripts);
+  }
+
+  static fromArray(scripts: Array<string>, options?: ScriptSet.NormalizeOptions): ScriptSet {
+    const src: Array<script> = [];
+    if (Array.isArray(scripts)) {
+      for (const script of scripts) {
+        if (Script.isScript(script)) {
+          src.push(Script.normalize(script));
         }
       }
     }
-    return false;
+    return new this(_normalizeSet(src, options));
   }
 
-  export function normalize(script: string): Script {
-    if (isScript(script)) {
-      return _normalize(script) as Script;
+  static fromLocale(locale: Intl.Locale, options?: ScriptSet.NormalizeOptions): ScriptSet {
+    const src: Array<script> = [];
+    if (Script.isScript(locale?.script)) {
+      src.push(Script.normalize(locale.script));
+    }
+    return new this(_normalizeSet(src, options));
+  }
+
+  override add(script: script): this {
+    if (_isScript(script)) {
+      const normalized = _normalize(script);
+      return super.add(normalized);
     }
     throw new TypeError("script");
   }
 
-  // disallow unkown code.
-  export function ofLocale(locale: Intl.Locale): Script | undefined {
-    if (isScript(locale?.script)) {
-      return normalize(locale.script);
+  normalize(options?: ScriptSet.NormalizeOptions): this {
+    const scripts = _normalizeSet(this.values(), options);
+    this.clear();
+    for (const script of scripts) {
+      super.add(script);
     }
-    return undefined;
+    return this;
   }
 }
 
+namespace ScriptSet {
+  export type NormalizeOptions = {
+    compose?: "composition" | "decomposition" | "none",
+    // TODO サブセットをスーパーセットに解決する、異体字を正字に解決する、・・・
+  };
+}
+
 export {
+  type script,
   Script,
+  ScriptSet,
 };

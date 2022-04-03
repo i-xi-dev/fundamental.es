@@ -46,7 +46,7 @@ type UnicodeCategory = typeof UnicodeCategory[keyof typeof UnicodeCategory];
 
 function _isUnicodeCategory(value: unknown): value is UnicodeCategory {
   if (typeof value === "string") {
-    return (Object.values(UnicodeCategory) as string[]).includes(value);
+    return (Object.values(UnicodeCategory) as Array<string>).includes(value);
   }
   return false;
 }

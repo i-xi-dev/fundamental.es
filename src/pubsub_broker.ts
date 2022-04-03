@@ -104,9 +104,9 @@ class PubSubBroker<T> {
       });
       const results = await Promise.allSettled(tasks);
 
-      const rejectedResults: PromiseRejectedResult[] = results.filter((result) => result.status === "rejected") as PromiseRejectedResult[];
+      const rejectedResults: Array<PromiseRejectedResult> = results.filter((result) => result.status === "rejected") as Array<PromiseRejectedResult>;
       if (rejectedResults.length > 0) {
-        const errors: Error[] = rejectedResults.map((result: PromiseRejectedResult): Error => {
+        const errors: Array<Error> = rejectedResults.map((result: PromiseRejectedResult): Error => {
           if (result.reason instanceof Error) {
             return result.reason;
           }
