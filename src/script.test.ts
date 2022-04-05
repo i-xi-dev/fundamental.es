@@ -6,7 +6,7 @@ describe("Script.isScript", () => {
     expect(Script.isScript("Zzzz")).to.equal(true);
     expect(Script.isScript("ZZZZ")).to.equal(true);
     expect(Script.isScript("zzzz")).to.equal(true);
-    expect(Script.isScript("aaaa")).to.equal(false);
+    expect(Script.isScript("aaaa")).to.equal(true);
     expect(Script.isScript("")).to.equal(false);
     expect(Script.isScript("Zzzzz")).to.equal(false);
     expect(Script.isScript("Zzz")).to.equal(false);
@@ -30,7 +30,7 @@ describe("Script.normalize", () => {
     expect(Script.normalize("zzzz")).to.equal("Zzzz");
 
     expect(() => {
-      Script.normalize("aaaa");
+      Script.normalize("aaa");
     }).to.throw(TypeError, "script").with.property("name", "TypeError");
 
   });
@@ -137,7 +137,7 @@ describe("ScriptSet.prototype.add", () => {
     expect([...set.values()].join(",")).to.equal("Latn,Hani");
 
     expect(() => {
-      set.add("aaaa" as unknown as script);
+      set.add("Zzzzz" as unknown as script);
     }).to.throw(TypeError, "script").with.property("name", "TypeError");
 
   });

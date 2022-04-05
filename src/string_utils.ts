@@ -11,6 +11,17 @@ import {
   CodePoint,
   Rune,
 } from "./rune";
+import {
+  type script,
+  Script,
+} from "./script";
+
+function _isScriptArray(value: unknown): value is Array<script> {
+  if (Array.isArray(value) && (value.length > 0)) {
+    return value.every((i) => Script.isScript(i));
+  }
+  return false;
+}
 
 // function matchPattern(input: string, patternSource: string): boolean {
 //   return (new RegExp(`^(?:${ patternSource })$`, "u")).test(input);
@@ -127,7 +138,6 @@ function _isCodePointRange(value: unknown): value is CodePointRange {
 }
 
 function _rangeToRegexPattern(range: CodePointRange): string {
-  // if (_isCodePointRange(range)) {
   return range.map((part) => {
     if (part.length === 2) {
       return `\\u{${ part[0].toString(16) }}-\\u{${ part[1].toString(16) }}`;
@@ -136,17 +146,31 @@ function _rangeToRegexPattern(range: CodePointRange): string {
       return `\\u{${ part[0].toString(16) }}`;
     }
   }).join("");
-  // }
-  // throw new TypeError("range");
 }
 
 function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
-  // if (_isUnicodeCategoryArray(categories)) {
-  return categories.map((category) => `\\p{gc=${ category }}`).join("");
-  // }
-  // throw new TypeError("categories");
+  const set = new Set(categories);
+  return [...set].map((category) => `\\p{gc=${ category }}`).join("");
 }
 
+function _scriptsToRegexPattern(scripts: Array<script>): string {
+  const set = new Set(scripts);
+  return [...set].map((script) => `\\p{scx=${script}}`).join("");
+  // XXX scxではなくscにしたいケースはあるか？
+}
+
+function _toRegexPattern(searchObject: CodePointRange | Array<string>): string {
+  if (_isCodePointRange(searchObject)) {
+    return _rangeToRegexPattern(searchObject);
+  }
+  else if (_isUnicodeCategoryArray(searchObject)) {
+    return _categoriesToRegexPattern(searchObject);
+  }
+  else if (_isScriptArray(searchObject)) {
+    return _scriptsToRegexPattern(searchObject);
+  }
+  throw new TypeError("searchObject");
+}
 
 // TODO TextScript, _scriptsToRegexPattern
 
@@ -154,76 +178,34 @@ function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
 
 
 
-function matches(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): boolean {
-  if (_isCodePointRange(searchObject)) {
-    return _matches(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _matches(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function matches(input: string, searchObject: CodePointRange | Array<string>): boolean {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _matches(input, regexPattern);
 }
 
-function contains(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): boolean {
-  if (_isCodePointRange(searchObject)) {
-    return _contains(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _contains(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function contains(input: string, searchObject: CodePointRange | Array<string>): boolean {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _contains(input, regexPattern);
 }
 
-function trim(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
-  if (_isCodePointRange(searchObject)) {
-    return _trim(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _trim(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function trim(input: string, searchObject: CodePointRange | Array<string>): string {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _trim(input, regexPattern);
 }
 
-function trimStart(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
-  if (_isCodePointRange(searchObject)) {
-    return _trimStart(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _trimStart(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function trimStart(input: string, searchObject: CodePointRange | Array<string>): string {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _trimStart(input, regexPattern);
 }
 
-function trimEnd(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
-  if (_isCodePointRange(searchObject)) {
-    return _trimEnd(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _trimEnd(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function trimEnd(input: string, searchObject: CodePointRange | Array<string>): string {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _trimEnd(input, regexPattern);
 }
 
-function collectStart(input: string, searchObject: CodePointRange | Array<UnicodeCategory>): string {
-  if (_isCodePointRange(searchObject)) {
-    return _collectStart(input, _rangeToRegexPattern(searchObject));
-  }
-  else if (_isUnicodeCategoryArray(searchObject)) {
-    return _collectStart(input, _categoriesToRegexPattern(searchObject));
-  }
-  else {
-    throw new TypeError("searchObject");
-  }
+function collectStart(input: string, searchObject: CodePointRange | Array<string>): string {
+  const regexPattern = _toRegexPattern(searchObject);
+  return _collectStart(input, regexPattern);
 }
 
 const UnitToCount = {

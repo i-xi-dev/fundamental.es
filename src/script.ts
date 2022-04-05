@@ -264,7 +264,8 @@ const _scripts = {
   ZYYY: "Zyyy", // Code for undetermined script // Common
   ZZZZ: "Zzzz", // Code for uncoded script // Unknown
 } as const;
-type script = typeof _scripts[keyof typeof _scripts];
+// type script = typeof _scripts[keyof typeof _scripts];
+type script = string; // 処理系によって対応しているコードに差異があったので、型では制限しない。
 
 /**
  * Scriptの集合であるScript
@@ -417,12 +418,13 @@ function _format(script: string): string {
 
 function _isScript(value: unknown): value is script {
   if (typeof value === "string") {
-    if (/^[A-Za-z]{4}$/.test(value)) {
-      const formatted = _format(value);
-      if ((Object.values(_scripts) as Array<string>).includes(formatted)) {
-        return true;
-      }
-    }
+    // if (/^[A-Za-z]{4}$/.test(value)) {
+    //   const formatted = _format(value);
+    //   if ((Object.values(_scripts) as Array<string>).includes(formatted)) {
+    //     return true;
+    //   }
+    // }
+    return /^[A-Za-z]{4}$/.test(value);
   }
   return false;
 }
