@@ -150,12 +150,12 @@ function _rangeToRegexPattern(range: CodePointRange): string {
 
 function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
   const set = new Set(categories);
-  return [...set].map((category) => `\\p{gc=${ category }}`).join("");
+  return [ ...set ].map((category) => `\\p{gc=${ category }}`).join("");
 }
 
 function _scriptsToRegexPattern(scripts: Array<script>): string {
   const set = new Set(scripts);
-  return [...set].map((script) => `\\p{scx=${script}}`).join("");
+  return [ ...set ].map((script) => `\\p{scx=${script}}`).join("");
   // XXX scxではなくscにしたいケースはあるか？
 }
 

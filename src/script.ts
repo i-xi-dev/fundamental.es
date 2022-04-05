@@ -431,7 +431,7 @@ function _isScript(value: unknown): value is script {
 
 function _normalize(script: string): script {
   if (_isScript(script)) {
-    return _format(script) as script;
+    return _format(script);
   }
   throw new TypeError("script");
 }
