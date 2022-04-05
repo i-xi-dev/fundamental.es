@@ -172,12 +172,6 @@ function _toRegexPattern(searchObject: CodePointRange | Array<string>): string {
   throw new TypeError("searchObject");
 }
 
-// TODO TextScript, _scriptsToRegexPattern
-
-
-
-
-
 function matches(input: string, searchObject: CodePointRange | Array<string>): boolean {
   const regexPattern = _toRegexPattern(searchObject);
   return _matches(input, regexPattern);
