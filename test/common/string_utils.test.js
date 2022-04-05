@@ -46,6 +46,19 @@ describe("matches", () => {
 
   });
 
+  it("matches(string, script[])", () => {
+    expect(matches("", [ "Latn" ])).to.equal(true);
+    expect(matches("a", [ "Latn" ])).to.equal(true);
+    expect(matches("1", [ "Latn" ])).to.equal(false);
+    expect(matches("a1", [ "Latn" ])).to.equal(false);
+    expect(matches("1a", [ "Latn" ])).to.equal(false);
+    expect(matches("可", [ "Latn" ])).to.equal(false);
+    expect(matches("可", [ "Hani" ])).to.equal(true);
+    expect(matches("可a", [ "Hani" ])).to.equal(false);
+    expect(matches("可a", [ "Hani","Latn" ])).to.equal(true);
+
+  });
+
   it("matches(string, any)", () => {
     expect(() => {
       matches("a", []);
