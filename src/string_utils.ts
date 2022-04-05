@@ -14,6 +14,7 @@ import {
 import {
   type script,
   Script,
+  ScriptSet,
 } from "./script";
 
 function _isScriptArray(value: unknown): value is Array<script> {
@@ -154,7 +155,8 @@ function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
 }
 
 function _scriptsToRegexPattern(scripts: Array<script>): string {
-  const set = new Set(scripts);
+  const set = ScriptSet.fromArray(scripts);
+  set.normalize({ compose: "decomposition" });
   return [ ...set ].map((script) => `\\p{scx=${script}}`).join("");
   // XXX scxではなくscにしたいケースはあるか？
 }

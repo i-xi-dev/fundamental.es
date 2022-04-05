@@ -57,6 +57,54 @@ describe("matches", () => {
     expect(matches("可a", [ "Hani" ])).to.equal(false);
     expect(matches("可a", [ "Hani","Latn" ])).to.equal(true);
 
+    expect(matches("あ", [ "Latn" ])).to.equal(false);
+    expect(matches("あ", [ "Hira" ])).to.equal(true);
+    expect(matches("あ", [ "Jpan" ])).to.equal(true);
+    expect(matches("あ", [ "Hrkt" ])).to.equal(true);
+    expect(matches("あ", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("あa", [ "Latn" ])).to.equal(false);
+    expect(matches("あa", [ "Hira" ])).to.equal(false);
+    expect(matches("あa", [ "Jpan" ])).to.equal(false);
+    expect(matches("あa", [ "Hrkt" ])).to.equal(false);
+    expect(matches("あa", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("ア", [ "Latn" ])).to.equal(false);
+    expect(matches("ア", [ "Hira" ])).to.equal(false);
+    expect(matches("ア", [ "Jpan" ])).to.equal(true);
+    expect(matches("ア", [ "Hrkt" ])).to.equal(true);
+    expect(matches("ア", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("アa", [ "Latn" ])).to.equal(false);
+    expect(matches("アa", [ "Hira" ])).to.equal(false);
+    expect(matches("アa", [ "Jpan" ])).to.equal(false);
+    expect(matches("アa", [ "Hrkt" ])).to.equal(false);
+    expect(matches("アa", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("あア", [ "Latn" ])).to.equal(false);
+    expect(matches("あア", [ "Hira" ])).to.equal(false);
+    expect(matches("あア", [ "Jpan" ])).to.equal(true);
+    expect(matches("あア", [ "Hrkt" ])).to.equal(true);
+    expect(matches("あア", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("あアa", [ "Latn" ])).to.equal(false);
+    expect(matches("あアa", [ "Hira" ])).to.equal(false);
+    expect(matches("あアa", [ "Jpan" ])).to.equal(false);
+    expect(matches("あアa", [ "Hrkt" ])).to.equal(false);
+    expect(matches("あアa", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("あア脗", [ "Latn" ])).to.equal(false);
+    expect(matches("あア脗", [ "Hira" ])).to.equal(false);
+    expect(matches("あア脗", [ "Jpan" ])).to.equal(true);
+    expect(matches("あア脗", [ "Hrkt" ])).to.equal(false);
+    expect(matches("あア脗", [ "Jpan","Latn" ])).to.equal(true);
+
+    expect(matches("あア脗a", [ "Latn" ])).to.equal(false);
+    expect(matches("あア脗a", [ "Hira" ])).to.equal(false);
+    expect(matches("あア脗a", [ "Jpan" ])).to.equal(false);
+    expect(matches("あア脗a", [ "Hrkt" ])).to.equal(false);
+    expect(matches("あア脗a", [ "Jpan","Latn" ])).to.equal(true);
+
   });
 
   it("matches(string, any)", () => {
