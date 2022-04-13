@@ -1,9 +1,9 @@
 //
 
-import { isPositiveInteger } from "./number_utils";
+import { isPositiveInteger } from "./int";
 import {
-  UnicodeCategory,
-  _isUnicodeCategoryArray,
+  Unicode,
+  UnicodeUtils,
 } from "./unicode";
 import {
   type codepoint,
@@ -16,6 +16,8 @@ import {
   Script,
   ScriptSet,
 } from "./script";
+
+// TODO namespace
 
 function _isScriptArray(value: unknown): value is Array<script> {
   if (Array.isArray(value) && (value.length > 0)) {
@@ -149,7 +151,7 @@ function _rangeToRegexPattern(range: CodePointRange): string {
   }).join("");
 }
 
-function _categoriesToRegexPattern(categories: Array<UnicodeCategory>): string {
+function _categoriesToRegexPattern(categories: Array<Unicode.Category>): string {
   const set = new Set(categories);
   return [ ...set ].map((category) => `\\p{gc=${ category }}`).join("");
 }
@@ -165,7 +167,7 @@ function _toRegexPattern(searchObject: CodePointRange | Array<string>): string {
   if (_isCodePointRange(searchObject)) {
     return _rangeToRegexPattern(searchObject);
   }
-  else if (_isUnicodeCategoryArray(searchObject)) {
+  else if (UnicodeUtils.isCategoryArray(searchObject)) {
     return _categoriesToRegexPattern(searchObject);
   }
   else if (_isScriptArray(searchObject)) {

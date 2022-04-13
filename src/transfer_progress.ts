@@ -4,8 +4,10 @@ import {
   AbortError,
   TimeoutError,
 } from "./error";
-import { isNonNegativeInteger } from "./number_utils";
+import { isNonNegativeInteger } from "./int";
 import { ProgressEvent } from "./progress_event";
+
+// TODO namespace
 
 /**
  * The options for the `TransferProgress` with the following optional fields.

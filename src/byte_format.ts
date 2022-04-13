@@ -1,13 +1,12 @@
 //
 
-import { isPositiveInteger } from "./number_utils";
+import { isPositiveInteger } from "./int";
 import {
   UnitToCount,
   segment,
-} from "./string_utils";
+} from "./string";
 import {
   type uint8,
-  // isUint8,
 } from "./uint8";
 import { SizedMap } from "./collections";
 

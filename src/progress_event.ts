@@ -1,6 +1,6 @@
 //
 
-import { isNonNegativeInteger } from "./number_utils";
+import { isNonNegativeInteger } from "./int";
 
 /**
  * The `ProgressEvent` for Node.js

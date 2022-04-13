@@ -47,6 +47,7 @@ namespace Uint8 {
     return false;
   }
 }
+Object.freeze(Uint8);
 
 namespace Uint8Utils {
   export function isArrayOfUint8(value: unknown): value is Array<uint8> {
@@ -56,6 +57,7 @@ namespace Uint8Utils {
     return false;
   }
 }
+Object.freeze(Uint8Utils);
 
 export {
   type uint8,

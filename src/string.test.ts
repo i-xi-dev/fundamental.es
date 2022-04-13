@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
+import { Unicode } from "./unicode";
 import {
   CodePointRange,
-  UnicodeCategory,
   collectStart,
   collectHttpQuotedString,
   contains,
@@ -10,7 +10,7 @@ import {
   trim,
   trimEnd,
   trimStart,
-} from "../../dist/index.js";
+} from "./string";
 
 describe("matches", () => {
   it("matches(string, CodePointRange)", () => {
@@ -29,20 +29,20 @@ describe("matches", () => {
     expect(matches("azAZ", [[0x41,0x5A]])).to.equal(false);
   });
 
-  it("matches(string, UnicodeCategory[])", () => {
-    expect(matches("", [ UnicodeCategory.LETTER ])).to.equal(true);
+  it("matches(string, Unicode.Category[])", () => {
+    expect(matches("", [ Unicode.Category.LETTER ])).to.equal(true);
 
-    expect(matches("a", [ UnicodeCategory.LETTER ])).to.equal(true);
-    expect(matches("1", [ UnicodeCategory.LETTER ])).to.equal(false);
-    expect(matches("-", [ UnicodeCategory.LETTER ])).to.equal(false);
-    expect(matches("a1", [ UnicodeCategory.LETTER ])).to.equal(false);
-    expect(matches("a1-", [ UnicodeCategory.LETTER ])).to.equal(false);
+    expect(matches("a", [ Unicode.Category.LETTER ])).to.equal(true);
+    expect(matches("1", [ Unicode.Category.LETTER ])).to.equal(false);
+    expect(matches("-", [ Unicode.Category.LETTER ])).to.equal(false);
+    expect(matches("a1", [ Unicode.Category.LETTER ])).to.equal(false);
+    expect(matches("a1-", [ Unicode.Category.LETTER ])).to.equal(false);
 
-    expect(matches("a", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(matches("1", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(matches("-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(false);
-    expect(matches("a1", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(matches("a1-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(false);
+    expect(matches("a", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(matches("1", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(matches("-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(false);
+    expect(matches("a1", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(matches("a1-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(false);
 
   });
 
@@ -113,15 +113,15 @@ describe("matches", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      matches("a");
+      matches("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      matches("a", [[]]);
+      matches("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      matches("a", [[1,2,3]]);
+      matches("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -138,20 +138,20 @@ describe("contains", () => {
 
   });
 
-  it("contains(string, UnicodeCategory[])", () => {
-    expect(contains("", [ UnicodeCategory.LETTER ])).to.equal(false);
+  it("contains(string, Unicode.Category[])", () => {
+    expect(contains("", [ Unicode.Category.LETTER ])).to.equal(false);
 
-    expect(contains("a", [ UnicodeCategory.LETTER ])).to.equal(true);
-    expect(contains("1", [ UnicodeCategory.LETTER ])).to.equal(false);
-    expect(contains("-", [ UnicodeCategory.LETTER ])).to.equal(false);
-    expect(contains("a1", [ UnicodeCategory.LETTER ])).to.equal(true);
-    expect(contains("a1-", [ UnicodeCategory.LETTER ])).to.equal(true);
+    expect(contains("a", [ Unicode.Category.LETTER ])).to.equal(true);
+    expect(contains("1", [ Unicode.Category.LETTER ])).to.equal(false);
+    expect(contains("-", [ Unicode.Category.LETTER ])).to.equal(false);
+    expect(contains("a1", [ Unicode.Category.LETTER ])).to.equal(true);
+    expect(contains("a1-", [ Unicode.Category.LETTER ])).to.equal(true);
 
-    expect(contains("a", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(contains("1", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(contains("-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(false);
-    expect(contains("a1", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
-    expect(contains("a1-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal(true);
+    expect(contains("a", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(contains("1", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(contains("-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(false);
+    expect(contains("a1", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
+    expect(contains("a1-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal(true);
 
   });
 
@@ -161,15 +161,15 @@ describe("contains", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      contains("a");
+      contains("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      contains("a", [[]]);
+      contains("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      contains("a", [[1,2,3]]);
+      contains("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -203,20 +203,20 @@ describe("trim", () => {
 
   });
 
-  it("trim(string, UnicodeCategory[])", () => {
-    expect(trim("", [ UnicodeCategory.LETTER ])).to.equal("");
+  it("trim(string, Unicode.Category[])", () => {
+    expect(trim("", [ Unicode.Category.LETTER ])).to.equal("");
 
-    expect(trim("b5a5b", [ UnicodeCategory.LETTER ])).to.equal("5a5");
-    expect(trim("b515b", [ UnicodeCategory.LETTER ])).to.equal("515");
-    expect(trim("b5-5b", [ UnicodeCategory.LETTER ])).to.equal("5-5");
-    expect(trim("b5a15b", [ UnicodeCategory.LETTER ])).to.equal("5a15");
-    expect(trim("b5a1-5b", [ UnicodeCategory.LETTER ])).to.equal("5a1-5");
+    expect(trim("b5a5b", [ Unicode.Category.LETTER ])).to.equal("5a5");
+    expect(trim("b515b", [ Unicode.Category.LETTER ])).to.equal("515");
+    expect(trim("b5-5b", [ Unicode.Category.LETTER ])).to.equal("5-5");
+    expect(trim("b5a15b", [ Unicode.Category.LETTER ])).to.equal("5a15");
+    expect(trim("b5a1-5b", [ Unicode.Category.LETTER ])).to.equal("5a1-5");
 
-    expect(trim("b5a5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trim("b515b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trim("b5-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("-");
-    expect(trim("b5a15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trim("b5a1-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("-");
+    expect(trim("b5a5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trim("b515b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trim("b5-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("-");
+    expect(trim("b5a15b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trim("b5a1-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("-");
 
   });
 
@@ -226,15 +226,15 @@ describe("trim", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trim("a");
+      trim("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trim("a", [[]]);
+      trim("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trim("a", [[1,2,3]]);
+      trim("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -257,20 +257,20 @@ describe("trimStart", () => {
 
   });
 
-  it("trimStart(string, UnicodeCategory[])", () => {
-    expect(trimStart("", [ UnicodeCategory.LETTER ])).to.equal("");
+  it("trimStart(string, Unicode.Category[])", () => {
+    expect(trimStart("", [ Unicode.Category.LETTER ])).to.equal("");
 
-    expect(trimStart("a5b", [ UnicodeCategory.LETTER ])).to.equal("5b");
-    expect(trimStart("15b", [ UnicodeCategory.LETTER ])).to.equal("15b");
-    expect(trimStart("-5b", [ UnicodeCategory.LETTER ])).to.equal("-5b");
-    expect(trimStart("a15b", [ UnicodeCategory.LETTER ])).to.equal("15b");
-    expect(trimStart("a1-5b", [ UnicodeCategory.LETTER ])).to.equal("1-5b");
+    expect(trimStart("a5b", [ Unicode.Category.LETTER ])).to.equal("5b");
+    expect(trimStart("15b", [ Unicode.Category.LETTER ])).to.equal("15b");
+    expect(trimStart("-5b", [ Unicode.Category.LETTER ])).to.equal("-5b");
+    expect(trimStart("a15b", [ Unicode.Category.LETTER ])).to.equal("15b");
+    expect(trimStart("a1-5b", [ Unicode.Category.LETTER ])).to.equal("1-5b");
 
-    expect(trimStart("a5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimStart("15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimStart("-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("-5b");
-    expect(trimStart("a15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimStart("a1-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("-5b");
+    expect(trimStart("a5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimStart("15b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimStart("-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("-5b");
+    expect(trimStart("a15b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimStart("a1-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("-5b");
 
   });
 
@@ -280,15 +280,15 @@ describe("trimStart", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimStart("a");
+      trimStart("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimStart("a", [[]]);
+      trimStart("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimStart("a", [[1,2,3]]);
+      trimStart("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -311,20 +311,20 @@ describe("trimEnd", () => {
 
   });
 
-  it("trimEnd(string, UnicodeCategory[])", () => {
-    expect(trimEnd("", [ UnicodeCategory.LETTER ])).to.equal("");
+  it("trimEnd(string, Unicode.Category[])", () => {
+    expect(trimEnd("", [ Unicode.Category.LETTER ])).to.equal("");
 
-    expect(trimEnd("b5a", [ UnicodeCategory.LETTER ])).to.equal("b5");
-    expect(trimEnd("b51", [ UnicodeCategory.LETTER ])).to.equal("b51");
-    expect(trimEnd("b5-", [ UnicodeCategory.LETTER ])).to.equal("b5-");
-    expect(trimEnd("b5a1", [ UnicodeCategory.LETTER ])).to.equal("b5a1");
-    expect(trimEnd("b5a1-", [ UnicodeCategory.LETTER ])).to.equal("b5a1-");
+    expect(trimEnd("b5a", [ Unicode.Category.LETTER ])).to.equal("b5");
+    expect(trimEnd("b51", [ Unicode.Category.LETTER ])).to.equal("b51");
+    expect(trimEnd("b5-", [ Unicode.Category.LETTER ])).to.equal("b5-");
+    expect(trimEnd("b5a1", [ Unicode.Category.LETTER ])).to.equal("b5a1");
+    expect(trimEnd("b5a1-", [ Unicode.Category.LETTER ])).to.equal("b5a1-");
 
-    expect(trimEnd("b5a", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimEnd("b51", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimEnd("b5-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("b5-");
-    expect(trimEnd("b5a1", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(trimEnd("b5a1-", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("b5a1-");
+    expect(trimEnd("b5a", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimEnd("b51", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimEnd("b5-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("b5-");
+    expect(trimEnd("b5a1", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(trimEnd("b5a1-", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("b5a1-");
 
   });
 
@@ -334,15 +334,15 @@ describe("trimEnd", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimEnd("a");
+      trimEnd("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimEnd("a", [[]]);
+      trimEnd("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      trimEnd("a", [[1,2,3]]);
+      trimEnd("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -376,20 +376,20 @@ describe("collectStart", () => {
 
   });
 
-  it("collectStart(string, UnicodeCategory[])", () => {
-    expect(collectStart("", [ UnicodeCategory.LETTER ])).to.equal("");
+  it("collectStart(string, Unicode.Category[])", () => {
+    expect(collectStart("", [ Unicode.Category.LETTER ])).to.equal("");
 
-    expect(collectStart("a5b", [ UnicodeCategory.LETTER ])).to.equal("a");
-    expect(collectStart("15b", [ UnicodeCategory.LETTER ])).to.equal("");
-    expect(collectStart("-5b", [ UnicodeCategory.LETTER ])).to.equal("");
-    expect(collectStart("a15b", [ UnicodeCategory.LETTER ])).to.equal("a");
-    expect(collectStart("a1-5b", [ UnicodeCategory.LETTER ])).to.equal("a");
+    expect(collectStart("a5b", [ Unicode.Category.LETTER ])).to.equal("a");
+    expect(collectStart("15b", [ Unicode.Category.LETTER ])).to.equal("");
+    expect(collectStart("-5b", [ Unicode.Category.LETTER ])).to.equal("");
+    expect(collectStart("a15b", [ Unicode.Category.LETTER ])).to.equal("a");
+    expect(collectStart("a1-5b", [ Unicode.Category.LETTER ])).to.equal("a");
 
-    expect(collectStart("a5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a5b");
-    expect(collectStart("15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("15b");
-    expect(collectStart("-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("");
-    expect(collectStart("a15b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a15b");
-    expect(collectStart("a1-5b", [ UnicodeCategory.LETTER, UnicodeCategory.NUMBER ])).to.equal("a1");
+    expect(collectStart("a5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("a5b");
+    expect(collectStart("15b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("15b");
+    expect(collectStart("-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("");
+    expect(collectStart("a15b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("a15b");
+    expect(collectStart("a1-5b", [ Unicode.Category.LETTER, Unicode.Category.NUMBER ])).to.equal("a1");
 
   });
 
@@ -399,15 +399,15 @@ describe("collectStart", () => {
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      collectStart("a");
+      collectStart("a", undefined as unknown as CodePointRange);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      collectStart("a", [[]]);
+      collectStart("a", [[] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
     expect(() => {
-      collectStart("a", [[1,2,3]]);
+      collectStart("a", [[1,2,3] as unknown as [number]]);
     }).to.throw(TypeError, "searchObject").with.property("name", "TypeError");
 
   });
@@ -445,7 +445,7 @@ describe("segment", () => {
     expect(JSON.stringify(segment("a\u{10000}c", {count:1, unit:"rune"}))).to.equal(`["a","\u{10000}","c"]`);
 
     expect(() => {
-      segment("", {count:undefined, unit:"char"});
+      segment("", {count:undefined as unknown as number, unit:"char"});
     }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
 
     expect(() => {
@@ -453,7 +453,7 @@ describe("segment", () => {
     }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
 
     expect(() => {
-      segment("", 0);
+      segment("", 0 as unknown as {count:number,unit:"char"});
     }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
 
     expect(() => {
@@ -461,14 +461,14 @@ describe("segment", () => {
     }).to.throw(TypeError, "by.count").with.property("name", "TypeError");
 
     expect(() => {
-      segment("", {count:1, unit:"x"});
+      segment("", {count:1, unit:"x" as unknown as "char"});
     }).to.throw(TypeError, "by.unit").with.property("name", "TypeError");
 
   });
 
   it("segment(any, Object)", () => {
     expect(() => {
-      segment(1, {count:1, unit:"char"});
+      segment(1 as unknown as string, {count:1, unit:"char"});
     }).to.throw(TypeError, "input").with.property("name", "TypeError");
 
   });
@@ -524,7 +524,7 @@ describe("segment", () => {
 
   it("segment(string, Object, any)", () => {
     expect(() => {
-      segment("", {count:1, unit:"char"}, 1);
+      segment("", {count:1, unit:"char"}, 1 as unknown as string);
     }).to.throw(TypeError, "padding").with.property("name", "TypeError");
 
   });

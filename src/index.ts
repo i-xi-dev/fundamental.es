@@ -7,13 +7,15 @@ export {
 export {
   isNonNegativeInteger,
   isPositiveInteger,
-} from "./number_utils";
+} from "./int";
 export {
   type script,
   Script,
   ScriptSet,
 } from "./script";
-export { UnicodeCategory } from "./unicode";
+export {
+  Unicode,
+} from "./unicode";
 export {
   type codepoint,
   type rune,
@@ -31,7 +33,7 @@ export {
   trim,
   trimEnd,
   trimStart,
-} from "./string_utils";
+} from "./string";
 export {
   type uint8,
   Uint8,
@@ -57,11 +59,8 @@ export {
 export { ByteBuffer } from "./byte_buffer";
 export { streamToAsyncGenerator } from "./stream_utils";
 export {
-  type DigestAlgorithm,
-  Sha256,
-  Sha384,
-  Sha512,
-} from "./digest_algorithm";
+  Digest,
+} from "./digest";
 export {
   type TransferOptions,
   TransferProgress,

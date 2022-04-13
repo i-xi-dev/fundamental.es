@@ -1,6 +1,8 @@
 //
 
-type int = number;
+import { type int } from "./int";
+
+// TODO namespace
 
 namespace Milliseconds {
   /**

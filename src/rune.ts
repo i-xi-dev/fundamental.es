@@ -1,7 +1,7 @@
 //
 
 import {
-  UnicodeCategory,
+  Unicode,
 } from "./unicode";
 
 type codepoint = number; // 厳密に定義するのは困難なので、ただのnumberの別名とする
@@ -20,11 +20,12 @@ namespace CodePoint {
     return false;
   }
 }
+Object.freeze(CodePoint);
 
 // XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
 type rune = string; // 厳密に定義するのは困難なので、ただのstringの別名とする
 
-function _runeIsInCategory(rune: rune, category: UnicodeCategory): boolean {
+function _runeIsInCategory(rune: rune, category: Unicode.Category): boolean {
   if (Rune.isRune(rune) !== true) {
     throw new TypeError("rune");
   }
@@ -62,38 +63,39 @@ namespace Rune {
   }
 
   export function isLetter(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.LETTER);
+    return _runeIsInCategory(rune, Unicode.Category.LETTER);
   }
 
   export function isMark(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.MARK);
+    return _runeIsInCategory(rune, Unicode.Category.MARK);
   }
 
   export function isNumber(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.NUMBER);
+    return _runeIsInCategory(rune, Unicode.Category.NUMBER);
   }
 
   export function isPunctuation(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.PUNCTUATION);
+    return _runeIsInCategory(rune, Unicode.Category.PUNCTUATION);
   }
 
   export function isSymbol(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.SYMBOL);
+    return _runeIsInCategory(rune, Unicode.Category.SYMBOL);
   }
 
   export function isSeparator(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.SEPARATOR);
+    return _runeIsInCategory(rune, Unicode.Category.SEPARATOR);
   }
 
   export function isControl(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.OTHER_CONTROL);
+    return _runeIsInCategory(rune, Unicode.Category.OTHER_CONTROL);
   }
 
   export function isSurrogate(rune: rune): boolean {
-    return _runeIsInCategory(rune, UnicodeCategory.OTHER_SURROGATE);
+    return _runeIsInCategory(rune, Unicode.Category.OTHER_SURROGATE);
   }
 
 }
+Object.freeze(Rune);
 
 export {
   type codepoint,

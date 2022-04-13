@@ -1,6 +1,8 @@
 //
 
-import { isPositiveInteger } from "./number_utils";
+import { isPositiveInteger } from "./int";
+
+// TODO namespace
 
 class SizedMap<K, V> extends Map<K, V> {
   #maxSize: number;

@@ -1,5 +1,7 @@
 //
 
+// TODO namespace
+
 // 2022-03時点
 const _scripts = {
   ADLM: "Adlm", // Adlam // Adlam

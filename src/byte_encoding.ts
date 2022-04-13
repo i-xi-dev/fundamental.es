@@ -2,6 +2,8 @@
 
 // The byte encoding
 
+// TODO namespace
+
 /**
  * The decoder that converts a string into a byte sequence.
  */

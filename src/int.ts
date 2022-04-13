@@ -1,5 +1,9 @@
 //
 
+type int = number;
+
+// TODO namespace
+
 /**
  * Determines whether the passed value is a nonnegative safe integer.
  * 
@@ -27,6 +31,7 @@ function isPositiveInteger(value: unknown): boolean {
 }
 
 export {
+  type int,
   isNonNegativeInteger,
   isPositiveInteger,
 };
