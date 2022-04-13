@@ -34,8 +34,8 @@ export {
 } from "./string_utils";
 export {
   type uint8,
-  isArrayOfUint8,
-  isUint8,
+  Uint8,
+  Uint8Utils,
 } from "./uint8";
 export { SizedMap } from "./collections";
 export { IsomorphicEncoding } from "./isomorphic_encoding";

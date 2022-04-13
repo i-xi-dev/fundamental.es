@@ -82,5 +82,51 @@ namespace Milliseconds {
     }
     return ofMilliseconds(days * DAY);
   }
+
+  // Temporalを使えばいい
+  // /**
+  //  * 時間量を表すISO 8601形式の文字列をミリ秒に変換し返却
+  //  * @param str 時間量を表すISO 8601形式の文字列
+  //  *    ※時間量が負の場合は先頭に"-"を付ける（ISO 8601としては仕様違反）
+  //  * @returns 
+  //  */
+  // export function fromString(str: string): int {
+  //   if (typeof str !== "string") {
+  //     throw new TypeError("str");
+  //   }
+  //
+  //   if (/^-?PT([1-9][0-9]+|0[0-9]+)H[0-9]{2}M[0-9]{2}(\.[0-9]+)?S$/.test(str) !== true) { // H省略などに未対応
+  //     throw new RangeError("str");
+  //   }
+  //
+  //   const isNegative = str.startsWith("-");
+  //   const result = str.matchAll(/[0-9]+/g);
+  //   const fields = [ ...result ] as [ RegExpMatchArray, RegExpMatchArray, RegExpMatchArray ] | [ RegExpMatchArray, RegExpMatchArray, RegExpMatchArray, RegExpMatchArray ];
+  //   const hStr = fields[0][0] as string;
+  //   const mStr = fields[1][0] as string;
+  //   const sIStr = fields[2][0] as string;
+  //   let sFStr: string;
+  //   if (fields.length >= 4) {
+  //     sFStr = (fields[3] as RegExpMatchArray)[0] as string;
+  //     sFStr = sFStr.padEnd(3, "0").substring(0, 3);
+  //   }
+  //   else {
+  //     sFStr = "000";
+  //   }
+  //
+  //   const hMillis = Number.parseInt(hStr, 10) * HOUR;
+  //   const mMillis = Number.parseInt(mStr, 10) * MINUTE;
+  //   const sIMillis = Number.parseInt(sIStr, 10) * SECOND;
+  //   const sFNanos = Number.parseInt(sFStr, 10);
+  //
+  //   let millis = hMillis + mMillis + sIMillis + sFNanos;
+  //   millis = isNegative ? (millis * -1) : millis;
+  //
+  //   return millis;
+  // }
+  //
+  // export function toString(milliseconds: number): string {
+  //
+  // }
 }
 Object.freeze(Milliseconds);
