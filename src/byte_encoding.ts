@@ -34,11 +34,11 @@ namespace ByteEncoding {
     flush(): string;
   }
 
-  export abstract class ByteDecoderStream implements TransformStream<string, Uint8Array> {
+  export abstract class DecoderStream implements TransformStream<string, Uint8Array> {
     readonly #stream: TransformStream<string, Uint8Array>;
 
     constructor(decoder: Decoder, regulator: DecoderStreamRegulator) {
-      this.#stream = new TransformStream<string, Uint8Array>(ByteDecoderStream._createTransformer(decoder, regulator));
+      this.#stream = new TransformStream<string, Uint8Array>(DecoderStream._createTransformer(decoder, regulator));
     }
 
     protected static _createTransformer(decoder: Decoder, regulator: DecoderStreamRegulator): Transformer<string, Uint8Array> {
@@ -72,7 +72,7 @@ namespace ByteEncoding {
       return this.#stream.readable;
     }
   }
-  Object.freeze(ByteDecoderStream);
+  Object.freeze(DecoderStream);
 
   export interface EncoderStreamRegulator {
     regulate(chunk: Uint8Array): Uint8Array;
