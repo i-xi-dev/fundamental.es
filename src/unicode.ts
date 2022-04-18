@@ -55,7 +55,6 @@ namespace Unicode {
     return false;
   }
 
-
 }
 Object.freeze(Unicode);
 

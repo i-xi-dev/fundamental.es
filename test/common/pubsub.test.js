@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { PubSubBroker } from "../../dist/index.js";
+import { PubSub } from "../../dist/index.js";
 
-describe("PubSubBroker.prototype.clear", () => {
+describe("PubSub.Broker.prototype.clear", () => {
   it("clear()", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -49,9 +49,9 @@ describe("PubSubBroker.prototype.clear", () => {
 
 });
 
-describe("PubSubBroker.prototype.publish", () => {
+describe("PubSub.Broker.prototype.publish", () => {
   it("publish(string, any)", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const topic1 = "t1";
     broker.subscribe(topic1, (data) => {
@@ -77,7 +77,7 @@ describe("PubSubBroker.prototype.publish", () => {
   });
 
   it("publish(string, any) - 2", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const topic1 = "t1";
     broker.subscribe(topic1, (data) => {
@@ -104,9 +104,9 @@ describe("PubSubBroker.prototype.publish", () => {
 
 });
 
-describe("PubSubBroker.prototype.subscribe", () => {
+describe("PubSub.Broker.prototype.subscribe", () => {
   it("subscribe(string, Function)", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -144,7 +144,7 @@ describe("PubSubBroker.prototype.subscribe", () => {
   });
 
   it("subscribe(symbol, Function)", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -182,7 +182,7 @@ describe("PubSubBroker.prototype.subscribe", () => {
   });
 
   it("subscribe(string, AsyncFunction)", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -218,7 +218,7 @@ describe("PubSubBroker.prototype.subscribe", () => {
   });
 
   it("subscribe(string, Function, { once: boolean })", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -256,7 +256,7 @@ describe("PubSubBroker.prototype.subscribe", () => {
   });
 
   it("subscribe(string, Function, { signal: AbortSignal })", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
@@ -300,9 +300,9 @@ describe("PubSubBroker.prototype.subscribe", () => {
 
 });
 
-describe("PubSubBroker.prototype.unsubscribe", () => {
+describe("PubSub.Broker.prototype.unsubscribe", () => {
   it("unsubscribe(string, Function)", async () => {
-    const broker = new PubSubBroker();
+    const broker = new PubSub.Broker();
 
     const t1results1 = [];
     const t1results2 = [];
