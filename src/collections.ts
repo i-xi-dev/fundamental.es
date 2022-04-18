@@ -5,8 +5,6 @@ import {
   Integer,
 } from "./int";
 
-// TODO namespace
-
 class SizedMap<K, V> extends Map<K, V> {
   #maxSize: int;
 

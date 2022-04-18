@@ -5,15 +5,11 @@ import {
   Integer,
 } from "./int";
 import {
+  type codepoint,
+  type rune,
   Unicode,
   UnicodeUtils,
 } from "./unicode";
-import {
-  type codepoint,
-  type rune,
-  CodePoint,
-  Rune,
-} from "./rune";
 import {
   type script,
   Script,
@@ -135,7 +131,7 @@ function _isCodePointRange(value: unknown): value is CodePointRange {
   if (Array.isArray(value) && (value.length > 0)) {
     return value.every((part) => {
       if (Array.isArray(part) && (part.length === 1 || part.length === 2)) {
-        return part.every((i) => CodePoint.isCodePoint(i));
+        return part.every((i) => Unicode.CodePoint.isCodePoint(i));
       }
       return false;
     });
@@ -272,7 +268,7 @@ function _devideByCharCount(input: string, segmentLength: number, paddingChar?: 
 }
 
 function _devideByRuneCount(input: string, segmentLength: number, paddingRune?: rune): Array<string> {
-  if ((typeof paddingRune === "string") && (Rune.isRune(paddingRune) !== true)) {
+  if ((typeof paddingRune === "string") && (Unicode.Rune.isRune(paddingRune) !== true)) {
     throw new TypeError("paddingRune must be a code point");
   }
 

@@ -1,5 +1,18 @@
 //
 
+type codepoint = number; // 厳密に定義するのは困難なので、ただのnumberの別名とする
+
+// XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
+type rune = string; // 厳密に定義するのは困難なので、ただのstringの別名とする
+
+function _runeIsInCategory(rune: rune, category: Unicode.Category): boolean {
+  if (Unicode.Rune.isRune(rune) !== true) {
+    throw new TypeError("rune");
+  }
+  const regex = new RegExp(`^[\\p{gc=${ category }}]$`, "u");
+  return regex.test(rune);
+}
+
 /**
  * Unicode
  */
@@ -55,6 +68,86 @@ namespace Unicode {
     return false;
   }
 
+  export namespace CodePoint {
+    /**
+     * Determines whether the passed value is an Unicode code point.
+     * 
+     * @param value The value to be tested
+     * @returns Whether the passed value is an Unicode code point.
+     */
+    export function isCodePoint(value: unknown): value is codepoint {
+      if (typeof value === "number") {
+        return (Number.isSafeInteger(value) && (value >= 0x0) && (value <= 0x10FFFF));
+      }
+      return false;
+    }
+  }
+  Object.freeze(CodePoint);
+
+  export namespace Rune {
+    export function isRune(value: unknown): value is rune {
+      if (typeof value !== "string") {
+        return false;
+      }
+      if (value.length > 2) {
+        return false;
+      }
+      const runes = [ ...value ];
+      if (runes.length !== 1) {
+        return false;
+      }
+      return true;
+    }
+
+    export function fromCodePoint(codePoint: codepoint): rune {
+      if (CodePoint.isCodePoint(codePoint) !== true) {
+        throw new TypeError("codePoint");
+      }
+      return String.fromCodePoint(codePoint);
+    }
+
+    export function toCodePoint(rune: rune): codepoint {
+      if (isRune(rune) !== true) {
+        throw new TypeError("rune");
+      }
+      return rune.codePointAt(0) as codepoint;
+    }
+
+    export function isLetter(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.LETTER);
+    }
+
+    export function isMark(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.MARK);
+    }
+
+    export function isNumber(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.NUMBER);
+    }
+
+    export function isPunctuation(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.PUNCTUATION);
+    }
+
+    export function isSymbol(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.SYMBOL);
+    }
+
+    export function isSeparator(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.SEPARATOR);
+    }
+
+    export function isControl(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.OTHER_CONTROL);
+    }
+
+    export function isSurrogate(rune: rune): boolean {
+      return _runeIsInCategory(rune, Unicode.Category.OTHER_SURROGATE);
+    }
+
+  }
+  Object.freeze(Rune);
+
 }
 Object.freeze(Unicode);
 
@@ -69,6 +162,8 @@ namespace UnicodeUtils {
 Object.freeze(UnicodeUtils);
 
 export {
+  type codepoint,
+  type rune,
   Unicode,
   UnicodeUtils,
 };

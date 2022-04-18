@@ -14,14 +14,10 @@ export {
   ScriptSet,
 } from "./script";
 export {
-  Unicode,
-} from "./unicode";
-export {
   type codepoint,
   type rune,
-  CodePoint,
-  Rune,
-} from "./rune";
+  Unicode,
+} from "./unicode";
 export {
   type CollectResult,
   CodePointRange,

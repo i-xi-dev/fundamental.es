@@ -1,51 +1,50 @@
 //
 
-function decode(input: BufferSource = new Uint8Array(0)): string {
-  let bytes: Uint8Array;
-  if (ArrayBuffer.isView(input)) {
-    bytes = new Uint8Array(input.buffer);
-  }
-  else if (input instanceof ArrayBuffer) {
-    bytes = new Uint8Array(input);
-  }
-  else {
-    throw new TypeError("buffer");
-  }
-
-  // A: Bの2倍以上遅い（Node.js）
-  // let chars: string = "";
-  // for (const byte of bytes) {
-  //   chars = chars + String.fromCharCode(byte);
-  // }
-  // return chars;
-
-  // B:
-  const chars = Array.from(bytes, (byte) => {
-    return String.fromCharCode(byte);
-  });
-  return chars.join("");
-}
-
-function isIsomorphicEncoded(value: string): boolean {
+function _isIsomorphicEncoded(value: string): boolean {
   return /^[\u{0}-\u{FF}]*$/u.test(value);
 }
 
-function encode(input = ""): Uint8Array {
-  if (isIsomorphicEncoded(input) !== true) {
-    throw new TypeError("input");
+namespace IsomorphicEncoding {
+  export function decode(input: BufferSource = new Uint8Array(0)): string {
+    let bytes: Uint8Array;
+    if (ArrayBuffer.isView(input)) {
+      bytes = new Uint8Array(input.buffer);
+    }
+    else if (input instanceof ArrayBuffer) {
+      bytes = new Uint8Array(input);
+    }
+    else {
+      throw new TypeError("buffer");
+    }
+  
+    // A: Bの2倍以上遅い（Node.js）
+    // let chars: string = "";
+    // for (const byte of bytes) {
+    //   chars = chars + String.fromCharCode(byte);
+    // }
+    // return chars;
+  
+    // B:
+    const chars = Array.from(bytes, (byte) => {
+      return String.fromCharCode(byte);
+    });
+    return chars.join("");
   }
 
-  const bytes = new Uint8Array(input.length);
-  for (let i = 0; i < input.length; i++) {
-    bytes[i] = input.charCodeAt(i);
+  export function encode(input = ""): Uint8Array {
+    if (_isIsomorphicEncoded(input) !== true) {
+      throw new TypeError("input");
+    }
+
+    const bytes = new Uint8Array(input.length);
+    for (let i = 0; i < input.length; i++) {
+      bytes[i] = input.charCodeAt(i);
+    }
+    return bytes;
   }
-  return bytes;
+
 }
-
-const IsomorphicEncoding = Object.freeze({
-  decode,
-  encode,
-});
+Object.freeze(IsomorphicEncoding);
 
 export {
   IsomorphicEncoding,
