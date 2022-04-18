@@ -1,6 +1,9 @@
 //
 
-import { isNonNegativeInteger } from "./int";
+import {
+  type int,
+  Integer,
+} from "./int";
 
 /**
  * The `ProgressEvent` for Node.js
@@ -9,8 +12,8 @@ import { isNonNegativeInteger } from "./int";
  */
 class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   #lengthComputable: boolean;
-  #loaded: number;
-  #total: number;
+  #loaded: int;
+  #total: int;
 
   /**
    * Creates a new `_ProgressEvent`.
@@ -22,8 +25,8 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
     super(type, init);
 
     this.#lengthComputable = (init && (typeof init.lengthComputable === "boolean")) ? init.lengthComputable : false;
-    this.#loaded = (init && (typeof init.loaded === "number") && isNonNegativeInteger(init.loaded)) ? init.loaded : 0;
-    this.#total = (init && (typeof init.total === "number") && isNonNegativeInteger(init.total)) ? init.total : 0;
+    this.#loaded = (init && (typeof init.loaded === "number") && Integer.isNonNegativeInteger(init.loaded)) ? init.loaded : 0;
+    this.#total = (init && (typeof init.total === "number") && Integer.isNonNegativeInteger(init.total)) ? init.total : 0;
   }
 
   /**
@@ -36,14 +39,14 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   /**
    * @see [ProgressEvent.loaded](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/loaded)
    */
-  get loaded(): number {
+  get loaded(): int {
     return this.#loaded;
   }
 
   /**
    * @see [ProgressEvent.total](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/total)
    */
-  get total(): number {
+  get total(): int {
     return this.#total;
   }
 }

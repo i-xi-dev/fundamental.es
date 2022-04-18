@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { isNonNegativeInteger, isPositiveInteger } from "./int";
+import { Integer } from "./int";
+const { isNonNegativeInteger, isPositiveInteger} = Integer;
 
 describe("isNonNegativeInteger", () => {
   it("isNonNegativeInteger(number)", () => {

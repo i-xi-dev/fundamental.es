@@ -1,6 +1,9 @@
 //
 
-import { isPositiveInteger } from "./int";
+import {
+  type int,
+  Integer,
+} from "./int";
 import {
   UnitToCount,
   segment,
@@ -30,7 +33,7 @@ type ResolvedOptions = {
   radix: Radix,
 
   /** 前方埋め結果の文字列長 */
-  paddedLength: number,
+  paddedLength: int,
 
   /** 16進数のa-fを小文字にするか否か */
   lowerCase: boolean,
@@ -67,7 +70,7 @@ type ByteFormatOptions = {
    * | `8` | `3` |
    * | `2` | `8` |
    */
-  paddedLength?: number,
+  paddedLength?: int,
 
   /**
    * Whether the formatted string is uppercase or not.
@@ -131,7 +134,7 @@ function resolveOptions(options: ByteFormatOptions | ResolvedOptions = {}): Reso
   }
   const radix: Radix = isRadix(options.radix) ? options.radix  : 16;
 
-  if (isPositiveInteger(options.paddedLength) || (options.paddedLength === undefined)) {
+  if (Integer.isPositiveInteger(options.paddedLength) || (options.paddedLength === undefined)) {
     // ok
   }
   else {

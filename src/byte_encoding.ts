@@ -11,7 +11,7 @@ interface ByteDecoder {
   /**
    * Converts a string into a byte sequence.
    * 
-   * @param encoded - An encoded string to decode.
+   * @param encoded An encoded string to decode.
    * @returns A decoded byte sequence.
    */
   decode(encoded: string): Uint8Array;
@@ -24,7 +24,7 @@ interface ByteEncoder {
   /**
    * Converts a byte sequence into a string.
    * 
-   * @param toEncode - A byte sequence to encode.
+   * @param toEncode A byte sequence to encode.
    * @returns An encoded string.
    */
   encode(toEncode: Uint8Array): string;

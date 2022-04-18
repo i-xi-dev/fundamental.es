@@ -2,36 +2,35 @@
 
 type int = number;
 
-// TODO namespace
-
-/**
- * Determines whether the passed value is a nonnegative safe integer.
- * 
- * @param value - The value to be tested
- * @returns Whether the passed value is a nonnegative safe integer.
- */
-function isNonNegativeInteger(value: unknown): boolean {
-  if (typeof value === "number") {
-    return Number.isSafeInteger(value) && value >= 0;
+namespace Integer {
+  /**
+   * Determines whether the passed value is a nonnegative safe integer.
+   * 
+   * @param value The value to be tested
+   * @returns Whether the passed value is a nonnegative safe integer.
+   */
+  export function isNonNegativeInteger(value: unknown): boolean {
+    if (typeof value === "number") {
+      return Number.isSafeInteger(value) && value >= 0;
+    }
+    return false;
   }
-  return false;
-}
 
-/**
- * Determines whether the passed value is a positive safe integer.
- * 
- * @param value - The value to be tested
- * @returns Whether the passed value is a positive safe integer.
- */
-function isPositiveInteger(value: unknown): boolean {
-  if (typeof value === "number") {
-    return Number.isSafeInteger(value) && value > 0;
+  /**
+   * Determines whether the passed value is a positive safe integer.
+   * 
+   * @param value The value to be tested
+   * @returns Whether the passed value is a positive safe integer.
+   */
+  export function isPositiveInteger(value: unknown): boolean {
+    if (typeof value === "number") {
+      return Number.isSafeInteger(value) && value > 0;
+    }
+    return false;
   }
-  return false;
 }
 
 export {
   type int,
-  isNonNegativeInteger,
-  isPositiveInteger,
+  Integer,
 };

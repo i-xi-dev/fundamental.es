@@ -1,6 +1,9 @@
 //
 
-import { isPositiveInteger } from "./int";
+import {
+  type int,
+  Integer,
+} from "./int";
 import {
   Unicode,
   UnicodeUtils,
@@ -213,11 +216,11 @@ const UnitToCount = {
 } as const;
 type UnitToCount = typeof UnitToCount[keyof typeof UnitToCount];
 
-function segment(input: string, by: { count: number, unit: UnitToCount }, padding?: string): Array<string> {
+function segment(input: string, by: { count: int, unit: UnitToCount }, padding?: string): Array<string> {
   if (typeof input !== "string") {
     throw new TypeError("input");
   }
-  if ((typeof by?.count !== "number") || (isPositiveInteger(by.count) !== true)) {
+  if ((typeof by?.count !== "number") || (Integer.isPositiveInteger(by.count) !== true)) {
     throw new TypeError("by.count");
   }
   if (Object.values(UnitToCount).includes(by?.unit) !== true) {

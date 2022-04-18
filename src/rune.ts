@@ -10,7 +10,7 @@ namespace CodePoint {
   /**
    * Determines whether the passed value is an Unicode code point.
    * 
-   * @param value - The value to be tested
+   * @param value The value to be tested
    * @returns Whether the passed value is an Unicode code point.
    */
   export function isCodePoint(value: unknown): value is codepoint {

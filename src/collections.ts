@@ -1,15 +1,18 @@
 //
 
-import { isPositiveInteger } from "./int";
+import {
+  type int,
+  Integer,
+} from "./int";
 
 // TODO namespace
 
 class SizedMap<K, V> extends Map<K, V> {
-  #maxSize: number;
+  #maxSize: int;
 
   constructor(maxSize: number) {
     super();
-    if (isPositiveInteger(maxSize) !== true) {
+    if (Integer.isPositiveInteger(maxSize) !== true) {
       throw new TypeError("maxSize");
     }
     this.#maxSize = maxSize;

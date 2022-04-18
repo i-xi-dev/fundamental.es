@@ -5,7 +5,7 @@
   // XXX ReadableStream自体が[Symbol.asyncIterator]を持つようになる
  * 
  * @experimental
- * @param reader - The reader created from `ReadableStream`.
+ * @param streamReader The reader created from `ReadableStream`.
  * @returns チャンクを返却する非同期ジェネレーター
  */
 async function* streamToAsyncGenerator<T>(streamReader: ReadableStreamDefaultReader<T>): AsyncGenerator<T, void, void> {

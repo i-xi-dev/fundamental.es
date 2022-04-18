@@ -5,8 +5,8 @@ export {
   TimeoutError,
 } from "./error";
 export {
-  isNonNegativeInteger,
-  isPositiveInteger,
+  type int,
+  Integer,
 } from "./int";
 export {
   type script,
