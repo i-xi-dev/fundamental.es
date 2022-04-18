@@ -42,14 +42,7 @@ export {
 export { SizedMap } from "./collections";
 export { IsomorphicEncoding } from "./isomorphic_encoding";
 export { ByteFormat } from "./byte_format";
-export {
-  type ByteDecoder,
-  type ByteEncoder,
-  type ByteDecoderStreamRegulator,
-  type ByteEncoderStreamRegulator,
-  ByteDecoderStream,
-  ByteEncoderStream,
-} from "./byte_encoding";
+export { ByteEncoding } from "./byte_encoding";
 export { ByteBuffer } from "./byte_buffer";
 export { streamToAsyncGenerator } from "./stream_utils";
 export {

@@ -459,6 +459,7 @@ namespace ByteFormat {
     return _format(bytes, resolvedOptions);
   }
 }
+Object.freeze(ByteFormat);
 
 export {
   ByteFormat,
