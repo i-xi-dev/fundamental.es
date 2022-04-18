@@ -18,8 +18,8 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
   /**
    * Creates a new `_ProgressEvent`.
    * 
-   * @param type - The name of the event.
-   * @param init - The `ProgressEventInit` object.
+   * @param type The name of the event.
+   * @param init The `ProgressEventInit` object.
    */
   constructor(type: string, init?: ProgressEventInit) {
     super(type, init);

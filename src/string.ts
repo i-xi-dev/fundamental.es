@@ -243,9 +243,9 @@ function segment(input: string, by: { count: int, unit: UnitToCount }, padding?:
  * 文字列を、指定したUTF-16コードユニット数ごとに分割し返却
  *     ※サロゲートペア、合成文字が分割される可能性あり
  * 
- * @param input - 分割する文字列
- * @param segmentLength - 分割単位とするUTF-16コードユニット数
- * @param paddingChar - 分割結果の配列の最後の要素がunitGroupSizeに満たない場合、最後の要素の末尾を埋める文字列
+ * @param input 分割する文字列
+ * @param segmentLength 分割単位とするUTF-16コードユニット数
+ * @param paddingChar 分割結果の配列の最後の要素がunitGroupSizeに満たない場合、最後の要素の末尾を埋める文字列
  * @returns strをunitGroupSize UTF-16コードユニットごとに分割した文字列配列
  */
 function _devideByCharCount(input: string, segmentLength: number, paddingChar?: string): Array<string> {
@@ -316,7 +316,7 @@ type CollectResult = {
  * - progression: 取得した文字数。（終了引用符までを含む）
  *                引用符とエスケープ文字を含むのでcollected.lengthとは一致しない
  * 
- * @param input - 先頭がU+0022の文字列
+ * @param input 先頭がU+0022の文字列
  * @returns 結果
  */
 function collectHttpQuotedString(input: string): CollectResult {

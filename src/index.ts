@@ -41,13 +41,7 @@ export {
 } from "./uint8";
 export { SizedMap } from "./collections";
 export { IsomorphicEncoding } from "./isomorphic_encoding";
-export {
-  type ByteFormatOptions,
-  type ByteFormatRadix,
-  ByteFormat,
-  BytesFormatter,
-  BytesParser,
-} from "./byte_format";
+export { ByteFormat } from "./byte_format";
 export {
   type ByteDecoder,
   type ByteEncoder,

@@ -19,7 +19,7 @@ namespace PubSub {
 
   /**
    * 出版ブローカー
-   * @typeParam T - publishされるメッセージの型、かつ購読コールバックの第1引数の型
+   * @typeParam T publishされるメッセージの型、かつ購読コールバックの第1引数の型
    */
   export class Broker<T> {
     /**
@@ -37,9 +37,9 @@ namespace PubSub {
 
     /**
     * 購読登録する
-    * @param topic - トピック
-    * @param callback - 購読コールバック
-    * @param options - 購読オプション
+    * @param topic トピック
+    * @param callback 購読コールバック
+    * @param options 購読オプション
     */
     subscribe(topic: Topic, callback: (message: T) => Promise<void>, options: SubscriptionOptions = {}): void {
       if (this.#subscriptions.has(topic) !== true) {
@@ -66,8 +66,8 @@ namespace PubSub {
 
     /**
     * 購読登録を解除する
-    * @param topic - トピック
-    * @param callback - 購読コールバック ※subscribeしたのと同じ参照先である必要がある
+    * @param topic トピック
+    * @param callback 購読コールバック ※subscribeしたのと同じ参照先である必要がある
     */
     unsubscribe(topic: Topic, callback: (message: T) => Promise<void>): void {
       if (this.#subscriptions.has(topic)) {
@@ -89,8 +89,8 @@ namespace PubSub {
 
     /**
     * 出版する
-    * @param topic - トピック
-    * @param message - メッセージ
+    * @param topic トピック
+    * @param message メッセージ
     */
     async publish(topic: Topic, message: T): Promise<void> {
       if (this.#subscriptions.has(topic)) {

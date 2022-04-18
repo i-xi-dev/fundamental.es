@@ -90,7 +90,7 @@ class TransferProgress<T, U = T> extends EventTarget {
   /**
    * Creates a new `TransferProgress`.
    * 
-   * @param param0 - 
+   * @param param0 
    */
   constructor(transferrer: Transferrer<T, U>, { total, timeout, signal } : TransferOptions = {}) {
     super();
