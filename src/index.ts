@@ -44,8 +44,5 @@ export { streamToAsyncGenerator } from "./stream_utils";
 export {
   Digest,
 } from "./digest";
-export {
-  type TransferOptions,
-  TransferProgress,
-} from "./transfer_progress";
+export { Transfer } from "./transfer";
 export { PubSub } from "./pubsub";

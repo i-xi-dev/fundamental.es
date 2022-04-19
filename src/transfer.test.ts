@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { TransferProgress } from "../../dist/index.js";
+import { Transfer } from "./transfer";
 
 async function* createChunkGenerator() {
   for (let i = 0; i < 10; i++) {
@@ -7,25 +7,25 @@ async function* createChunkGenerator() {
   }
 }
 
-function wait(ms) {
-  return new Promise((resolve) => {
+function wait(ms: number) {
+  return new Promise<void>((resolve) => {
     setTimeout(() => {
       resolve();
     }, ms);
   });
 }
 
-async function* createChunkGenerator2(interval) {
+async function* createChunkGenerator2(interval: number) {
   for (let i = 0; i < 10; i++) {
     await wait(interval);
     yield i.toString(10).padStart(4, "0");
   }
 }
 
-describe("TransferProgress", () => {
-  it("TransferProgress(Object)", async () => {
+describe("Transfer.Progress", () => {
+  it("Transfer.Progress(Object)", async () => {
     let buffer = "";
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator(),
 
       transferChunk(chunkStr) {
@@ -56,9 +56,9 @@ describe("TransferProgress", () => {
 
   });
 
-  it("TransferProgress(Object, {total:number})", async () => {
+  it("Transfer.Progress(Object, {total:number})", async () => {
     let buffer = "";
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator(),
 
       transferChunk(chunkStr) {
@@ -92,17 +92,17 @@ describe("TransferProgress", () => {
     try {
       await p.initiate();
     }catch(e){
-      const err = e;
+      const err = e as Error;
       expect(err.name).to.equal("Error");
       expect(err.message).to.equal("invalid state");
     }
 
   });
 
-  it("TransferProgress(Object, {total:number}) - error", () => {
+  it("Transfer.Progress(Object, {total:number}) - error", () => {
     expect(() => {
       let buffer = "";
-      const p = new TransferProgress({
+      const p = new Transfer.Progress({
         chunkGenerator: createChunkGenerator(),
 
         transferChunk(chunkStr) {
@@ -123,7 +123,7 @@ describe("TransferProgress", () => {
 
     expect(() => {
       let buffer = "";
-      const p = new TransferProgress({
+      const p = new Transfer.Progress({
         chunkGenerator: createChunkGenerator(),
 
         transferChunk(chunkStr) {
@@ -138,15 +138,15 @@ describe("TransferProgress", () => {
           return buffer;
         },
       }, {
-        total: "100",
+        total: "100" as unknown as number,
       });
     }).to.throw(TypeError, "total").with.property("name", "TypeError");
 
   });
 
-  it("TransferProgress(Object, {timeout:number})", async () => {
+  it("Transfer.Progress(Object, {timeout:number})", async () => {
     let buffer = "";
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator2(100),
 
       transferChunk(chunkStr) {
@@ -178,7 +178,7 @@ describe("TransferProgress", () => {
     try {
       r = await p.initiate();
     }catch(e){
-      const err = e;
+      const err = e as Error;
       expect(err.name).to.equal("TimeoutError");
       expect(err.message).to.equal("timeout");
     }
@@ -193,10 +193,10 @@ describe("TransferProgress", () => {
 
   });
 
-  it("TransferProgress(Object, {abort:AbortSignal})", async () => {
+  it("Transfer.Progress(Object, {abort:AbortSignal})", async () => {
     let buffer = "";
     const ac = new AbortController();
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator2(100),
 
       transferChunk(chunkStr) {
@@ -231,7 +231,7 @@ describe("TransferProgress", () => {
     try {
       r = await p.initiate();
     }catch(e){
-      const err = e;
+      const err = e as Error;
       expect(err.name).to.equal("AbortError");
       expect(err.message).to.equal("aborted");
     }
@@ -246,11 +246,11 @@ describe("TransferProgress", () => {
 
   });
 
-  it("TransferProgress(Object, {abort:AbortSignal}) - error", async () => {
+  it("Transfer.Progress(Object, {abort:AbortSignal}) - error", async () => {
     let buffer = "";
     const ac = new AbortController();
     ac.abort();
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator2(100),
 
       transferChunk(chunkStr) {
@@ -277,7 +277,7 @@ describe("TransferProgress", () => {
     try {
       r = await p.initiate();
     }catch(e){
-      const err = e;
+      const err = e as Error;
       expect(err.name).to.equal("AbortError");
       expect(err.message).to.equal("already aborted");
     }
@@ -290,9 +290,9 @@ describe("TransferProgress", () => {
 
   });
 
-  it("TransferProgress(Object)/addEventListener()", async () => {
+  it("Transfer.Progress(Object)/addEventListener()", async () => {
     let buffer = "";
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator(),
 
       transferChunk(chunkStr) {
@@ -344,9 +344,9 @@ describe("TransferProgress", () => {
 
   });
 
-  it("TransferProgress(Object)/addEventListener() - error", async () => {
+  it("Transfer.Progress(Object)/addEventListener() - error", async () => {
     let buffer = "";
-    const p = new TransferProgress({
+    const p = new Transfer.Progress({
       chunkGenerator: createChunkGenerator(),
 
       transferChunk() {
@@ -378,7 +378,7 @@ describe("TransferProgress", () => {
     try {
       await p.initiate();
     }catch(e){
-      const err = e;
+      const err = e as Error;
       expect(err.name).to.equal("Error");
       expect(err.message).to.equal("test-ex");
     }
