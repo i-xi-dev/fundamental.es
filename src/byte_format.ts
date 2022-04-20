@@ -267,6 +267,38 @@ function _format(bytes: Uint8Array, options: _ResolvedOptions): string {
 
 namespace ByteFormat {
   /**
+   * Parses the string that represents the byte sequence.
+   * 
+   * @param toParse The string to parse.
+   * @param options The `ByteFormat.Options` dictionary.
+   * @returns An `Uint8Array` containing the parsed byte sequence.
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
+   */
+  export function parse(toParse: string, options?: Options): Uint8Array {
+    const resolvedOptions = _resolveOptions(options);
+    const byteRegex = _createByteRegex(resolvedOptions);
+    return _parse(toParse, resolvedOptions, byteRegex);
+  }
+
+  /**
+   * Formats the byte sequence into a string.
+   * 
+   * @param bytes The byte sequence to format.
+   * @param options The `ByteFormat.Options` dictionary.
+   * @returns A string that represents the byte sequence.
+   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
+   * @throws {TypeError} The `options.paddedLength` is not positive integer.
+   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
+   */
+  export function format(bytes: Uint8Array, options?: Options): string {
+    const resolvedOptions = _resolveOptions(options);
+    return _format(bytes, resolvedOptions);
+  }
+
+  /**
    * 2, 8, 10, or 16.
    */
   export type Radix = typeof _radixes[number];
@@ -350,7 +382,7 @@ namespace ByteFormat {
      * Parses the string that represents the byte sequence.
      * 
      * @param toParse The string to parse.
-     * @returns An `Uint8Array` representing the byte sequence.
+     * @returns An `Uint8Array` containing the parsed byte sequence.
      * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
      */
     parse(toParse: string): Uint8Array {
@@ -405,9 +437,9 @@ namespace ByteFormat {
     }
   
     /**
-     * Format the byte sequence into a string.
+     * Formats the byte sequence into a string.
      * 
-     * @param bytes The byte sequence.
+     * @param bytes The byte sequence to format.
      * @returns A string that represents the byte sequence.
      */
     format(bytes: Uint8Array): string {
@@ -438,37 +470,6 @@ namespace ByteFormat {
   }
   Object.freeze(Formatter);
 
-  /**
-   * Parses the string that represents the byte sequence.
-   * 
-   * @param toParse The string to parse.
-   * @param options The `ByteFormat.Options` dictionary.
-   * @returns An `Uint8Array` representing bytes.
-   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
-   * @throws {TypeError} The `options.paddedLength` is not positive integer.
-   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
-   * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
-   */
-  export function parse(toParse: string, options?: Options): Uint8Array {
-    const resolvedOptions = _resolveOptions(options);
-    const byteRegex = _createByteRegex(resolvedOptions);
-    return _parse(toParse, resolvedOptions, byteRegex);
-  }
-
-  /**
-   * Format the byte sequence into a string.
-   * 
-   * @param bytes The byte sequence.
-   * @param options The `ByteFormat.Options` dictionary.
-   * @returns A string that represents the byte sequence.
-   * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
-   * @throws {TypeError} The `options.paddedLength` is not positive integer.
-   * @throws {RangeError} The `options.paddedLength` is below the lower limit.
-   */
-  export function format(bytes: Uint8Array, options?: Options): string {
-    const resolvedOptions = _resolveOptions(options);
-    return _format(bytes, resolvedOptions);
-  }
 }
 Object.freeze(ByteFormat);
 
