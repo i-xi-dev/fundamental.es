@@ -267,7 +267,7 @@ function _format(bytes: Uint8Array, options: _ResolvedOptions): string {
 
 namespace ByteFormat {
   /**
-   * 対応する基数
+   * 2, 8, 10, or 16.
    */
   export type Radix = typeof _radixes[number];
 
@@ -335,8 +335,7 @@ namespace ByteFormat {
     #byteRegex: RegExp;// "g"等を持たせないよう注意
 
     /**
-     * 
-     * @param options 
+     * @param options The `ByteFormat.Options` dictionary.
      * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
      * @throws {TypeError} The `options.paddedLength` is not positive integer.
      * @throws {RangeError} The `options.paddedLength` is below the lower limit.
@@ -348,9 +347,10 @@ namespace ByteFormat {
     }
 
     /**
+     * Parses the string that represents the byte sequence.
      * 
-     * @param toParse 
-     * @returns 
+     * @param toParse The string to parse.
+     * @returns An `Uint8Array` representing the byte sequence.
      * @throws {TypeError} The `toParse` contains the character sequence that does not match the specified format.
      */
     parse(toParse: string): Uint8Array {
@@ -358,9 +358,10 @@ namespace ByteFormat {
     }
 
     /**
+     * Returns a `ByteFormat.Parser` object.
      * 
-     * @param options 
-     * @returns 
+     * @param options The `ByteFormat.Options` dictionary.
+     * @returns An instance of `ByteFormat.Parser`.
      * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
      * @throws {TypeError} The `options.paddedLength` is not positive integer.
      * @throws {RangeError} The `options.paddedLength` is below the lower limit.
@@ -393,8 +394,7 @@ namespace ByteFormat {
     #options: _ResolvedOptions;
 
     /**
-     * 
-     * @param options 
+     * @param options The `ByteFormat.Options` dictionary.
      * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
      * @throws {TypeError} The `options.paddedLength` is not positive integer.
      * @throws {RangeError} The `options.paddedLength` is below the lower limit.
@@ -404,14 +404,21 @@ namespace ByteFormat {
       Object.freeze(this);
     }
   
+    /**
+     * Format the byte sequence into a string.
+     * 
+     * @param bytes The byte sequence.
+     * @returns A string that represents the byte sequence.
+     */
     format(bytes: Uint8Array): string {
       return _format(bytes, this.#options);
     }
 
     /**
+     * Returns a `ByteFormat.Formatter` object.
      * 
-     * @param options 
-     * @returns 
+     * @param options The `ByteFormat.Options` dictionary.
+     * @returns An instance of `ByteFormat.Formatter`.
      * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
      * @throws {TypeError} The `options.paddedLength` is not positive integer.
      * @throws {RangeError} The `options.paddedLength` is below the lower limit.
@@ -432,9 +439,11 @@ namespace ByteFormat {
   Object.freeze(Formatter);
 
   /**
+   * Parses the string that represents the byte sequence.
    * 
-   * @param toParse 
-   * @param options 
+   * @param toParse The string to parse.
+   * @param options The `ByteFormat.Options` dictionary.
+   * @returns An `Uint8Array` representing bytes.
    * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
    * @throws {TypeError} The `options.paddedLength` is not positive integer.
    * @throws {RangeError} The `options.paddedLength` is below the lower limit.
@@ -447,9 +456,11 @@ namespace ByteFormat {
   }
 
   /**
+   * Format the byte sequence into a string.
    * 
-   * @param bytes 
-   * @param options 
+   * @param bytes The byte sequence.
+   * @param options The `ByteFormat.Options` dictionary.
+   * @returns A string that represents the byte sequence.
    * @throws {TypeError} The `options.radix` is not 2, 8, 10, or 16.
    * @throws {TypeError} The `options.paddedLength` is not positive integer.
    * @throws {RangeError} The `options.paddedLength` is below the lower limit.
