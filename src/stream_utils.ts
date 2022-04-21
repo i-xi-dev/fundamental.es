@@ -1,10 +1,10 @@
-//
+//TODO 削除
 
 /**
  * 可読ストリームを読み取り、チャンクを返却する非同期ジェネレーターを返却
   // XXX ReadableStream自体が[Symbol.asyncIterator]を持つようになる
  * 
- * @experimental
+ * @deprecated
  * @param streamReader The reader created from `ReadableStream`.
  * @returns チャンクを返却する非同期ジェネレーター
  */
