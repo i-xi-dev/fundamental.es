@@ -12,6 +12,9 @@ type _ProgressIndicator = {
   totalUnitCount?: number,
 };
 
+/**
+ * @experimental
+ */
 namespace Transfer {
   /**
    * The options for the `Transfer.Progress` with the following optional fields.
@@ -21,12 +24,15 @@ namespace Transfer {
      * The size to transfer, in units that depends on the `Transfer.Progress`.
      */
     total?: number,
-  
+
+    // AbortSignal.timeout()が標準化されたので、これは廃止する
     /**
      * The number of milliseconds it takes for the `Transfer.Progress` to end automatically.
+     * 
+     * @deprecated
      */
     timeout?: number, // XXX ジェネレーターを終了させればいいので、不要か
-  
+
     /**
      * The `AbortSignal` object.
      */
