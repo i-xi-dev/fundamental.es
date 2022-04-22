@@ -7,6 +7,13 @@ class AbortError extends Error {
   }
 }
 
+class InvalidStateError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = "InvalidStateError";
+  }
+}
+
 class TimeoutError extends Error {
   constructor(message?: string) {
     super(message);
@@ -16,5 +23,6 @@ class TimeoutError extends Error {
 
 export {
   AbortError,
+  InvalidStateError,
   TimeoutError,
 };

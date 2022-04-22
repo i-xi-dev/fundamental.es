@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { AbortError, TimeoutError } from "../../dist/index.js";
+import { AbortError, InvalidStateError, TimeoutError } from "../../dist/index.js";
 
 describe("AbortError", () => {
   it("new AbortError()", () => {
@@ -16,6 +16,27 @@ describe("AbortError", () => {
 
     expect(error instanceof Error).to.equal(true);
     expect(error.name).to.equal("AbortError");
+    expect(error.message).to.equal("a123");
+
+  });
+
+});
+
+describe("InvalidStateError", () => {
+  it("new InvalidStateError()", () => {
+    const error = new InvalidStateError();
+
+    expect(error instanceof Error).to.equal(true);
+    expect(error.name).to.equal("InvalidStateError");
+    expect(error.message).to.equal("");
+
+  });
+
+  it("new InvalidStateError(string)", () => {
+    const error = new InvalidStateError("a123");
+
+    expect(error instanceof Error).to.equal(true);
+    expect(error.name).to.equal("InvalidStateError");
     expect(error.message).to.equal("a123");
 
   });
