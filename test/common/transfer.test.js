@@ -91,6 +91,7 @@ describe("Transfer.Progress", () => {
 
     try {
       await p.initiate();
+      fail();
     }catch(e){
       const err = e;
       expect(err.name).to.equal("Error");
@@ -177,6 +178,7 @@ describe("Transfer.Progress", () => {
     let r;
     try {
       r = await p.initiate();
+      fail();
     }catch(e){
       const err = e;
       expect(err.name).to.equal("TimeoutError");
@@ -230,6 +232,7 @@ describe("Transfer.Progress", () => {
     let r;
     try {
       r = await p.initiate();
+      fail();
     }catch(e){
       const err = e;
       expect(err.name).to.equal("AbortError");
@@ -276,6 +279,7 @@ describe("Transfer.Progress", () => {
     let r;
     try {
       r = await p.initiate();
+      fail();
     }catch(e){
       const err = e;
       expect(err.name).to.equal("AbortError");
@@ -377,6 +381,7 @@ describe("Transfer.Progress", () => {
 
     try {
       await p.initiate();
+      fail();
     }catch(e){
       const err = e;
       expect(err.name).to.equal("Error");
