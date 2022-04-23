@@ -46,6 +46,7 @@ function _decodeGVLIs(input: string, radix: number, thresholdResolver: (digit: n
       currVal = 0;
       weight = 1;
       pos = 0;
+      threshold = thresholdResolver(0);
     }
     else {
       weight = weight * (radix - threshold);
@@ -65,12 +66,11 @@ const _T_MAX = 26;
 
 
 
+
 namespace Punycode {
   export function decode() {
     throw new Error("not implemented");
   }
-
-
 
 }
 Object.freeze(Punycode);
