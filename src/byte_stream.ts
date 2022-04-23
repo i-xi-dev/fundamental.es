@@ -109,12 +109,14 @@ namespace ByteStream {
       if (this.#readyState !== _ReaderReadyState.EMPTY) {
         throw new InvalidStateError(`readyState: ${ this.#readyState }`);
       }
+      this.#readyState = _ReaderReadyState.LOADING;
 
       const totalByteLength: number | undefined = options?.totalByteLength;
       if (typeof totalByteLength === "number") {
         if (Integer.isNonNegativeInteger(totalByteLength) !== true) {
           throw new RangeError("options.totalByteLength");
         }
+        this.#totalByteLength = totalByteLength;
       }
       else if (totalByteLength === undefined) {
         // ok
@@ -130,7 +132,8 @@ namespace ByteStream {
         // ストリームの最後の読み取りがキューされるまでに中止通達されれば中断する
         signal.addEventListener("abort", () => {
           // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
-          void reader.cancel().catch(); // XXX closeで良い？
+          // void reader.cancel().catch(); // XXX closeで良い？ // → ループ内で中断判定するので何もしない
+          // console.log("aborted");
         }, {
           once: true,
           passive: true,
@@ -139,7 +142,7 @@ namespace ByteStream {
 
         // 既に中止通達されている場合はエラーとする
         if (signal.aborted === true) {
-          throw new AbortError(); // TODO signal.reasonが広く実装されたら、signal.reasonをthrowするようにする
+          throw new AbortError("already aborted"); // TODO signal.reasonが広く実装されたら、signal.reasonをthrowするようにする
         }
       }
       else if (signal === undefined) {
@@ -149,7 +152,7 @@ namespace ByteStream {
         throw new TypeError("options.signal");
       }
 
-      const buffer: ByteBuffer = new ByteBuffer(totalByteLength);
+      const buffer: ByteBuffer = new ByteBuffer(this.#totalByteLength);
 
       try {
         // started
@@ -165,7 +168,6 @@ namespace ByteStream {
           this.#loadedByteLength = buffer.position;
           this.#notify("progress");
         }
-
 
         // completed
         this.#notify("load");
@@ -196,10 +198,11 @@ namespace ByteStream {
         throw exception;
       }
       finally {
-        this.#notify("loadend");
-
         // signalに追加したリスナーを削除
         this.#abortController.abort();
+
+        this.#readyState = _ReaderReadyState.DONE;
+        this.#notify("loadend");
       }
     }
   }

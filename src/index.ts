@@ -2,6 +2,7 @@
 
 export {
   AbortError,
+  InvalidStateError,
   TimeoutError,
 } from "./error";
 export {
@@ -40,6 +41,7 @@ export { IsomorphicEncoding } from "./isomorphic_encoding";
 export { ByteFormat } from "./byte_format";
 export { ByteEncoding } from "./byte_encoding";
 export { ByteBuffer } from "./byte_buffer";
+export { ByteStream } from "./byte_stream";
 export { streamToAsyncGenerator } from "./stream_utils";
 export {
   Digest,
