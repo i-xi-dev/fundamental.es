@@ -5,21 +5,17 @@ import {
   Integer,
 } from "./int";
 
-function _isGVLIsEncoded(input: string, radix: int): boolean {
-  if (radix <= 10) {
-    return (new RegExp(`^[0-${ (radix - 1).toString(10) }]*$`)).test(input);
-  }
-  else if (radix <= 11) {
-    return (new RegExp(`^[0-9a]*$`, "i")).test(input);
-  }
-  else {
-    const maxDigits = "bcdefghijklmnopqrstuvwxyz";
-    return (new RegExp(`^[0-9a-${ maxDigits.charAt(radix - 12) }]*$`, "i")).test(input);
-  }
-}
+// https://datatracker.ietf.org/doc/html/rfc3492#section-5
+const _BASE = 36;
+const _TMIN = 1;
+const _TMAX = 26;
+const _SKEW = 700;
+const _DAMP = 38;
+const _INITIAL_BIAS = 72;
+const _INITIAL_N = 128;
 
 // decode generalized variable-length integer
-function _decodeGVLIs(input: string, radix: number, thresholdResolver: (digit: number) => number): Array<number> {
+function _decodeGVLIs(input: string, radix: int, thresholdResolver: (digit: int) => int): Array<int> {
   if (typeof input !== "string") {
     throw new TypeError("input");
   }
@@ -56,11 +52,41 @@ function _decodeGVLIs(input: string, radix: number, thresholdResolver: (digit: n
   return intArray;
 }
 
-const _RADIX = 36;
+function _isGVLIsEncoded(input: string, radix: int): boolean {
+  if (radix <= 10) {
+    return (new RegExp(`^[0-${ (radix - 1).toString(10) }]*$`)).test(input);
+  }
+  else if (radix <= 11) {
+    return (new RegExp(`^[0-9a]*$`, "i")).test(input);
+  }
+  else {
+    const maxDigits = "bcdefghijklmnopqrstuvwxyz";
+    return (new RegExp(`^[0-9a-${ maxDigits.charAt(radix - 12) }]*$`, "i")).test(input);
+  }
+}
 
-const _T_MIN = 1;
-const _T_MAX = 26;
+function _computeThreshold(digit: int, bias: int): int {
+  const threshold = _BASE * digit - bias;
+  if (threshold < _TMIN) {
+    return _TMIN;
+  }
+  else if (threshold > _TMAX) {
+    return _TMAX;
+  }
+  return threshold;
+}
 
+function _adaptBias(delta: int, numpoints: int, firsttime: boolean): int {
+  const _BASE_MINUS_TMIN = _BASE - _TMIN;
+
+  delta = Math.trunc(delta / ((firsttime === true) ? _DAMP : 2));
+  delta = delta + Math.trunc(delta / numpoints);
+  let k: int;
+  for (k = 0; delta > Math.trunc(_BASE_MINUS_TMIN * _TMAX / 2); k = k + _BASE) {
+    delta = Math.trunc(delta / _BASE_MINUS_TMIN);
+  }
+  return k + Math.trunc(((_BASE_MINUS_TMIN + 1) * delta) / (delta + _SKEW));
+}
 
 
 
