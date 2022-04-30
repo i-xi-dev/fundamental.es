@@ -1,5 +1,7 @@
 //
 
+import { Integer } from "./int";
+
 type codepoint = number; // 厳密に定義するのは困難なので、ただのnumberの別名とする
 
 // XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
@@ -76,8 +78,8 @@ namespace Unicode {
      * @returns Whether the passed value is an Unicode code point.
      */
     export function isCodePoint(value: unknown): value is codepoint {
-      if (typeof value === "number") {
-        return (Number.isSafeInteger(value) && (value >= 0x0) && (value <= 0x10FFFF));
+      if ((typeof value === "number") && Integer.isNonNegativeInteger(value)) {
+        return Integer.inRange(value, [ 0x0, 0x10FFFF ]);
       }
       return false;
     }

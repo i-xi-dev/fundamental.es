@@ -1,5 +1,7 @@
 //
 
+import { Integer } from "./int";
+
 /**
  * The type of 8-bit unsigned integer.
  */
@@ -41,8 +43,8 @@ namespace Uint8 {
    * @returns Whether the passed value is an 8-bit integer.
    */
   export function isUint8(value: unknown): value is uint8 {
-    if (typeof value === "number") {
-      return (Number.isSafeInteger(value) && (value >= MIN_VALUE) && (value <= MAX_VALUE));
+    if ((typeof value === "number") && Integer.isNonNegativeInteger(value)) {
+      return Integer.inRange(value, [ MIN_VALUE, MAX_VALUE ]);
     }
     return false;
   }
