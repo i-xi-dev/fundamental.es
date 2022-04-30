@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { Integer } from "./int";
-const { isNonNegativeInteger, isPositiveInteger} = Integer;
+const { isNonNegativeInteger, isPositiveInteger, inRange } = Integer;
 
 describe("isNonNegativeInteger", () => {
   it("isNonNegativeInteger(number)", () => {
@@ -45,6 +45,39 @@ describe("isPositiveInteger", () => {
   it("isPositiveInteger(*)", () => {
     expect(isPositiveInteger("1")).to.equal(false);
     expect(isPositiveInteger(true)).to.equal(false);
+
+  });
+
+});
+
+describe("inRange", () => {
+  it("inRange(number,[number,number])", () => {
+    expect(inRange(1, [1, 1])).to.equal(true);
+    expect(inRange(1, [0, 1])).to.equal(true);
+    expect(inRange(1, [1, 2])).to.equal(true);
+    expect(inRange(1, [-1, 0])).to.equal(false);
+    expect(inRange(1, [2, 3])).to.equal(false);
+    expect(inRange(1, [0, 2])).to.equal(true);
+
+    expect(() => {
+      inRange("" as unknown as number, [1, 1]);
+    }).to.throw(TypeError, "value").with.property("name", "TypeError");
+
+    expect(() => {
+      inRange(1, ["" as unknown as number, 1]);
+    }).to.throw(TypeError, "minmax").with.property("name", "TypeError");
+
+    expect(() => {
+      inRange(1, [1, "" as unknown as number]);
+    }).to.throw(TypeError, "minmax").with.property("name", "TypeError");
+
+    expect(() => {
+      inRange(1, [] as unknown as [number,number]);
+    }).to.throw(TypeError, "minmax").with.property("name", "TypeError");
+
+    expect(() => {
+      inRange(1, [3, 2]);
+    }).to.throw(RangeError, "minmax").with.property("name", "RangeError");
 
   });
 

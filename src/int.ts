@@ -28,6 +28,29 @@ namespace Integer {
     }
     return false;
   }
+
+  export type Range = [ min: int, max: int ];
+
+  export function inRange(value: int, minmax: Range): boolean {
+    if (Number.isSafeInteger(value) !== true) {
+      throw new TypeError("value");
+    }
+    if (_isRangeTuple(minmax) !== true) {
+      throw new TypeError("minmax");
+    }
+
+    const [ min, max ] = minmax;
+    if (min > max) {
+      throw new RangeError("minmax");
+    }
+
+    return ((value >= min) && (value <= max));
+  }
+
+}
+
+function _isRangeTuple(value: unknown): value is Integer.Range {
+  return (Array.isArray(value) && (value.length === 2) && value.every((i) => Number.isSafeInteger(i)));
 }
 
 export {
