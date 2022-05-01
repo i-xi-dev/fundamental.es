@@ -26,6 +26,9 @@ function createStream(length) {
         controller.enqueue(x);
       }, 10);
     },
+    cancel() {
+      clearInterval(ti);
+    },
   });
 }
 
@@ -46,6 +49,73 @@ describe("ByteStream.Reader", () => {
       const err = e;
       expect(err.name).to.equal("InvalidStateError");
       expect(err.message).to.equal("readyState: 2");
+    }
+  });
+
+  it("ByteStream.Reader.prototype.read(AsyncIterable<Uint8Array>)", async () => {
+    const reader1 = new ByteStream.Reader();
+    const ai1 = async function*() {
+      yield Uint8Array.of(1);
+      yield Uint8Array.of(2,3);
+    };
+    const bs1 = await reader1.read(ai1());
+    expect(bs1.byteLength).to.equal(3);
+    
+    const reader2 = new ByteStream.Reader();
+    const ai2 = async function*() {
+      return;
+    };
+    const bs2 = await reader2.read(ai2());
+    expect(bs2.byteLength).to.equal(0);
+  });
+
+  it("ByteStream.Reader.prototype.read(AsyncIterable<*>)", async () => {
+    const reader1 = new ByteStream.Reader();
+    const ai1 = async function*() {
+      yield 1;
+      yield 2;
+    };
+    try {
+      await reader1.read(ai1());
+      throw new Error();
+    }catch(e){
+      const err = e;
+      expect(err.name).to.equal("TypeError");
+      expect(err.message).to.equal("asyncSource");
+    }
+  });
+
+  it("ByteStream.Reader.prototype.read(*)", async () => {
+    const reader1 = new ByteStream.Reader();
+    try {
+      await reader1.read(3);
+      throw new Error();
+    }catch(e){
+      const err = e;
+      expect(err.name).to.equal("TypeError");
+      expect(err.message).to.equal("stream");
+    }
+  });
+
+  it("ByteStream.Reader.prototype.read(Iterable<Uint8Array>)", async () => {
+    const reader1 = new ByteStream.Reader();
+    const bs1 = await reader1.read([ Uint8Array.of(1), Uint8Array.of(2,3) ]);
+    expect(bs1.byteLength).to.equal(3);
+
+    const reader2 = new ByteStream.Reader();
+    const bs2 = await reader2.read([]);
+    expect(bs2.byteLength).to.equal(0);
+  });
+
+  it("ByteStream.Reader.prototype.read(Iterable<*>)", async () => {
+    const reader1 = new ByteStream.Reader();
+    try {
+      await reader1.read([ 3 ]);
+      throw new Error();
+    }catch(e){
+      const err = e;
+      expect(err.name).to.equal("TypeError");
+      expect(err.message).to.equal("asyncSource");
     }
   });
 

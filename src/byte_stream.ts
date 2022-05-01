@@ -105,7 +105,27 @@ namespace ByteStream {
       this.dispatchEvent(event);
     }
 
-    async read(stream: ReadableStream<Uint8Array>, options?: ReadingOptions): Promise<Uint8Array> {
+    async read(stream: AsyncIterable<Uint8Array> | ReadableStream<Uint8Array> | Iterable<Uint8Array>, options?: ReadingOptions): Promise<Uint8Array> {
+      if (stream && (typeof stream === "object")) {
+        if (Reflect.has(stream, Symbol.asyncIterator) || Reflect.has(stream, Symbol.iterator)) {
+          return this.#readAsyncIterable(stream as AsyncIterable<Uint8Array>, options);
+        }
+        else if (stream instanceof ReadableStream) {
+          // ReadableStreamに[Symbol.asyncIterator]が未実装の場合
+          const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
+          // try {
+          return this.#readAsyncIterable(_streamToAsyncGenerator<Uint8Array>(reader), options);
+          // }
+          // catch (exception) {
+          //   stream.cancel();
+          //   throw exception;
+          // }
+        }
+      }
+      throw new TypeError("stream");
+    }
+
+    async #readAsyncIterable(asyncSource: AsyncIterable<Uint8Array>, options?: ReadingOptions): Promise<Uint8Array> {
       if (this.#readyState !== _ReaderReadyState.EMPTY) {
         throw new InvalidStateError(`readyState: ${ this.#readyState }`);
       }
@@ -125,20 +145,17 @@ namespace ByteStream {
         throw new TypeError("options.totalByteLength");
       }
 
-      const reader: ReadableStreamDefaultReader<Uint8Array> = stream.getReader();
-
       const signal = options?.signal;
       if (signal instanceof AbortSignal) {
-        // ストリームの最後の読み取りがキューされるまでに中止通達されれば中断する
-        signal.addEventListener("abort", () => {
-          // stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
-          // void reader.cancel().catch(); // XXX closeで良い？ // → ループ内で中断判定するので何もしない
-          // console.log("aborted");
-        }, {
-          once: true,
-          passive: true,
-          signal: this.#abortController.signal,
-        });
+        // // ストリームの最後の読み取りがキューされるまでに中止通達されれば中断する
+        // signal.addEventListener("abort", () => {
+        //   stream.cancel()しても読取終了まで待ちになるので、reader.cancel()する
+        //   void reader.cancel().catch(); // XXX closeで良い？ // → ループ内で中断判定するので何もしない
+        // }, {
+        //   once: true,
+        //   passive: true,
+        //   signal: this.#abortController.signal,
+        // });
 
         // 既に中止通達されている場合はエラーとする
         if (signal.aborted === true) {
@@ -158,15 +175,20 @@ namespace ByteStream {
         // started
         this.#notify("loadstart");
 
-        const chunkGenerator = _streamToAsyncGenerator<Uint8Array>(reader);
-        for await (const chunk of chunkGenerator) {
+        for await (const chunk of asyncSource) {
           if (signal?.aborted === true) {
             // aborted or expired
             throw new AbortError("aborted"); // TODO signal.reasonが広く実装されたら、signal.reasonをthrowするようにする
           }
-          buffer.put(chunk);
-          this.#loadedByteLength = buffer.position;
-          this.#notify("progress");
+
+          if (chunk instanceof Uint8Array) {
+            buffer.put(chunk);
+            this.#loadedByteLength = buffer.position;
+            this.#notify("progress");
+          }
+          else {
+            throw new TypeError("asyncSource");
+          }
         }
 
         // completed
