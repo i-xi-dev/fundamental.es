@@ -5,7 +5,6 @@ import {
   Integer,
 } from "./int";
 import {
-  type codepoint,
   type rune,
   Unicode,
   UnicodeUtils,
@@ -15,8 +14,6 @@ import {
   Script,
   ScriptSet,
 } from "./script";
-
-// TODO namespace
 
 function _isScriptArray(value: unknown): value is Array<script> {
   if (Array.isArray(value) && (value.length > 0)) {
@@ -78,68 +75,7 @@ function _collectStart(input: string, patternSource: string): string {
   return results[0] as string;
 }
 
-const CodePointRange = {
-  /** [ASCII whitespace](https://infra.spec.whatwg.org/#ascii-whitespace) */
-  ASCII_WHITESPACE: [
-    [ 0x9 ],
-    [ 0xA ],
-    [ 0xC ],
-    [ 0xD ],
-    [ 0x20 ],
-  ],
-
-  /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
-  HTTP_QUOTED_STRING_TOKEN: [
-    [ 0x9 ],
-    [ 0x20, 0x7E ],
-    [ 0x80, 0xFF ],
-  ],
-
-  /** [HTTP tab or space](https://fetch.spec.whatwg.org/#http-tab-or-space) */
-  HTTP_TAB_OR_SPACE: [
-    [ 0x9 ],
-    [ 0x20 ],
-  ],
-
-  /** [HTTP token code point](https://mimesniff.spec.whatwg.org/#http-token-code-point) */
-  HTTP_TOKEN: [
-    [ 0x21 ],
-    [ 0x23, 0x27 ],
-    [ 0x2A ],
-    [ 0x2B ],
-    [ 0x2D ],
-    [ 0x2E ],
-    [ 0x30, 0x39 ],
-    [ 0x41, 0x5A ],
-    [ 0x5E, 0x60 ],
-    [ 0x61, 0x7A ],
-    [ 0x7C ],
-    [ 0x7E ],
-  ],
-
-  /** [HTTP whitespace](https://fetch.spec.whatwg.org/#http-whitespace) */
-  HTTP_WHITESPACE: [
-    [ 0x9 ],
-    [ 0xA ],
-    [ 0xD ],
-    [ 0x20 ],
-  ],
-} as const;
-type CodePointRange = typeof CodePointRange[keyof typeof CodePointRange] | Array<[ codepoint ] | [ codepoint, codepoint ]>;
-
-function _isCodePointRange(value: unknown): value is CodePointRange {
-  if (Array.isArray(value) && (value.length > 0)) {
-    return value.every((part) => {
-      if (Array.isArray(part) && (part.length === 1 || part.length === 2)) {
-        return part.every((i) => Unicode.CodePoint.isCodePoint(i));
-      }
-      return false;
-    });
-  }
-  return false;
-}
-
-function _rangeToRegexPattern(range: CodePointRange): string {
+function _rangeToRegexPattern(range: UnicodeUtils.CodePointRange): string {
   return range.map((part) => {
     if (part.length === 2) {
       return `\\u{${ part[0].toString(16) }}-\\u{${ part[1].toString(16) }}`;
@@ -162,8 +98,8 @@ function _scriptsToRegexPattern(scripts: Array<script>): string {
   // XXX scxではなくscにしたいケースはあるか？
 }
 
-function _toRegexPattern(searchObject: CodePointRange | Array<string>): string {
-  if (_isCodePointRange(searchObject)) {
+function _toRegexPattern(searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+  if (UnicodeUtils.isCodePointRange(searchObject)) {
     return _rangeToRegexPattern(searchObject);
   }
   else if (UnicodeUtils.isCategoryArray(searchObject)) {
@@ -173,66 +109,6 @@ function _toRegexPattern(searchObject: CodePointRange | Array<string>): string {
     return _scriptsToRegexPattern(searchObject);
   }
   throw new TypeError("searchObject");
-}
-
-function matches(input: string, searchObject: CodePointRange | Array<string>): boolean {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _matches(input, regexPattern);
-}
-
-function contains(input: string, searchObject: CodePointRange | Array<string>): boolean {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _contains(input, regexPattern);
-}
-
-function trim(input: string, searchObject: CodePointRange | Array<string>): string {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _trim(input, regexPattern);
-}
-
-function trimStart(input: string, searchObject: CodePointRange | Array<string>): string {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _trimStart(input, regexPattern);
-}
-
-function trimEnd(input: string, searchObject: CodePointRange | Array<string>): string {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _trimEnd(input, regexPattern);
-}
-
-function collectStart(input: string, searchObject: CodePointRange | Array<string>): string {
-  const regexPattern = _toRegexPattern(searchObject);
-  return _collectStart(input, regexPattern);
-}
-
-const UnitToCount = {
-  CHAR: "char",
-  RUNE: "rune",
-  // GRAPHEME: "grapheme",
-} as const;
-type UnitToCount = typeof UnitToCount[keyof typeof UnitToCount];
-
-function segment(input: string, by: { count: int, unit: UnitToCount }, padding?: string): Array<string> {
-  if (typeof input !== "string") {
-    throw new TypeError("input");
-  }
-  if ((typeof by?.count !== "number") || (Integer.isPositiveInteger(by.count) !== true)) {
-    throw new TypeError("by.count");
-  }
-  if (Object.values(UnitToCount).includes(by?.unit) !== true) {
-    throw new TypeError("by.unit");
-  }
-  if ((typeof padding !== "string") && (padding !== undefined)) {
-    throw new TypeError("padding");
-  }
-
-  if (by.unit === UnitToCount.CHAR) {
-    return _devideByCharCount(input, by.count, padding);
-  }
-  else if (by.unit === UnitToCount.RUNE) {
-    return _devideByRuneCount(input, by.count, padding);
-  }
-  return [] as never;
 }
 
 /**
@@ -292,93 +168,69 @@ function _devideByRuneCount(input: string, segmentLength: number, paddingRune?: 
   return segments;
 }
 
+namespace StringUtils {
+  export const Unit = {
+    CHAR: "char",
+    RUNE: "rune",
+    // GRAPHEME: "grapheme",
+  } as const;
+  export type Unit = typeof Unit[keyof typeof Unit];  
 
-
-
-
-// TODO 名前変える
-
-type CollectResult = {
-  collected: string,
-  progression: number,
-  following?: boolean,
-};
-
-/**
- * 文字列の先頭のHTTP quoted stringを取得し返却
- *     仕様は https://fetch.spec.whatwg.org/#collect-an-http-quoted-string
- * 
- * - collected: 引用符で括られていた値。引用符とエスケープ文字は取り除いて返す
- * - progression: 取得した文字数。（終了引用符までを含む）
- *                引用符とエスケープ文字を含むのでcollected.lengthとは一致しない
- * 
- * @param input 先頭がU+0022の文字列
- * @returns 結果
- */
-function collectHttpQuotedString(input: string): CollectResult {
-  // 2.
-  let value = "";
-
-  // 3.
-  if (input.startsWith('"') !== true) {
-    return {
-      collected: value,
-      progression: 0,
-    };
+  export function matches(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): boolean {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _matches(input, regexPattern);
   }
 
-  // 4.
-  const text2 = input.substring(1);
+  export function contains(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): boolean {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _contains(input, regexPattern);
+  }
 
-  // 5.
-  let escaped = false;
-  let i = 0;
-  for (i = 0; i < text2.length; i++) {
-    const c: string = text2[i] as string;
+  export function collectStart(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _collectStart(input, regexPattern);
+  }
 
-    if (escaped === true) {
-      value = value + c;
-      escaped = false;
-      continue;
+  export function trim(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _trim(input, regexPattern);
+  }
+
+  export function trimStart(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _trimStart(input, regexPattern);
+  }
+
+  export function trimEnd(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+    const regexPattern = _toRegexPattern(searchObject);
+    return _trimEnd(input, regexPattern);
+  }
+
+  export function segment(input: string, by: { count: int, unit: Unit }, padding?: string): Array<string> {
+    if (typeof input !== "string") {
+      throw new TypeError("input");
     }
-    else {
-      if (c === '"') {
-        i++;
-        break;
-      }
-      else if (c === "\\") {
-        escaped = true;
-        continue;
-      }
-      else {
-        value = value + c;
-        continue;
-      }
+    if ((typeof by?.count !== "number") || (Integer.isPositiveInteger(by.count) !== true)) {
+      throw new TypeError("by.count");
     }
+    if (Object.values(Unit).includes(by?.unit) !== true) {
+      throw new TypeError("by.unit");
+    }
+    if ((typeof padding !== "string") && (padding !== undefined)) {
+      throw new TypeError("padding");
+    }
+  
+    if (by.unit === Unit.CHAR) {
+      return _devideByCharCount(input, by.count, padding);
+    }
+    else if (by.unit === Unit.RUNE) {
+      return _devideByRuneCount(input, by.count, padding);
+    }
+    return [] as never;
   }
-
-  if (escaped === true) {
-    value = value + "\\";
-  }
-
-  return {
-    collected: value,
-    progression: (i + 1),
-  };
+  
 }
 
 export {
-  type codepoint,
-  type rune,
-  type CollectResult,
-  CodePointRange,
-  UnitToCount,
-  collectStart,
-  collectHttpQuotedString,
-  contains,
-  matches,
-  segment,
-  trim,
-  trimEnd,
-  trimStart,
+  StringUtils,
 };

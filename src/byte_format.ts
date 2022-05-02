@@ -5,8 +5,7 @@ import {
   Integer,
 } from "./int";
 import {
-  UnitToCount,
-  segment,
+  StringUtils,
 } from "./string";
 import {
   type uint8,
@@ -231,9 +230,9 @@ function _parse(toParse: string, options: _ResolvedOptions, byteRegex: RegExp): 
   }
   else {
     const elementLength = options.paddedLength + options.prefix.length + options.suffix.length;
-    byteStringArray = segment(toParse, {
+    byteStringArray = StringUtils.segment(toParse, {
       count: elementLength,
-      unit: UnitToCount.CHAR,
+      unit: StringUtils.Unit.CHAR,
     });
   }
 

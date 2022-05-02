@@ -2,6 +2,9 @@
 
 import { Integer } from "./int";
 
+/**
+ * 0x0-0x10FFFF
+ */
 type codepoint = number; // 厳密に定義するのは困難なので、ただのnumberの別名とする
 
 // XXX Goや.Netに倣ってruneとしたが、ルーン文字のruneと紛らわしいのが気になる…
@@ -160,6 +163,21 @@ namespace UnicodeUtils {
     }
     return false;
   }
+
+  export type CodePointRange = Array<[ codepoint ] | [ codepoint, codepoint ]>;
+
+  export function isCodePointRange(value: unknown): value is CodePointRange {
+    if (Array.isArray(value) && (value.length > 0)) {
+      return value.every((part) => {
+        if (Array.isArray(part) && (part.length === 1 || part.length === 2)) {
+          return part.every((i) => Unicode.CodePoint.isCodePoint(i));
+        }
+        return false;
+      });
+    }
+    return false;
+  }
+
 }
 Object.freeze(UnicodeUtils);
 

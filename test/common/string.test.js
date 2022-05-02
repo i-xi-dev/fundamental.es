@@ -1,28 +1,29 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  CodePointRange,
-  Unicode,
+import { Unicode, StringUtils } from "../../dist/index.js";
+
+const {
   collectStart,
-  collectHttpQuotedString,
   contains,
   matches,
   segment,
   trim,
   trimEnd,
   trimStart,
-} from "../../dist/index.js";
+} = StringUtils;
+
+const HTTP_TAB_OR_SPACE = [[ 0x9 ], [ 0x20 ]];
 
 describe("matches", () => {
   it("matches(string, CodePointRange)", () => {
-    expect(matches("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(true);
-    expect(matches("\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
-    expect(matches("\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(true);
-    expect(matches("\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
-    expect(matches("\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
-    expect(matches(" ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(true);
-    expect(matches("\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
-    expect(matches("a", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
-    expect(matches("\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(matches("", HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(matches("\u0008", HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(matches("\t", HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(matches("\u000A", HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(matches("\u001F", HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(matches(" ", HTTP_TAB_OR_SPACE)).to.equal(true);
+    expect(matches("\u0021", HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(matches("a", HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(matches("\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal(true);
 
     expect(matches("az", [[0x41,0x5A]])).to.equal(false);
     expect(matches("AZ", [[0x41,0x5A]])).to.equal(true);
@@ -130,7 +131,7 @@ describe("matches", () => {
 
 describe("contains", () => {
   it("contains(string, CodePointRange)", () => {
-    expect(contains("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(false);
+    expect(contains("", HTTP_TAB_OR_SPACE)).to.equal(false);
 
     expect(contains("az", [[0x41,0x5A]])).to.equal(false);
     expect(contains("AZ", [[0x41,0x5A]])).to.equal(true);
@@ -178,28 +179,28 @@ describe("contains", () => {
 
 describe("trim", () => {
   it("trim(string, CodePointRange)", () => {
-    expect(trim("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(trim("X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
-    expect(trim("X\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("X\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
-    expect(trim("X\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
-    expect(trim("X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
-    expect(trim("Xa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("Xa");
+    expect(trim("", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(trim("X\u0008", HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
+    expect(trim("X\t", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("X\u000A", HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
+    expect(trim("X\u001F", HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
+    expect(trim("X ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("X\u0021", HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
+    expect(trim("Xa", HTTP_TAB_OR_SPACE)).to.equal("Xa");
 
-    expect(trim("X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
+    expect(trim("X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
 
-    expect(trim("\u0008X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u0008X\u0008");
-    expect(trim("\tX\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("\u000AX\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u000AX\u000A");
-    expect(trim("\u001FX\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u001FX\u001F");
-    expect(trim(" X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("\u0021X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u0021X\u0021");
-    expect(trim("aXa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("aXa");
+    expect(trim("\u0008X\u0008", HTTP_TAB_OR_SPACE)).to.equal("\u0008X\u0008");
+    expect(trim("\tX\t", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("\u000AX\u000A", HTTP_TAB_OR_SPACE)).to.equal("\u000AX\u000A");
+    expect(trim("\u001FX\u001F", HTTP_TAB_OR_SPACE)).to.equal("\u001FX\u001F");
+    expect(trim(" X ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("\u0021X\u0021", HTTP_TAB_OR_SPACE)).to.equal("\u0021X\u0021");
+    expect(trim("aXa", HTTP_TAB_OR_SPACE)).to.equal("aXa");
 
-    expect(trim("\t      \t    X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trim("X\t      \t    X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X\t      \t    X");
+    expect(trim("\t      \t    X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trim("X\t      \t    X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X\t      \t    X");
 
   });
 
@@ -243,17 +244,17 @@ describe("trim", () => {
 
 describe("trimStart", () => {
   it("trimStart(string, CodePointRange)", () => {
-    expect(trimStart("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(trimStart("\u0008X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u0008X");
-    expect(trimStart("\tX", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimStart("\u000AX", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u000AX");
-    expect(trimStart("\u001FX", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u001FX");
-    expect(trimStart(" X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimStart("\u0021X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\u0021X");
-    expect(trimStart("aX", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("aX");
+    expect(trimStart("", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(trimStart("\u0008X", HTTP_TAB_OR_SPACE)).to.equal("\u0008X");
+    expect(trimStart("\tX", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimStart("\u000AX", HTTP_TAB_OR_SPACE)).to.equal("\u000AX");
+    expect(trimStart("\u001FX", HTTP_TAB_OR_SPACE)).to.equal("\u001FX");
+    expect(trimStart(" X", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimStart("\u0021X", HTTP_TAB_OR_SPACE)).to.equal("\u0021X");
+    expect(trimStart("aX", HTTP_TAB_OR_SPACE)).to.equal("aX");
 
-    expect(trimStart("\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimStart("X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
+    expect(trimStart("\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimStart("X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
 
   });
 
@@ -297,17 +298,17 @@ describe("trimStart", () => {
 
 describe("trimEnd", () => {
   it("trimEnd(string, CodePointRange)", () => {
-    expect(trimEnd("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(trimEnd("X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
-    expect(trimEnd("X\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimEnd("X\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
-    expect(trimEnd("X\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
-    expect(trimEnd("X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimEnd("X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
-    expect(trimEnd("Xa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("Xa");
+    expect(trimEnd("", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(trimEnd("X\u0008", HTTP_TAB_OR_SPACE)).to.equal("X\u0008");
+    expect(trimEnd("X\t", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimEnd("X\u000A", HTTP_TAB_OR_SPACE)).to.equal("X\u000A");
+    expect(trimEnd("X\u001F", HTTP_TAB_OR_SPACE)).to.equal("X\u001F");
+    expect(trimEnd("X ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimEnd("X\u0021", HTTP_TAB_OR_SPACE)).to.equal("X\u0021");
+    expect(trimEnd("Xa", HTTP_TAB_OR_SPACE)).to.equal("Xa");
 
-    expect(trimEnd("X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X");
-    expect(trimEnd("X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
+    expect(trimEnd("X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("X");
+    expect(trimEnd("X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("X\t      \t    X");
 
   });
 
@@ -351,28 +352,28 @@ describe("trimEnd", () => {
 
 describe("collectStart", () => {
   it("collectStart(string, CodePointRange)", () => {
-    expect(collectStart("", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("Xa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u0008", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\t", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u000A", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u001F", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X ", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\u0021", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("Xa", HTTP_TAB_OR_SPACE)).to.equal("");
 
-    expect(collectStart("X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("");
 
-    expect(collectStart("\u0008X\u0008", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("\tX\t", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\t");
-    expect(collectStart("\u000AX\u000A", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("\u001FX\u001F", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart(" X ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal(" ");
-    expect(collectStart("\u0021X\u0021", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
-    expect(collectStart("aXa", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\u0008X\u0008", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\tX\t", HTTP_TAB_OR_SPACE)).to.equal("\t");
+    expect(collectStart("\u000AX\u000A", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\u001FX\u001F", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart(" X ", HTTP_TAB_OR_SPACE)).to.equal(" ");
+    expect(collectStart("\u0021X\u0021", HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("aXa", HTTP_TAB_OR_SPACE)).to.equal("");
 
-    expect(collectStart("\t      \t    X\t      \t    ", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
-    expect(collectStart("X\t      \t    X\t      \t    X", CodePointRange.HTTP_TAB_OR_SPACE)).to.equal("");
+    expect(collectStart("\t      \t    X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
+    expect(collectStart("X\t      \t    X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("");
 
   });
 
@@ -541,25 +542,3 @@ describe("segment", () => {
 
 
 
-
-describe("collectHttpQuotedString", () => {
-  it("collectHttpQuotedString(string)", () => {
-    const r1 = collectHttpQuotedString("");
-    expect(r1.collected).to.equal("");
-    expect(r1.progression).to.equal(0);
-
-    const r2 = collectHttpQuotedString('"\\');
-    expect(r2.collected).to.equal("\u005C");
-    expect(r2.progression).to.equal(2);
-
-    const r3 = collectHttpQuotedString('"Hello" World');
-    expect(r3.collected).to.equal("Hello");
-    expect(r3.progression).to.equal(7);
-
-    const r4 = collectHttpQuotedString('"Hello \\\\ World\\""');
-    expect(r4.collected).to.equal('Hello \u005C World"');
-    expect(r4.progression).to.equal(18);
-
-  });
-
-});
