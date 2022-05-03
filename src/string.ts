@@ -67,8 +67,8 @@ function _trimEnd(input: string, patternSource: string): string {
 }
 
 // patternSource空文字列は許容しない
-function _collectStart(input: string, patternSource: string): string {
-  const results = (new RegExp(`^[${ patternSource }]+`, "u")).exec(input);
+function _collectStart(input: string, patternSource: string, negative: boolean): string {
+  const results = (new RegExp(`^[${ (negative === true) ? "^" : "" }${ patternSource }]+`, "u")).exec(input);
   if (results === null) {
     return "";
   }
@@ -186,9 +186,9 @@ namespace StringUtils {
     return _contains(input, regexPattern);
   }
 
-  export function collectStart(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {
+  export function collectStart(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>, negative = false): string {
     const regexPattern = _toRegexPattern(searchObject);
-    return _collectStart(input, regexPattern);
+    return _collectStart(input, regexPattern, negative);
   }
 
   export function trim(input: string, searchObject: UnicodeUtils.CodePointRange | Array<string>): string {

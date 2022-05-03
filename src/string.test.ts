@@ -378,6 +378,8 @@ describe("collectStart", () => {
     expect(collectStart("\t      \t    X\t      \t    ", HTTP_TAB_OR_SPACE)).to.equal("\t      \t    ");
     expect(collectStart("X\t      \t    X\t      \t    X", HTTP_TAB_OR_SPACE)).to.equal("");
 
+    expect(collectStart("X1\t      \t    X2\t      \t    X3", HTTP_TAB_OR_SPACE, true)).to.equal("X1");
+
   });
 
   it("collectStart(string, Unicode.Category[])", () => {
