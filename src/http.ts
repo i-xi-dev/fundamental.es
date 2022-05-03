@@ -2,6 +2,9 @@
 import {
   UnicodeUtils,
 } from "./unicode";
+import {
+  StringUtils,
+} from "./string";
 
 namespace HttpUtils {
   export const CodePointRange = {
@@ -69,57 +72,87 @@ namespace HttpUtils {
    * @param input 先頭がU+0022の文字列
    * @returns 結果
    */
-   export function collectHttpQuotedString(input: string): CollectResult {
-     // 2.
-     let value = "";
+  export function collectHttpQuotedString(input: string): CollectResult {
+    // 2.
+    let value = "";
 
-     // 3.
-     if (input.startsWith('"') !== true) {
-       return {
-         collected: value,
-         progression: 0,
-       };
-     }
+    // 3.
+    if (input.startsWith('"') !== true) {
+      return {
+        collected: value,
+        progression: 0,
+      };
+    }
 
-     // 4.
-     const text2 = input.substring(1);
+    // 4.
+    const text2 = input.substring(1);
 
-     // 5.
-     let escaped = false;
-     let i = 0;
-     for (i = 0; i < text2.length; i++) {
-       const c: string = text2[i] as string;
+    // 5.
+    let escaped = false;
+    let i = 0;
+    for (i = 0; i < text2.length; i++) {
+      const c: string = text2[i] as string;
 
-       if (escaped === true) {
-         value = value + c;
-         escaped = false;
-         continue;
-       }
-       else {
-         if (c === '"') {
-           i++;
-           break;
-         }
-         else if (c === "\\") {
-           escaped = true;
-           continue;
-         }
-         else {
-           value = value + c;
-           continue;
-         }
-       }
-     }
+      if (escaped === true) {
+        value = value + c;
+        escaped = false;
+        continue;
+      }
+      else {
+        if (c === '"') {
+          i++;
+          break;
+        }
+        else if (c === "\\") {
+          escaped = true;
+          continue;
+        }
+        else {
+          value = value + c;
+          continue;
+        }
+      }
+    }
 
-     if (escaped === true) {
-       value = value + "\\";
-     }
+    if (escaped === true) {
+      value = value + "\\";
+    }
 
-     return {
-       collected: value,
-       progression: (i + 1),
-     };
-   }
+    return {
+      collected: value,
+      progression: (i + 1),
+    };
+  }
+
+  /**
+   * Headers#getで取得した値を分割する
+   * （複数ヘッダーだった場合、","で連結されているので分割する）
+   * 
+   * かつてはHeaders#getAllすれば良かったが、それは廃止されたので。
+   * {@link https://fetch.spec.whatwg.org/#concept-header-list-get-decode-split} のsplitの部分の仕様で分割する
+   * 
+   * @param value Headers#getで取得した値
+   * @returns 分割結果
+   */
+  export function splitHeaderValue(value: string): Array<string> {
+    const u0022OrU002C: Array<[ number ]> = [ [ 0x22 ], [ 0x2C ] ];
+    const values: Array<string> = [];
+    let work = value;
+    while (work.length > 0) {
+      let splitted = StringUtils.collectStart(work, u0022OrU002C, true);
+      work = work.substring(splitted.length);
+      if (work.startsWith("\u0022")) {
+        const result = collectHttpQuotedString(work);
+        splitted = splitted + result.collected;
+        work = work.substring(result.progression);
+      }
+      else { // work.startsWith("\u002C")
+        work = work.substring(1);
+      }
+      values.push(StringUtils.trim(splitted, CodePointRange.HTTP_TAB_OR_SPACE));
+    }
+    return values;
+  }
 
 }
 

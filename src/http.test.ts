@@ -22,3 +22,21 @@ describe("collectHttpQuotedString", () => {
   });
 
 });
+
+describe("splitHeaderValue", () => {
+  it("splitHeaderValue(string)", () => {
+    const r1 = HttpUtils.splitHeaderValue("");
+    expect(JSON.stringify(r1)).to.equal('[]');
+
+    const r2 = HttpUtils.splitHeaderValue("a1");
+    expect(JSON.stringify(r2)).to.equal('["a1"]');
+
+    const r3 = HttpUtils.splitHeaderValue("a,1");
+    expect(JSON.stringify(r3)).to.equal('["a","1"]');
+
+    const r4 = HttpUtils.splitHeaderValue('a,"1 2"');
+    expect(JSON.stringify(r4)).to.equal('["a","1 2"]');
+
+  });
+
+});
