@@ -18,6 +18,7 @@ export {
   type codepoint,
   type rune,
   Unicode,
+  UnicodeUtils,
 } from "./unicode";
 export { StringUtils } from "./string";
 export {
