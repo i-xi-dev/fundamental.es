@@ -194,6 +194,14 @@ namespace HttpUtils {
     return values;
   }
 
+  export const Header = {
+    CONTENT_ENCODING: "Content-Encoding",
+    CONTENT_LANGUAGE: "Content-Language",
+    CONTENT_LENGTH: "Content-Length",
+    CONTENT_LOCATION: "Content-Location",
+    CONTENT_TYPE: "Content-Type",
+  } as const;
+
 }
 
 export {
