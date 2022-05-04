@@ -156,7 +156,7 @@ namespace HttpUtils {
     let cc = 0;
     let v = "";
     while (i < value.length) {
-      let collected = StringUtils.collectStart(value.substring(i), u0022OrU002C, true);
+      const collected = StringUtils.collectStart(value.substring(i), u0022OrU002C, true);
       i = i + collected.length;
       v = v + collected;
       const remains = value.substring(i);
