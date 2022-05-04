@@ -31,11 +31,14 @@ describe("splitHeaderValue", () => {
     const r2 = HttpUtils.splitHeaderValue("a1");
     expect(JSON.stringify(r2)).to.equal('["a1"]');
 
-    const r3 = HttpUtils.splitHeaderValue("b,11");
-    expect(JSON.stringify(r3)).to.equal('["b","11"]');
+    const r3 = HttpUtils.splitHeaderValue("b,11,,");
+    expect(JSON.stringify(r3)).to.equal('["b","11","",""]');
 
     const r4 = HttpUtils.splitHeaderValue('c,"21 22"');
     expect(JSON.stringify(r4)).to.equal('["c","\\"21 22\\""]');
+
+    const r4b = HttpUtils.splitHeaderValue('c,"21 22"b');
+    expect(JSON.stringify(r4b)).to.equal('["c","\\"21 22\\"b"]');
 
     const r5 = HttpUtils.splitHeaderValue('nosniff,');
     expect(JSON.stringify(r5)).to.equal('["nosniff",""]');
