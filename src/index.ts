@@ -36,4 +36,7 @@ export { streamToAsyncGenerator } from "./stream_utils";
 export { Digest } from "./digest";
 export { Transfer } from "./transfer";
 export { PubSub } from "./pubsub";
-export { HttpUtils } from "./http";
+export {
+  Http,
+  HttpUtils,
+} from "./http";
