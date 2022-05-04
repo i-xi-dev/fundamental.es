@@ -31,11 +31,29 @@ describe("splitHeaderValue", () => {
     const r2 = HttpUtils.splitHeaderValue("a1");
     expect(JSON.stringify(r2)).to.equal('["a1"]');
 
-    const r3 = HttpUtils.splitHeaderValue("a,1");
-    expect(JSON.stringify(r3)).to.equal('["a","1"]');
+    const r3 = HttpUtils.splitHeaderValue("b,11");
+    expect(JSON.stringify(r3)).to.equal('["b","11"]');
 
-    const r4 = HttpUtils.splitHeaderValue('a,"1 2"');
-    expect(JSON.stringify(r4)).to.equal('["a","1 2"]');
+    const r4 = HttpUtils.splitHeaderValue('c,"21 22"');
+    expect(JSON.stringify(r4)).to.equal('["c","\\"21 22\\""]');
+
+    const r5 = HttpUtils.splitHeaderValue('nosniff,');
+    expect(JSON.stringify(r5)).to.equal('["nosniff",""]');
+
+    const r5b = HttpUtils.splitHeaderValue('nosniff, ');
+    expect(JSON.stringify(r5b)).to.equal('["nosniff",""]');
+
+    const r5c = HttpUtils.splitHeaderValue('text/html;", x/x');
+    expect(JSON.stringify(r5c)).to.equal('["text/html;\\", x/x"]');
+
+    const r5d = HttpUtils.splitHeaderValue('x/x;test="hi",y/y');
+    expect(JSON.stringify(r5d)).to.equal('["x/x;test=\\"hi\\"","y/y"]');
+
+    const r5e = HttpUtils.splitHeaderValue('x / x,,,1');
+    expect(JSON.stringify(r5e)).to.equal('["x / x","","","1"]');
+
+    const r5f = HttpUtils.splitHeaderValue('"1,2", 3');
+    expect(JSON.stringify(r5f)).to.equal('["\\"1,2\\"","3"]');
 
   });
 
