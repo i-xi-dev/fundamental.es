@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import { ReadableStream } from "node:stream/web";
 import { streamToAsyncGenerator } from "./stream_utils";
 
 describe("streamToAsyncGenerator", () => {

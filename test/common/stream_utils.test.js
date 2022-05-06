@@ -1,11 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { streamToAsyncGenerator } from "../../dist/index.js";
 
-if (globalThis.process) {
-  const streamWeb = await import("node:stream/web");
-  globalThis.ReadableStream = streamWeb.ReadableStream;
-}
-
 describe("streamToAsyncGenerator", () => {
   it("streamToAsyncGenerator(ReadableStreamDefaultReader)", async () => {
     let ti;
