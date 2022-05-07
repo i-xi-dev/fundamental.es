@@ -33,7 +33,6 @@ export { ByteEncoding } from "./byte_encoding";
 export { ByteBuffer } from "./byte_buffer";
 export { ByteStream } from "./byte_stream";
 export { streamToAsyncGenerator } from "./stream_utils";
-export { Digest } from "./digest";
 export { Transfer } from "./transfer";
 export { PubSub } from "./pubsub";
 export {
