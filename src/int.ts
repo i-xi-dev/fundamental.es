@@ -5,7 +5,7 @@ type int = number;
 namespace Integer {
   /**
    * Determines whether the passed value is a nonnegative safe integer.
-   * 
+   *
    * @param value The value to be tested
    * @returns Whether the passed value is a nonnegative safe integer.
    */
@@ -18,7 +18,7 @@ namespace Integer {
 
   /**
    * Determines whether the passed value is a positive safe integer.
-   * 
+   *
    * @param value The value to be tested
    * @returns Whether the passed value is a positive safe integer.
    */
@@ -29,7 +29,7 @@ namespace Integer {
     return false;
   }
 
-  export type Range = [ min: int, max: int ];
+  export type Range = [min: int, max: int];
 
   export function inRange(value: int, minmax: Range): boolean {
     if (Number.isSafeInteger(value) !== true) {
@@ -39,21 +39,18 @@ namespace Integer {
       throw new TypeError("minmax");
     }
 
-    const [ min, max ] = minmax;
+    const [min, max] = minmax;
     if (min > max) {
       throw new RangeError("minmax");
     }
 
     return ((value >= min) && (value <= max));
   }
-
 }
 
 function _isRangeTuple(value: unknown): value is Integer.Range {
-  return (Array.isArray(value) && (value.length === 2) && value.every((i) => Number.isSafeInteger(i)));
+  return (Array.isArray(value) && (value.length === 2) &&
+    value.every((i) => Number.isSafeInteger(i)));
 }
 
-export {
-  type int,
-  Integer,
-};
+export { type int, Integer };

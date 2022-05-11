@@ -9,7 +9,7 @@ namespace ByteEncoding {
   export interface Decoder {
     /**
      * Converts a string into a byte sequence.
-     * 
+     *
      * @param encoded An encoded string to decode.
      * @returns A decoded byte sequence.
      */
@@ -22,7 +22,7 @@ namespace ByteEncoding {
   export interface Encoder {
     /**
      * Converts a byte sequence into a string.
-     * 
+     *
      * @param toEncode A byte sequence to encode.
      * @returns An encoded string.
      */
@@ -34,16 +34,25 @@ namespace ByteEncoding {
     flush(): string;
   }
 
-  export abstract class DecoderStream implements TransformStream<string, Uint8Array> {
+  export abstract class DecoderStream
+    implements TransformStream<string, Uint8Array> {
     readonly #stream: TransformStream<string, Uint8Array>;
 
     constructor(decoder: Decoder, regulator: DecoderStreamRegulator) {
-      this.#stream = new TransformStream<string, Uint8Array>(DecoderStream._createTransformer(decoder, regulator));
+      this.#stream = new TransformStream<string, Uint8Array>(
+        DecoderStream._createTransformer(decoder, regulator),
+      );
     }
 
-    protected static _createTransformer(decoder: Decoder, regulator: DecoderStreamRegulator): Transformer<string, Uint8Array> {
+    protected static _createTransformer(
+      decoder: Decoder,
+      regulator: DecoderStreamRegulator,
+    ): Transformer<string, Uint8Array> {
       return {
-        transform(chunk: string, controller: TransformStreamDefaultController<Uint8Array>): void {
+        transform(
+          chunk: string,
+          controller: TransformStreamDefaultController<Uint8Array>,
+        ): void {
           const toDecode = regulator.regulate(chunk);
           const decoded = decoder.decode(toDecode);
           controller.enqueue(decoded);
@@ -79,16 +88,25 @@ namespace ByteEncoding {
     flush(): Uint8Array;
   }
 
-  export abstract class EncoderStream implements TransformStream<Uint8Array, string> {
+  export abstract class EncoderStream
+    implements TransformStream<Uint8Array, string> {
     readonly #stream: TransformStream<Uint8Array, string>;
-  
+
     constructor(encoder: Encoder, regulator: EncoderStreamRegulator) {
-      this.#stream = new TransformStream<Uint8Array, string>(EncoderStream._createTransformer(encoder, regulator));
+      this.#stream = new TransformStream<Uint8Array, string>(
+        EncoderStream._createTransformer(encoder, regulator),
+      );
     }
-  
-    protected static _createTransformer(encoder: Encoder, regulator: EncoderStreamRegulator): Transformer<Uint8Array, string> {
+
+    protected static _createTransformer(
+      encoder: Encoder,
+      regulator: EncoderStreamRegulator,
+    ): Transformer<Uint8Array, string> {
       return {
-        transform(chunk: Uint8Array, controller: TransformStreamDefaultController<string>): void {
+        transform(
+          chunk: Uint8Array,
+          controller: TransformStreamDefaultController<string>,
+        ): void {
           const toEncode = regulator.regulate(chunk);
           const encoded = encoder.encode(toEncode);
           controller.enqueue(encoded);
@@ -102,14 +120,14 @@ namespace ByteEncoding {
         },
       };
     }
-  
+
     /**
      * @see [TransformStream.writable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/writable)
      */
     get writable(): WritableStream<Uint8Array> {
       return this.#stream.writable;
     }
-  
+
     /**
      * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
      */
@@ -118,10 +136,7 @@ namespace ByteEncoding {
     }
   }
   Object.freeze(EncoderStream);
-
 }
 Object.freeze(ByteEncoding);
 
-export {
-  ByteEncoding,
-};
+export { ByteEncoding };

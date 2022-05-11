@@ -5,11 +5,11 @@
 // 2022-03時点
 const _scripts = {
   ADLM: "Adlm", // Adlam // Adlam
-  AFAK: "Afak", // Afaka // 
+  AFAK: "Afak", // Afaka //
   AGHB: "Aghb", // Caucasian Albanian // Caucasian_Albanian
   AHOM: "Ahom", // Ahom, Tai Ahom // Ahom
   ARAB: "Arab", // Arabic // Arabic
-  ARAN: "Aran", // Arabic (Nastaliq variant) // 
+  ARAN: "Aran", // Arabic (Nastaliq variant) //
   ARMI: "Armi", // Imperial Aramaic // Imperial_Aramaic
   ARMN: "Armn", // Armenian // Armenian
   AVST: "Avst", // Avestan // Avestan
@@ -19,7 +19,7 @@ const _scripts = {
   BATK: "Batk", // Batak // Batak
   BENG: "Beng", // Bengali (Bangla) // Bengali
   BHKS: "Bhks", // Bhaiksuki // Bhaiksuki
-  BLIS: "Blis", // Blissymbols // 
+  BLIS: "Blis", // Blissymbols //
   BOPO: "Bopo", // Bopomofo // Bopomofo
   BRAH: "Brah", // Brahmi // Brahmi
   BRAI: "Brai", // Braille // Braille
@@ -31,19 +31,19 @@ const _scripts = {
   CHAM: "Cham", // Cham // Cham
   CHER: "Cher", // Cherokee // Cherokee
   CHRS: "Chrs", // Chorasmian // Chorasmian
-  CIRT: "Cirt", // Cirth // 
+  CIRT: "Cirt", // Cirth //
   COPT: "Copt", // Coptic // Coptic
   CPMN: "Cpmn", // Cypro-Minoan // Cypro_Minoan
   CPRT: "Cprt", // Cypriot syllabary // Cypriot
   CYRL: "Cyrl", // Cyrillic // Cyrillic
-  CYRS: "Cyrs", // Cyrillic (Old Church Slavonic variant) // 
+  CYRS: "Cyrs", // Cyrillic (Old Church Slavonic variant) //
   DEVA: "Deva", // Devanagari (Nagari) // Devanagari
   DIAK: "Diak", // Dives Akuru // Dives_Akuru
   DOGR: "Dogr", // Dogra // Dogra
   DSRT: "Dsrt", // Deseret (Mormon) // Deseret
   DUPL: "Dupl", // Duployan shorthand, Duployan stenography // Duployan
-  EGYD: "Egyd", // Egyptian demotic // 
-  EGYH: "Egyh", // Egyptian hieratic // 
+  EGYD: "Egyd", // Egyptian demotic //
+  EGYH: "Egyh", // Egyptian hieratic //
   EGYP: "Egyp", // Egyptian hieroglyphs // Egyptian_Hieroglyphs
   ELBA: "Elba", // Elbasan // Elbasan
   ELYM: "Elym", // Elymaic // Elymaic
@@ -58,12 +58,12 @@ const _scripts = {
   GREK: "Grek", // Greek // Greek
   GUJR: "Gujr", // Gujarati // Gujarati
   GURU: "Guru", // Gurmukhi // Gurmukhi
-  HANB: "Hanb", // Han with Bopomofo (alias for Han + Bopomofo) // 
+  HANB: "Hanb", // Han with Bopomofo (alias for Han + Bopomofo) //
   HANG: "Hang", // Hangul (Hangŭl, Hangeul) // Hangul
   HANI: "Hani", // Han (Hanzi, Kanji, Hanja) // Han
   HANO: "Hano", // Hanunoo (Hanunóo) // Hanunoo
-  HANS: "Hans", // Han (Simplified variant) // 
-  HANT: "Hant", // Han (Traditional variant) // 
+  HANS: "Hans", // Han (Simplified variant) //
+  HANT: "Hant", // Han (Traditional variant) //
   HATR: "Hatr", // Hatran // Hatran
   HEBR: "Hebr", // Hebrew // Hebrew
   HIRA: "Hira", // Hiragana // Hiragana
@@ -72,36 +72,36 @@ const _scripts = {
   HMNP: "Hmnp", // Nyiakeng Puachue Hmong // Nyiakeng_Puachue_Hmong
   HRKT: "Hrkt", // Japanese syllabaries (alias for Hiragana + Katakana) // Katakana_Or_Hiragana
   HUNG: "Hung", // Old Hungarian (Hungarian Runic) // Old_Hungarian
-  INDS: "Inds", // Indus (Harappan) // 
+  INDS: "Inds", // Indus (Harappan) //
   ITAL: "Ital", // Old Italic (Etruscan, Oscan, etc.) // Old_Italic
-  JAMO: "Jamo", // Jamo (alias for Jamo subset of Hangul) // 
+  JAMO: "Jamo", // Jamo (alias for Jamo subset of Hangul) //
   JAVA: "Java", // Javanese // Javanese
-  JPAN: "Jpan", // Japanese (alias for Han + Hiragana + Katakana) // 
-  JURC: "Jurc", // Jurchen // 
+  JPAN: "Jpan", // Japanese (alias for Han + Hiragana + Katakana) //
+  JURC: "Jurc", // Jurchen //
   KALI: "Kali", // Kayah Li // Kayah_Li
   KANA: "Kana", // Katakana // Katakana
-  KAWI: "Kawi", // Kawi // 
+  KAWI: "Kawi", // Kawi //
   KHAR: "Khar", // Kharoshthi // Kharoshthi
   KHMR: "Khmr", // Khmer // Khmer
   KHOJ: "Khoj", // Khojki // Khojki
-  KITL: "Kitl", // Khitan large script // 
+  KITL: "Kitl", // Khitan large script //
   KITS: "Kits", // Khitan small script // Khitan_Small_Script
   KNDA: "Knda", // Kannada // Kannada
-  KORE: "Kore", // Korean (alias for Hangul + Han) // 
-  KPEL: "Kpel", // Kpelle // 
+  KORE: "Kore", // Korean (alias for Hangul + Han) //
+  KPEL: "Kpel", // Kpelle //
   KTHI: "Kthi", // Kaithi // Kaithi
   LANA: "Lana", // Tai Tham (Lanna) // Tai_Tham
   LAOO: "Laoo", // Lao // Lao
-  LATF: "Latf", // Latin (Fraktur variant) // 
-  LATG: "Latg", // Latin (Gaelic variant) // 
+  LATF: "Latf", // Latin (Fraktur variant) //
+  LATG: "Latg", // Latin (Gaelic variant) //
   LATN: "Latn", // Latin // Latin
-  LEKE: "Leke", // Leke // 
+  LEKE: "Leke", // Leke //
   LEPC: "Lepc", // Lepcha (Róng) // Lepcha
   LIMB: "Limb", // Limbu // Limbu
   LINA: "Lina", // Linear A // Linear_A
   LINB: "Linb", // Linear B // Linear_B
   LISU: "Lisu", // Lisu (Fraser) // Lisu
-  LOMA: "Loma", // Loma // 
+  LOMA: "Loma", // Loma //
   LYCI: "Lyci", // Lycian // Lycian
   LYDI: "Lydi", // Lydian // Lydian
   MAHJ: "Mahj", // Mahajani // Mahajani
@@ -109,7 +109,7 @@ const _scripts = {
   MAND: "Mand", // Mandaic, Mandaean // Mandaic
   MANI: "Mani", // Manichaean // Manichaean
   MARC: "Marc", // Marchen // Marchen
-  MAYA: "Maya", // Mayan hieroglyphs // 
+  MAYA: "Maya", // Mayan hieroglyphs //
   MEDF: "Medf", // Medefaidrin (Oberi Okaime, Oberi Ɔkaimɛ) // Medefaidrin
   MEND: "Mend", // Mende Kikakui // Mende_Kikakui
   MERC: "Merc", // Meroitic Cursive // Meroitic_Cursive
@@ -117,18 +117,18 @@ const _scripts = {
   MLYM: "Mlym", // Malayalam // Malayalam
   MODI: "Modi", // Modi, Moḍī // Modi
   MONG: "Mong", // Mongolian // Mongolian
-  MOON: "Moon", // Moon (Moon code, Moon script, Moon type) // 
+  MOON: "Moon", // Moon (Moon code, Moon script, Moon type) //
   MROO: "Mroo", // Mro, Mru // Mro
   MTEI: "Mtei", // Meitei Mayek (Meithei, Meetei) // Meetei_Mayek
   MULT: "Mult", // Multani // Multani
   MYMR: "Mymr", // Myanmar (Burmese) // Myanmar
-  NAGM: "Nagm", // Nag Mundari // 
+  NAGM: "Nagm", // Nag Mundari //
   NAND: "Nand", // Nandinagari // Nandinagari
   NARB: "Narb", // Old North Arabian (Ancient North Arabian) // Old_North_Arabian
   NBAT: "Nbat", // Nabataean // Nabataean
   NEWA: "Newa", // Newa, Newar, Newari, Nepāla lipi // Newa
-  NKDB: "Nkdb", // Naxi Dongba (na²¹ɕi³³ to³³ba²¹, Nakhi Tomba) // 
-  NKGB: "Nkgb", // Naxi Geba (na²¹ɕi³³ gʌ²¹ba²¹, 'Na-'Khi ²Ggŏ-¹baw, Nakhi Geba) // 
+  NKDB: "Nkdb", // Naxi Dongba (na²¹ɕi³³ to³³ba²¹, Nakhi Tomba) //
+  NKGB: "Nkgb", // Naxi Geba (na²¹ɕi³³ gʌ²¹ba²¹, 'Na-'Khi ²Ggŏ-¹baw, Nakhi Geba) //
   NKOO: "Nkoo", // N’Ko // Nko
   NSHU: "Nshu", // Nüshu // Nushu
   OGAM: "Ogam", // Ogham // Ogham
@@ -140,81 +140,81 @@ const _scripts = {
   OUGR: "Ougr", // Old Uyghur // Old_Uyghur
   PALM: "Palm", // Palmyrene // Palmyrene
   PAUC: "Pauc", // Pau Cin Hau // Pau_Cin_Hau
-  PCUN: "Pcun", // Proto-Cuneiform // 
-  PELM: "Pelm", // Proto-Elamite // 
+  PCUN: "Pcun", // Proto-Cuneiform //
+  PELM: "Pelm", // Proto-Elamite //
   PERM: "Perm", // Old Permic // Old_Permic
   PHAG: "Phag", // Phags-pa // Phags_Pa
   PHLI: "Phli", // Inscriptional Pahlavi // Inscriptional_Pahlavi
   PHLP: "Phlp", // Psalter Pahlavi // Psalter_Pahlavi
-  PHLV: "Phlv", // Book Pahlavi // 
+  PHLV: "Phlv", // Book Pahlavi //
   PHNX: "Phnx", // Phoenician // Phoenician
   PLRD: "Plrd", // Miao (Pollard) // Miao
-  PIQD: "Piqd", // Klingon (KLI pIqaD) // 
+  PIQD: "Piqd", // Klingon (KLI pIqaD) //
   PRTI: "Prti", // Inscriptional Parthian // Inscriptional_Parthian
-  PSIN: "Psin", // Proto-Sinaitic // 
-  QAAA: "Qaaa", // Reserved for private use (start) // 
-  QAAB: "Qaab", //  // 
-  QAAC: "Qaac", //  // 
-  QAAD: "Qaad", //  // 
-  QAAE: "Qaae", //  // 
-  QAAF: "Qaaf", //  // 
-  QAAG: "Qaag", //  // 
-  QAAH: "Qaah", //  // 
-  QAAI: "Qaai", //  // 
-  QAAJ: "Qaaj", //  // 
-  QAAK: "Qaak", //  // 
-  QAAL: "Qaal", //  // 
-  QAAM: "Qaam", //  // 
-  QAAN: "Qaan", //  // 
-  QAAO: "Qaao", //  // 
-  QAAP: "Qaap", //  // 
-  QAAQ: "Qaaq", //  // 
-  QAAR: "Qaar", //  // 
-  QAAS: "Qaas", //  // 
-  QAAT: "Qaat", //  // 
-  QAAU: "Qaau", //  // 
-  QAAV: "Qaav", //  // 
-  QAAW: "Qaaw", //  // 
-  QAAX: "Qaax", //  // 
-  QAAY: "Qaay", //  // 
-  QAAZ: "Qaaz", //  // 
-  QABA: "Qaba", //  // 
-  QABB: "Qabb", //  // 
-  QABC: "Qabc", //  // 
-  QABD: "Qabd", //  // 
-  QABE: "Qabe", //  // 
-  QABF: "Qabf", //  // 
-  QABG: "Qabg", //  // 
-  QABH: "Qabh", //  // 
-  QABI: "Qabi", //  // 
-  QABJ: "Qabj", //  // 
-  QABK: "Qabk", //  // 
-  QABL: "Qabl", //  // 
-  QABM: "Qabm", //  // 
-  QABN: "Qabn", //  // 
-  QABO: "Qabo", //  // 
-  QABP: "Qabp", //  // 
-  QABQ: "Qabq", //  // 
-  QABR: "Qabr", //  // 
-  QABS: "Qabs", //  // 
-  QABT: "Qabt", //  // 
-  QABU: "Qabu", //  // 
-  QABV: "Qabv", //  // 
-  QABW: "Qabw", //  // 
-  QABX: "Qabx", // Reserved for private use (end) // 
-  RANJ: "Ranj", // Ranjana // 
+  PSIN: "Psin", // Proto-Sinaitic //
+  QAAA: "Qaaa", // Reserved for private use (start) //
+  QAAB: "Qaab", //  //
+  QAAC: "Qaac", //  //
+  QAAD: "Qaad", //  //
+  QAAE: "Qaae", //  //
+  QAAF: "Qaaf", //  //
+  QAAG: "Qaag", //  //
+  QAAH: "Qaah", //  //
+  QAAI: "Qaai", //  //
+  QAAJ: "Qaaj", //  //
+  QAAK: "Qaak", //  //
+  QAAL: "Qaal", //  //
+  QAAM: "Qaam", //  //
+  QAAN: "Qaan", //  //
+  QAAO: "Qaao", //  //
+  QAAP: "Qaap", //  //
+  QAAQ: "Qaaq", //  //
+  QAAR: "Qaar", //  //
+  QAAS: "Qaas", //  //
+  QAAT: "Qaat", //  //
+  QAAU: "Qaau", //  //
+  QAAV: "Qaav", //  //
+  QAAW: "Qaaw", //  //
+  QAAX: "Qaax", //  //
+  QAAY: "Qaay", //  //
+  QAAZ: "Qaaz", //  //
+  QABA: "Qaba", //  //
+  QABB: "Qabb", //  //
+  QABC: "Qabc", //  //
+  QABD: "Qabd", //  //
+  QABE: "Qabe", //  //
+  QABF: "Qabf", //  //
+  QABG: "Qabg", //  //
+  QABH: "Qabh", //  //
+  QABI: "Qabi", //  //
+  QABJ: "Qabj", //  //
+  QABK: "Qabk", //  //
+  QABL: "Qabl", //  //
+  QABM: "Qabm", //  //
+  QABN: "Qabn", //  //
+  QABO: "Qabo", //  //
+  QABP: "Qabp", //  //
+  QABQ: "Qabq", //  //
+  QABR: "Qabr", //  //
+  QABS: "Qabs", //  //
+  QABT: "Qabt", //  //
+  QABU: "Qabu", //  //
+  QABV: "Qabv", //  //
+  QABW: "Qabw", //  //
+  QABX: "Qabx", // Reserved for private use (end) //
+  RANJ: "Ranj", // Ranjana //
   RJNG: "Rjng", // Rejang (Redjang, Kaganga) // Rejang
   ROHG: "Rohg", // Hanifi Rohingya // Hanifi_Rohingya
-  RORO: "Roro", // Rongorongo // 
+  RORO: "Roro", // Rongorongo //
   RUNR: "Runr", // Runic // Runic
   SAMR: "Samr", // Samaritan // Samaritan
-  SARA: "Sara", // Sarati // 
+  SARA: "Sara", // Sarati //
   SARB: "Sarb", // Old South Arabian // Old_South_Arabian
   SAUR: "Saur", // Saurashtra // Saurashtra
   SGNW: "Sgnw", // SignWriting // SignWriting
   SHAW: "Shaw", // Shavian (Shaw) // Shavian
   SHRD: "Shrd", // Sharada, Śāradā // Sharada
-  SHUI: "Shui", // Shuishu // 
+  SHUI: "Shui", // Shuishu //
   SIDD: "Sidd", // Siddham, Siddhaṃ, Siddhamātṛkā // Siddham
   SIND: "Sind", // Khudawadi, Sindhi // Khudawadi
   SINH: "Sinh", // Sinhala // Sinhala
@@ -223,12 +223,12 @@ const _scripts = {
   SORA: "Sora", // Sora Sompeng // Sora_Sompeng
   SOYO: "Soyo", // Soyombo // Soyombo
   SUND: "Sund", // Sundanese // Sundanese
-  SUNU: "Sunu", // Sunuwar // 
+  SUNU: "Sunu", // Sunuwar //
   SYLO: "Sylo", // Syloti Nagri // Syloti_Nagri
   SYRC: "Syrc", // Syriac // Syriac
-  SYRE: "Syre", // Syriac (Estrangelo variant) // 
-  SYRJ: "Syrj", // Syriac (Western variant) // 
-  SYRN: "Syrn", // Syriac (Eastern variant) // 
+  SYRE: "Syre", // Syriac (Estrangelo variant) //
+  SYRJ: "Syrj", // Syriac (Western variant) //
+  SYRN: "Syrn", // Syriac (Eastern variant) //
   TAGB: "Tagb", // Tagbanwa // Tagbanwa
   TAKR: "Takr", // Takri, Ṭākrī, Ṭāṅkrī // Takri
   TALE: "Tale", // Tai Le // Tai_Le
@@ -237,7 +237,7 @@ const _scripts = {
   TANG: "Tang", // Tangut // Tangut
   TAVT: "Tavt", // Tai Viet // Tai_Viet
   TELU: "Telu", // Telugu // Telugu
-  TENG: "Teng", // Tengwar // 
+  TENG: "Teng", // Tengwar //
   TFNG: "Tfng", // Tifinagh (Berber) // Tifinagh
   TGLG: "Tglg", // Tagalog (Baybayin, Alibata) // Tagalog
   THAA: "Thaa", // Thaana // Thaana
@@ -248,21 +248,21 @@ const _scripts = {
   TOTO: "Toto", // Toto // Toto
   UGAR: "Ugar", // Ugaritic // Ugaritic
   VAII: "Vaii", // Vai // Vai
-  VISP: "Visp", // Visible Speech // 
+  VISP: "Visp", // Visible Speech //
   VITH: "Vith", // Vithkuqi // Vithkuqi
   WARA: "Wara", // Warang Citi (Varang Kshiti) // Warang_Citi
   WCHO: "Wcho", // Wancho // Wancho
-  WOLE: "Wole", // Woleai // 
+  WOLE: "Wole", // Woleai //
   XPEO: "Xpeo", // Old Persian // Old_Persian
   XSUX: "Xsux", // Cuneiform, Sumero-Akkadian // Cuneiform
   YEZI: "Yezi", // Yezidi // Yezidi
   YIII: "Yiii", // Yi // Yi
   ZANB: "Zanb", // Zanabazar Square (Zanabazarin Dörböljin Useg, Xewtee Dörböljin Bicig, Horizontal Square Script) // Zanabazar_Square
   ZINH: "Zinh", // Code for inherited script // Inherited
-  ZMTH: "Zmth", // Mathematical notation // 
-  ZSYE: "Zsye", // Symbols (Emoji variant) // 
-  ZSYM: "Zsym", // Symbols // 
-  ZXXX: "Zxxx", // Code for unwritten documents // 
+  ZMTH: "Zmth", // Mathematical notation //
+  ZSYE: "Zsye", // Symbols (Emoji variant) //
+  ZSYM: "Zsym", // Symbols //
+  ZXXX: "Zxxx", // Code for unwritten documents //
   ZYYY: "Zyyy", // Code for undetermined script // Common
   ZZZZ: "Zzzz", // Code for uncoded script // Unknown
 } as const;
@@ -271,30 +271,30 @@ type script = string; // 処理系によって対応しているコードに差�
 
 /**
  * Scriptの集合であるScript
- * 
+ *
  * - キー: 集合であるScriptのコード
  * - 値: キーの集合を構成するScriptのコードの配列
  *    - キーのScriptに含まれている文字は、値のいずれか（基本的には1つ）のScriptに含まれる
- * 
+ *
  * /\p{sc=****}/u で使えないので分解するため用
  */
 const _unionScripts: Map<script, Array<script>> = new Map([
-  [ "Hanb", [ "Bopo", "Hani" ] ],
-  [ "Jpan", [ "Hani", "Hira", "Kana" ] ],
-  [ "Kore", [ "Hang", "Hani" ] ],
+  ["Hanb", ["Bopo", "Hani"]],
+  ["Jpan", ["Hani", "Hira", "Kana"]],
+  ["Kore", ["Hang", "Hani"]],
 
-  [ "Hrkt", [ "Hira", "Kana" ] ],
+  ["Hrkt", ["Hira", "Kana"]],
 ]);
 
 // /**
 //  * あるScriptの部分集合であるScript
-//  * 
+//  *
 //  * - キー: 部分集合であるScriptのコード
 //  * - 値: キーに対するスーパーセットであるScriptのコード
 //  *    - キーのScriptに含まれている文字は、値のScriptに含まれる
 //  *    - 値を同じくするどのキーのScriptに含まれておらず、値のScriptに含まれる文字は
 //  *        値のScriptのみに含まれる（固有のコード割り当ては無い）
-//  * 
+//  *
 //  * Unicode的には、スーパーセットのScriptになるので、/\p{sc=****}/u では使えない
 //  * （CJK統合漢字の場合、HansとHantは同じ符号位置の文字に対する書体の違いになる）
 //  * （ハングル字母の場合、固有の符号位置を持つ文字だがscはHang）
@@ -307,10 +307,10 @@ const _unionScripts: Map<script, Array<script>> = new Map([
 
 // /**
 //  * あるScriptのtypographic variantであるScript
-//  * 
+//  *
 //  * - キー: typographic variantであるScriptのコード
 //  * - 値: キーに対する正字体であるScriptのコード
-//  * 
+//  *
 //  * Unicode的には、正字体のScriptになるので、/\p{sc=****}/u では使えない
 //  * （同じ符号位置の文字に対する書体の違いになる）
 //  */
@@ -415,7 +415,8 @@ const _unionScripts: Map<script, Array<script>> = new Map([
 // ]);
 
 function _format(script: string): string {
-  return script.substring(0, 1).toUpperCase() + script.substring(1).toLowerCase();
+  return script.substring(0, 1).toUpperCase() +
+    script.substring(1).toLowerCase();
 }
 
 function _isScript(value: unknown): value is script {
@@ -449,7 +450,7 @@ function _decompose(script: script): Array<script> {
   if (Array.isArray(subsets)) {
     return subsets;
   }
-  return [ script ];
+  return [script];
 }
 
 // function _resolve(script: script): script {
@@ -468,13 +469,16 @@ function _decompose(script: script): Array<script> {
 //   return script;
 // }
 
-function _normalizeSet(sources: Iterable<script>, options: ScriptSet.NormalizeOptions = {}): Iterable<script> {
+function _normalizeSet(
+  sources: Iterable<script>,
+  options: ScriptSet.NormalizeOptions = {},
+): Iterable<script> {
   const sourceSet: Set<script> = new Set(sources);
 
   const work: Array<Array<script>> = [];
   let composedOrDecomposed: Array<script>;
   if (options.compose === "composition") {
-    for (const [ union, subsets ] of _unionScripts.entries()) {
+    for (const [union, subsets] of _unionScripts.entries()) {
       let x = true;
       for (const subset of subsets) {
         x = x && sourceSet.has(subset);
@@ -487,22 +491,20 @@ function _normalizeSet(sources: Iterable<script>, options: ScriptSet.NormalizeOp
         for (const subset of subsets) {
           sourceSet.delete(subset);
         }
-        work.push([ union ]);
+        work.push([union]);
       }
     }
     for (const source of sourceSet) {
-      work.push([ source ]);
+      work.push([source]);
     }
     composedOrDecomposed = work.flat();
-  }
-  else if (options.compose === "decomposition") {
+  } else if (options.compose === "decomposition") {
     for (const source of sourceSet) {
       work.push(_decompose(source));
     }
     composedOrDecomposed = work.flat();
-  }
-  else {
-    composedOrDecomposed = [ ...sourceSet.values() ];
+  } else {
+    composedOrDecomposed = [...sourceSet.values()];
   }
 
   return composedOrDecomposed.sort();
@@ -513,7 +515,10 @@ class ScriptSet extends Set<script> {
     super(scripts);
   }
 
-  static fromArray(scripts: Array<string>, options?: ScriptSet.NormalizeOptions): ScriptSet {
+  static fromArray(
+    scripts: Array<string>,
+    options?: ScriptSet.NormalizeOptions,
+  ): ScriptSet {
     const src: Array<script> = [];
     if (Array.isArray(scripts)) {
       for (const script of scripts) {
@@ -525,7 +530,10 @@ class ScriptSet extends Set<script> {
     return new this(_normalizeSet(src, options));
   }
 
-  static fromLocale(locale: Intl.Locale, options?: ScriptSet.NormalizeOptions): ScriptSet {
+  static fromLocale(
+    locale: Intl.Locale,
+    options?: ScriptSet.NormalizeOptions,
+  ): ScriptSet {
     const src: Array<script> = [];
     if (Script.isScript(locale?.script)) {
       src.push(Script.normalize(locale.script));
@@ -553,13 +561,9 @@ class ScriptSet extends Set<script> {
 
 namespace ScriptSet {
   export type NormalizeOptions = {
-    compose?: "composition" | "decomposition" | "none",
+    compose?: "composition" | "decomposition" | "none";
     // TODO サブセットをスーパーセットに解決する、異体字を正字に解決する、・・・
   };
 }
 
-export {
-  type script,
-  Script,
-  ScriptSet,
-};
+export { Script, type script, ScriptSet };

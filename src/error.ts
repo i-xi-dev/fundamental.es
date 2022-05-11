@@ -21,8 +21,4 @@ class TimeoutError extends Error {
   }
 }
 
-export {
-  AbortError,
-  InvalidStateError,
-  TimeoutError,
-};
+export { AbortError, InvalidStateError, TimeoutError };

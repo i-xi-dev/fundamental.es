@@ -1,9 +1,6 @@
 //
 
-import {
-  type int,
-  Integer,
-} from "./int";
+import { type int, Integer } from "./int.ts";
 
 class SizedMap<K, V> extends Map<K, V> {
   #maxSize: int;
@@ -19,13 +16,11 @@ class SizedMap<K, V> extends Map<K, V> {
   override set(key: K, value: V): this {
     super.set(key, value);
     if (this.size > this.#maxSize) {
-      this.delete([ ...this.keys() ][0] as K);
+      this.delete([...this.keys()][0] as K);
     }
     return this;
   }
 }
 Object.freeze(SizedMap);
 
-export {
-  SizedMap,
-};
+export { SizedMap };

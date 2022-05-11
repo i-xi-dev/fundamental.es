@@ -1,6 +1,7 @@
 //
 
 function _isIsomorphicEncoded(value: string): boolean {
+  // deno-lint-ignore no-control-regex
   return /^[\u{0}-\u{FF}]*$/u.test(value);
 }
 
@@ -9,21 +10,19 @@ namespace IsomorphicEncoding {
     let bytes: Uint8Array;
     if (ArrayBuffer.isView(input)) {
       bytes = new Uint8Array(input.buffer);
-    }
-    else if (input instanceof ArrayBuffer) {
+    } else if (input instanceof ArrayBuffer) {
       bytes = new Uint8Array(input);
-    }
-    else {
+    } else {
       throw new TypeError("buffer");
     }
-  
+
     // A: Bの2倍以上遅い（Node.js）
     // let chars: string = "";
     // for (const byte of bytes) {
     //   chars = chars + String.fromCharCode(byte);
     // }
     // return chars;
-  
+
     // B:
     const chars = Array.from(bytes, (byte) => {
       return String.fromCharCode(byte);
@@ -42,10 +41,7 @@ namespace IsomorphicEncoding {
     }
     return bytes;
   }
-
 }
 Object.freeze(IsomorphicEncoding);
 
-export {
-  IsomorphicEncoding,
-};
+export { IsomorphicEncoding };

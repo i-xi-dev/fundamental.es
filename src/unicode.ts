@@ -1,6 +1,6 @@
 //
 
-import { Integer } from "./int";
+import { Integer } from "./int.ts";
 
 /**
  * 0x0-0x10FFFF
@@ -14,7 +14,7 @@ function _runeIsInCategory(rune: rune, category: Unicode.Category): boolean {
   if (Unicode.Rune.isRune(rune) !== true) {
     throw new TypeError("rune");
   }
-  const regex = new RegExp(`^[\\p{gc=${ category }}]$`, "u");
+  const regex = new RegExp(`^[\\p{gc=${category}}]$`, "u");
   return regex.test(rune);
 }
 
@@ -76,13 +76,13 @@ namespace Unicode {
   export namespace CodePoint {
     /**
      * Determines whether the passed value is an Unicode code point.
-     * 
+     *
      * @param value The value to be tested
      * @returns Whether the passed value is an Unicode code point.
      */
     export function isCodePoint(value: unknown): value is codepoint {
       if ((typeof value === "number") && Integer.isNonNegativeInteger(value)) {
-        return Integer.inRange(value, [ 0x0, 0x10FFFF ]);
+        return Integer.inRange(value, [0x0, 0x10FFFF]);
       }
       return false;
     }
@@ -97,7 +97,7 @@ namespace Unicode {
       if (value.length > 2) {
         return false;
       }
-      const runes = [ ...value ];
+      const runes = [...value];
       if (runes.length !== 1) {
         return false;
       }
@@ -149,22 +149,22 @@ namespace Unicode {
     export function isSurrogate(rune: rune): boolean {
       return _runeIsInCategory(rune, Unicode.Category.OTHER_SURROGATE);
     }
-
   }
   Object.freeze(Rune);
-
 }
 Object.freeze(Unicode);
 
 namespace UnicodeUtils {
-  export function isCategoryArray(value: unknown): value is Array<Unicode.Category> {
+  export function isCategoryArray(
+    value: unknown,
+  ): value is Array<Unicode.Category> {
     if (Array.isArray(value) && (value.length > 0)) {
       return value.every((i) => Unicode.isCategory(i));
     }
     return false;
   }
 
-  export type CodePointRange = Array<[ codepoint ] | [ codepoint, codepoint ]>;
+  export type CodePointRange = Array<[codepoint] | [codepoint, codepoint]>;
 
   export function isCodePointRange(value: unknown): value is CodePointRange {
     if (Array.isArray(value) && (value.length > 0)) {
@@ -177,13 +177,7 @@ namespace UnicodeUtils {
     }
     return false;
   }
-
 }
 Object.freeze(UnicodeUtils);
 
-export {
-  type codepoint,
-  type rune,
-  Unicode,
-  UnicodeUtils,
-};
+export { type codepoint, type rune, Unicode, UnicodeUtils };

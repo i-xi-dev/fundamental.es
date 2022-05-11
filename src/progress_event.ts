@@ -1,13 +1,10 @@
 //
 
-import {
-  type int,
-  Integer,
-} from "./int";
+import { type int, Integer } from "./int.ts";
 
 /**
  * The `ProgressEvent` for Node.js
- * 
+ *
  * Implements the [`ProgressEvent`](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) interface.
  */
 class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
@@ -17,16 +14,25 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
 
   /**
    * Creates a new `_ProgressEvent`.
-   * 
+   *
    * @param type The name of the event.
    * @param init The `ProgressEventInit` object.
    */
   constructor(type: string, init?: ProgressEventInit) {
     super(type, init);
 
-    this.#lengthComputable = (init && (typeof init.lengthComputable === "boolean")) ? init.lengthComputable : false;
-    this.#loaded = (init && (typeof init.loaded === "number") && Integer.isNonNegativeInteger(init.loaded)) ? init.loaded : 0;
-    this.#total = (init && (typeof init.total === "number") && Integer.isNonNegativeInteger(init.total)) ? init.total : 0;
+    this.#lengthComputable =
+      (init && (typeof init.lengthComputable === "boolean"))
+        ? init.lengthComputable
+        : false;
+    this.#loaded = (init && (typeof init.loaded === "number") &&
+        Integer.isNonNegativeInteger(init.loaded))
+      ? init.loaded
+      : 0;
+    this.#total = (init && (typeof init.total === "number") &&
+        Integer.isNonNegativeInteger(init.total))
+      ? init.total
+      : 0;
   }
 
   /**
@@ -50,6 +56,12 @@ class _ProgressEvent extends Event implements ProgressEvent<EventTarget> {
     return this.#total;
   }
 }
-const pe = (globalThis.ProgressEvent) ? globalThis.ProgressEvent : _ProgressEvent;// カバレッジがUncoveredになるがテスト不可能
+const _PE = (globalThis as unknown as {
+  ProgressEvent: new (
+    type: string,
+    eventInitDict?: ProgressEventInit,
+  ) => ProgressEvent;
+}).ProgressEvent ??
+  _ProgressEvent;
 
-export { pe as ProgressEvent };
+export { _PE };

@@ -1,6 +1,6 @@
 //
 
-import { type int } from "./int";
+import { type int } from "./int.ts";
 
 // TODO namespace
 
@@ -28,7 +28,7 @@ namespace Milliseconds {
   /**
    * ミリ秒をミリ秒に変換し返却
    * @param milliseconds ミリ秒（ミリ秒より下位は切り捨て）
-   * @returns 
+   * @returns
    */
   export function ofMilliseconds(milliseconds: number): int {
     if (Number.isFinite(milliseconds) !== true) {
@@ -40,7 +40,7 @@ namespace Milliseconds {
   /**
    * 秒をミリ秒に変換し返却
    * @param seconds 秒（ミリ秒より下位は切り捨て）
-   * @returns 
+   * @returns
    */
   export function ofSeconds(seconds: number): int {
     if (Number.isFinite(seconds) !== true) {
@@ -52,7 +52,7 @@ namespace Milliseconds {
   /**
    * 分をミリ秒に変換し返却
    * @param minutes 分（ミリ秒より下位は切り捨て）
-   * @returns 
+   * @returns
    */
   export function ofMinutes(minutes: number): int {
     if (Number.isFinite(minutes) !== true) {
@@ -64,7 +64,7 @@ namespace Milliseconds {
   /**
    * 時をミリ秒に変換し返却
    * @param hours 時（ミリ秒より下位は切り捨て）
-   * @returns 
+   * @returns
    */
   export function ofHours(hours: number): int {
     if (Number.isFinite(hours) !== true) {
@@ -76,7 +76,7 @@ namespace Milliseconds {
   /**
    * 日をミリ秒に変換し返却
    * @param days 日（ミリ秒より下位は切り捨て）
-   * @returns 
+   * @returns
    */
   export function ofDays(days: number): int {
     if (Number.isFinite(days) !== true) {
@@ -90,7 +90,7 @@ namespace Milliseconds {
   //  * 時間量を表すISO 8601形式の文字列をミリ秒に変換し返却
   //  * @param str 時間量を表すISO 8601形式の文字列
   //  *    ※時間量が負の場合は先頭に"-"を付ける（ISO 8601としては仕様違反）
-  //  * @returns 
+  //  * @returns
   //  */
   // export function fromString(str: string): int {
   //   if (typeof str !== "string") {
