@@ -16,9 +16,9 @@
   "compilerOptions": {
     "removeComments": true,
     "strict": true //,
-    //"noUncheckedIndexedAccess": true, → trueにすると、"deno test"でstd/testingでエラーになる
-    //"noImplicitOverride": true, → trueにすると、dntでエラーになる
-    //"noPropertyAccessFromIndexSignature": true → trueにすると、dntでエラーになる
+    // "noUncheckedIndexedAccess": true, → trueにすると、"deno test"でstd/testingでエラーになる
+    // "noImplicitOverride": true, → trueにすると、dntでエラーになる
+    // "noPropertyAccessFromIndexSignature": true → trueにすると、dntでエラーになる
   },
   "importMap": "import_map.json",
   "tasks": {
