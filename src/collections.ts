@@ -2,6 +2,9 @@
 
 import { type int, Integer } from "./int.ts";
 
+/**
+ * @deprecated
+ */
 class SizedMap<K, V> extends Map<K, V> {
   #maxSize: int;
 
