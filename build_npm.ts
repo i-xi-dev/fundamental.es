@@ -12,7 +12,7 @@ await build({
   rootTestDir: "./tests",
   package: {
     name: "@i-xi-dev/fundamental",
-    version: "7.0.1",
+    version: "8.0.0",
     description: "This is not for direct usage.",
     license: "MIT",
     author: "i-xi-dev",
