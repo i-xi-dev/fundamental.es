@@ -1,4 +1,4 @@
-import * as Hex from "../../../src/bytes_encoding/hex/mod.mts";
+import * as BinaryString from "../../../src/bytes_encoding/binary_string/mod.mts";
 import { assertStrictEquals } from "@std/assert";
 import { delay } from "../../_.mts";
 
@@ -15,7 +15,7 @@ async function test1(
 
   await delay(20);
 
-  const encoder = new Hex.EncoderStream();
+  const encoder = new BinaryString.EncoderStream();
 
   let actual = "";
   const ws = new WritableStream<string>({
@@ -29,47 +29,53 @@ async function test1(
   assertStrictEquals(actual, expected);
 }
 
-Deno.test("Hex.EncoderStream", async () => {
+Deno.test("BinaryString.Encoder", async () => {
   await test1([
     Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC),
-  ], "03020100fffefdfc");
+  ], "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC");
 
-  await test1([
-    Uint8Array.of(
-      0x03,
-      0x02,
-      0x01,
-      0x00,
-      0xFF,
-      0xFE,
-      0xFD,
-      0xFC,
-      0x03,
-      0x02,
-      0x01,
-      0x00,
-      0xFF,
-      0xFE,
-      0xFD,
-      0xFC,
-      0x03,
-      0x02,
-      0x01,
-      0x00,
-      0xFF,
-      0xFE,
-      0xFD,
-      0xFC,
-      0x03,
-      0x02,
-      0x01,
-      0x00,
-      0xFF,
-      0xFE,
-      0xFD,
-      0xFC,
-    ),
-  ], "03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc");
+  await test1(
+    [
+      Uint8Array.of(
+        0x03,
+        0x02,
+        0x01,
+        0x00,
+        0xFF,
+        0xFE,
+        0xFD,
+        0xFC,
+        0x03,
+        0x02,
+        0x01,
+        0x00,
+        0xFF,
+        0xFE,
+        0xFD,
+        0xFC,
+        0x03,
+        0x02,
+        0x01,
+        0x00,
+        0xFF,
+        0xFE,
+        0xFD,
+        0xFC,
+        0x03,
+        0x02,
+        0x01,
+        0x00,
+        0xFF,
+        0xFE,
+        0xFD,
+        0xFC,
+      ),
+    ],
+    "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002" +
+      "\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000" +
+      "\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE" +
+      "\u00FD\u00FC",
+  );
 
   await test1([
     Uint8Array.of(0x03),
@@ -80,7 +86,7 @@ Deno.test("Hex.EncoderStream", async () => {
     Uint8Array.of(0xFE),
     Uint8Array.of(0xFD),
     Uint8Array.of(0xFC),
-  ], "03020100fffefdfc");
+  ], "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC");
 
   await test1(
     [
@@ -157,6 +163,12 @@ Deno.test("Hex.EncoderStream", async () => {
       Uint8Array.of(0xFC),
       Uint8Array.of(),
     ],
-    "03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc03020100fffefdfc",
+    "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002" +
+      "\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000" +
+      "\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE" +
+      "\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC" +
+      "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002" +
+      "\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000" +
+      "\u00FF\u00FE\u00FD\u00FC",
   );
 });

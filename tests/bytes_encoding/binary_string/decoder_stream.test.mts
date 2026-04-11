@@ -1,11 +1,10 @@
-import * as Base64 from "../../../src/bytes_encoding/base64/mod.mts";
+import * as BinaryString from "../../../src/bytes_encoding/binary_string/mod.mts";
 import { assertRejects, assertStrictEquals } from "@std/assert";
 import { delay } from "../../_.mts";
 
 async function test1(
   input: string[],
   expected: Uint8Array<ArrayBuffer>,
-  decoderOptions?: Base64.DecoderOptions,
 ): Promise<void> {
   const s = ReadableStream.from((async function* () {
     for (let i = 0; i < input.length; i++) {
@@ -16,7 +15,7 @@ async function test1(
 
   await delay(20);
 
-  const decoder = new Base64.DecoderStream(decoderOptions);
+  const decoder = new BinaryString.DecoderStream();
 
   const actual = new Uint8Array(expected.length);
   let written = 0;
@@ -27,12 +26,12 @@ async function test1(
     },
     abort(reason) {
       console.log("UnderlyingSink.abort");
-      //       //console.log(reason);
-      //       assertStrictEquals(reason.name, "SyntaxError");
-      //       assertStrictEquals(
-      //         reason.message,
-      //         "Found a character that cannot be part of a valid base64 string.",
-      //       );
+      // // console.log(reason);
+      // assertStrictEquals(reason.name, "SyntaxError");
+      // assertStrictEquals(
+      //   reason.message,
+      //   "-",
+      // );
     },
   });
 
@@ -44,19 +43,19 @@ async function test1(
   }
 }
 
-Deno.test("Base64.DecoderStream", async () => {
+Deno.test("BinaryString.DecoderStream", async () => {
   await test1(
-    ["AwIBAP/+/fw="],
+    ["\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0000\u0000"],
     Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x00),
   );
 
   await test1(
-    ["AwIBAP/+/fw"],
-    Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x00),
-  );
-
-  await test1(
-    ["AwIBAP/+/fwDAgEA//79/AMCAQD//v38AwIBAP/+/fw="],
+    [
+      "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002" +
+      "\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000" +
+      "\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE" +
+      "\u00FD\u00FC\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",
+    ],
     Uint8Array.of(
       0x03,
       0x02,
@@ -102,15 +101,31 @@ Deno.test("Base64.DecoderStream", async () => {
   );
 
   await test1(
-    ["A", "w", "I", "B", "A", "P", "/", "+", "/", "f", "w", "="],
+    [
+      "\u0003",
+      "\u0002",
+      "\u0001",
+      "\u0000",
+      "\u00FF",
+      "\u00FE",
+      "\u00FD",
+      "\u00FC",
+      "\u0000",
+      "\u0000",
+    ],
     Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x00),
   );
 
   await test1(
     [
-      "AwIBAP/+/fwDAgEA//79/AMC",
-      "AQD//v38AwIBAP/+/fwDAgEA//79/AMCAQD//v38AwIB",
-      "AP/+/fwDAgEA//79/A=",
+      "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002",
+      "\u0001",
+      "\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF" +
+      "\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD" +
+      "\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003" +
+      "\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001" +
+      "\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF" +
+      "\u00FE\u00FD\u00FC\u0000\u0000\u0000\u0000\u0000",
       "",
       "",
       "",
@@ -118,8 +133,8 @@ Deno.test("Base64.DecoderStream", async () => {
       "",
       "",
       "",
+      "\u0000",
       "",
-      "=",
     ],
     Uint8Array.of(
       0x03,
@@ -196,66 +211,21 @@ Deno.test("Base64.DecoderStream", async () => {
   );
 });
 
-Deno.test("Base64.DecoderStream - alphabet:base64url", async () => {
-  await test1(
-    ["AwIBAP_-_fw="],
-    Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x00),
-    { alphabet: "base64url" },
-  );
-});
-
-Deno.test("Base64.DecoderStream - lastChunkHandling:strict", async () => {
-  await test1(
-    ["AwIBAP/+/fw="],
-    Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC, 0x00, 0x00),
-    { lastChunkHandling: "strict" },
-  );
-
+Deno.test("BinaryString.DecoderStream - error", async () => {
   await assertRejects(
     async () => {
       await test1(
-        ["AwIBAP/+/fw"],
-        new Uint8Array(100),
-        { lastChunkHandling: "strict" },
-      );
-    },
-    SyntaxError,
-    "The base64 input terminates with a single character, excluding padding (=).",
-  );
-});
-
-Deno.test("Base64.DecoderStream - error", async () => {
-  await assertRejects(
-    async () => {
-      await test1(
-        ["A", "w", "あ", "B", "A", "P", "/", "+", "/", "f", "w", "="],
+        [
+          "\u0003",
+          "\u0002",
+          "\u0001",
+          "\u0000",
+          "\u0100", // レンジ外
+        ],
         new Uint8Array(100),
       );
     },
     SyntaxError,
-    "Found a character that cannot be part of a valid base64 string.",
-  );
-
-  await assertRejects(
-    async () => {
-      await test1(
-        ["AwIBAP/+/fw="],
-        Uint8Array.of(
-          0x03,
-          0x02,
-          0x01,
-          0x00,
-          0xFF,
-          0xFE,
-          0xFD,
-          0xFC,
-          0x00,
-          0x00,
-        ),
-        { alphabet: "base64url" },
-      );
-    },
-    SyntaxError,
-    "Found a character that cannot be part of a valid base64 string.",
+    "Input string must not contain characters outside of the Latin1 range",
   );
 });

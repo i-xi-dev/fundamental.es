@@ -1,5 +1,5 @@
-import { assertRejects, assertStrictEquals } from "@std/assert";
 import * as Hex from "../../../src/bytes_encoding/hex/mod.mts";
+import { assertRejects, assertStrictEquals } from "@std/assert";
 import { delay } from "../../_.mts";
 
 async function test1(
@@ -37,9 +37,9 @@ async function test1(
 
   await s.pipeThrough<Uint8Array<ArrayBuffer>>(decoder).pipeTo(ws);
 
-  assertStrictEquals(expected.length, actual.length);
+  assertStrictEquals(actual.length, expected.length);
   for (let i = 0; i < expected.length; i++) {
-    assertStrictEquals(expected[i], actual[i]);
+    assertStrictEquals(actual[i], expected[i]);
   }
 }
 

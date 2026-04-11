@@ -1,5 +1,5 @@
-import { assertStrictEquals } from "@std/assert";
 import * as Base64 from "../../../src/bytes_encoding/base64/mod.mts";
+import { assertStrictEquals } from "@std/assert";
 import { delay } from "../../_.mts";
 
 async function test1(
