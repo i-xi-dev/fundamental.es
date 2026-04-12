@@ -1,14 +1,14 @@
-import * as _com from "../_common/mod.mts";
 import { type _Encoder } from "./_encoder.mts";
 import { type _EncoderStreamRegulator } from "./_encoder_stream_regulator.mts";
+import { _T } from "../_common/mod.mts";
 
 type _Controller = TransformStreamDefaultController<string>;
 
 export abstract class _EncoderStreamBase
-  extends TransformStream<_com.Bytes, string> {
+  extends TransformStream<_T.Bytes, string> {
   constructor(encoder: _Encoder, regulator: _EncoderStreamRegulator) {
     super({
-      transform(bytes: _com.Bytes, controller: _Controller): void {
+      transform(bytes: _T.Bytes, controller: _Controller): void {
         try {
           const regulatedBytes = regulator.regulate(bytes);
           const encodedText = encoder.encode(regulatedBytes);

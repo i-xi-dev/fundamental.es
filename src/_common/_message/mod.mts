@@ -1,1 +1,1 @@
-export { _message as message } from "./_builder.mts";
+export { _build as build } from "./_builder.mts";

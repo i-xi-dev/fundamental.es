@@ -1,0 +1,12 @@
+import { _uint3 } from "./_uint3.mts";
+
+export type _uint4 =
+  | _uint3
+  | 0x8
+  | 0x9
+  | 0xA
+  | 0xB
+  | 0xC
+  | 0xD
+  | 0xE
+  | 0xF;

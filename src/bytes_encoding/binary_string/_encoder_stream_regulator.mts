@@ -1,16 +1,16 @@
-import * as _com from "../../_common/mod.mts";
 import { type _EncoderStreamRegulator } from "../_encoder_stream_regulator.mts";
+import { _T } from "../../_common/mod.mts";
 
 export class _BinaryStringEncoderStreamRegulator
   implements _EncoderStreamRegulator {
   constructor() {
   }
 
-  regulate(bytes: _com.Bytes): _com.Bytes {
+  regulate(bytes: _T.Bytes): _T.Bytes {
     return bytes;
   }
 
-  flush(): _com.Bytes {
+  flush(): _T.Bytes {
     return new Uint8Array(0);
   }
 }

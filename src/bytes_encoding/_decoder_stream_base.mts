@@ -1,11 +1,11 @@
-import * as _com from "../_common/mod.mts";
 import { type _Decoder } from "./_decoder.mts";
 import { type _DecoderStreamRegulator } from "./_decoder_stream_regulator.mts";
+import { _T } from "../_common/mod.mts";
 
-type _Controller = TransformStreamDefaultController<_com.Bytes>;
+type _Controller = TransformStreamDefaultController<_T.Bytes>;
 
 export abstract class _DecoderStreamBase
-  extends TransformStream<string, _com.Bytes> {
+  extends TransformStream<string, _T.Bytes> {
   constructor(decoder: _Decoder, regulator: _DecoderStreamRegulator) {
     super({
       transform(text: string, controller: _Controller): void {

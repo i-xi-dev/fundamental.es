@@ -1,0 +1,3 @@
+export type _uint1 =
+  | 0x0
+  | 0x1;

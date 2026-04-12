@@ -1,5 +1,5 @@
-import * as _com from "../_common/mod.mts";
+import { _T } from "../_common/mod.mts";
 
 export interface _Encoder {
-  encode(bytes: _com.Bytes): string;
+  encode(bytes: _T.Bytes): string;
 }
