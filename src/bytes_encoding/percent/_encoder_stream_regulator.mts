@@ -1,7 +1,7 @@
 import type { _EncoderStreamRegulator } from "../_encoder_stream_regulator.mts";
 import { _T } from "../../_common/mod.mts";
 
-export class _HexEncoderStreamRegulator implements _EncoderStreamRegulator {
+export class _PercentEncoderStreamRegulator implements _EncoderStreamRegulator {
   constructor() {
   }
 

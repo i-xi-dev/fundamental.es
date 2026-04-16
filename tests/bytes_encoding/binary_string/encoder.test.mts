@@ -1,5 +1,5 @@
 import * as BinaryString from "../../../src/bytes_encoding/binary_string/mod.mts";
-import { assertStrictEquals } from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 
 const encoder = new BinaryString.Encoder();
 
@@ -11,7 +11,7 @@ function test1(
   assertStrictEquals(actual, expected);
 }
 
-Deno.test("BinaryString.Encoder", () => {
+Deno.test("BinaryString.Encoder.prototype.encode()", () => {
   test1(
     Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC),
     "\u0003\u0002\u0001\u0000\u00FF\u00FE\u00FD\u00FC",
@@ -56,5 +56,18 @@ Deno.test("BinaryString.Encoder", () => {
       "\u0001\u0000\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000" +
       "\u00FF\u00FE\u00FD\u00FC\u0003\u0002\u0001\u0000\u00FF\u00FE" +
       "\u00FD\u00FC",
+  );
+});
+
+Deno.test("BinaryString.Encoder.prototype.encode() - error", () => {
+  assertThrows(
+    () => {
+      test1(
+        [] as unknown as Uint8Array<ArrayBuffer>,
+        "000000000000000000000000000",
+      );
+    },
+    TypeError,
+    "Input must be an Uint8Array that references an ArrayBuffer",
   );
 });

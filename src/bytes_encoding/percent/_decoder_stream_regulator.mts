@@ -1,6 +1,6 @@
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
 
-export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
+export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;
 
   constructor() {
@@ -9,15 +9,14 @@ export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
 
   regulate(text: string): string {
     const temp = this.#pending + text;
-    const surplus = temp.length % 2;
+    const lastIdx = temp.lastIndexOf("%");
 
-    if (surplus === 0) {
+    if (lastIdx >= (temp.length - 2)) {
+      this.#pending = temp.substring(lastIdx);
+      return temp.substring(0, lastIdx);
+    } else {
       this.#pending = "";
       return temp;
-    } else {
-      const pendingLength = temp.length - surplus;
-      this.#pending = temp.substring(pendingLength);
-      return temp.substring(0, pendingLength);
     }
   }
 

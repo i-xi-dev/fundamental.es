@@ -1,5 +1,5 @@
-import { type _Encoder } from "./_encoder.mts";
-import { type _EncoderStreamRegulator } from "./_encoder_stream_regulator.mts";
+import type { _Encoder } from "./_encoder.mts";
+import type { _EncoderStreamRegulator } from "./_encoder_stream_regulator.mts";
 import { _T } from "../_common/mod.mts";
 
 type _Controller = TransformStreamDefaultController<string>;

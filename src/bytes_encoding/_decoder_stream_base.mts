@@ -1,5 +1,5 @@
-import { type _Decoder } from "./_decoder.mts";
-import { type _DecoderStreamRegulator } from "./_decoder_stream_regulator.mts";
+import type { _Decoder } from "./_decoder.mts";
+import type { _DecoderStreamRegulator } from "./_decoder_stream_regulator.mts";
 import { _T } from "../_common/mod.mts";
 
 type _Controller = TransformStreamDefaultController<_T.Bytes>;

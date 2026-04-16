@@ -11,3 +11,11 @@ export class _Base64EncoderStream extends _EncoderStreamBase {
     this.#options = _Base64EncoderOptions.resolve(options);
   }
 }
+//TODO
+/*
+
+  if (_T.isNonSharedUint8Array(bytes) !== true) {
+    throw new TypeError(_Message.build("E10002"));
+  }
+
+*/
