@@ -1,7 +1,7 @@
 import { _Message, _T, _U } from "../../_common/mod.mts";
 
 export type _PercentOptions = {
-  encodeSet?: Array<number>; // Array<uint8>;
+  encodeSet?: Array</* _T.uint8 */ number>;
   spaceAsPlus?: boolean;
 };
 
