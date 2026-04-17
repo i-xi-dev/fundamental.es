@@ -11,12 +11,6 @@ function* _defaultEncodeSet() {
   }
 }
 
-//TODO 外に出す
-function _is_uint8(test: unknown): test is _T.uint8 {
-  return Number.isSafeInteger(test) && ((test as number) >= 0) &&
-    ((test as number) <= 0xFF);
-}
-
 export namespace _PercentOptions {
   export function resolve(
     options?: _PercentOptions,
@@ -25,7 +19,7 @@ export namespace _PercentOptions {
 
     if (Array.isArray(options?.encodeSet) === true) {
       for (const b of options.encodeSet) {
-        if (_is_uint8(b) === true) {
+        if (_T.isUint8(b) === true) {
           set.add(b);
         }
       }
