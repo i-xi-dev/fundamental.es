@@ -1,1 +1,1 @@
-export type _Bytes = Uint8Array<ArrayBuffer>;
+export type Bytes = Uint8Array<ArrayBuffer>;

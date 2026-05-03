@@ -1,3 +1,3 @@
-export function _isString(test: unknown): test is string {
+export function isString(test: unknown): test is string {
   return (typeof test === "string");
 }

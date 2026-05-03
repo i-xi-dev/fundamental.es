@@ -1,3 +1,8 @@
-export type _finite = number;
+/**  */
+export type finite = number;
 
-export type _safeint = number;
+/** Safe-integer */
+export type safeint = number;
+
+/** unsigned integer */
+export type _unit = safeint; // かならず0を含む

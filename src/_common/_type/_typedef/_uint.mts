@@ -1,15 +1,15 @@
-import { _safeint } from "./_number.mts";
+import { _unit } from "./_number.mts";
 
-export type _uint1 = 0 | 0x1;
+export type uint1 = 0 | 0x1;
 
-export type _uint2 = _uint1 | 0x2 | 0x3;
+export type uint2 = uint1 | 0x2 | 0x3;
 
-export type _uint3 = _uint2 | 0x4 | 0x5 | 0x6 | 0x7;
+export type uint3 = uint2 | 0x4 | 0x5 | 0x6 | 0x7;
 
-export type _uint4 = _uint3 | 0x8 | 0x9 | 0xA | 0xB | 0xC | 0xD | 0xE | 0xF;
+export type uint4 = uint3 | 0x8 | 0x9 | 0xA | 0xB | 0xC | 0xD | 0xE | 0xF;
 
-export type _uint5 =
-  | _uint4
+export type uint5 =
+  | uint4
   | 0x10
   | 0x11
   | 0x12
@@ -27,8 +27,8 @@ export type _uint5 =
   | 0x1E
   | 0x1F;
 
-export type _uint6 =
-  | _uint5
+export type uint6 =
+  | uint5
   | 0x20
   | 0x21
   | 0x22
@@ -62,8 +62,8 @@ export type _uint6 =
   | 0x3E
   | 0x3F;
 
-export type _uint7 =
-  | _uint6
+export type uint7 =
+  | uint6
   | 0x40
   | 0x41
   | 0x42
@@ -129,8 +129,8 @@ export type _uint7 =
   | 0x7E
   | 0x7F;
 
-export type _uint8 =
-  | _uint7
+export type uint8 =
+  | uint7
   | 0x80
   | 0x81
   | 0x82
@@ -260,8 +260,8 @@ export type _uint8 =
   | 0xFE
   | 0xFF;
 
-export type uint16 = _safeint;
+export type uint16 = _unit;
 
-export type uint24 = _safeint;
+export type uint24 = _unit;
 
-export type uint32 = _safeint;
+export type uint32 = _unit;
