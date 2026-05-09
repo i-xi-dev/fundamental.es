@@ -265,3 +265,5 @@ export type uint16 = _unit;
 export type uint24 = _unit;
 
 export type uint32 = _unit;
+
+export type uint48 = _unit;

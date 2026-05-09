@@ -6,6 +6,7 @@ export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
   get BIT_LENGTH(): _T.safeint;
+  get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   // bitwiseAnd(a: T, b: T): T;
 }
@@ -18,6 +19,10 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   readonly #max: T;
 
   constructor(bitLength: _T.safeint) {
+    // if (bitLength > 48) {
+    //   throw
+    // } コンストラクタは公開しないのでチェックしない
+
     this.#bitLength = bitLength;
     this.#byteLength = Math.ceil(bitLength / Byte.BITS);
     this.#size = 2 ** bitLength;
@@ -65,3 +70,10 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   //   return this.fromBytes(r);
   // }
 }
+
+export const Uint6: _Uint<_T.uint6> = new _UintImpl(6);
+export const Uint7: _Uint<_T.uint7> = new _UintImpl(7);
+export const Uint8: _Uint<_T.uint8> = new _UintImpl(8);
+export const Uint16: _Uint<_T.uint16> = new _UintImpl(16);
+export const Uint24: _Uint<_T.uint24> = new _UintImpl(24);
+export const Uint32: _Uint<_T.uint32> = new _UintImpl(32);
