@@ -14,20 +14,21 @@ export interface _Uint<T extends _T.safeint> {
 export class _UintImpl<T extends _unit> implements _Uint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
-  readonly #size: _T.safeint; // non-negative integer
+  readonly #size: _unit;
   readonly #min: T;
   readonly #max: T;
 
   constructor(bitLength: _T.safeint) {
-    // if (bitLength > 48) {
-    //   throw
-    // } コンストラクタは公開しないのでチェックしない
-
-    this.#bitLength = bitLength;
-    this.#byteLength = Math.ceil(bitLength / Byte.BITS);
-    this.#size = 2 ** bitLength;
-    this.#min = 0 as T;
-    this.#max = (this.#size - 1) as T;
+    if (_T.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
+      this.#bitLength = bitLength;
+      this.#byteLength = Math.ceil(bitLength / Byte.BITS);
+      this.#size = 2 ** bitLength;
+      this.#min = 0 as T;
+      this.#max = (this.#size - 1) as T;
+    } else {
+      // コンストラクターは公開しないのでありえない
+      throw new TypeError("--internal-error");
+    }
   }
 
   get MIN_VALUE(): T {
@@ -77,3 +78,4 @@ export const Uint8: _Uint<_T.uint8> = new _UintImpl(8);
 export const Uint16: _Uint<_T.uint16> = new _UintImpl(16);
 export const Uint24: _Uint<_T.uint24> = new _UintImpl(24);
 export const Uint32: _Uint<_T.uint32> = new _UintImpl(32);
+export const Uint48: _Uint<_T.uint48> = new _UintImpl(48);

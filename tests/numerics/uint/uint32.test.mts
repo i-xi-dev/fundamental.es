@@ -6,7 +6,7 @@ Deno.test("Numerics.Uint32.MIN_VALUE", () => {
 });
 
 Deno.test("Numerics.Uint32.MAX_VALUE", () => {
-  assertStrictEquals(Numerics.Uint32.MAX_VALUE, 0xFFFFFFFF);
+  assertStrictEquals(Numerics.Uint32.MAX_VALUE, 0xFFFF_FFFF);
 });
 
 Deno.test("Numerics.Uint32.BIT_LENGTH", () => {

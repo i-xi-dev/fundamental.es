@@ -1,4 +1,4 @@
-import { _unit } from "./_number.mts";
+import { _biguint, _unit } from "./_number.mts";
 
 export type uint1 = 0 | 0x1;
 
@@ -267,3 +267,7 @@ export type uint24 = _unit;
 export type uint32 = _unit;
 
 export type uint48 = _unit;
+
+export type biguint64 = _biguint;
+
+export type biguint128 = _biguint;
