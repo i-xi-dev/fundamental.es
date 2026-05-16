@@ -28,6 +28,6 @@ Deno.test("ByteSequence.Encoding.BinaryString.decode() - error", () => {
       );
     },
     SyntaxError,
-    "Input string must not contain characters outside of the Latin1 range",
+    "Input must not contain characters outside of the Latin1 range",
   );
 });

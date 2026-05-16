@@ -293,7 +293,7 @@ Deno.test("ByteSequence.Encoding.Percent.Encoder.prototype.encode() - error", ()
       encoder1.encode([] as unknown as Uint8Array<ArrayBuffer>);
     },
     TypeError,
-    "Input must be an Uint8Array that references an ArrayBuffer",
+    "Input must be an `Uint8Array` that references an `ArrayBuffer`",
   );
 });
 

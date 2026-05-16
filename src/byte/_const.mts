@@ -1,2 +1,2 @@
 /** Bits per byte */
-export const _BITS = 8;
+export const BITS = 8;

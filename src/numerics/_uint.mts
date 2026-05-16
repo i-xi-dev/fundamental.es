@@ -1,6 +1,8 @@
 import * as Byte from "../byte/mod.mts";
-import { _T } from "../_common/mod.mts";
+import { _Message, _T } from "../_common/mod.mts";
+import { _resolveByteOrder } from "../_proc.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
+import { ByteOrder } from "../_byte_order.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -8,6 +10,7 @@ export interface _Uint<T extends _T.safeint> {
   get BIT_LENGTH(): _T.safeint;
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
+  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
   // bitwiseAnd(a: T, b: T): T;
 }
 
@@ -49,6 +52,34 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   get [Symbol.toStringTag](): string {
     return `Uint${this.#bitLength}`;
+  }
+
+  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
+    if (_T.isNonSharedUint8Array(bytes) !== true) {
+      throw new TypeError(_Message.build("E10002"));
+    }
+    if ((bytes.length <= 0) && (bytes.length > this.#byteLength)) {
+      //TODO
+      //  throw new RangeError("byte length unmatched.");
+    }
+
+    const resolvedByteOrder = _resolveByteOrder(byteOrder);
+
+    //XXX 32以下はUint32Arrayにした方が多分速い
+
+    const x = (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN)
+      ? [...bytes]
+      : [...bytes].reverse();
+
+    let result = x[0];
+    for (let i = 1; i < x.length; i++) {
+      result += x[i] * (0x100 ** i);
+    }
+
+    if (result > this.#max) { // #bitLength % 8 === 0のときは発生しない
+      throw new RangeError(_Message.build("E10101", `Uint${this.#bitLength}`));
+    }
+    return result as T;
   }
 
   // bitwiseAnd(a: T, b: T): T {

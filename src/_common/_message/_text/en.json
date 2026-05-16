@@ -1,6 +1,0 @@
-{
-  "E10001": "Input must be a string",
-  "E10002": "Input must be an Uint8Array that references an ArrayBuffer",
-  "E10009": "Input string must not contain characters outside of the Latin1 range",
-  "E10010": "Input string must not contain controls or characters outside of the US-ASCII range"
-}

@@ -30,7 +30,7 @@ Deno.test("ByteSequence.Encoding.BinaryString.Decoder.prototype.decode() - error
       );
     },
     SyntaxError,
-    "Input string must not contain characters outside of the Latin1 range",
+    "Input must not contain characters outside of the Latin1 range",
   );
 
   assertThrows(
@@ -41,6 +41,6 @@ Deno.test("ByteSequence.Encoding.BinaryString.Decoder.prototype.decode() - error
       );
     },
     TypeError,
-    "Input must be a string",
+    "Input must be a `string`",
   );
 });

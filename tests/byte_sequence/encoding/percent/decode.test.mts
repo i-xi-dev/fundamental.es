@@ -67,7 +67,7 @@ Deno.test("ByteSequence.Encoding.Percent.decode()", () => {
       Percent.decode(0 as unknown as string);
     },
     TypeError,
-    "Input must be a string",
+    "Input must be a `string`",
   );
 
   assertThrows(
@@ -75,7 +75,7 @@ Deno.test("ByteSequence.Encoding.Percent.decode()", () => {
       Percent.decode("あ");
     },
     SyntaxError,
-    "Input string must not contain controls or characters outside of the US-ASCII range",
+    "Input must not contain controls or characters outside of the US-ASCII range",
   );
 
   const decodedA55 = Percent.decode("%%65A");
@@ -159,7 +159,7 @@ Deno.test("ByteSequence.Encoding.Percent.decode() - spaceAsPlus:true", () => {
       Percent.decode("あ", { spaceAsPlus: true });
     },
     SyntaxError,
-    "Input string must not contain controls or characters outside of the US-ASCII range",
+    "Input must not contain controls or characters outside of the US-ASCII range",
   );
 });
 
@@ -261,7 +261,7 @@ Deno.test("ByteSequence.Encoding.Percent.decode() - encodeSet:*", () => {
       Percent.decode("あ", opC);
     },
     SyntaxError,
-    "Input string must not contain controls or characters outside of the US-ASCII range",
+    "Input must not contain controls or characters outside of the US-ASCII range",
   );
 
   const decodedC55 = Percent.decode("%%65A", opC);

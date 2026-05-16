@@ -70,6 +70,6 @@ Deno.test("ByteSequence.Encoding.BinaryString.Encoder.prototype.encode() - error
       );
     },
     TypeError,
-    "Input must be an Uint8Array that references an ArrayBuffer",
+    "Input must be an `Uint8Array` that references an `ArrayBuffer`",
   );
 });
