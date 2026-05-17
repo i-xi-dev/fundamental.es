@@ -1,6 +1,7 @@
+import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
-import { _Message, _T } from "../_common/mod.mts";
 import { _resolveByteOrder } from "../_proc.mts";
+import { _T } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../_byte_order.mts";
 
@@ -56,11 +57,10 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     if (_T.isNonSharedUint8Array(bytes) !== true) {
-      throw new TypeError(_Message.build("E10002"));
+      throw _InputError.typeMismatch_Bytes();
     }
     if ((bytes.length <= 0) && (bytes.length > this.#byteLength)) {
-      //TODO
-      //  throw new RangeError("byte length unmatched.");
+      throw _InputError.tooLong(this.#byteLength);
     }
 
     const resolvedByteOrder = _resolveByteOrder(byteOrder);
@@ -77,7 +77,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     }
 
     if (result > this.#max) { // #bitLength % 8 === 0のときは発生しない
-      throw new RangeError(_Message.build("E10101", `Uint${this.#bitLength}`));
+      throw _InputError.typeOverflow(`Uint${this.#bitLength}`);
     }
     return result as T;
   }

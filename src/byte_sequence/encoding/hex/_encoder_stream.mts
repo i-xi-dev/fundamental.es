@@ -12,7 +12,7 @@ export class _HexEncoderStream extends _EncoderStreamBase {
 /*
 
   if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw new TypeError(_Message.build("E10002"));
+    throw _InputError.typeMismatch_Bytes();
   }
 
 */

@@ -1,4 +1,6 @@
-import { _Message, _T, _U } from "../../../_common/mod.mts";
+import * as _InputError from "../../../_internal/_input_error.mts";
+import { _T, _U } from "../../../_common/mod.mts";
+import { Uint8 } from "../../../numerics/_uint.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* _T.uint8 */ number>;
@@ -6,7 +8,7 @@ export type _PercentOptions = {
 };
 
 function* _defaultEncodeSet() {
-  for (let i = 0; i <= 0xFF /*TODO Uint8.MAX */; i++) {
+  for (let i = 0; i <= Uint8.MAX_VALUE; i++) {
     yield i as _T.uint8;
   }
 }
@@ -41,10 +43,10 @@ export function _decode(
   options: Required<_PercentOptions>,
 ): _T.Bytes {
   if (_T.isString(text) !== true) {
-    throw new TypeError(_Message.build("E10001"));
+    throw _InputError.typeMismatch_String();
   }
   if (_regex.test(text) !== true) {
-    throw new SyntaxError(_Message.build("E10010"));
+    throw _InputError.x_nonControlAsciiString();
   }
 
   const decoded = new Uint8Array(text.length); // 0x20-0x7E以外を含んでいたらエラーにしている為decoded.lengthがtext.lengthより増えることは無い
@@ -104,7 +106,7 @@ export function _encode(
   options: Required<_PercentOptions>,
 ): string {
   if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw new TypeError(_Message.build("E10002"));
+    throw _InputError.typeMismatch_Bytes();
   }
 
   return Array.from(bytes, (byte) => {
