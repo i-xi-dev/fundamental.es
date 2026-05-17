@@ -1,6 +1,9 @@
+import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
-import { _T } from "../_common/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
+import { _resolveByteOrder } from "../_internal/_proc.mts";
+import { _T } from "../_common/mod.mts";
+import { ByteOrder } from "../byte_order.mts";
 
 export interface _BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -8,6 +11,7 @@ export interface _BigUint<T extends bigint> {
   get BIT_LENGTH(): _T.safeint;
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
+  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
   // bitwiseAnd(a: T, b: T): T;
 }
 
@@ -49,6 +53,31 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   get [Symbol.toStringTag](): string {
     return `BigUint${this.#bitLength}`;
+  }
+
+  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
+    if (_T.isNonSharedUint8Array(bytes) !== true) {
+      throw _InputError.typeMismatch_Bytes();
+    }
+    if (bytes.length !== this.#byteLength) {
+      throw _InputError.lengthMismatch(this.#byteLength);
+    }
+
+    const resolvedByteOrder = _resolveByteOrder(byteOrder);
+
+    const x = (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN)
+      ? [...bytes]
+      : [...bytes].reverse();
+
+    let result = BigInt(x[0]);
+    for (let i = 1; i < x.length; i++) {
+      result += BigInt(x[i]) * BigInt(0x100 ** i);
+    }
+
+    if (result > this.#max) { // #bitLength % 8 === 0のときは発生しない
+      throw _InputError.typeOverflow(`BigUint${this.#bitLength}`);
+    }
+    return result as T;
   }
 }
 
