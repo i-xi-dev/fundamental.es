@@ -27,6 +27,12 @@ export function typeMismatch_BigInt(): TypeError {
   return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:BIG_INT"));
 }
 
+export function typeMismatch_BigUint(bits: number): TypeError {
+  return new TypeError(
+    _Message.build("INPUT:TYPE_MISMATCH:BIG_UINT", bits.toString(10)),
+  );
+}
+
 export function typeMismatch_Bytes(): TypeError {
   return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:BYTES"));
 }
@@ -37,6 +43,12 @@ export function typeMismatch_SafeInt(): TypeError {
 
 export function typeMismatch_String(): TypeError {
   return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:STRING"));
+}
+
+export function typeMismatch_Uint(bits: number): TypeError {
+  return new TypeError(
+    _Message.build("INPUT:TYPE_MISMATCH:UINT", bits.toString(10)),
+  );
 }
 
 export function typeOverflow(typeName: string): RangeError {

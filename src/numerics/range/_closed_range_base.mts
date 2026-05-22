@@ -2,13 +2,15 @@ import * as _InputError from "../../_internal/_input_error.mts";
 import { _numeric } from "../../_common/_type/_typedef/_number.mts";
 import { ClosedRange } from "./closed_range.mts";
 
-export abstract class _ClosedRangeBase<T extends _numeric>
-  implements ClosedRange<T> {
+export abstract class _ClosedRangeBase<
+  BaseT extends _numeric,
+  T extends BaseT = BaseT,
+> implements ClosedRange<BaseT, T> {
   readonly #min: T;
   readonly #max: T;
 
   constructor(min: T, max: T) {
-    if ((this._isT(min) && this._isT(max)) !== true) {
+    if ((this._isBaseT(min) && this._isBaseT(max)) !== true) {
       throw this._typeError();
     } else if (min > max) {
       throw _InputError.rangeImpossible();
@@ -26,12 +28,12 @@ export abstract class _ClosedRangeBase<T extends _numeric>
     return this.#max;
   }
 
-  protected abstract _isT(test: unknown): test is T;
+  protected abstract _isBaseT(test: unknown): test is BaseT;
 
   protected abstract _typeError(): TypeError;
 
-  contains(test: T): boolean {
-    return this._isT(test) && (test >= this.#min) && (test <= this.#max);
+  contains(test: BaseT): test is T {
+    return this._isBaseT(test) && (test >= this.#min) && (test <= this.#max);
   }
 
   [Symbol.iterator](): IterableIterator<T, void, void> {

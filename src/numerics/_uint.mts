@@ -13,15 +13,22 @@ export interface _Uint<T extends _T.safeint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  //toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes;
+  // toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes;
+  toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
   // bitwiseAnd(a: T, b: T): T;
+}
+
+function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
+  const x1 = 0x100 ** pos;
+  const x2 = (unit >= x1) ? (unit % x1) : unit;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as _T.uint8;
 }
 
 export class _UintImpl<T extends _unit> implements _Uint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _unit;
-  readonly #range: Range.ClosedRange<T>;
+  readonly #range: Range.ClosedRange<_T.safeint, T>;
 
   constructor(bitLength: _T.safeint) {
     if (_T.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
@@ -84,14 +91,29 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     return result as T;
   }
 
-  // #is(test: unknown): test is T {
-  //   if (_T.isSafeInt(test) !== true) {
-  //     return false;
-  //   }
-  // }
+  toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes {
+    if (this.#range.contains(uint) !== true) {
+      throw _InputError.typeMismatch_Uint(this.#bitLength);
+    }
 
-  // toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes {
-  // }
+    const resolvedByteOrder = _resolveByteOrder(byteOrder);
+
+    if (this.#byteLength === 1) {
+      return Uint8Array.of(uint);
+    }
+
+    const bytes: Array<_T.uint8> = [];
+    bytes.push((uint % 0x100) as _T.uint8);
+    for (let i = 2; i <= 6; i++) { // 16-48
+      if (this.#bitLength >= (Byte.BITS * i)) {
+        bytes.push(_extractByte(uint, i));
+      }
+    }
+    return Uint8Array.from(
+      (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
+    );
+  }
+  // DataViewにsetUint32しUint8Arrayとして読み出す だと遅かった（32bitまでしか出来ないし）
 
   // bitwiseAnd(a: T, b: T): T {
   //   this.#assert(a, `\`Uint${this.#bitLength}.bitwiseAnd\` argument1`);

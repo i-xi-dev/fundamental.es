@@ -13,14 +13,22 @@ export interface _BigUint<T extends bigint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
+  // toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes;
+  toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes;
   // bitwiseAnd(a: T, b: T): T;
+}
+
+function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
+  const x1 = 0x100n ** BigInt(pos);
+  const x2 = (unit >= x1) ? (unit % x1) : unit;
+  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _T.uint8;
 }
 
 export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _biguint;
-  readonly #range: Range.ClosedRange<T>;
+  readonly #range: Range.ClosedRange<_biguint, T>;
 
   constructor(bitLength: _T.safeint) {
     if (_T.isSafeInt(bitLength) && (bitLength > 0)) {
@@ -79,6 +87,29 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
       throw _InputError.typeOverflow(`BigUint${this.#bitLength}`);
     }
     return result as T;
+  }
+
+  toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes {
+    if (this.#range.contains(uint) !== true) {
+      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+    }
+
+    const resolvedByteOrder = _resolveByteOrder(byteOrder);
+
+    if (this.#byteLength === 1) {
+      return Uint8Array.of(Number(uint));
+    }
+
+    const bytes: Array<_T.uint8> = [];
+    bytes.push(Number(uint % 0x100n) as _T.uint8);
+    for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
+      if (this.#bitLength >= (Byte.BITS * i)) {
+        bytes.push(_extractByte(uint, i));
+      }
+    }
+    return Uint8Array.from(
+      (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
+    );
   }
 }
 

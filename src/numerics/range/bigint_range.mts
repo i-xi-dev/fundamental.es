@@ -3,12 +3,13 @@ import { _ClosedRangeBase } from "./_closed_range_base.mts";
 import { _T } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
 
-class _BigIntClosedRangeImpl<T extends bigint> extends _ClosedRangeBase<T> {
+class _BigIntClosedRangeImpl<T extends bigint = bigint>
+  extends _ClosedRangeBase<bigint, T> {
   constructor(min: T, max: T) {
     super(min, max);
   }
 
-  protected override _isT(test: unknown): test is T {
+  protected override _isBaseT(test: unknown): test is bigint {
     return _T.isBigInt(test);
   }
 
@@ -17,9 +18,9 @@ class _BigIntClosedRangeImpl<T extends bigint> extends _ClosedRangeBase<T> {
   }
 }
 
-export function bigIntClosedRange<T extends bigint>(
+export function bigIntClosedRange<T extends bigint = bigint>(
   min: T,
   max: T,
-): ClosedRange<T> {
+): ClosedRange<bigint, T> {
   return new _BigIntClosedRangeImpl<T>(min, max);
 }
