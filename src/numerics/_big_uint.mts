@@ -3,7 +3,9 @@ import * as Byte from "../byte/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
+import { bigIntClosedRange } from "./range/bigint_range.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { ClosedRange } from "./range/closed_range.mts";
 
 export interface _BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -19,16 +21,16 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _biguint;
-  readonly #min: T;
-  readonly #max: T;
+  readonly #range: ClosedRange<T>;
 
   constructor(bitLength: _T.safeint) {
     if (_T.isSafeInt(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2n ** BigInt(bitLength);
-      this.#min = 0n as T;
-      this.#max = (this.#size - 1n) as T;
+      const min = 0n as T;
+      const max = (this.#size - 1n) as T;
+      this.#range = bigIntClosedRange<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
       throw new TypeError("--internal-error");
@@ -36,11 +38,11 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
   }
 
   get MIN_VALUE(): T {
-    return this.#min;
+    return this.#range.min;
   }
 
   get MAX_VALUE(): T {
-    return this.#max;
+    return this.#range.max;
   }
 
   get BIT_LENGTH(): _T.safeint {
@@ -74,7 +76,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
       result += BigInt(x[i]) * BigInt(0x100 ** i);
     }
 
-    if (result > this.#max) { // #bitLength % 8 === 0のときは発生しない
+    if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
       throw _InputError.typeOverflow(`BigUint${this.#bitLength}`);
     }
     return result as T;

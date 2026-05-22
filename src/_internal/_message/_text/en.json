@@ -2,9 +2,12 @@
   "INPUT:LENGTH_MISMATCH:_": "The length of input must be {0}",
   "INPUT:PATTERN_MISMATCH:ASCII_RANGE_EX": "Input must not contain controls or characters outside of the US-ASCII range",
   "INPUT:PATTERN_MISMATCH:LATIN1_RANGE": "Input must not contain characters outside of the Latin1 range",
+  "INPUT:RANGE_IMPOSSIBLE": "The lower and upper bounds of the range are contradictory",
   "INPUT:RANGE_OVERFLOW:TYPE": "Input overflows the `{0}`",
   "INPUT:TOO_LONG:_": "The length of input must be {0} or less",
   "INPUT:TOO_SHORT:_": "The length of input must be {0} or greater",
-  "INPUT:TYPE_MISMATCH:STRING": "Input must be a `string`",
-  "INPUT:TYPE_MISMATCH:BYTES": "Input must be an `Uint8Array` that references an `ArrayBuffer`"
+  "INPUT:TYPE_MISMATCH:BIG_INT": "Input must be a `bigint`",
+  "INPUT:TYPE_MISMATCH:BYTES": "Input must be an `Uint8Array` that references an `ArrayBuffer`",
+  "INPUT:TYPE_MISMATCH:SAFE_INT": "Input must be a safe-integer of type `number`",
+  "INPUT:TYPE_MISMATCH:STRING": "Input must be a `string`"
 }

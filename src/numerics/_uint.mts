@@ -4,6 +4,8 @@ import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { ClosedRange } from "./range/closed_range.mts";
+import { safeIntClosedRange } from "./range/safeint_range.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -12,6 +14,7 @@ export interface _Uint<T extends _T.safeint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
+  //toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes;
   // bitwiseAnd(a: T, b: T): T;
 }
 
@@ -19,16 +22,16 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _unit;
-  readonly #min: T;
-  readonly #max: T;
+  readonly #range: ClosedRange<T>;
 
   constructor(bitLength: _T.safeint) {
     if (_T.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2 ** bitLength;
-      this.#min = 0 as T;
-      this.#max = (this.#size - 1) as T;
+      const min = 0 as T;
+      const max = (this.#size - 1) as T;
+      this.#range = safeIntClosedRange<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
       throw new TypeError("--internal-error");
@@ -36,11 +39,11 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   }
 
   get MIN_VALUE(): T {
-    return this.#min;
+    return this.#range.min;
   }
 
   get MAX_VALUE(): T {
-    return this.#max;
+    return this.#range.max;
   }
 
   get BIT_LENGTH(): _T.safeint {
@@ -76,11 +79,20 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
       result += x[i] * (0x100 ** i);
     }
 
-    if (result > this.#max) { // #bitLength % 8 === 0のときは発生しない
+    if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
       throw _InputError.typeOverflow(`Uint${this.#bitLength}`);
     }
     return result as T;
   }
+
+  // #is(test: unknown): test is T {
+  //   if (_T.isSafeInt(test) !== true) {
+  //     return false;
+  //   }
+  // }
+
+  // toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes {
+  // }
 
   // bitwiseAnd(a: T, b: T): T {
   //   this.#assert(a, `\`Uint${this.#bitLength}.bitwiseAnd\` argument1`);

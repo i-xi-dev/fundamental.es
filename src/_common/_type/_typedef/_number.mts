@@ -8,3 +8,5 @@ export type safeint = number;
 export type _unit = safeint; // かならず0を含む
 
 export type _biguint = bigint;
+
+export type _numeric = number | bigint;
