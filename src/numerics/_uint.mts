@@ -1,11 +1,10 @@
 import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
+import * as Range from "./range/mod.mts";
 import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { ClosedRange } from "./range/closed_range.mts";
-import { safeIntClosedRange } from "./range/safeint_range.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -22,7 +21,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _unit;
-  readonly #range: ClosedRange<T>;
+  readonly #range: Range.ClosedRange<T>;
 
   constructor(bitLength: _T.safeint) {
     if (_T.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
@@ -31,7 +30,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
       this.#size = 2 ** bitLength;
       const min = 0 as T;
       const max = (this.#size - 1) as T;
-      this.#range = safeIntClosedRange<T>(min, max);
+      this.#range = Range.safeIntClosedRange<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
       throw new TypeError("--internal-error");
