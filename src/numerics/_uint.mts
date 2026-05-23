@@ -15,6 +15,7 @@ export interface _Uint<T extends _T.safeint> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
   toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
   bitwiseAnd(a: _T.safeint, b: _T.safeint): T;
+  bitwiseOr(a: _T.safeint, b: _T.safeint): T;
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
@@ -128,6 +129,25 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     const r = new Uint8Array(this.#byteLength);
     for (let i = 0; i < r.length; i++) {
       r[i] = aBytes[i] & bBytes[i];
+    }
+    return this.fromBytes(r);
+  }
+
+  bitwiseOr(a: _T.safeint, b: _T.safeint): T {
+    if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
+      throw _InputError.typeMismatch_Uint(this.#bitLength);
+    }
+
+    if (this.#bitLength < 32) {
+      return (a | b) as T;
+    }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const aBytes = this.toBytes(a);
+    const bBytes = this.toBytes(b);
+    const r = new Uint8Array(this.#byteLength);
+    for (let i = 0; i < r.length; i++) {
+      r[i] = aBytes[i] | bBytes[i];
     }
     return this.fromBytes(r);
   }

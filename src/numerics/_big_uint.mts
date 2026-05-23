@@ -15,6 +15,7 @@ export interface _BigUint<T extends bigint> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
   toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes;
   bitwiseAnd(a: bigint, b: bigint): T;
+  bitwiseOr(a: bigint, b: bigint): T;
 }
 
 function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
@@ -117,6 +118,14 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
     }
 
     return (a & b) as T;
+  }
+
+  bitwiseOr(a: bigint, b: bigint): T {
+    if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
+      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+    }
+
+    return (a | b) as T;
   }
 }
 
