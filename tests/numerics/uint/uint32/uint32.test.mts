@@ -1,6 +1,6 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Numerics } from "../../../src/mod.mts";
-import { stringifyNumbers } from "../../_.mts";
+import { Numerics } from "../../../../src/mod.mts";
+import { stringifyNumbers } from "../../../_.mts";
 
 Deno.test("Numerics.Uint32.MIN_VALUE", () => {
   assertStrictEquals(Numerics.Uint32.MIN_VALUE, 0);
