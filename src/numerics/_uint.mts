@@ -13,9 +13,8 @@ export interface _Uint<T extends _T.safeint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  // toBytes(uint: T, byteOrder?: ByteOrder): _T.Bytes;
   toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
-  // bitwiseAnd(a: T, b: T): T;
+  bitwiseAnd(a: _T.safeint, b: _T.safeint): T;
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
@@ -113,27 +112,25 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
       (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
   }
-  // DataViewにsetUint32しUint8Arrayとして読み出す だと遅かった（32bitまでしか出来ないし）
 
-  // bitwiseAnd(a: T, b: T): T {
-  //   this.#assert(a, `\`Uint${this.#bitLength}.bitwiseAnd\` argument1`);
-  //   this.#assert(b, `\`Uint${this.#bitLength}.bitwiseAnd\` argument2`);
+  bitwiseAnd(a: _T.safeint, b: _T.safeint): T {
+    if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
+      throw _InputError.typeMismatch_Uint(this.#bitLength);
+    }
 
-  //   if (this.#bitLength < 32) {
-  //     return (a & b) as T;
-  //   } else if (this.#bitLength === 32) {
-  //     return this.#bitOperateUint32(a, b, _BitOperation.AND) as T;
-  //   }
+    if (this.#bitLength < 32) {
+      return (a & b) as T;
+    }
 
-  //   // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
-  //   const aBytes = this.toBytes(a);
-  //   const bBytes = this.toBytes(b);
-  //   const r = new Uint8Array(this.#byteLength);
-  //   for (let i = 0; i < r.length; i++) {
-  //     r[i] = aBytes[i] & bBytes[i];
-  //   }
-  //   return this.fromBytes(r);
-  // }
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const aBytes = this.toBytes(a);
+    const bBytes = this.toBytes(b);
+    const r = new Uint8Array(this.#byteLength);
+    for (let i = 0; i < r.length; i++) {
+      r[i] = aBytes[i] & bBytes[i];
+    }
+    return this.fromBytes(r);
+  }
 }
 
 export const Uint6: _Uint<_T.uint6> = new _UintImpl(6);
