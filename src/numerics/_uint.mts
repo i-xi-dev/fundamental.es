@@ -1,11 +1,11 @@
 import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
+import { _clampFinite, _normalizeOffset } from "./_utils.mts";
 import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { _normalizeOffset } from "./_utils.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -22,6 +22,7 @@ export interface _Uint<T extends _T.safeint> {
   rotateLeft(value: /* T */ _T.safeint, offset: _T.safeint): T;
   //XXX rotateRight()
   truncateFrom(value: _T.safeint): T;
+  saturateFrom(value: _T.safeint): T;
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
@@ -210,6 +211,14 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     } else {
       return (this.#size + (value % this.#size)) as T;
     }
+  }
+
+  saturateFrom(value: _T.safeint): T {
+    if (_T.isSafeInt(value) !== true) {
+      throw _InputError.typeMismatch_SafeInt();
+    }
+
+    return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }
 }
 

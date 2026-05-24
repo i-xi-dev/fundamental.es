@@ -2,10 +2,10 @@ import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
+import { _clampBigInt, _normalizeOffset } from "./_utils.mts";
 import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { _normalizeOffset } from "./_utils.mts";
 
 export interface _BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -22,6 +22,7 @@ export interface _BigUint<T extends bigint> {
   rotateLeft(value: /* T */ bigint, offset: _T.safeint): T;
   //XXX rotateRight()
   truncateFrom(value: bigint): T;
+  saturateFrom(value: bigint): T;
 }
 
 function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
@@ -179,6 +180,14 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
     }
 
     return BigInt.asUintN(this.#bitLength, value) as T;
+  }
+
+  saturateFrom(value: bigint): T {
+    if (_T.isBigInt(value) !== true) {
+      throw _InputError.typeMismatch_BigInt();
+    }
+
+    return _clampBigInt<T>(value, this.#range.min, this.#range.max);
   }
 }
 
