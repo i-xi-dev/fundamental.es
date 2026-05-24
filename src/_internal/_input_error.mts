@@ -41,6 +41,10 @@ export function typeMismatch_SafeInt(): TypeError {
   return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:SAFE_INT"));
 }
 
+export function offsetTypeMismatch_SafeInt(): TypeError { //TODO 主語を変えられるようにする
+  return new TypeError(_Message.build("OFFSET:TYPE_MISMATCH:SAFE_INT"));
+}
+
 export function typeMismatch_String(): TypeError {
   return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:STRING"));
 }

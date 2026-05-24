@@ -5,6 +5,7 @@ import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { _normalizeOffset } from "./_utils.mts";
 
 export interface _BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -13,11 +14,13 @@ export interface _BigUint<T extends bigint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes;
-  bitwiseAnd(a: bigint, b: bigint): T;
-  bitwiseOr(a: bigint, b: bigint): T;
-  bitwiseXOr(a: bigint, b: bigint): T;
+  toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): _T.Bytes;
+  bitwiseAnd(a: /* T */ bigint, b: /* T */ bigint): T;
+  bitwiseOr(a: /* T */ bigint, b: /* T */ bigint): T;
+  bitwiseXOr(a: /* T */ bigint, b: /* T */ bigint): T;
   //XXX bitwiseNot()
+  rotateLeft(value: /* T */ bigint, offset: _T.safeint): T;
+  //XXX rotateRight()
 }
 
 function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
@@ -148,6 +151,25 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   bitwiseXOr(a: bigint, b: bigint): T {
     return this.#bitwiseOp(a, b, this.#xOr);
+  }
+
+  rotateLeft(value: bigint, offset: _T.safeint): T {
+    if (this.#range.contains(value) !== true) {
+      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+    }
+    if (_T.isSafeInt(offset) !== true) {
+      throw _InputError.offsetTypeMismatch_SafeInt();
+    }
+
+    const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
+    if (normalizedOffset === 0) {
+      return value;
+    }
+
+    const bigIntOffset = BigInt(normalizedOffset);
+    const p1 = value << bigIntOffset;
+    const p2 = value >> (BigInt(this.#bitLength) - bigIntOffset);
+    return ((p1 | p2) & this.#range.max) as T;
   }
 }
 

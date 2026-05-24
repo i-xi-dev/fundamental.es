@@ -5,6 +5,7 @@ import { _resolveByteOrder } from "../_internal/_proc.mts";
 import { _T } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { _normalizeOffset } from "./_utils.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -13,11 +14,13 @@ export interface _Uint<T extends _T.safeint> {
   get BYTE_LENGTH(): _T.safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
-  bitwiseAnd(a: _T.safeint, b: _T.safeint): T;
-  bitwiseOr(a: _T.safeint, b: _T.safeint): T;
-  bitwiseXOr(a: _T.safeint, b: _T.safeint): T;
+  toBytes(uint: /* T */ _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
+  bitwiseAnd(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
+  bitwiseOr(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
+  bitwiseXOr(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
   //XXX bitwiseNot()
+  rotateLeft(value: /* T */ _T.safeint, offset: _T.safeint): T;
+  //XXX rotateRight()
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
@@ -161,6 +164,35 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   bitwiseXOr(a: _T.safeint, b: _T.safeint): T {
     return this.#bitwiseOp(a, b, this.#xOr);
+  }
+
+  rotateLeft(value: _T.safeint, offset: _T.safeint): T {
+    if (this.#range.contains(value) !== true) {
+      throw _InputError.typeMismatch_Uint(this.#bitLength);
+    }
+    if (_T.isSafeInt(offset) !== true) {
+      throw _InputError.offsetTypeMismatch_SafeInt();
+    }
+
+    const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
+    if (normalizedOffset === 0) {
+      return value;
+    }
+
+    if (this.#bitLength < 32) {
+      const p1 = value << normalizedOffset;
+      const p2 = value >> (this.#bitLength - normalizedOffset);
+      return ((p1 | p2) & this.#range.max) as T;
+    }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const bs = BigInt(value);
+    return Number(
+      ((bs << BigInt(normalizedOffset)) |
+        (bs >> BigInt(this.#bitLength - normalizedOffset))) &
+        BigInt(this.#range.max),
+    ) as T;
+    //TODO bigint使うと遅い
   }
 }
 

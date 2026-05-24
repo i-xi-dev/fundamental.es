@@ -11,5 +11,6 @@
   "INPUT:TYPE_MISMATCH:BYTES": "Input must be an `Uint8Array` that references an `ArrayBuffer`",
   "INPUT:TYPE_MISMATCH:SAFE_INT": "Input must be a safe-integer of type `number`",
   "INPUT:TYPE_MISMATCH:STRING": "Input must be a `string`",
-  "INPUT:TYPE_MISMATCH:UINT": "Input must be a {0}-bit unsigned integer of type `number`"
+  "INPUT:TYPE_MISMATCH:UINT": "Input must be a {0}-bit unsigned integer of type `number`",
+  "OFFSET:TYPE_MISMATCH:SAFE_INT": "Offset must be a safe-integer of type `number`"
 }
