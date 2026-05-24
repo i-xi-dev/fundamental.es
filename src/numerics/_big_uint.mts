@@ -17,6 +17,7 @@ export interface _BigUint<T extends bigint> {
   bitwiseAnd(a: bigint, b: bigint): T;
   bitwiseOr(a: bigint, b: bigint): T;
   bitwiseXOr(a: bigint, b: bigint): T;
+  //XXX bitwiseNot()
 }
 
 function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {

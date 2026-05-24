@@ -17,6 +17,7 @@ export interface _Uint<T extends _T.safeint> {
   bitwiseAnd(a: _T.safeint, b: _T.safeint): T;
   bitwiseOr(a: _T.safeint, b: _T.safeint): T;
   bitwiseXOr(a: _T.safeint, b: _T.safeint): T;
+  //XXX bitwiseNot()
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
