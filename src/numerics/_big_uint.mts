@@ -21,6 +21,7 @@ export interface _BigUint<T extends bigint> {
   //XXX bitwiseNot()
   rotateLeft(value: /* T */ bigint, offset: _T.safeint): T;
   //XXX rotateRight()
+  truncateFrom(value: bigint): T;
 }
 
 function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
@@ -170,6 +171,14 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
     const p1 = value << bigIntOffset;
     const p2 = value >> (BigInt(this.#bitLength) - bigIntOffset);
     return ((p1 | p2) & this.#range.max) as T;
+  }
+
+  truncateFrom(value: bigint): T {
+    if (_T.isBigInt(value) !== true) {
+      throw _InputError.typeMismatch_BigInt();
+    }
+
+    return BigInt.asUintN(this.#bitLength, value) as T;
   }
 }
 

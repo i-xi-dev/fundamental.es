@@ -21,6 +21,7 @@ export interface _Uint<T extends _T.safeint> {
   //XXX bitwiseNot()
   rotateLeft(value: /* T */ _T.safeint, offset: _T.safeint): T;
   //XXX rotateRight()
+  truncateFrom(value: _T.safeint): T;
 }
 
 function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
@@ -193,6 +194,22 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
         BigInt(this.#range.max),
     ) as T;
     //TODO bigint使うと遅い
+  }
+
+  truncateFrom(value: _T.safeint): T {
+    if (_T.isSafeInt(value) !== true) {
+      throw _InputError.typeMismatch_SafeInt();
+    }
+
+    if (this.#range.contains(value)) {
+      return value as T;
+    }
+
+    if (value > 0) {
+      return (value % this.#size) as T;
+    } else {
+      return (this.#size + (value % this.#size)) as T;
+    }
   }
 }
 
