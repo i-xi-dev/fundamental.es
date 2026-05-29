@@ -1,6 +1,6 @@
 import * as _InputError from "../../../_internal/_input_error.mts";
 import { _T, _U } from "../../../_common/mod.mts";
-import { Uint8 } from "../../../numerics/_uint.mts";
+import { Uint8 } from "../../../numerics/mod.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* _T.uint8 */ number>;
