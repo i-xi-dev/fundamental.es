@@ -9,6 +9,10 @@ export function isSafeInt(test: unknown): test is safeint {
   return Number.isSafeInteger(test);
 }
 
+export function isNonNegativeSafeInt(test: unknown): test is safeint {
+  return isSafeInt(test) && (test >= 0);
+}
+
 function _inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }

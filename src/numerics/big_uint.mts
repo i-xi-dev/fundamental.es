@@ -5,6 +5,7 @@ import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _clampBigInt, _normalizeOffset } from "./_utils.mts";
 import { _T, Io } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { Exception } from "../_internal/mod.mts";
 
 export interface _BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -175,7 +176,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   truncateFrom(value: bigint): T {
     if (_T.isBigInt(value) !== true) {
-      throw _InputError.typeMismatch_BigInt();
+      throw Exception.TypeMismatch.bigInt("Input");
     }
 
     return BigInt.asUintN(this.#bitLength, value) as T;
@@ -183,7 +184,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   saturateFrom(value: bigint): T {
     if (_T.isBigInt(value) !== true) {
-      throw _InputError.typeMismatch_BigInt();
+      throw Exception.TypeMismatch.bigInt("Input");
     }
 
     return _clampBigInt<T>(value, this.#range.min, this.#range.max);

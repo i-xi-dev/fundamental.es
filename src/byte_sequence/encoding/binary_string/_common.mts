@@ -1,12 +1,13 @@
 import * as _InputError from "../../../_internal/_input_error.mts";
 import { _T } from "../../../_common/mod.mts";
+import { Exception } from "../../../_internal/mod.mts";
 
 // deno-lint-ignore no-control-regex
 const _regex = /^[\u0000-\u00FF]*$/;
 
 export function _decode(text: string): _T.Bytes {
   if (_T.isString(text) !== true) {
-    throw _InputError.typeMismatch_String();
+    throw Exception.TypeMismatch.string("Input");
   }
   if (_regex.test(text) !== true) {
     throw _InputError.x_isomorphicString();

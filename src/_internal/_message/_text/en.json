@@ -6,11 +6,8 @@
   "INPUT:RANGE_OVERFLOW:TYPE": "Input overflows the `{0}`",
   "INPUT:TOO_LONG:_": "The length of input must be {0} or less",
   "INPUT:TOO_SHORT:_": "The length of input must be {0} or greater",
-  "INPUT:TYPE_MISMATCH:BIG_INT": "Input must be a `bigint`",
   "INPUT:TYPE_MISMATCH:BIG_UINT": "Input must be a {0}-bit unsigned integer of type `bigint`",
   "INPUT:TYPE_MISMATCH:BYTES": "Input must be an `Uint8Array` that references an `ArrayBuffer`",
-  "INPUT:TYPE_MISMATCH:SAFE_INT": "Input must be a safe-integer of type `number`",
-  "INPUT:TYPE_MISMATCH:STRING": "Input must be a `string`",
   "INPUT:TYPE_MISMATCH:UINT": "Input must be a {0}-bit unsigned integer of type `number`",
   "OFFSET:TYPE_MISMATCH:SAFE_INT": "Offset must be a safe-integer of type `number`"
 }

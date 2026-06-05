@@ -5,6 +5,7 @@ import { _clampFinite, _normalizeOffset } from "./_utils.mts";
 import { _T, Io } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { Exception } from "../_internal/mod.mts";
 
 export interface _Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -198,7 +199,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   truncateFrom(value: _T.safeint): T {
     if (_T.isSafeInt(value) !== true) {
-      throw _InputError.typeMismatch_SafeInt();
+      throw Exception.TypeMismatch.safeInt("Input");
     }
 
     if (this.#range.contains(value)) {
@@ -214,7 +215,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   saturateFrom(value: _T.safeint): T {
     if (_T.isSafeInt(value) !== true) {
-      throw _InputError.typeMismatch_SafeInt();
+      throw Exception.TypeMismatch.safeInt("Input");
     }
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
