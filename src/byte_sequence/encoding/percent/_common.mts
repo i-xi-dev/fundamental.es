@@ -107,7 +107,7 @@ export function _encode(
   options: Required<_PercentOptions>,
 ): string {
   if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw _InputError.typeMismatch_Bytes();
+    throw Exception.TypeMismatch.bytes("Input");
   }
 
   return Array.from(bytes, (byte) => {

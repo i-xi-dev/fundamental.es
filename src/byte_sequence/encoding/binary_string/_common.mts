@@ -18,7 +18,7 @@ export function _decode(text: string): _T.Bytes {
 
 export function _encode(bytes: _T.Bytes): string {
   if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw _InputError.typeMismatch_Bytes();
+    throw Exception.TypeMismatch.bytes("Input");
   }
 
   return Array.from(bytes, (byte) => String.fromCharCode(byte)).join("");

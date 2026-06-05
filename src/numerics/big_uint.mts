@@ -73,7 +73,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     if (_T.isNonSharedUint8Array(bytes) !== true) {
-      throw _InputError.typeMismatch_Bytes();
+      throw Exception.TypeMismatch.bytes("Input");
     }
     if (bytes.length !== this.#byteLength) {
       throw _InputError.lengthMismatch(this.#byteLength);
@@ -160,7 +160,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
       throw _InputError.typeMismatch_BigUint(this.#bitLength);
     }
     if (_T.isSafeInt(offset) !== true) {
-      throw _InputError.offsetTypeMismatch_SafeInt();
+      throw Exception.TypeMismatch.safeInt("Offset");
     }
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);

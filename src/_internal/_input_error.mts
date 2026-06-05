@@ -29,14 +29,6 @@ export function typeMismatch_BigUint(bits: number): TypeError {
   );
 }
 
-export function typeMismatch_Bytes(): TypeError {
-  return new TypeError(_Message.build("INPUT:TYPE_MISMATCH:BYTES"));
-}
-
-export function offsetTypeMismatch_SafeInt(): TypeError { //TODO 主語を変えられるようにする
-  return new TypeError(_Message.build("OFFSET:TYPE_MISMATCH:SAFE_INT"));
-}
-
 export function typeMismatch_Uint(bits: number): TypeError {
   return new TypeError(
     _Message.build("INPUT:TYPE_MISMATCH:UINT", bits.toString(10)),

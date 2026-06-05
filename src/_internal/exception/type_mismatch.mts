@@ -13,6 +13,13 @@ export namespace TypeMismatchError {
     return new _TypeMismatchError(target, "a `bigint`");
   }
 
+  export function bytes(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(
+      target,
+      "an `Uint8Array` that references an `ArrayBuffer`",
+    );
+  }
+
   export function safeInt(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "a safe-integer of type `number`");
   }
