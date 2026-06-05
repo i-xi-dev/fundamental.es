@@ -1,3 +1,5 @@
+import { _T } from "../../_common/mod.mts";
+
 function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
 }
@@ -13,6 +15,16 @@ export namespace TypeMismatchError {
     return new _TypeMismatchError(target, "a `bigint`");
   }
 
+  export function bigUintN(
+    bits: _T.safeint,
+    target: string,
+  ): _TypeMismatchError {
+    return new _TypeMismatchError(
+      target,
+      `a ${bits}-bit unsigned integer of type \`bigint\``,
+    );
+  }
+
   export function bytes(target: string): _TypeMismatchError {
     return new _TypeMismatchError(
       target,
@@ -26,5 +38,12 @@ export namespace TypeMismatchError {
 
   export function string(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "a `string`");
+  }
+
+  export function uintN(bits: _T.safeint, target: string): _TypeMismatchError {
+    return new _TypeMismatchError(
+      target,
+      `a ${bits}-bit unsigned integer of type \`number\``,
+    );
   }
 }

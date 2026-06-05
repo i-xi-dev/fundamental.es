@@ -98,7 +98,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -125,7 +125,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
     f: (fa: bigint, fb: bigint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
     }
 
     return f(a, b);
@@ -157,7 +157,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
 
   rotateLeft(value: bigint, offset: _T.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw _InputError.typeMismatch_BigUint(this.#bitLength);
+      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
     }
     if (_T.isSafeInt(offset) !== true) {
       throw Exception.TypeMismatch.safeInt("Offset");

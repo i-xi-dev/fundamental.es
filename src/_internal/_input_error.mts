@@ -23,18 +23,6 @@ export function tooShort(minLength: _numeric): RangeError {
   return new RangeError(_Message.build("INPUT:TOO_SHORT:_", `${minLength}`));
 }
 
-export function typeMismatch_BigUint(bits: number): TypeError {
-  return new TypeError(
-    _Message.build("INPUT:TYPE_MISMATCH:BIG_UINT", bits.toString(10)),
-  );
-}
-
-export function typeMismatch_Uint(bits: number): TypeError {
-  return new TypeError(
-    _Message.build("INPUT:TYPE_MISMATCH:UINT", bits.toString(10)),
-  );
-}
-
 export function typeOverflow(typeName: string): RangeError {
   return new RangeError(_Message.build("INPUT:RANGE_OVERFLOW:TYPE", typeName));
 }

@@ -100,7 +100,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw _InputError.typeMismatch_Uint(this.#bitLength);
+      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -127,7 +127,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     f: (fa: _T.safeint, fb: _T.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw _InputError.typeMismatch_Uint(this.#bitLength);
+      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -170,7 +170,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
 
   rotateLeft(value: _T.safeint, offset: _T.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw _InputError.typeMismatch_Uint(this.#bitLength);
+      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
     }
     if (_T.isSafeInt(offset) !== true) {
       throw Exception.TypeMismatch.safeInt("Offset");
