@@ -3,7 +3,6 @@
   "INPUT:PATTERN_MISMATCH:ASCII_RANGE_EX": "Input must not contain controls or characters outside of the US-ASCII range",
   "INPUT:PATTERN_MISMATCH:LATIN1_RANGE": "Input must not contain characters outside of the Latin1 range",
   "INPUT:RANGE_IMPOSSIBLE": "The lower and upper bounds of the range are contradictory",
-  "INPUT:RANGE_OVERFLOW:TYPE": "Input overflows the `{0}`",
   "INPUT:TOO_LONG:_": "The length of input must be {0} or less",
   "INPUT:TOO_SHORT:_": "The length of input must be {0} or greater"
 }

@@ -91,7 +91,7 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw _InputError.typeOverflow(`BigUint${this.#bitLength}`);
+      throw Exception.RangeOverflow.bigUintN(this.#bitLength, "Input");
     }
     return result as T;
   }

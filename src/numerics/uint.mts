@@ -93,7 +93,7 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw _InputError.typeOverflow(`Uint${this.#bitLength}`);
+      throw Exception.RangeOverflow.uintN(this.#bitLength, "Input");
     }
     return result as T;
   }

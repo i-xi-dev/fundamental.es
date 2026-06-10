@@ -72,7 +72,7 @@ Deno.test("Numerics.Uint6.fromBytes() - error", () => {
       testFromBytes([0x40]);
     },
     RangeError,
-    "Input overflows the `Uint6`",
+    "Input must be a 6-bit unsigned integer of type `number`",
   );
 });
 
