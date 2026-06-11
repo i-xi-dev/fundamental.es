@@ -15,10 +15,6 @@ export function rangeImpossible(): RangeError {
 //   return new RangeError(_Message.build(""));
 // }
 
-export function tooLong(maxLength: _numeric): RangeError {
-  return new RangeError(_Message.build("INPUT:TOO_LONG:_", `${maxLength}`));
-}
-
 export function tooShort(minLength: _numeric): RangeError {
   return new RangeError(_Message.build("INPUT:TOO_SHORT:_", `${minLength}`));
 }
