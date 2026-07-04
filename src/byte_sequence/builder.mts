@@ -1,7 +1,7 @@
 import { _T } from "../_common/mod.mts";
 import { Exception } from "../_internal/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { Uint16, Uint32, Uint8 } from "../numerics/mod.mts";
+import { BigUint64, Uint16, Uint32, Uint8 } from "../numerics/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -26,6 +26,12 @@ function _getUint32Clamper(mode?: _ClampMode): (v: _T.safeint) => _T.uint32 {
     : (v) => Uint32.truncateFrom(v);
 }
 
+function _getBigUint64Clamper(mode?: _ClampMode): (v: bigint) => _T.biguint64 {
+  return (mode === _ClampMode.SATURATE)
+    ? (v) => BigUint64.saturateFrom(v)
+    : (v) => BigUint64.truncateFrom(v);
+}
+
 type _LoadOptions = {
   clampMode?: _ClampMode;
   byteOrder?: ByteOrder;
@@ -40,6 +46,11 @@ function _uint8sToBuffer(
   }
   return Uint8Array.from(uint8s).buffer;
 }
+
+type _ToBufferOptions = {
+  byteLength?: _T.safeint;
+  //XXX fixLength?: boolean;
+};
 
 export class Builder {
   readonly #buffer: ArrayBuffer;
@@ -202,9 +213,39 @@ export class Builder {
     return this;
   }
 
-  toArrayBuffer(
-    options?: { byteLength?: _T.safeint /* fixLength?: boolean */ },
-  ): ArrayBuffer {
+  loadFromBigUint64s(
+    biguint64s: Iterable<bigint>,
+    options?: _LoadOptions,
+  ): this {
+    this.#assertNonDetached();
+    if (_T.isIterable(biguint64s) !== true) {
+      throw Exception.TypeMismatch.iterable("Input");
+    }
+
+    const f = _getBigUint64Clamper(options?.clampMode);
+    for (const biguint64 of biguint64s) {
+      this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+    }
+    return this;
+  }
+
+  async loadFromAsyncBigUint64s(
+    biguint64s: AsyncIterable<bigint>,
+    options?: _LoadOptions,
+  ): Promise<this> {
+    this.#assertNonDetached();
+    if (_T.isAsyncIterable(biguint64s) !== true) {
+      throw Exception.TypeMismatch.asyncIterable("Input");
+    }
+
+    const f = _getBigUint64Clamper(options?.clampMode);
+    for await (const biguint64 of biguint64s) {
+      this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+    }
+    return this;
+  }
+
+  toArrayBuffer(options?: _ToBufferOptions): ArrayBuffer {
     this.#assertNonDetached();
     // const buffer = (options?.fixLength === true)
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
@@ -214,6 +255,10 @@ export class Builder {
       ? options?.byteLength
       : this.#index;
     return this.#buffer.transferToFixedLength(length);
+  }
+
+  toBytes(options?: _ToBufferOptions): _T.Bytes {
+    return new Uint8Array(this.toArrayBuffer(options));
   }
 
   #appendByte(byte: _T.uint8): void {

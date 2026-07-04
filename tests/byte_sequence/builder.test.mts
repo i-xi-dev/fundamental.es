@@ -545,3 +545,215 @@ Deno.test("ByteSequence.Builder.prototype.loadFromAsyncUint32s() - error", async
     "Input must be an `AsyncIterable`",
   );
 });
+
+Deno.test("ByteSequence.Builder.prototype.loadFromBigUint64s()", () => {
+  const b = ByteSequence.Builder.create(16);
+  b.loadFromBigUint64s([0xFFF0123466554433n, 1n]);
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 16);
+  assertStrictEquals(bytes[0], 0x33);
+  assertStrictEquals(bytes[1], 0x44);
+  assertStrictEquals(bytes[2], 0x55);
+  assertStrictEquals(bytes[3], 0x66);
+  assertStrictEquals(bytes[4], 0x34);
+  assertStrictEquals(bytes[5], 0x12);
+  assertStrictEquals(bytes[6], 0xF0);
+  assertStrictEquals(bytes[7], 0xFF);
+  assertStrictEquals(bytes[8], 1);
+  assertStrictEquals(bytes[9], 0);
+  assertStrictEquals(bytes[10], 0);
+  assertStrictEquals(bytes[11], 0);
+  assertStrictEquals(bytes[12], 0);
+  assertStrictEquals(bytes[13], 0);
+  assertStrictEquals(bytes[14], 0);
+  assertStrictEquals(bytes[15], 0);
+
+  const b2 = ByteSequence.Builder.create(16);
+  b2.loadFromBigUint64s([0xFFF0123466554433n, 1n], { byteOrder: "big-endian" });
+  const bytes2 = new Uint8Array(b2.toArrayBuffer());
+  assertStrictEquals(bytes2.byteLength, 16);
+  assertStrictEquals(bytes2[0], 0xFF);
+  assertStrictEquals(bytes2[1], 0xF0);
+  assertStrictEquals(bytes2[2], 0x12);
+  assertStrictEquals(bytes2[3], 0x34);
+  assertStrictEquals(bytes2[4], 0x66);
+  assertStrictEquals(bytes2[5], 0x55);
+  assertStrictEquals(bytes2[6], 0x44);
+  assertStrictEquals(bytes2[7], 0x33);
+  assertStrictEquals(bytes2[8], 0);
+  assertStrictEquals(bytes2[9], 0);
+  assertStrictEquals(bytes2[10], 0);
+  assertStrictEquals(bytes2[11], 0);
+  assertStrictEquals(bytes2[12], 0);
+  assertStrictEquals(bytes2[13], 0);
+  assertStrictEquals(bytes2[14], 0);
+  assertStrictEquals(bytes2[15], 1);
+
+  const b3 = ByteSequence.Builder.create(16);
+  b3.loadFromBigUint64s([0xFFF0123466554433n, 1n], {
+    byteOrder: "little-endian",
+  });
+  const bytes3 = new Uint8Array(b3.toArrayBuffer());
+  assertStrictEquals(bytes3.byteLength, 16);
+  assertStrictEquals(bytes3[0], 0x33);
+  assertStrictEquals(bytes3[1], 0x44);
+  assertStrictEquals(bytes3[2], 0x55);
+  assertStrictEquals(bytes3[3], 0x66);
+  assertStrictEquals(bytes3[4], 0x34);
+  assertStrictEquals(bytes3[5], 0x12);
+  assertStrictEquals(bytes3[6], 0xF0);
+  assertStrictEquals(bytes3[7], 0xFF);
+  assertStrictEquals(bytes3[8], 1);
+  assertStrictEquals(bytes3[9], 0);
+  assertStrictEquals(bytes3[10], 0);
+  assertStrictEquals(bytes3[11], 0);
+  assertStrictEquals(bytes3[12], 0);
+  assertStrictEquals(bytes3[13], 0);
+  assertStrictEquals(bytes3[14], 0);
+  assertStrictEquals(bytes3[15], 0);
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadFromBigUint64s() - error", () => {
+  const b3 = ByteSequence.Builder.create(16);
+  assertThrows(
+    () => {
+      b3.loadFromBigUint64s(255 as unknown as bigint[]);
+    },
+    TypeError,
+    "Input must be an `Iterable`",
+  );
+
+  const b4 = ByteSequence.Builder.create(16);
+  assertThrows(
+    () => {
+      b4.loadFromBigUint64s([255n, "x" as unknown as bigint]);
+    },
+    TypeError,
+    "Input must be a `bigint`", //XXX 主語を変えたい
+  );
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadFromAsyncUint32s()", async () => {
+  async function* bs() {
+    yield 0xFFF0123466554433n;
+    yield 1n;
+  }
+
+  const b = ByteSequence.Builder.create(16);
+  await b.loadFromAsyncBigUint64s(bs());
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 16);
+  assertStrictEquals(bytes[0], 0x33);
+  assertStrictEquals(bytes[1], 0x44);
+  assertStrictEquals(bytes[2], 0x55);
+  assertStrictEquals(bytes[3], 0x66);
+  assertStrictEquals(bytes[4], 0x34);
+  assertStrictEquals(bytes[5], 0x12);
+  assertStrictEquals(bytes[6], 0xF0);
+  assertStrictEquals(bytes[7], 0xFF);
+  assertStrictEquals(bytes[8], 1);
+  assertStrictEquals(bytes[9], 0);
+  assertStrictEquals(bytes[10], 0);
+  assertStrictEquals(bytes[11], 0);
+  assertStrictEquals(bytes[12], 0);
+  assertStrictEquals(bytes[13], 0);
+  assertStrictEquals(bytes[14], 0);
+  assertStrictEquals(bytes[15], 0);
+
+  const b2 = ByteSequence.Builder.create(16);
+  await b2.loadFromAsyncBigUint64s(bs(), { byteOrder: "big-endian" });
+  const bytes2 = new Uint8Array(b2.toArrayBuffer());
+  assertStrictEquals(bytes2.byteLength, 16);
+  assertStrictEquals(bytes2[0], 0xFF);
+  assertStrictEquals(bytes2[1], 0xF0);
+  assertStrictEquals(bytes2[2], 0x12);
+  assertStrictEquals(bytes2[3], 0x34);
+  assertStrictEquals(bytes2[4], 0x66);
+  assertStrictEquals(bytes2[5], 0x55);
+  assertStrictEquals(bytes2[6], 0x44);
+  assertStrictEquals(bytes2[7], 0x33);
+  assertStrictEquals(bytes2[8], 0);
+  assertStrictEquals(bytes2[9], 0);
+  assertStrictEquals(bytes2[10], 0);
+  assertStrictEquals(bytes2[11], 0);
+  assertStrictEquals(bytes2[12], 0);
+  assertStrictEquals(bytes2[13], 0);
+  assertStrictEquals(bytes2[14], 0);
+  assertStrictEquals(bytes2[15], 1);
+
+  const b3 = ByteSequence.Builder.create(16);
+  await b3.loadFromAsyncBigUint64s(bs(), { byteOrder: "little-endian" });
+  const bytes3 = new Uint8Array(b3.toArrayBuffer());
+  assertStrictEquals(bytes3.byteLength, 16);
+  assertStrictEquals(bytes3[0], 0x33);
+  assertStrictEquals(bytes3[1], 0x44);
+  assertStrictEquals(bytes3[2], 0x55);
+  assertStrictEquals(bytes3[3], 0x66);
+  assertStrictEquals(bytes3[4], 0x34);
+  assertStrictEquals(bytes3[5], 0x12);
+  assertStrictEquals(bytes3[6], 0xF0);
+  assertStrictEquals(bytes3[7], 0xFF);
+  assertStrictEquals(bytes3[8], 1);
+  assertStrictEquals(bytes3[9], 0);
+  assertStrictEquals(bytes3[10], 0);
+  assertStrictEquals(bytes3[11], 0);
+  assertStrictEquals(bytes3[12], 0);
+  assertStrictEquals(bytes3[13], 0);
+  assertStrictEquals(bytes3[14], 0);
+  assertStrictEquals(bytes3[15], 0);
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadFromAsyncBigUint64s() - error", async () => {
+  const b3 = ByteSequence.Builder.create(16);
+  await assertRejects(
+    async () => {
+      await b3.loadFromAsyncBigUint64s(255 as unknown as AsyncIterable<bigint>);
+    },
+    TypeError,
+    "Input must be an `AsyncIterable`",
+  );
+});
+
+Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
+  const b = ByteSequence.Builder.create(4, 8);
+  b.appendUint8(0xFF);
+  b.appendUint8(0xFE);
+  b.appendUint8(0xFD);
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 3);
+  assertStrictEquals(bytes[0], 0xFF);
+  assertStrictEquals(bytes[1], 0xFE);
+  assertStrictEquals(bytes[2], 0xFD);
+
+  const b2 = ByteSequence.Builder.create(4, 8);
+  b2.appendUint8(0xFF);
+  b2.appendUint8(0xFE);
+  b2.appendUint8(0xFD);
+  const bytes2 = new Uint8Array(b2.toArrayBuffer({ byteLength: 2 }));
+  assertStrictEquals(bytes2.byteLength, 2);
+  assertStrictEquals(bytes2.buffer.resizable, false);
+  assertStrictEquals(bytes2[0], 0xFF);
+  assertStrictEquals(bytes2[1], 0xFE);
+});
+
+Deno.test("ByteSequence.Builder.prototype.toBytes()", () => {
+  const b = ByteSequence.Builder.create(4, 8);
+  b.appendUint8(0xFF);
+  b.appendUint8(0xFE);
+  b.appendUint8(0xFD);
+  const bytes = b.toBytes();
+  assertStrictEquals(bytes.byteLength, 3);
+  assertStrictEquals(bytes[0], 0xFF);
+  assertStrictEquals(bytes[1], 0xFE);
+  assertStrictEquals(bytes[2], 0xFD);
+
+  const b2 = ByteSequence.Builder.create(4, 8);
+  b2.appendUint8(0xFF);
+  b2.appendUint8(0xFE);
+  b2.appendUint8(0xFD);
+  const bytes2 = b2.toBytes({ byteLength: 2 });
+  assertStrictEquals(bytes2.byteLength, 2);
+  assertStrictEquals(bytes2.buffer.resizable, false);
+  assertStrictEquals(bytes2[0], 0xFF);
+  assertStrictEquals(bytes2[1], 0xFE);
+});
