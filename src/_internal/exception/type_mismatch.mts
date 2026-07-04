@@ -15,6 +15,10 @@ export namespace TypeMismatchError {
     return new _TypeMismatchError(target, "an `ArrayBuffer`");
   }
 
+  export function asyncIterable(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(target, "an `AsyncIterable`");
+  }
+
   export function bigInt(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "a `bigint`");
   }
@@ -34,6 +38,10 @@ export namespace TypeMismatchError {
       target,
       "an `Uint8Array` that references an `ArrayBuffer`",
     );
+  }
+
+  export function iterable(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(target, "an `Iterable`");
   }
 
   export function safeInt(target: string): _TypeMismatchError {
