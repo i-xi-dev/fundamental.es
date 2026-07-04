@@ -11,6 +11,10 @@ class _TypeMismatchError extends TypeError {
 }
 
 export namespace TypeMismatchError {
+  export function arrayBuffer(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(target, "an `ArrayBuffer`");
+  }
+
   export function bigInt(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "a `bigint`");
   }
@@ -34,6 +38,13 @@ export namespace TypeMismatchError {
 
   export function safeInt(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "a safe-integer of type `number`");
+  }
+
+  export function nonNegativeSafeInt(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(
+      target,
+      "a non-negative safe-integer of type `number`",
+    );
   }
 
   export function string(target: string): _TypeMismatchError {
