@@ -80,7 +80,7 @@ export class Builder {
   }
 
   get capacity(): _T.safeint {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     return this.#buffer.byteLength;
   }
 
@@ -101,7 +101,7 @@ export class Builder {
   }
 
   appendUint8(byte: _T.safeint, options?: _LoadOptions): this {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
 
     const clamped = (options?.clampMode === _ClampMode.SATURATE)
@@ -111,12 +111,11 @@ export class Builder {
     return this;
   }
 
-  // - TypedArrayであるかに関係なくArrayBufferのbyte順通りにuint8で読み取る
   // - sourceBufferの部分範囲だけ追加したければ切り出してから渡せば良い
   // - SharedArrayBufferは弾く
   // - sourceBufferは読み取るだけなのでdetatch等しない（要らないなら自分で処分すること）
-  loadFromArrayBuffer(sourceBuffer: ArrayBuffer): this {
-    this.#assertNonDetached();
+  loadArrayBuffer(sourceBuffer: ArrayBuffer): this {
+    this.#assertAccessible();
     if (_T.isArrayBuffer(sourceBuffer) !== true) {
       throw Exception.TypeMismatch.arrayBuffer("Input");
     }
@@ -125,8 +124,32 @@ export class Builder {
     return this;
   }
 
-  loadFromUint8s(uint8s: Iterable<_T.safeint>, options?: _LoadOptions): this {
-    this.#assertNonDetached();
+  //TODO
+  // WebSocketStream なんかは ReadableStream<ArrayBuffer>
+  // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
+  // Uint8Arrayの場合はTranformStreamをかませば良い
+  // async loadArrayBufferAsyncIterable(
+  //   sourceBuffers: AsyncIterable<ArrayBuffer>,
+  // ): Promise<this> {
+  //   this.#assertAccessible();
+  //   if (_T.isAsyncIterable(sourceBuffers) !== true) {
+  //     throw Exception.TypeMismatch.asyncIterable("Input");
+  //   }
+  //
+  //   for await (const sourceBuffer of sourceBuffers) {
+  //     if (_T.isArrayBuffer(sourceBuffer) !== true) {
+  //       throw Exception.TypeMismatch.arrayBuffer("Input");
+  //     }
+  //     this.#appendBytes(new Uint8Array(sourceBuffer));
+  //   }
+  //   return this;
+  // }
+
+  loadUint8Iterable(
+    uint8s: Iterable<_T.safeint>,
+    options?: _LoadOptions,
+  ): this {
+    this.#assertAccessible();
     if (_T.isIterable(uint8s) !== true) {
       throw Exception.TypeMismatch.iterable("Input");
     }
@@ -136,7 +159,7 @@ export class Builder {
     //   buffer = Uint8ClampedArray.from(uint8s).buffer;
     // }
     // buffer = Uint8Array.from(uint8s).buffer;
-    // return this.loadFromArrayBuffer(buffer);
+    // return this.loadArrayBuffer(buffer);
 
     const f = _uintClamper(Uint8, options?.clampMode);
     for (const uint8 of uint8s) {
@@ -145,11 +168,11 @@ export class Builder {
     return this;
   }
 
-  async loadFromAsyncUint8s(
+  async loadUint8AsyncIterable(
     uint8s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     if (_T.isAsyncIterable(uint8s) !== true) {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
@@ -160,8 +183,11 @@ export class Builder {
     return this;
   }
 
-  loadFromUint16s(uint16s: Iterable<_T.safeint>, options?: _LoadOptions): this {
-    this.#assertNonDetached();
+  loadUint16Iterable(
+    uint16s: Iterable<_T.safeint>,
+    options?: _LoadOptions,
+  ): this {
+    this.#assertAccessible();
     if (_T.isIterable(uint16s) !== true) {
       throw Exception.TypeMismatch.iterable("Input");
     }
@@ -173,11 +199,11 @@ export class Builder {
     return this;
   }
 
-  async loadFromAsyncUint16s(
+  async loadUint16AsyncIterable(
     uint16s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     if (_T.isAsyncIterable(uint16s) !== true) {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
@@ -189,8 +215,11 @@ export class Builder {
     return this;
   }
 
-  loadFromUint32s(uint32s: Iterable<_T.safeint>, options?: _LoadOptions): this {
-    this.#assertNonDetached();
+  loadUint32Iterable(
+    uint32s: Iterable<_T.safeint>,
+    options?: _LoadOptions,
+  ): this {
+    this.#assertAccessible();
     if (_T.isIterable(uint32s) !== true) {
       throw Exception.TypeMismatch.iterable("Input");
     }
@@ -202,11 +231,11 @@ export class Builder {
     return this;
   }
 
-  async loadFromAsyncUint32s(
+  async loadUint32AsyncIterable(
     uint32s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     if (_T.isAsyncIterable(uint32s) !== true) {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
@@ -218,11 +247,11 @@ export class Builder {
     return this;
   }
 
-  loadFromBigUint64s(
+  loadBigUint64Iterable(
     biguint64s: Iterable<bigint>,
     options?: _LoadOptions,
   ): this {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     if (_T.isIterable(biguint64s) !== true) {
       throw Exception.TypeMismatch.iterable("Input");
     }
@@ -234,11 +263,11 @@ export class Builder {
     return this;
   }
 
-  async loadFromAsyncBigUint64s(
+  async loadBigUint64AsyncIterable(
     biguint64s: AsyncIterable<bigint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     if (_T.isAsyncIterable(biguint64s) !== true) {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
@@ -251,7 +280,7 @@ export class Builder {
   }
 
   toArrayBuffer(options?: _ToBufferOptions): ArrayBuffer {
-    this.#assertNonDetached();
+    this.#assertAccessible();
     // const buffer = (options?.fixLength === true)
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
     //   : this.#bytes.buffer.transfer(options?.byteLength);
@@ -297,9 +326,11 @@ export class Builder {
     }
   }
 
-  #assertNonDetached(): void {
+  #assertAccessible(): void {
     if (this.#buffer.detached === true) {
       throw new TypeError("`ArrayBuffer` is detached"); //TODO
     }
+
+    //TODO 非同期操作中もエラーにする
   }
 }
