@@ -30,14 +30,14 @@ Deno.test("ByteSequence.Builder.create()", () => {
 
 Deno.test("ByteSequence.Builder.create() - fixed-length", () => {
   const b = ByteSequence.Builder.create(4);
-  b.appendUint8(0);
-  b.appendUint8(1);
-  b.appendUint8(2);
-  b.appendUint8(3);
+  b.loadUint8(0);
+  b.loadUint8(1);
+  b.loadUint8(2);
+  b.loadUint8(3);
 
   assertThrows(
     () => {
-      b.appendUint8(4);
+      b.loadUint8(4);
     },
     RangeError,
     "`ArrayBuffer` cannot be resized",
@@ -53,11 +53,11 @@ Deno.test("ByteSequence.Builder.create() - fixed-length", () => {
 
 Deno.test("ByteSequence.Builder.create() - expandabe-length", () => {
   const b = ByteSequence.Builder.create(4, 8);
-  b.appendUint8(0);
-  b.appendUint8(1);
-  b.appendUint8(2);
-  b.appendUint8(3);
-  b.appendUint8(4);
+  b.loadUint8(0);
+  b.loadUint8(1);
+  b.loadUint8(2);
+  b.loadUint8(3);
+  b.loadUint8(4);
 
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 5);
@@ -70,18 +70,18 @@ Deno.test("ByteSequence.Builder.create() - expandabe-length", () => {
 
 Deno.test("ByteSequence.Builder.create() - expandabe-length - 2", () => {
   const b = ByteSequence.Builder.create(4, 8);
-  b.appendUint8(0);
-  b.appendUint8(1);
-  b.appendUint8(2);
-  b.appendUint8(3);
-  b.appendUint8(4);
-  b.appendUint8(5);
-  b.appendUint8(6);
-  b.appendUint8(7);
+  b.loadUint8(0);
+  b.loadUint8(1);
+  b.loadUint8(2);
+  b.loadUint8(3);
+  b.loadUint8(4);
+  b.loadUint8(5);
+  b.loadUint8(6);
+  b.loadUint8(7);
 
   assertThrows(
     () => {
-      b.appendUint8(8);
+      b.loadUint8(8);
     },
     RangeError,
     "Exceeds the resize limit for `ArrayBuffer`",
@@ -101,14 +101,14 @@ Deno.test("ByteSequence.Builder.create() - expandabe-length - 2", () => {
 
 Deno.test("ByteSequence.Builder.create() - expandabe-length - 3", () => {
   const b = ByteSequence.Builder.create(4, 2);
-  b.appendUint8(0);
-  b.appendUint8(1);
-  b.appendUint8(2);
-  b.appendUint8(3);
+  b.loadUint8(0);
+  b.loadUint8(1);
+  b.loadUint8(2);
+  b.loadUint8(3);
 
   assertThrows(
     () => {
-      b.appendUint8(4);
+      b.loadUint8(4);
     },
     RangeError,
     "Exceeds the resize limit for `ArrayBuffer`",
@@ -156,12 +156,12 @@ Deno.test("ByteSequence.Builder.create() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.appendUint8()", () => {
+Deno.test("ByteSequence.Builder.prototype.loadUint8()", () => {
   const b = ByteSequence.Builder.create(4);
-  b.appendUint8(-1);
-  b.appendUint8(0);
-  b.appendUint8(0xFF);
-  b.appendUint8(0x100);
+  b.loadUint8(-1);
+  b.loadUint8(0);
+  b.loadUint8(0xFF);
+  b.loadUint8(0x100);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes[0], 0xFF);
   assertStrictEquals(bytes[1], 0);
@@ -169,10 +169,10 @@ Deno.test("ByteSequence.Builder.prototype.appendUint8()", () => {
   assertStrictEquals(bytes[3], 0);
 
   const b2 = ByteSequence.Builder.create(4);
-  b2.appendUint8(-1, { clampMode: "truncate" });
-  b2.appendUint8(0, { clampMode: "truncate" });
-  b2.appendUint8(0xFF, { clampMode: "truncate" });
-  b2.appendUint8(0x100, { clampMode: "truncate" });
+  b2.loadUint8(-1, { clampMode: "truncate" });
+  b2.loadUint8(0, { clampMode: "truncate" });
+  b2.loadUint8(0xFF, { clampMode: "truncate" });
+  b2.loadUint8(0x100, { clampMode: "truncate" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2[0], 0xFF);
   assertStrictEquals(bytes2[1], 0);
@@ -180,10 +180,10 @@ Deno.test("ByteSequence.Builder.prototype.appendUint8()", () => {
   assertStrictEquals(bytes2[3], 0);
 
   const b3 = ByteSequence.Builder.create(4);
-  b3.appendUint8(-1, { clampMode: "saturate" });
-  b3.appendUint8(0, { clampMode: "saturate" });
-  b3.appendUint8(0xFF, { clampMode: "saturate" });
-  b3.appendUint8(0x100, { clampMode: "saturate" });
+  b3.loadUint8(-1, { clampMode: "saturate" });
+  b3.loadUint8(0, { clampMode: "saturate" });
+  b3.loadUint8(0xFF, { clampMode: "saturate" });
+  b3.loadUint8(0x100, { clampMode: "saturate" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3[0], 0);
   assertStrictEquals(bytes3[1], 0);
@@ -191,17 +191,48 @@ Deno.test("ByteSequence.Builder.prototype.appendUint8()", () => {
   assertStrictEquals(bytes3[3], 0xFF);
 });
 
-Deno.test("ByteSequence.Builder.prototype.appendUint8() - error", () => {
+Deno.test("ByteSequence.Builder.prototype.loadUint8() - error", () => {
   const b = ByteSequence.Builder.create(4);
   const _ = b.toArrayBuffer();
 
   assertThrows(
     () => {
-      b.appendUint8(0);
+      b.loadUint8(0);
     },
     TypeError,
     "`ArrayBuffer` is detached",
   );
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
+  const b = ByteSequence.Builder.create(4);
+  b.loadUint8(-1);
+  b.loadUint8(0);
+  b.loadUint8(0xFF);
+  b.loadUint8(0x100);
+  b.loadUint8(0x11, { insertAt: 0 });
+  b.loadUint8(0x22, { insertAt: 1 });
+  b.loadUint8(0x33, { insertAt: 2 });
+  b.loadUint8(0x44, { insertAt: 3 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes[0], 0x11);
+  assertStrictEquals(bytes[1], 0x22);
+  assertStrictEquals(bytes[2], 0x33);
+  assertStrictEquals(bytes[3], 0x44);
+
+  const b2 = ByteSequence.Builder.create(4);
+  b2.loadUint8(0xFF);
+  b2.loadUint8(0x11, { insertAt: -1 });
+  const bytes2 = new Uint8Array(b2.toArrayBuffer());
+  assertStrictEquals(bytes2[0], 0xFF);
+  assertStrictEquals(bytes2[1], 0x11);
+
+  const b3 = ByteSequence.Builder.create(4);
+  b3.loadUint8(0xFF);
+  b3.loadUint8(0x11, { insertAt: 100 });
+  const bytes3 = new Uint8Array(b3.toArrayBuffer());
+  assertStrictEquals(bytes3[0], 0xFF);
+  assertStrictEquals(bytes3[1], 0x11);
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
@@ -258,6 +289,56 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - error", () => {
     TypeError,
     "Input must be an `ArrayBuffer`",
   );
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
+  const testdata = Uint8Array.of(255, 254, 253);
+
+  const b = ByteSequence.Builder.create(24);
+  b.loadArrayBuffer(testdata.buffer);
+  b.loadArrayBuffer(testdata.buffer, { insertAt: -1 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 6);
+  assertStrictEquals(bytes[0], 255);
+  assertStrictEquals(bytes[1], 254);
+  assertStrictEquals(bytes[2], 253);
+  assertStrictEquals(bytes[3], 255);
+  assertStrictEquals(bytes[4], 254);
+  assertStrictEquals(bytes[5], 253);
+
+  const b2 = ByteSequence.Builder.create(24);
+  b2.loadArrayBuffer(testdata.buffer);
+  b2.loadArrayBuffer(testdata.buffer, { insertAt: 100 });
+  const bytes2 = new Uint8Array(b2.toArrayBuffer());
+  assertStrictEquals(bytes2.byteLength, 6);
+  assertStrictEquals(bytes2[0], 255);
+  assertStrictEquals(bytes2[1], 254);
+  assertStrictEquals(bytes2[2], 253);
+  assertStrictEquals(bytes2[3], 255);
+  assertStrictEquals(bytes2[4], 254);
+  assertStrictEquals(bytes2[5], 253);
+
+  const b3 = ByteSequence.Builder.create(24);
+  b3.loadArrayBuffer(testdata.buffer);
+  b3.loadArrayBuffer(testdata.buffer, { insertAt: 1 });
+  const bytes3 = new Uint8Array(b3.toArrayBuffer());
+  assertStrictEquals(bytes3.byteLength, 4);
+  assertStrictEquals(bytes3[0], 255);
+  assertStrictEquals(bytes3[1], 255);
+  assertStrictEquals(bytes3[2], 254);
+  assertStrictEquals(bytes3[3], 253);
+
+  const b4 = ByteSequence.Builder.create(24);
+  b4.loadArrayBuffer(testdata.buffer);
+  b4.loadArrayBuffer(testdata.buffer, { insertAt: 1 });
+  b4.loadUint8(0x01);
+  const bytes4 = new Uint8Array(b4.toArrayBuffer());
+  assertStrictEquals(bytes4.byteLength, 5);
+  assertStrictEquals(bytes4[0], 255);
+  assertStrictEquals(bytes4[1], 255);
+  assertStrictEquals(bytes4[2], 254);
+  assertStrictEquals(bytes4[3], 253);
+  assertStrictEquals(bytes4[4], 1);
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable()", () => {
@@ -720,9 +801,9 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable() - error",
 
 Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
   const b = ByteSequence.Builder.create(4, 8);
-  b.appendUint8(0xFF);
-  b.appendUint8(0xFE);
-  b.appendUint8(0xFD);
+  b.loadUint8(0xFF);
+  b.loadUint8(0xFE);
+  b.loadUint8(0xFD);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 3);
   assertStrictEquals(bytes[0], 0xFF);
@@ -730,9 +811,9 @@ Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
   assertStrictEquals(bytes[2], 0xFD);
 
   const b2 = ByteSequence.Builder.create(4, 8);
-  b2.appendUint8(0xFF);
-  b2.appendUint8(0xFE);
-  b2.appendUint8(0xFD);
+  b2.loadUint8(0xFF);
+  b2.loadUint8(0xFE);
+  b2.loadUint8(0xFD);
   const bytes2 = new Uint8Array(b2.toArrayBuffer({ byteLength: 2 }));
   assertStrictEquals(bytes2.byteLength, 2);
   assertStrictEquals(bytes2.buffer.resizable, false);
@@ -742,9 +823,9 @@ Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
 
 Deno.test("ByteSequence.Builder.prototype.toBytes()", () => {
   const b = ByteSequence.Builder.create(4, 8);
-  b.appendUint8(0xFF);
-  b.appendUint8(0xFE);
-  b.appendUint8(0xFD);
+  b.loadUint8(0xFF);
+  b.loadUint8(0xFE);
+  b.loadUint8(0xFD);
   const bytes = b.toBytes();
   assertStrictEquals(bytes.byteLength, 3);
   assertStrictEquals(bytes[0], 0xFF);
@@ -752,9 +833,9 @@ Deno.test("ByteSequence.Builder.prototype.toBytes()", () => {
   assertStrictEquals(bytes[2], 0xFD);
 
   const b2 = ByteSequence.Builder.create(4, 8);
-  b2.appendUint8(0xFF);
-  b2.appendUint8(0xFE);
-  b2.appendUint8(0xFD);
+  b2.loadUint8(0xFF);
+  b2.loadUint8(0xFE);
+  b2.loadUint8(0xFD);
   const bytes2 = b2.toBytes({ byteLength: 2 });
   assertStrictEquals(bytes2.byteLength, 2);
   assertStrictEquals(bytes2.buffer.resizable, false);

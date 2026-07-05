@@ -39,9 +39,19 @@ function _biguintClamper<T extends bigint>(
     : (v) => x.truncateFrom(v);
 }
 
+type _LoadOptions_1 = {
+  clampMode?: _ClampMode;
+  insertAt?: _T.safeint;
+};
+
+type _LoadOptions_2 = {
+  insertAt?: _T.safeint;
+};
+
 type _LoadOptions = {
   clampMode?: _ClampMode;
   byteOrder?: ByteOrder;
+  insertAt?: _T.safeint;
 };
 
 type _ToBufferOptions = {
@@ -49,10 +59,33 @@ type _ToBufferOptions = {
   //XXX fixLength?: boolean;
 };
 
+function _randomBytes(byteLength: _T.safeint): ArrayBuffer {
+  const buffer = new ArrayBuffer(byteLength);
+  let bytesSpan: Uint8Array<ArrayBuffer>;
+  let filled = 0;
+  // getRandomValuesは16ビットまでなので16ビットずつ処理する
+  while (filled < buffer.byteLength) {
+    if ((filled + Uint16.MAX_VALUE) >= buffer.byteLength) {
+      bytesSpan = new Uint8Array(
+        buffer,
+        filled,
+        buffer.byteLength % Uint16.MAX_VALUE,
+      );
+      globalThis.crypto.getRandomValues(bytesSpan);
+      break;
+    }
+
+    bytesSpan = new Uint8Array(buffer, filled, Uint16.MAX_VALUE);
+    globalThis.crypto.getRandomValues(bytesSpan);
+    filled += Uint16.MAX_VALUE;
+  }
+  return buffer;
+}
+
 export class Builder {
   readonly #buffer: ArrayBuffer;
   readonly #view: Uint8Array<ArrayBuffer>;
-  #index: _T.safeint;
+  #index: _T.safeint; // 進むのみ。戻す手段は提供しない
 
   private constructor(capacity: _T.safeint, maxCapacity?: _T.safeint) {
     if (_T.isNonNegativeSafeInt(maxCapacity) === true) {
@@ -100,51 +133,46 @@ export class Builder {
     return new Builder(capacity, maxCapacity);
   }
 
-  appendUint8(byte: _T.safeint, options?: _LoadOptions): this {
+  loadUint8(byte: _T.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
 
     const clamped = (options?.clampMode === _ClampMode.SATURATE)
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
-    this.#appendByte(clamped);
+
+    if (
+      _T.isNonNegativeSafeInt(options?.insertAt) &&
+      (options.insertAt < this.#index)
+    ) {
+      this.#view[options.insertAt] = clamped;
+    } else {
+      this.#appendByte(clamped);
+    }
     return this;
   }
 
   // - sourceBufferの部分範囲だけ追加したければ切り出してから渡せば良い
   // - SharedArrayBufferは弾く
   // - sourceBufferは読み取るだけなのでdetatch等しない（要らないなら自分で処分すること）
-  loadArrayBuffer(sourceBuffer: ArrayBuffer): this {
+  loadArrayBuffer(sourceBuffer: ArrayBuffer, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     if (_T.isArrayBuffer(sourceBuffer) !== true) {
       throw Exception.TypeMismatch.arrayBuffer("Input");
     }
 
-    this.#appendBytes(new Uint8Array(sourceBuffer));
+    if (
+      _T.isNonNegativeSafeInt(options?.insertAt) &&
+      (options.insertAt < this.#index)
+    ) {
+      this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
+    } else {
+      this.#appendBytes(new Uint8Array(sourceBuffer));
+    }
     return this;
   }
 
-  //TODO
-  // WebSocketStream なんかは ReadableStream<ArrayBuffer>
-  // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
-  // Uint8Arrayの場合はTranformStreamをかませば良い
-  // async loadArrayBufferAsyncIterable(
-  //   sourceBuffers: AsyncIterable<ArrayBuffer>,
-  // ): Promise<this> {
-  //   this.#assertAccessible();
-  //   if (_T.isAsyncIterable(sourceBuffers) !== true) {
-  //     throw Exception.TypeMismatch.asyncIterable("Input");
-  //   }
-  //
-  //   for await (const sourceBuffer of sourceBuffers) {
-  //     if (_T.isArrayBuffer(sourceBuffer) !== true) {
-  //       throw Exception.TypeMismatch.arrayBuffer("Input");
-  //     }
-  //     this.#appendBytes(new Uint8Array(sourceBuffer));
-  //   }
-  //   return this;
-  // }
-
+  //TODO insertAt
   loadUint8Iterable(
     uint8s: Iterable<_T.safeint>,
     options?: _LoadOptions,
@@ -168,6 +196,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   async loadUint8AsyncIterable(
     uint8s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
@@ -178,11 +207,12 @@ export class Builder {
     }
 
     for await (const v of uint8s) {
-      this.appendUint8(v, options);
+      this.loadUint8(v, options);
     }
     return this;
   }
 
+  //TODO insertAt
   loadUint16Iterable(
     uint16s: Iterable<_T.safeint>,
     options?: _LoadOptions,
@@ -199,6 +229,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   async loadUint16AsyncIterable(
     uint16s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
@@ -215,6 +246,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   loadUint32Iterable(
     uint32s: Iterable<_T.safeint>,
     options?: _LoadOptions,
@@ -231,6 +263,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   async loadUint32AsyncIterable(
     uint32s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
@@ -247,6 +280,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   loadBigUint64Iterable(
     biguint64s: Iterable<bigint>,
     options?: _LoadOptions,
@@ -263,6 +297,7 @@ export class Builder {
     return this;
   }
 
+  //TODO insertAt
   async loadBigUint64AsyncIterable(
     biguint64s: AsyncIterable<bigint>,
     options?: _LoadOptions,
@@ -278,6 +313,45 @@ export class Builder {
     }
     return this;
   }
+
+  //TODO
+  // appendZeros(byteLength: _T.safeint): this {
+  //   if (_T.isNonNegativeSafeInt(byteLength) !== true) {
+  //     throw Exception.TypeMismatch.nonNegativeSafeInt("Input");
+  //   }
+  //
+  //   return this.loadArrayBuffer(new ArrayBuffer(byteLength));
+  // }
+
+  //TODO
+  // appendRandom(byteLength: _T.safeint): this {
+  //   if (_T.isNonNegativeSafeInt(byteLength) !== true) {
+  //     throw Exception.TypeMismatch.nonNegativeSafeInt("Input");
+  //   }
+  //
+  //   return this.loadArrayBuffer(_randomBytes(byteLength));
+  // }
+
+  //TODO
+  // WebSocketStream なんかは ReadableStream<ArrayBuffer>
+  // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
+  // Uint8Arrayの場合はTranformStreamをかませば良い
+  // async loadArrayBufferAsyncIterable(
+  //   sourceBuffers: AsyncIterable<ArrayBuffer>,
+  // ): Promise<this> {
+  //   this.#assertAccessible();
+  //   if (_T.isAsyncIterable(sourceBuffers) !== true) {
+  //     throw Exception.TypeMismatch.asyncIterable("Input");
+  //   }
+  //
+  //   for await (const sourceBuffer of sourceBuffers) {
+  //     if (_T.isArrayBuffer(sourceBuffer) !== true) {
+  //       throw Exception.TypeMismatch.arrayBuffer("Input");
+  //     }
+  //     this.#appendBytes(new Uint8Array(sourceBuffer));
+  //   }
+  //   return this;
+  // }
 
   toArrayBuffer(options?: _ToBufferOptions): ArrayBuffer {
     this.#assertAccessible();
@@ -295,6 +369,8 @@ export class Builder {
     return new Uint8Array(this.toArrayBuffer(options));
   }
 
+  //XXX fillZeros,fillRandom
+
   #appendByte(byte: _T.uint8): void {
     this.#growIfNeeded(1);
     this.#view[this.#index] = byte;
@@ -305,6 +381,12 @@ export class Builder {
     this.#growIfNeeded(bytes.byteLength);
     this.#view.set(bytes, this.#index);
     this.#index += bytes.byteLength;
+  }
+
+  #setBytes(bytes: _T.Bytes, offset: _T.safeint): void {
+    this.#growIfNeeded(offset + bytes.byteLength);
+    this.#view.set(bytes, offset);
+    this.#index = offset + bytes.byteLength;
   }
 
   #growIfNeeded(increaseLength: _T.safeint): void {
