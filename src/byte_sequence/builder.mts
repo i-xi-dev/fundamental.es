@@ -141,10 +141,7 @@ export class Builder {
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
 
-    if (
-      _T.isNonNegativeSafeInt(options?.insertAt) &&
-      (options.insertAt < this.#index)
-    ) {
+    if (this.#indexInRange(options?.insertAt)) {
       this.#view[options.insertAt] = clamped;
     } else {
       this.#appendByte(clamped);
@@ -161,10 +158,7 @@ export class Builder {
       throw Exception.TypeMismatch.arrayBuffer("Input");
     }
 
-    if (
-      _T.isNonNegativeSafeInt(options?.insertAt) &&
-      (options.insertAt < this.#index)
-    ) {
+    if (this.#indexInRange(options?.insertAt)) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
     } else {
       this.#appendBytes(new Uint8Array(sourceBuffer));
@@ -172,10 +166,9 @@ export class Builder {
     return this;
   }
 
-  //TODO insertAt
   loadUint8Iterable(
     uint8s: Iterable<_T.safeint>,
-    options?: _LoadOptions,
+    options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
     if (_T.isIterable(uint8s) !== true) {
@@ -190,29 +183,39 @@ export class Builder {
     // return this.loadArrayBuffer(buffer);
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    for (const uint8 of uint8s) {
-      this.#appendByte(f(uint8));
+    if (this.#indexInRange(options?.insertAt)) {
+      for (const uint8 of uint8s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for (const uint8 of uint8s) {
+        this.#appendByte(f(uint8));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   async loadUint8AsyncIterable(
     uint8s: AsyncIterable<_T.safeint>,
-    options?: _LoadOptions,
+    options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
     if (_T.isAsyncIterable(uint8s) !== true) {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
 
-    for await (const v of uint8s) {
-      this.loadUint8(v, options);
+    if (this.#indexInRange(options?.insertAt)) {
+      for await (const uint8 of uint8s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for await (const uint8 of uint8s) {
+        this.loadUint8(uint8, options);
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   loadUint16Iterable(
     uint16s: Iterable<_T.safeint>,
     options?: _LoadOptions,
@@ -223,13 +226,18 @@ export class Builder {
     }
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    for (const uint16 of uint16s) {
-      this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for (const uint16 of uint16s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for (const uint16 of uint16s) {
+        this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   async loadUint16AsyncIterable(
     uint16s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
@@ -240,13 +248,18 @@ export class Builder {
     }
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    for await (const uint16 of uint16s) {
-      this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for await (const uint16 of uint16s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for await (const uint16 of uint16s) {
+        this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   loadUint32Iterable(
     uint32s: Iterable<_T.safeint>,
     options?: _LoadOptions,
@@ -257,13 +270,18 @@ export class Builder {
     }
 
     const f = _uintClamper(Uint32, options?.clampMode);
-    for (const uint32 of uint32s) {
-      this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for (const uint32 of uint32s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for (const uint32 of uint32s) {
+        this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   async loadUint32AsyncIterable(
     uint32s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
@@ -274,13 +292,18 @@ export class Builder {
     }
 
     const f = _uintClamper(Uint32, options?.clampMode);
-    for await (const uint32 of uint32s) {
-      this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for await (const uint32 of uint32s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for await (const uint32 of uint32s) {
+        this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   loadBigUint64Iterable(
     biguint64s: Iterable<bigint>,
     options?: _LoadOptions,
@@ -291,13 +314,18 @@ export class Builder {
     }
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
-    for (const biguint64 of biguint64s) {
-      this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for (const biguint64 of biguint64s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for (const biguint64 of biguint64s) {
+        this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+      }
     }
     return this;
   }
 
-  //TODO insertAt
   async loadBigUint64AsyncIterable(
     biguint64s: AsyncIterable<bigint>,
     options?: _LoadOptions,
@@ -308,8 +336,14 @@ export class Builder {
     }
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
-    for await (const biguint64 of biguint64s) {
-      this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+    if (this.#indexInRange(options?.insertAt)) {
+      for await (const biguint64 of biguint64s) {
+        throw new Error("TODO not-implemented");
+      }
+    } else {
+      for await (const biguint64 of biguint64s) {
+        this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
+      }
     }
     return this;
   }
@@ -370,6 +404,10 @@ export class Builder {
   }
 
   //XXX fillZeros,fillRandom
+
+  #indexInRange(index: unknown): index is _T.safeint {
+    return _T.isNonNegativeSafeInt(index) && (index < this.#index);
+  }
 
   #appendByte(byte: _T.uint8): void {
     this.#growIfNeeded(1);
