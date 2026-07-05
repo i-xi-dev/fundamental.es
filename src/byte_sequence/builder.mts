@@ -121,14 +121,9 @@ export class Builder {
     capacity: _T.safeint,
     maxCapacity?: _T.safeint,
   ): Builder {
-    if (_T.isNonNegativeSafeInt(capacity) !== true) {
-      throw Exception.TypeMismatch.nonNegativeSafeInt("Capacity");
-    }
-    if (
-      (_T.isNullOrUndefined(maxCapacity) ||
-        _T.isNonNegativeSafeInt(maxCapacity)) !== true
-    ) {
-      throw Exception.TypeMismatch.nonNegativeSafeInt("Max-capacity");
+    _T.assertNonNegativeSafeInt(capacity, "Capacity");
+    if (_T.isNullOrUndefined(maxCapacity) !== true) {
+      _T.assertNonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
     return new Builder(capacity, maxCapacity);
   }
@@ -136,6 +131,7 @@ export class Builder {
   loadUint8(byte: _T.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
+    //XXX options.insertAt が範囲外の場合エラー
 
     const clamped = (options?.clampMode === _ClampMode.SATURATE)
       ? Uint8.saturateFrom(byte)
@@ -154,9 +150,8 @@ export class Builder {
   // - sourceBufferは読み取るだけなのでdetatch等しない（要らないなら自分で処分すること）
   loadArrayBuffer(sourceBuffer: ArrayBuffer, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    if (_T.isArrayBuffer(sourceBuffer) !== true) {
-      throw Exception.TypeMismatch.arrayBuffer("Input");
-    }
+    _T.assertArrayBuffer(sourceBuffer, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     if (this.#indexInRange(options?.insertAt)) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
@@ -171,21 +166,22 @@ export class Builder {
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
-    if (_T.isIterable(uint8s) !== true) {
-      throw Exception.TypeMismatch.iterable("Input");
-    }
+    _T.assertIterable(uint8s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
-    // let buffer: ArrayBuffer;
-    // if (options?.clampMode === "saturate") {
-    //   buffer = Uint8ClampedArray.from(uint8s).buffer;
-    // }
-    // buffer = Uint8Array.from(uint8s).buffer;
-    // return this.loadArrayBuffer(buffer);
+    // this.loadArrayBuffer(Uint8Array.from(uint8s).buffer);
+    // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
+      let offset = options.insertAt;
       for (const uint8 of uint8s) {
-        throw new Error("TODO not-implemented");
+        if (offset < this.#index) {
+          this.#view[offset] = f(uint8);
+        } else {
+          this.#appendByte(f(uint8));
+        }
+        offset += 1;
       }
     } else {
       for (const uint8 of uint8s) {
@@ -200,17 +196,23 @@ export class Builder {
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
-    if (_T.isAsyncIterable(uint8s) !== true) {
-      throw Exception.TypeMismatch.asyncIterable("Input");
-    }
+    _T.assertAsyncIterable(uint8s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
+    const f = _uintClamper(Uint8, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
+      let offset = options.insertAt;
       for await (const uint8 of uint8s) {
-        throw new Error("TODO not-implemented");
+        if (offset < this.#index) {
+          this.#view[offset] = f(uint8);
+        } else {
+          this.#appendByte(f(uint8));
+        }
+        offset += 1;
       }
     } else {
       for await (const uint8 of uint8s) {
-        this.loadUint8(uint8, options);
+        this.#appendByte(f(uint8));
       }
     }
     return this;
@@ -221,9 +223,8 @@ export class Builder {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    if (_T.isIterable(uint16s) !== true) {
-      throw Exception.TypeMismatch.iterable("Input");
-    }
+    _T.assertIterable(uint16s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _uintClamper(Uint16, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -243,9 +244,8 @@ export class Builder {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    if (_T.isAsyncIterable(uint16s) !== true) {
-      throw Exception.TypeMismatch.asyncIterable("Input");
-    }
+    _T.assertAsyncIterable(uint16s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _uintClamper(Uint16, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -265,9 +265,8 @@ export class Builder {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    if (_T.isIterable(uint32s) !== true) {
-      throw Exception.TypeMismatch.iterable("Input");
-    }
+    _T.assertIterable(uint32s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _uintClamper(Uint32, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -287,9 +286,8 @@ export class Builder {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    if (_T.isAsyncIterable(uint32s) !== true) {
-      throw Exception.TypeMismatch.asyncIterable("Input");
-    }
+    _T.assertAsyncIterable(uint32s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _uintClamper(Uint32, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -309,9 +307,8 @@ export class Builder {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    if (_T.isIterable(biguint64s) !== true) {
-      throw Exception.TypeMismatch.iterable("Input");
-    }
+    _T.assertIterable(biguint64s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -331,9 +328,8 @@ export class Builder {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    if (_T.isAsyncIterable(biguint64s) !== true) {
-      throw Exception.TypeMismatch.asyncIterable("Input");
-    }
+    _T.assertAsyncIterable(biguint64s, "Input");
+    //XXX options.insertAt が範囲外の場合エラー
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
     if (this.#indexInRange(options?.insertAt)) {
@@ -350,18 +346,14 @@ export class Builder {
 
   //TODO
   // appendZeros(byteLength: _T.safeint): this {
-  //   if (_T.isNonNegativeSafeInt(byteLength) !== true) {
-  //     throw Exception.TypeMismatch.nonNegativeSafeInt("Input");
-  //   }
+  //   _T.assertNonNegativeSafeInt(byteLength, "Input");
   //
   //   return this.loadArrayBuffer(new ArrayBuffer(byteLength));
   // }
 
   //TODO
   // appendRandom(byteLength: _T.safeint): this {
-  //   if (_T.isNonNegativeSafeInt(byteLength) !== true) {
-  //     throw Exception.TypeMismatch.nonNegativeSafeInt("Input");
-  //   }
+  //   _T.assertNonNegativeSafeInt(byteLength, "Input");
   //
   //   return this.loadArrayBuffer(_randomBytes(byteLength));
   // }
@@ -374,14 +366,10 @@ export class Builder {
   //   sourceBuffers: AsyncIterable<ArrayBuffer>,
   // ): Promise<this> {
   //   this.#assertAccessible();
-  //   if (_T.isAsyncIterable(sourceBuffers) !== true) {
-  //     throw Exception.TypeMismatch.asyncIterable("Input");
-  //   }
+  //   _T.assertAsyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
-  //     if (_T.isArrayBuffer(sourceBuffer) !== true) {
-  //       throw Exception.TypeMismatch.arrayBuffer("Input");
-  //     }
+  //     _T.assertArrayBuffer(sourceBuffer);
   //     this.#appendBytes(new Uint8Array(sourceBuffer));
   //   }
   //   return this;

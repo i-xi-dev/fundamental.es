@@ -72,9 +72,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
-    if (_T.isNonSharedUint8Array(bytes) !== true) {
-      throw Exception.TypeMismatch.bytes("Input");
-    }
+    _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _InputError.lengthMismatch(this.#byteLength);
     }
@@ -172,9 +170,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
     }
-    if (_T.isSafeInt(offset) !== true) {
-      throw Exception.TypeMismatch.safeInt("Offset");
-    }
+    _T.assertSafeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -198,9 +194,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   truncateFrom(value: _T.safeint): T {
-    if (_T.isSafeInt(value) !== true) {
-      throw Exception.TypeMismatch.safeInt("Input");
-    }
+    _T.assertSafeInt(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -214,9 +208,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   saturateFrom(value: _T.safeint): T {
-    if (_T.isSafeInt(value) !== true) {
-      throw Exception.TypeMismatch.safeInt("Input");
-    }
+    _T.assertSafeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }

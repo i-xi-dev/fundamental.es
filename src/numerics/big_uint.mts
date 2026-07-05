@@ -72,9 +72,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   }
 
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
-    if (_T.isNonSharedUint8Array(bytes) !== true) {
-      throw Exception.TypeMismatch.bytes("Input");
-    }
+    _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _InputError.lengthMismatch(this.#byteLength);
     }
@@ -159,9 +157,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     if (this.#range.contains(value) !== true) {
       throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
     }
-    if (_T.isSafeInt(offset) !== true) {
-      throw Exception.TypeMismatch.safeInt("Offset");
-    }
+    _T.assertSafeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -175,17 +171,13 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   }
 
   truncateFrom(value: bigint): T {
-    if (_T.isBigInt(value) !== true) {
-      throw Exception.TypeMismatch.bigInt("Input");
-    }
+    _T.assertBigInt(value, "Input");
 
     return BigInt.asUintN(this.#bitLength, value) as T;
   }
 
   saturateFrom(value: bigint): T {
-    if (_T.isBigInt(value) !== true) {
-      throw Exception.TypeMismatch.bigInt("Input");
-    }
+    _T.assertBigInt(value, "Input");
 
     return _clampBigInt<T>(value, this.#range.min, this.#range.max);
   }

@@ -388,6 +388,30 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - error", () => {
   );
 });
 
+Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - insertAt", () => {
+  const b = ByteSequence.Builder.create(8);
+  b.loadUint8Iterable([255, 254, 253]);
+  b.loadUint8Iterable([255, 254, 253], { insertAt: 1 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 4);
+  assertStrictEquals(bytes[0], 255);
+  assertStrictEquals(bytes[1], 255);
+  assertStrictEquals(bytes[2], 254);
+  assertStrictEquals(bytes[3], 253);
+
+  const b2 = ByteSequence.Builder.create(8);
+  b2.loadUint8Iterable(Uint8Array.of(255, 254, 253));
+  b2.loadUint8Iterable(Uint8Array.of(255, 254, 253), { insertAt: 10 });
+  const bytes2 = new Uint8Array(b2.toArrayBuffer());
+  assertStrictEquals(bytes2.byteLength, 6);
+  assertStrictEquals(bytes2[0], 255);
+  assertStrictEquals(bytes2[1], 254);
+  assertStrictEquals(bytes2[2], 253);
+  assertStrictEquals(bytes2[3], 255);
+  assertStrictEquals(bytes2[4], 254);
+  assertStrictEquals(bytes2[5], 253);
+});
+
 Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable()", async () => {
   async function* bs() {
     yield 255;
@@ -413,6 +437,24 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - error", asy
     TypeError,
     "Input must be an `AsyncIterable`",
   );
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - insertAt", async () => {
+  async function* bs() {
+    yield 255;
+    yield 254;
+    yield 253;
+  }
+
+  const b = ByteSequence.Builder.create(8);
+  await b.loadUint8AsyncIterable(bs());
+  await b.loadUint8AsyncIterable(bs(), { insertAt: 1 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 4);
+  assertStrictEquals(bytes[0], 255);
+  assertStrictEquals(bytes[1], 255);
+  assertStrictEquals(bytes[2], 254);
+  assertStrictEquals(bytes[3], 253);
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable()", () => {

@@ -8,11 +8,3 @@ export class _HexEncoderStream extends _EncoderStreamBase {
     }, new _HexEncoderStreamRegulator());
   }
 }
-//TODO
-/*
-
-  if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw Exception.TypeMismatch.bytes();
-  }
-
-*/

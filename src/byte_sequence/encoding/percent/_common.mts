@@ -1,7 +1,6 @@
 import * as _InputError from "../../../_internal/_input_error.mts";
 import { _T, _U } from "../../../_common/mod.mts";
 import { Uint8 } from "../../../numerics/mod.mts";
-import { Exception } from "../../../_internal/mod.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* _T.uint8 */ number>;
@@ -43,9 +42,7 @@ export function _decode(
   text: string,
   options: Required<_PercentOptions>,
 ): _T.Bytes {
-  if (_T.isString(text) !== true) {
-    throw Exception.TypeMismatch.string("Input");
-  }
+  _T.assertString(text, "Input");
   if (_regex.test(text) !== true) {
     throw _InputError.x_nonControlAsciiString();
   }
@@ -106,9 +103,7 @@ export function _encode(
   bytes: _T.Bytes,
   options: Required<_PercentOptions>,
 ): string {
-  if (_T.isNonSharedUint8Array(bytes) !== true) {
-    throw Exception.TypeMismatch.bytes("Input");
-  }
+  _T.assertNonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => {
     if ((byte === _U.CharCode.SPACE) && (options.spaceAsPlus === true)) {
