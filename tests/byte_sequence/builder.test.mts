@@ -279,23 +279,23 @@ Deno.test("ByteSequence.Builder.prototype.loadFromUint8s()", () => {
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadFromUint8s() - error", () => {
-  //XXX エラーにしたい
-  // const b = ByteSequence.Builder.create(4);
-  // b.loadFromUint8s(["255", "254", "253"] as unknown as number[]);
-  // const bytes = new Uint8Array(b.toArrayBuffer());
-  // assertStrictEquals(bytes.byteLength, 3);
-  // assertStrictEquals(bytes[0], 255);
-  // assertStrictEquals(bytes[1], 254);
-  // assertStrictEquals(bytes[2], 253);
+  const b = ByteSequence.Builder.create(4);
+  assertThrows(
+    () => {
+      b.loadFromUint8s(["255", "254", "253"] as unknown as number[]);
+    },
+    TypeError,
+    "Input must be a safe-integer of type `number`", //XXX 主語を変えたい
+  );
 
-  //XXX 絶対にエラーにしたい
-  // const b2 = ByteSequence.Builder.create(4);
-  // b2.loadFromUint8s("255" as unknown as number[]);
-  // const bytes2 = new Uint8Array(b2.toArrayBuffer());
-  // assertStrictEquals(bytes2.byteLength, 3);
-  // assertStrictEquals(bytes2[0], 2);
-  // assertStrictEquals(bytes2[1], 5);
-  // assertStrictEquals(bytes2[2], 5);
+  const b2 = ByteSequence.Builder.create(4);
+  assertThrows(
+    () => {
+      b2.loadFromUint8s("255" as unknown as number[]);
+    },
+    TypeError,
+    "Input must be a safe-integer of type `number`", //XXX 主語を変えたい
+  );
 
   const b3 = ByteSequence.Builder.create(4);
   assertThrows(

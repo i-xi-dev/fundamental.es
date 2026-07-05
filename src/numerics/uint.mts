@@ -7,7 +7,7 @@ import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Exception } from "../_internal/mod.mts";
 
-export interface _Uint<T extends _T.safeint> {
+export interface Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
   get BIT_LENGTH(): _T.safeint;
@@ -31,7 +31,7 @@ function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
   return Math.trunc(x2 / (0x100 ** (pos - 1))) as _T.uint8;
 }
 
-export class _UintImpl<T extends _unit> implements _Uint<T> {
+export class _UintImpl<T extends _unit> implements Uint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _unit;
@@ -222,10 +222,10 @@ export class _UintImpl<T extends _unit> implements _Uint<T> {
   }
 }
 
-export const Uint6: _Uint<_T.uint6> = new _UintImpl(6);
-export const Uint7: _Uint<_T.uint7> = new _UintImpl(7);
-export const Uint8: _Uint<_T.uint8> = new _UintImpl(8);
-export const Uint16: _Uint<_T.uint16> = new _UintImpl(16);
-export const Uint24: _Uint<_T.uint24> = new _UintImpl(24);
-export const Uint32: _Uint<_T.uint32> = new _UintImpl(32);
-export const Uint48: _Uint<_T.uint48> = new _UintImpl(48);
+export const Uint6: Uint<_T.uint6> = new _UintImpl(6);
+export const Uint7: Uint<_T.uint7> = new _UintImpl(7);
+export const Uint8: Uint<_T.uint8> = new _UintImpl(8);
+export const Uint16: Uint<_T.uint16> = new _UintImpl(16);
+export const Uint24: Uint<_T.uint24> = new _UintImpl(24);
+export const Uint32: Uint<_T.uint32> = new _UintImpl(32);
+export const Uint48: Uint<_T.uint48> = new _UintImpl(48);

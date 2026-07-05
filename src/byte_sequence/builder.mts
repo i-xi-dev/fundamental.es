@@ -1,11 +1,18 @@
 import { _T } from "../_common/mod.mts";
 import { Exception } from "../_internal/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { BigUint64, Uint16, Uint32, Uint8 } from "../numerics/mod.mts";
+import {
+  BigUint,
+  BigUint64,
+  Uint,
+  Uint16,
+  Uint32,
+  Uint8,
+} from "../numerics/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
-const _DEFAULT_EXTENT = 1_048_576;
+const _DEFAULT_EXTENT = 1_048_576; //TODO growIfNeededで使う
 
 const _ClampMode = {
   TRUNCATE: "truncate",
@@ -14,38 +21,28 @@ const _ClampMode = {
 
 type _ClampMode = typeof _ClampMode[keyof typeof _ClampMode];
 
-function _getUint16Clamper(mode?: _ClampMode): (v: _T.safeint) => _T.uint16 {
+function _uintClamper<T extends _T.safeint>(
+  x: Uint<T>,
+  mode?: _ClampMode,
+): (v: _T.safeint) => T {
   return (mode === _ClampMode.SATURATE)
-    ? (v) => Uint16.saturateFrom(v)
-    : (v) => Uint16.truncateFrom(v);
+    ? (v) => x.saturateFrom(v)
+    : (v) => x.truncateFrom(v);
 }
 
-function _getUint32Clamper(mode?: _ClampMode): (v: _T.safeint) => _T.uint32 {
+function _biguintClamper<T extends bigint>(
+  x: BigUint<T>,
+  mode?: _ClampMode,
+): (v: bigint) => T {
   return (mode === _ClampMode.SATURATE)
-    ? (v) => Uint32.saturateFrom(v)
-    : (v) => Uint32.truncateFrom(v);
-}
-
-function _getBigUint64Clamper(mode?: _ClampMode): (v: bigint) => _T.biguint64 {
-  return (mode === _ClampMode.SATURATE)
-    ? (v) => BigUint64.saturateFrom(v)
-    : (v) => BigUint64.truncateFrom(v);
+    ? (v) => x.saturateFrom(v)
+    : (v) => x.truncateFrom(v);
 }
 
 type _LoadOptions = {
   clampMode?: _ClampMode;
   byteOrder?: ByteOrder;
 };
-
-function _uint8sToBuffer(
-  uint8s: Iterable<_T.safeint>,
-  options?: _LoadOptions,
-): ArrayBuffer {
-  if (options?.clampMode === "saturate") {
-    return Uint8ClampedArray.from(uint8s).buffer;
-  }
-  return Uint8Array.from(uint8s).buffer;
-}
 
 type _ToBufferOptions = {
   byteLength?: _T.safeint;
@@ -133,11 +130,19 @@ export class Builder {
     if (_T.isIterable(uint8s) !== true) {
       throw Exception.TypeMismatch.iterable("Input");
     }
-    //TODO 要素の型は逐次チェックするしかない
-    // _uint8sToBuffer ではUint8Arry.fromを第2引数なしで使っているので、["0"]とか渡されたとしても暗黙に型変換される
 
-    const buffer = _uint8sToBuffer(uint8s, options);
-    return this.loadFromArrayBuffer(buffer);
+    // let buffer: ArrayBuffer;
+    // if (options?.clampMode === "saturate") {
+    //   buffer = Uint8ClampedArray.from(uint8s).buffer;
+    // }
+    // buffer = Uint8Array.from(uint8s).buffer;
+    // return this.loadFromArrayBuffer(buffer);
+
+    const f = _uintClamper(Uint8, options?.clampMode);
+    for (const uint8 of uint8s) {
+      this.#appendByte(f(uint8));
+    }
+    return this;
   }
 
   async loadFromAsyncUint8s(
@@ -161,7 +166,7 @@ export class Builder {
       throw Exception.TypeMismatch.iterable("Input");
     }
 
-    const f = _getUint16Clamper(options?.clampMode);
+    const f = _uintClamper(Uint16, options?.clampMode);
     for (const uint16 of uint16s) {
       this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
     }
@@ -177,7 +182,7 @@ export class Builder {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
 
-    const f = _getUint16Clamper(options?.clampMode);
+    const f = _uintClamper(Uint16, options?.clampMode);
     for await (const uint16 of uint16s) {
       this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
     }
@@ -190,7 +195,7 @@ export class Builder {
       throw Exception.TypeMismatch.iterable("Input");
     }
 
-    const f = _getUint32Clamper(options?.clampMode);
+    const f = _uintClamper(Uint32, options?.clampMode);
     for (const uint32 of uint32s) {
       this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
     }
@@ -206,7 +211,7 @@ export class Builder {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
 
-    const f = _getUint32Clamper(options?.clampMode);
+    const f = _uintClamper(Uint32, options?.clampMode);
     for await (const uint32 of uint32s) {
       this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
     }
@@ -222,7 +227,7 @@ export class Builder {
       throw Exception.TypeMismatch.iterable("Input");
     }
 
-    const f = _getBigUint64Clamper(options?.clampMode);
+    const f = _biguintClamper(BigUint64, options?.clampMode);
     for (const biguint64 of biguint64s) {
       this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
     }
@@ -238,7 +243,7 @@ export class Builder {
       throw Exception.TypeMismatch.asyncIterable("Input");
     }
 
-    const f = _getBigUint64Clamper(options?.clampMode);
+    const f = _biguintClamper(BigUint64, options?.clampMode);
     for await (const biguint64 of biguint64s) {
       this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
     }

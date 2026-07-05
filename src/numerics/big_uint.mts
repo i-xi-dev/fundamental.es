@@ -7,7 +7,7 @@ import { _T, Io } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Exception } from "../_internal/mod.mts";
 
-export interface _BigUint<T extends bigint> {
+export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
   get BIT_LENGTH(): _T.safeint;
@@ -31,7 +31,7 @@ function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
   return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _T.uint8;
 }
 
-export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
+export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   readonly #bitLength: _T.safeint; // non-negative integer
   readonly #byteLength: _T.safeint; // non-negative integer
   readonly #size: _biguint;
@@ -191,5 +191,5 @@ export class _BigUintImpl<T extends _biguint> implements _BigUint<T> {
   }
 }
 
-export const BigUint64: _BigUint<_T.biguint64> = new _BigUintImpl(64);
-export const BigUint128: _BigUint<_T.biguint128> = new _BigUintImpl(128);
+export const BigUint64: BigUint<_T.biguint64> = new _BigUintImpl(64);
+export const BigUint128: BigUint<_T.biguint128> = new _BigUintImpl(128);
