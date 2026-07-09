@@ -131,13 +131,13 @@ export class Builder {
   loadUint8(byte: _T.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const clamped = (options?.clampMode === _ClampMode.SATURATE)
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
 
-    if (this.#indexInRange(options?.insertAt)) {
+    if (_T.isSafeInt(options?.insertAt)) {
       this.#view[options.insertAt] = clamped;
     } else {
       this.#appendByte(clamped);
@@ -151,9 +151,9 @@ export class Builder {
   loadArrayBuffer(sourceBuffer: ArrayBuffer, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     _T.assertArrayBuffer(sourceBuffer, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    if (this.#indexInRange(options?.insertAt)) {
+    if (_T.isSafeInt(options?.insertAt)) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
     } else {
       this.#appendBytes(new Uint8Array(sourceBuffer));
@@ -167,13 +167,13 @@ export class Builder {
   ): this {
     this.#assertAccessible();
     _T.assertIterable(uint8s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     // this.loadArrayBuffer(Uint8Array.from(uint8s).buffer);
     // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (_T.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for (const uint8 of uint8s) {
         if (offset < this.#index) {
@@ -197,10 +197,10 @@ export class Builder {
   ): Promise<this> {
     this.#assertAccessible();
     _T.assertAsyncIterable(uint8s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (_T.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for await (const uint8 of uint8s) {
         if (offset < this.#index) {
@@ -224,10 +224,10 @@ export class Builder {
   ): this {
     this.#assertAccessible();
     _T.assertIterable(uint16s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for (const uint16 of uint16s) {
         throw new Error("TODO not-implemented");
       }
@@ -245,10 +245,10 @@ export class Builder {
   ): Promise<this> {
     this.#assertAccessible();
     _T.assertAsyncIterable(uint16s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for await (const uint16 of uint16s) {
         throw new Error("TODO not-implemented");
       }
@@ -266,10 +266,10 @@ export class Builder {
   ): this {
     this.#assertAccessible();
     _T.assertIterable(uint32s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint32, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for (const uint32 of uint32s) {
         throw new Error("TODO not-implemented");
       }
@@ -287,10 +287,10 @@ export class Builder {
   ): Promise<this> {
     this.#assertAccessible();
     _T.assertAsyncIterable(uint32s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint32, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for await (const uint32 of uint32s) {
         throw new Error("TODO not-implemented");
       }
@@ -308,10 +308,10 @@ export class Builder {
   ): this {
     this.#assertAccessible();
     _T.assertIterable(biguint64s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for (const biguint64 of biguint64s) {
         throw new Error("TODO not-implemented");
       }
@@ -329,10 +329,10 @@ export class Builder {
   ): Promise<this> {
     this.#assertAccessible();
     _T.assertAsyncIterable(biguint64s, "Input");
-    //XXX options.insertAt が範囲外の場合エラー
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(BigUint64, options?.clampMode);
-    if (this.#indexInRange(options?.insertAt)) {
+    if (this.#inRange(options?.insertAt)) {
       for await (const biguint64 of biguint64s) {
         throw new Error("TODO not-implemented");
       }
@@ -345,14 +345,14 @@ export class Builder {
   }
 
   //TODO
-  // appendZeros(byteLength: _T.safeint): this {
+  // fillZeros(byteLength: _T.safeint, options?): this {
   //   _T.assertNonNegativeSafeInt(byteLength, "Input");
   //
   //   return this.loadArrayBuffer(new ArrayBuffer(byteLength));
   // }
 
   //TODO
-  // appendRandom(byteLength: _T.safeint): this {
+  // fillRandom(byteLength: _T.safeint, options?): this {
   //   _T.assertNonNegativeSafeInt(byteLength, "Input");
   //
   //   return this.loadArrayBuffer(_randomBytes(byteLength));
@@ -363,7 +363,7 @@ export class Builder {
   // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
   // Uint8Arrayの場合はTranformStreamをかませば良い
   // async loadArrayBufferAsyncIterable(
-  //   sourceBuffers: AsyncIterable<ArrayBuffer>,
+  //   sourceBuffers: AsyncIterable<ArrayBuffer>, options?
   // ): Promise<this> {
   //   this.#assertAccessible();
   //   _T.assertAsyncIterable(sourceBuffers, "Input");
@@ -391,10 +391,19 @@ export class Builder {
     return new Uint8Array(this.toArrayBuffer(options));
   }
 
-  //XXX fillZeros,fillRandom
-
-  #indexInRange(index: unknown): index is _T.safeint {
+  /** @deprecated */
+  #inRange(index: unknown): index is _T.safeint {
     return _T.isNonNegativeSafeInt(index) && (index < this.#index);
+  }
+
+  #assertOffsetInRangeOrNull(
+    test: unknown,
+  ): asserts test is _T.safeint | null | undefined {
+    if (_T.isNullOrUndefined(test) || this.#inRange(test)) {
+      return;
+    }
+
+    throw new RangeError("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
   }
 
   #appendByte(byte: _T.uint8): void {

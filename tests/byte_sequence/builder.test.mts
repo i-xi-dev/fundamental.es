@@ -222,17 +222,23 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
 
   const b2 = ByteSequence.Builder.create(4);
   b2.loadUint8(0xFF);
-  b2.loadUint8(0x11, { insertAt: -1 });
-  const bytes2 = new Uint8Array(b2.toArrayBuffer());
-  assertStrictEquals(bytes2[0], 0xFF);
-  assertStrictEquals(bytes2[1], 0x11);
+  assertThrows(
+    () => {
+      b2.loadUint8(0x11, { insertAt: -1 });
+    },
+    RangeError,
+    "Insertion position is out of range",
+  );
 
   const b3 = ByteSequence.Builder.create(4);
   b3.loadUint8(0xFF);
-  b3.loadUint8(0x11, { insertAt: 100 });
-  const bytes3 = new Uint8Array(b3.toArrayBuffer());
-  assertStrictEquals(bytes3[0], 0xFF);
-  assertStrictEquals(bytes3[1], 0x11);
+  assertThrows(
+    () => {
+      b3.loadUint8(0x11, { insertAt: 100 });
+    },
+    RangeError,
+    "Insertion position is out of range",
+  );
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
@@ -296,27 +302,23 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
 
   const b = ByteSequence.Builder.create(24);
   b.loadArrayBuffer(testdata.buffer);
-  b.loadArrayBuffer(testdata.buffer, { insertAt: -1 });
-  const bytes = new Uint8Array(b.toArrayBuffer());
-  assertStrictEquals(bytes.byteLength, 6);
-  assertStrictEquals(bytes[0], 255);
-  assertStrictEquals(bytes[1], 254);
-  assertStrictEquals(bytes[2], 253);
-  assertStrictEquals(bytes[3], 255);
-  assertStrictEquals(bytes[4], 254);
-  assertStrictEquals(bytes[5], 253);
+  assertThrows(
+    () => {
+      b.loadArrayBuffer(testdata.buffer, { insertAt: -1 });
+    },
+    RangeError,
+    "Insertion position is out of range",
+  );
 
   const b2 = ByteSequence.Builder.create(24);
   b2.loadArrayBuffer(testdata.buffer);
-  b2.loadArrayBuffer(testdata.buffer, { insertAt: 100 });
-  const bytes2 = new Uint8Array(b2.toArrayBuffer());
-  assertStrictEquals(bytes2.byteLength, 6);
-  assertStrictEquals(bytes2[0], 255);
-  assertStrictEquals(bytes2[1], 254);
-  assertStrictEquals(bytes2[2], 253);
-  assertStrictEquals(bytes2[3], 255);
-  assertStrictEquals(bytes2[4], 254);
-  assertStrictEquals(bytes2[5], 253);
+  assertThrows(
+    () => {
+      b2.loadArrayBuffer(testdata.buffer, { insertAt: 100 });
+    },
+    RangeError,
+    "Insertion position is out of range",
+  );
 
   const b3 = ByteSequence.Builder.create(24);
   b3.loadArrayBuffer(testdata.buffer);
@@ -401,15 +403,13 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - insertAt", () =>
 
   const b2 = ByteSequence.Builder.create(8);
   b2.loadUint8Iterable(Uint8Array.of(255, 254, 253));
-  b2.loadUint8Iterable(Uint8Array.of(255, 254, 253), { insertAt: 10 });
-  const bytes2 = new Uint8Array(b2.toArrayBuffer());
-  assertStrictEquals(bytes2.byteLength, 6);
-  assertStrictEquals(bytes2[0], 255);
-  assertStrictEquals(bytes2[1], 254);
-  assertStrictEquals(bytes2[2], 253);
-  assertStrictEquals(bytes2[3], 255);
-  assertStrictEquals(bytes2[4], 254);
-  assertStrictEquals(bytes2[5], 253);
+  assertThrows(
+    () => {
+      b2.loadUint8Iterable(Uint8Array.of(255, 254, 253), { insertAt: 10 });
+    },
+    RangeError,
+    "Insertion position is out of range",
+  );
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable()", async () => {
