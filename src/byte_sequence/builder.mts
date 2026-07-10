@@ -181,7 +181,7 @@ export class Builder {
         } else {
           this.#appendByte(f(uint8));
         }
-        offset += 1;
+        offset += Uint8.BYTE_LENGTH;
       }
     } else {
       for (const uint8 of uint8s) {
@@ -208,7 +208,7 @@ export class Builder {
         } else {
           this.#appendByte(f(uint8));
         }
-        offset += 1;
+        offset += Uint8.BYTE_LENGTH;
       }
     } else {
       for await (const uint8 of uint8s) {
@@ -227,9 +227,18 @@ export class Builder {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
+
+    if (_T.isSafeInt(options?.insertAt)) {
+      let offset = options.insertAt;
       for (const uint16 of uint16s) {
-        throw new Error("TODO not-implemented");
+        if (offset < this.#index) {
+          console.log(`set-${offset}`);
+          this.#setBytes(Uint16.toBytes(f(uint16), options?.byteOrder), offset);
+        } else {
+          console.log(`append`);
+          this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+        }
+        offset += Uint16.BYTE_LENGTH;
       }
     } else {
       for (const uint16 of uint16s) {
@@ -248,9 +257,15 @@ export class Builder {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint16, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
+    if (_T.isSafeInt(options?.insertAt)) {
+      let offset = options.insertAt;
       for await (const uint16 of uint16s) {
-        throw new Error("TODO not-implemented");
+        if (offset < this.#index) {
+          this.#setBytes(Uint16.toBytes(f(uint16), options?.byteOrder), offset);
+        } else {
+          this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+        }
+        offset += Uint16.BYTE_LENGTH;
       }
     } else {
       for await (const uint16 of uint16s) {

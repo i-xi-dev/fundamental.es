@@ -506,6 +506,19 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - error", () => {
   );
 });
 
+Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - insertAt", () => {
+  const b = ByteSequence.Builder.create(64);
+  b.loadUint16Iterable([0xFFF0, 0x0033]);
+  b.loadUint16Iterable([0xFFF0, 0x0033], { insertAt: 1 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 5);
+  assertStrictEquals(bytes[0], 0xF0);
+  assertStrictEquals(bytes[1], 0xF0);
+  assertStrictEquals(bytes[2], 0xFF);
+  assertStrictEquals(bytes[3], 0x33);
+  assertStrictEquals(bytes[4], 0x00);
+});
+
 Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable()", async () => {
   async function* bs() {
     yield 0xFFF0;
@@ -549,6 +562,24 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - error", as
     TypeError,
     "Input must be an `AsyncIterable`",
   );
+});
+
+Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - insertAt", async () => {
+  async function* bs() {
+    yield 0xFFF0;
+    yield 0x0033;
+  }
+
+  const b = ByteSequence.Builder.create(64);
+  await b.loadUint16AsyncIterable(bs());
+  await b.loadUint16AsyncIterable(bs(), { insertAt: 1 });
+  const bytes = new Uint8Array(b.toArrayBuffer());
+  assertStrictEquals(bytes.byteLength, 5);
+  assertStrictEquals(bytes[0], 0xF0);
+  assertStrictEquals(bytes[1], 0xF0);
+  assertStrictEquals(bytes[2], 0xFF);
+  assertStrictEquals(bytes[3], 0x33);
+  assertStrictEquals(bytes[4], 0x00);
 });
 
 Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable()", () => {
