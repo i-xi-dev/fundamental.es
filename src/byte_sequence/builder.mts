@@ -218,61 +218,75 @@ export class Builder {
     return this;
   }
 
-  loadUint16Iterable(
-    uint16s: Iterable<_T.safeint>,
+  #loadUintNIterable<T extends _T.safeint>(
+    uT: Uint<T>,
+    uintNs: Iterable<_T.safeint>,
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    _T.assertIterable(uint16s, "Input");
+    _T.assertIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    const f = _uintClamper(Uint16, options?.clampMode);
+    const f = _uintClamper(uT, options?.clampMode);
 
     if (_T.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
-      for (const uint16 of uint16s) {
+      for (const uintN of uintNs) {
         if (offset < this.#index) {
-          console.log(`set-${offset}`);
-          this.#setBytes(Uint16.toBytes(f(uint16), options?.byteOrder), offset);
+          this.#setBytes(uT.toBytes(f(uintN), options?.byteOrder), offset);
         } else {
-          console.log(`append`);
-          this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+          this.#appendBytes(uT.toBytes(f(uintN), options?.byteOrder));
         }
-        offset += Uint16.BYTE_LENGTH;
+        offset += uT.BYTE_LENGTH;
       }
     } else {
-      for (const uint16 of uint16s) {
-        this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+      for (const uintN of uintNs) {
+        this.#appendBytes(uT.toBytes(f(uintN), options?.byteOrder));
       }
     }
     return this;
   }
 
-  async loadUint16AsyncIterable(
-    uint16s: AsyncIterable<_T.safeint>,
+  async #loadUintNAsyncIterable<T extends _T.safeint>(
+    uT: Uint<T>,
+    uintNs: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
-  ): Promise<this> {
+  ) {
     this.#assertAccessible();
-    _T.assertAsyncIterable(uint16s, "Input");
+    _T.assertAsyncIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    const f = _uintClamper(Uint16, options?.clampMode);
+    const f = _uintClamper(uT, options?.clampMode);
     if (_T.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
-      for await (const uint16 of uint16s) {
+      for await (const uintN of uintNs) {
         if (offset < this.#index) {
-          this.#setBytes(Uint16.toBytes(f(uint16), options?.byteOrder), offset);
+          this.#setBytes(uT.toBytes(f(uintN), options?.byteOrder), offset);
         } else {
-          this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+          this.#appendBytes(uT.toBytes(f(uintN), options?.byteOrder));
         }
-        offset += Uint16.BYTE_LENGTH;
+        offset += uT.BYTE_LENGTH;
       }
     } else {
-      for await (const uint16 of uint16s) {
-        this.#appendBytes(Uint16.toBytes(f(uint16), options?.byteOrder));
+      for await (const uintN of uintNs) {
+        this.#appendBytes(uT.toBytes(f(uintN), options?.byteOrder));
       }
     }
     return this;
+  }
+
+  loadUint16Iterable(
+    uint16s: Iterable<_T.safeint>,
+    options?: _LoadOptions,
+  ): this {
+    return this.#loadUintNIterable(Uint16, uint16s, options);
+  }
+
+  loadUint16AsyncIterable(
+    uint16s: AsyncIterable<_T.safeint>,
+    options?: _LoadOptions,
+  ): Promise<this> {
+    return this.#loadUintNAsyncIterable(Uint16, uint16s, options);
   }
 
   loadUint32Iterable(
