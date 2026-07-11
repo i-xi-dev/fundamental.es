@@ -489,6 +489,6 @@ export class Builder {
       throw new TypeError("`ArrayBuffer` is detached");
     }
 
-    //TODO 非同期操作中もエラーにする、もしくは、非同期はstaticメソッドのみにする
+    //TODO 非同期操作中もエラーにする
   }
 }
