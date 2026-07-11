@@ -12,3 +12,7 @@ export function assertString(
     throw Exception.TypeMismatch.string(targetLabel);
   }
 }
+
+export function isChar(test: unknown): test is /*char*/ string {
+  return isString(test) && (test.length === 1);
+}

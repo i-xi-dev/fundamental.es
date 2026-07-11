@@ -36,9 +36,15 @@ function _inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }
 
-const _MIN_UINT = 0;
-const _MAX_UINT8 = 0xFF;
-
 export function isUint8(test: unknown): test is uint8 {
-  return isSafeInt(test) && _inRange(test, _MIN_UINT, _MAX_UINT8);
+  return isSafeInt(test) && _inRange(test, 0, 0xFF);
+}
+
+export function assertUint8(
+  test: unknown,
+  targetLabel: string,
+): asserts test is uint8 {
+  if (isUint8(test) !== true) {
+    throw Exception.TypeMismatch.uintN(8, targetLabel);
+  }
 }
