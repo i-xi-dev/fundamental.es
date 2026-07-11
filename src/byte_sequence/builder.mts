@@ -1,5 +1,4 @@
 import { _T } from "../_common/mod.mts";
-import { Exception } from "../_internal/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import {
   BigUint,
@@ -376,19 +375,21 @@ export class Builder {
     return this.#loadBigUintNAsyncIterable(BigUint64, biguint64s, options);
   }
 
-  //TODO
-  // fillZeros(byteLength: _T.safeint, options?): this {
-  //   _T.assertNonNegativeSafeInt(byteLength, "Input");
-  //
-  //   return this.loadArrayBuffer(new ArrayBuffer(byteLength));
-  // }
+  fillZeros(byteLength: _T.safeint, options?: _LoadOptions_2): this {
+    this.#assertAccessible();
+    _T.assertNonNegativeSafeInt(byteLength, "Input");
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-  //TODO
-  // fillRandom(byteLength: _T.safeint, options?): this {
-  //   _T.assertNonNegativeSafeInt(byteLength, "Input");
-  //
-  //   return this.loadArrayBuffer(_randomBytes(byteLength));
-  // }
+    return this.loadArrayBuffer(new ArrayBuffer(byteLength), options);
+  }
+
+  fillRandom(byteLength: _T.safeint, options?: _LoadOptions_2): this {
+    this.#assertAccessible();
+    _T.assertNonNegativeSafeInt(byteLength, "Input");
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
+
+    return this.loadArrayBuffer(_randomBytes(byteLength), options);
+  }
 
   //TODO
   // WebSocketStream なんかは ReadableStream<ArrayBuffer>
@@ -423,15 +424,16 @@ export class Builder {
     return new Uint8Array(this.toArrayBuffer(options));
   }
 
-  /** @deprecated */
-  #inRange(index: unknown): index is _T.safeint {
-    return _T.isNonNegativeSafeInt(index) && (index < this.#index);
-  }
-
   #assertOffsetInRangeOrNull(
     test: unknown,
   ): asserts test is _T.safeint | null | undefined {
-    if (_T.isNullOrUndefined(test) || this.#inRange(test)) {
+    if (_T.isNullOrUndefined(test) === true) {
+      // null | undefined はok
+      return;
+    }
+
+    if (_T.isNonNegativeSafeInt(test) && (test < this.#index)) {
+      // 整数かつ #index 未満はok
       return;
     }
 
@@ -451,9 +453,12 @@ export class Builder {
   }
 
   #setBytes(bytes: _T.Bytes, offset: _T.safeint): void {
-    this.#growIfNeeded(offset + bytes.byteLength);
+    const setEnd = offset + bytes.byteLength;
+    this.#growIfNeeded(setEnd);
     this.#view.set(bytes, offset);
-    this.#index = offset + bytes.byteLength;
+    if (setEnd > this.#index) {
+      this.#index = setEnd;
+    }
   }
 
   #growIfNeeded(increaseLength: _T.safeint): void {
