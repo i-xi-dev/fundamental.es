@@ -53,7 +53,7 @@ function _f(
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, y),
   //   Uint32.bitwiseAnd(Uint32.bitwiseXOr(x, 0xFFFFFFFF), z),
-  // );
+  // ); この後ビット演算するわけではないので
   return ((x & y) | ((x ^ 0xFFFFFFFF) & z));
 }
 
@@ -65,7 +65,7 @@ function _g(
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, z),
   //   Uint32.bitwiseAnd(y, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
-  // );
+  // ); この後ビット演算するわけではないので
   return ((x & z) | (y & (z ^ 0xFFFFFFFF)));
 }
 
@@ -74,7 +74,7 @@ function _h(
   y: _T.uint32,
   z: _T.uint32,
 ): /*uint32*/ _T.safeint {
-  // return Uint32.bitwiseXOr(Uint32.bitwiseXOr(x, y), z);
+  // return Uint32.bitwiseXOr(Uint32.bitwiseXOr(x, y), z); この後ビット演算するわけではないので
   return (x ^ y ^ z);
 }
 
@@ -86,7 +86,7 @@ function _i(
   // return Uint32.bitwiseXOr(
   //   y,
   //   Uint32.bitwiseOr(x, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
-  // );
+  // ); この後ビット演算するわけではないので
   return (y ^ (x | (z ^ 0xFFFFFFFF)));
 }
 
