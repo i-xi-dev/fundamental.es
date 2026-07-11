@@ -1,5 +1,16 @@
+import { _T } from "../../../_common/mod.mts";
+
+export { _HexDecoder as Decoder } from "./_decoder.mts";
 export { _HexDecoderStream as DecoderStream } from "./_decoder_stream.mts";
+export { _HexEncoder as Encoder } from "./_encoder.mts";
 export { _HexEncoderStream as EncoderStream } from "./_encoder_stream.mts";
 
-// decode静的メソッドとDecoderクラス は Uint8Array.fromHex で出来るので廃止
-// encode静的メソッドとEncoderクラス は Uint8Array.prototype.toHex で出来るので廃止
+/** @deprecated Use `Uint8Array.fromHex`. */
+export function decode(text: string): _T.Bytes {
+  return Uint8Array.fromHex(text);
+}
+
+/** @deprecated Use `Uint8Array.prototype.toHex`. */
+export function encode(bytes: _T.Bytes): string {
+  return bytes.toHex();
+}
