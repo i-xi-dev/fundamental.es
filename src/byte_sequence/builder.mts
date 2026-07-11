@@ -11,7 +11,7 @@ import {
 
 const _MAX_CAPACITY = 536_870_912;
 
-const _DEFAULT_EXTENT = 1_048_576; //TODO growIfNeededで使う
+const _DEFAULT_EXTENT = 1_048_576;
 
 const _ClampMode = {
   TRUNCATE: "truncate",
@@ -466,25 +466,29 @@ export class Builder {
 
     if (this.#buffer.resizable !== true) {
       if (needed === true) {
-        throw new RangeError("`ArrayBuffer` cannot be resized"); //TODO
+        throw new RangeError("`ArrayBuffer` cannot be resized");
       }
     }
 
     if (needed == true) {
-      const newSize = this.#index + increaseLength;
-      if (newSize > this.#buffer.maxByteLength) {
-        throw new RangeError("Exceeds the resize limit for `ArrayBuffer`"); //TODO
+      const minSize = this.#index + increaseLength;
+      const optSize = this.#index + _DEFAULT_EXTENT; //XXX 適切なサイズは？
+
+      if (minSize > this.#buffer.maxByteLength) {
+        throw new RangeError("Exceeds the resize limit for `ArrayBuffer`");
+      } else if (optSize > this.#buffer.maxByteLength) {
+        this.#buffer.resize(minSize);
       } else {
-        this.#buffer.resize(newSize);
+        this.#buffer.resize(optSize);
       }
     }
   }
 
   #assertAccessible(): void {
     if (this.#buffer.detached === true) {
-      throw new TypeError("`ArrayBuffer` is detached"); //TODO
+      throw new TypeError("`ArrayBuffer` is detached");
     }
 
-    //TODO 非同期操作中もエラーにする
+    //TODO 非同期操作中もエラーにする、もしくは、非同期はstaticメソッドのみにする
   }
 }
