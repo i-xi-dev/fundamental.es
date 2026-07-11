@@ -247,6 +247,35 @@ export class Builder {
     return this;
   }
 
+  #loadBigUintNIterable<T extends bigint>(
+    uT: BigUint<T>,
+    biguintNs: Iterable<bigint>,
+    options?: _LoadOptions,
+  ): this {
+    this.#assertAccessible();
+    _T.assertIterable(biguintNs, "Input");
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
+
+    const f = _biguintClamper(uT, options?.clampMode);
+
+    if (_T.isSafeInt(options?.insertAt)) {
+      let offset = options.insertAt;
+      for (const biguintN of biguintNs) {
+        if (offset < this.#index) {
+          this.#setBytes(uT.toBytes(f(biguintN), options?.byteOrder), offset);
+        } else {
+          this.#appendBytes(uT.toBytes(f(biguintN), options?.byteOrder));
+        }
+        offset += uT.BYTE_LENGTH;
+      }
+    } else {
+      for (const biguintN of biguintNs) {
+        this.#appendBytes(uT.toBytes(f(biguintN), options?.byteOrder));
+      }
+    }
+    return this;
+  }
+
   async #loadUintNAsyncIterable<T extends _T.safeint>(
     uT: Uint<T>,
     uintNs: AsyncIterable<_T.safeint>,
@@ -257,6 +286,7 @@ export class Builder {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
+
     if (_T.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for await (const uintN of uintNs) {
@@ -270,6 +300,35 @@ export class Builder {
     } else {
       for await (const uintN of uintNs) {
         this.#appendBytes(uT.toBytes(f(uintN), options?.byteOrder));
+      }
+    }
+    return this;
+  }
+
+  async #loadBigUintNAsyncIterable<T extends bigint>(
+    uT: BigUint<T>,
+    biguintNs: AsyncIterable<bigint>,
+    options?: _LoadOptions,
+  ): Promise<this> {
+    this.#assertAccessible();
+    _T.assertAsyncIterable(biguintNs, "Input");
+    this.#assertOffsetInRangeOrNull(options?.insertAt);
+
+    const f = _biguintClamper(uT, options?.clampMode);
+
+    if (_T.isSafeInt(options?.insertAt)) {
+      let offset = options.insertAt;
+      for await (const biguintN of biguintNs) {
+        if (offset < this.#index) {
+          this.#setBytes(uT.toBytes(f(biguintN), options?.byteOrder), offset);
+        } else {
+          this.#appendBytes(uT.toBytes(f(biguintN), options?.byteOrder));
+        }
+        offset += uT.BYTE_LENGTH;
+      }
+    } else {
+      for await (const biguintN of biguintNs) {
+        this.#appendBytes(uT.toBytes(f(biguintN), options?.byteOrder));
       }
     }
     return this;
@@ -293,84 +352,28 @@ export class Builder {
     uint32s: Iterable<_T.safeint>,
     options?: _LoadOptions,
   ): this {
-    this.#assertAccessible();
-    _T.assertIterable(uint32s, "Input");
-    this.#assertOffsetInRangeOrNull(options?.insertAt);
-
-    const f = _uintClamper(Uint32, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
-      for (const uint32 of uint32s) {
-        throw new Error("TODO not-implemented");
-      }
-    } else {
-      for (const uint32 of uint32s) {
-        this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
-      }
-    }
-    return this;
+    return this.#loadUintNIterable(Uint32, uint32s, options);
   }
 
-  async loadUint32AsyncIterable(
+  loadUint32AsyncIterable(
     uint32s: AsyncIterable<_T.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertAccessible();
-    _T.assertAsyncIterable(uint32s, "Input");
-    this.#assertOffsetInRangeOrNull(options?.insertAt);
-
-    const f = _uintClamper(Uint32, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
-      for await (const uint32 of uint32s) {
-        throw new Error("TODO not-implemented");
-      }
-    } else {
-      for await (const uint32 of uint32s) {
-        this.#appendBytes(Uint32.toBytes(f(uint32), options?.byteOrder));
-      }
-    }
-    return this;
+    return this.#loadUintNAsyncIterable(Uint32, uint32s, options);
   }
 
   loadBigUint64Iterable(
     biguint64s: Iterable<bigint>,
     options?: _LoadOptions,
   ): this {
-    this.#assertAccessible();
-    _T.assertIterable(biguint64s, "Input");
-    this.#assertOffsetInRangeOrNull(options?.insertAt);
-
-    const f = _biguintClamper(BigUint64, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
-      for (const biguint64 of biguint64s) {
-        throw new Error("TODO not-implemented");
-      }
-    } else {
-      for (const biguint64 of biguint64s) {
-        this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
-      }
-    }
-    return this;
+    return this.#loadBigUintNIterable(BigUint64, biguint64s, options);
   }
 
-  async loadBigUint64AsyncIterable(
+  loadBigUint64AsyncIterable(
     biguint64s: AsyncIterable<bigint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    this.#assertAccessible();
-    _T.assertAsyncIterable(biguint64s, "Input");
-    this.#assertOffsetInRangeOrNull(options?.insertAt);
-
-    const f = _biguintClamper(BigUint64, options?.clampMode);
-    if (this.#inRange(options?.insertAt)) {
-      for await (const biguint64 of biguint64s) {
-        throw new Error("TODO not-implemented");
-      }
-    } else {
-      for await (const biguint64 of biguint64s) {
-        this.#appendBytes(BigUint64.toBytes(f(biguint64), options?.byteOrder));
-      }
-    }
-    return this;
+    return this.#loadBigUintNAsyncIterable(BigUint64, biguint64s, options);
   }
 
   //TODO
