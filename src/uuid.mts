@@ -206,7 +206,7 @@ export namespace Uuid {
 
   export function fromBytes(bytes: _T.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
-      throw new TypeError("TODO ");
+      throw new TypeError("Input must be an UUID bytes of type `Uint8Array`");
     }
 
     return new _Uuid(bytes);
