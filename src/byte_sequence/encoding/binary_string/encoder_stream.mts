@@ -2,7 +2,7 @@ import { _BinaryStringEncoderStreamRegulator } from "./_encoder_stream_regulator
 import { _encode } from "./_common.mts";
 import { _EncoderStreamBase } from "../_encoder_stream_base.mts";
 
-export class _BinaryStringEncoderStream extends _EncoderStreamBase {
+export class BinaryStringEncoderStream extends _EncoderStreamBase {
   constructor() {
     super({
       encode: (bytes) => _encode(bytes),

@@ -1,6 +1,7 @@
 import * as _InputError from "../../../_internal/_input_error.mts";
 import { _T, _U } from "../../../_common/mod.mts";
-import { Uint8 } from "../../../numerics/mod.mts";
+import { ByteFormat } from "../../../byte_format.mts";
+import { Radix, Uint8 } from "../../../numerics/mod.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* _T.uint8 */ number>;
@@ -94,10 +95,11 @@ export function _staticDecode(
   return _decode(text, _PercentOptions.resolve(options));
 }
 
-//TODO 外に出す
-function _byte_to_hex(byte: _T.uint8): string {
-  return byte.toString(16).padStart(2, _U.Char.DIGIT_ZERO);
-}
+const f = new ByteFormat({
+  minLength: 2,
+  radix: Radix.HEXADECIMAL,
+  upperCase: true,
+});
 
 export function _encode(
   bytes: _T.Bytes,
@@ -115,9 +117,7 @@ export function _encode(
       (byte === _U.CharCode.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
-      return `${_U.Char.PERCENT_SIGN}${
-        _byte_to_hex(byte as _T.uint8).toUpperCase()
-      }`;
+      return `${_U.Char.PERCENT_SIGN}${f.format(byte)}`;
     }
     return String.fromCharCode(byte);
   }).join("");

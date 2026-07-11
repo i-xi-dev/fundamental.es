@@ -1,12 +1,12 @@
 import { _encode, _PercentOptions } from "./_common.mts";
 import { _Encoder } from "../_encoder.mts";
-import { _PercentEncoderOptions } from "./_encoder_options.mts";
 import { _T } from "../../../_common/mod.mts";
+import { PercentEncoderOptions } from "./encoder_options.mts";
 
-export class _PercentEncoder implements _Encoder {
-  readonly #options: Required<_PercentEncoderOptions>;
+export class PercentEncoder implements _Encoder {
+  readonly #options: Required<PercentEncoderOptions>;
 
-  constructor(options?: _PercentEncoderOptions) {
+  constructor(options?: PercentEncoderOptions) {
     this.#options = _PercentOptions.resolve(options);
   }
 

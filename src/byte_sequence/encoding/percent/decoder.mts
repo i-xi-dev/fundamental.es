@@ -1,12 +1,12 @@
 import { _decode, _PercentOptions } from "./_common.mts";
 import { _Decoder } from "../_decoder.mts";
-import { _PercentDecoderOptions } from "./_decoder_options.mts";
 import { _T } from "../../../_common/mod.mts";
+import { PercentDecoderOptions } from "./decoder_options.mts";
 
-export class _PercentDecoder implements _Decoder {
-  readonly #options: Required<_PercentDecoderOptions>;
+export class PercentDecoder implements _Decoder {
+  readonly #options: Required<PercentDecoderOptions>;
 
-  constructor(options?: _PercentDecoderOptions) {
+  constructor(options?: PercentDecoderOptions) {
     this.#options = _PercentOptions.resolve(options);
   }
 

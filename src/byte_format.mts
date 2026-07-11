@@ -1,4 +1,5 @@
-import { _T, Radix } from "./_common/mod.mts";
+import { _T, _U } from "./_common/mod.mts";
+import { Radix } from "./numerics/mod.mts";
 
 type _FormatOptions = {
   radix?: Radix;
@@ -20,7 +21,7 @@ export class ByteFormat {
     // this.#paddingChar = _T.isNonEmptyString(options?.paddingChar)
     //   ? options.paddingChar.charAt(0)
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
-    this.#paddingChar = "0";
+    this.#paddingChar = _U.Char.DIGIT_ZERO;
     this.#minPaddedLength = _T.isNonNegativeSafeInt(options?.minLength)
       ? options.minLength
       : 0;

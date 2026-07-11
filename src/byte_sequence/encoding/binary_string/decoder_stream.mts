@@ -2,7 +2,7 @@ import { _BinaryStringDecoderStreamRegulator } from "./_decoder_stream_regulator
 import { _decode } from "./_common.mts";
 import { _DecoderStreamBase } from "../_decoder_stream_base.mts";
 
-export class _BinaryStringDecoderStream extends _DecoderStreamBase {
+export class BinaryStringDecoderStream extends _DecoderStreamBase {
   constructor() {
     super({
       decode: (text) => _decode(text),

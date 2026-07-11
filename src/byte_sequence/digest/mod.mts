@@ -1,4 +1,4 @@
-import { _computeMd5 } from "./md5.mts";
+import { _computeMd5 } from "./_md5.mts";
 import { _T } from "../../_common/mod.mts";
 import { type DigestAlgorithm } from "./digest_algorithm.mts";
 
