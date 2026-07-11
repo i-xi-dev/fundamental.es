@@ -2,15 +2,14 @@ import { _T, Radix } from "./_common/mod.mts";
 
 type _FormatOptions = {
   radix?: Radix;
-  upperCase?: boolean;
-  paddingChar?: _T.char;
-  minPaddedLength?: _T.safeint;
+  upperCase?: boolean; // parse時は無視
+  minLength?: _T.safeint; // parse時は無視
 };
 
 export class ByteFormat {
   readonly #radix: Radix;
   readonly #upperCase: boolean;
-  readonly #paddingChar: _T.char; //XXX 1-char ではなかった場合エラーにするか
+  readonly #paddingChar: _T.char;
   readonly #minPaddedLength: _T.safeint;
 
   constructor(options?: _FormatOptions) {
@@ -18,11 +17,12 @@ export class ByteFormat {
       ? options!.radix!
       : Radix.HEXADECIMAL;
     this.#upperCase = options?.upperCase === true;
-    this.#paddingChar = _T.isNonEmptyString(options?.paddingChar)
-      ? options.paddingChar.charAt(0)
-      : "0";
-    this.#minPaddedLength = _T.isNonNegativeSafeInt(options?.minPaddedLength)
-      ? options.minPaddedLength
+    // this.#paddingChar = _T.isNonEmptyString(options?.paddingChar)
+    //   ? options.paddingChar.charAt(0)
+    //   : "0";//XXX 1-char ではなかった場合エラーにするか
+    this.#paddingChar = "0";
+    this.#minPaddedLength = _T.isNonNegativeSafeInt(options?.minLength)
+      ? options.minLength
       : 0;
   }
 
@@ -35,6 +35,28 @@ export class ByteFormat {
     }
 
     return str.padStart(this.#minPaddedLength, this.#paddingChar);
+  }
+
+  parse(str: string): _T.uint8 {
+    _T.assertNonEmptyString(str, "Input");
+    if (this.#isFormatMatch(str) !== true) {
+      throw new Error("TODO");
+    }
+
+    return Number.parseInt(str, this.#radix) as _T.uint8;
+  }
+
+  #isFormatMatch(test: string): boolean {
+    switch (this.#radix) {
+      case Radix.BINARY:
+        return /^[01]+$/.test(test);
+      case Radix.OCTAL:
+        return /^[0-7]+$/.test(test);
+      case Radix.DECIMAL:
+        return /^[0-9]+$/.test(test);
+      default:
+        return /^[0-9A-Fa-f]+$/.test(test);
+    }
   }
 }
 

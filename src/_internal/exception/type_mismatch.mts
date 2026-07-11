@@ -44,8 +44,11 @@ export namespace TypeMismatchError {
     return new _TypeMismatchError(target, "an `Iterable`");
   }
 
-  export function safeInt(target: string): _TypeMismatchError {
-    return new _TypeMismatchError(target, "a safe-integer of type `number`");
+  export function nonEmptyString(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(
+      target,
+      "a `string` with a length of at least 1.",
+    );
   }
 
   export function nonNegativeSafeInt(target: string): _TypeMismatchError {
@@ -53,6 +56,10 @@ export namespace TypeMismatchError {
       target,
       "a non-negative safe-integer of type `number`",
     );
+  }
+
+  export function safeInt(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(target, "a safe-integer of type `number`");
   }
 
   export function string(target: string): _TypeMismatchError {

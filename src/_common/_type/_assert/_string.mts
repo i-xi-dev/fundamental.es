@@ -17,6 +17,15 @@ export function isNonEmptyString(test: unknown): test is string {
   return isString(test) && (test.length > 0);
 }
 
+export function assertNonEmptyString(
+  test: unknown,
+  targetLabel: string,
+): asserts test is string {
+  if (isNonEmptyString(test) !== true) {
+    throw Exception.TypeMismatch.nonEmptyString(targetLabel);
+  }
+}
+
 export function isChar(test: unknown): test is /*char*/ string {
   return isString(test) && (test.length === 1);
 }
