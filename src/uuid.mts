@@ -197,7 +197,7 @@ export namespace Uuid {
 
   export function fromBigUint128(uint: _T.biguint128): Uuid {
     if (_isUuidBigInt(uint) !== true) {
-      throw new TypeError("TODO ");
+      throw new TypeError("Input must be an UUID of type `bigint`");
     }
 
     const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
