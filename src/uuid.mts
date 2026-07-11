@@ -187,7 +187,7 @@ export namespace Uuid {
 
   export function fromString(str: string): Uuid {
     if (_isUuidString(str) !== true) {
-      throw new TypeError("TODO ");
+      throw new TypeError("Input must be an UUID of type `string`");
     }
 
     const hex = str.replace(/^urn:uuid:/, "").replace(/-/g, "");
