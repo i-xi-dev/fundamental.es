@@ -93,13 +93,13 @@ function _generateRandom(): _T.Bytes {
   return bytes;
 }
 
-function _timestamp(): _T.finite {
+function _timestamp(): _T.safeint {
   const { performance } = globalThis;
-  return performance.timeOrigin + performance.now();
+  return Math.trunc(performance.timeOrigin + performance.now());
 }
 
 const _v7Counter = (function* () {
-  let last: _T.finite = Number.MIN_SAFE_INTEGER;
+  let last: _T.safeint = Number.MIN_SAFE_INTEGER;
   let cnt: _T.safeint = 0;
   while (true) {
     const curr = _timestamp();
