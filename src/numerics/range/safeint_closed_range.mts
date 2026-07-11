@@ -1,13 +1,15 @@
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
-import { _normalizeFinite } from "../_utils.mts";
-import { _T } from "../../_common/mod.mts";
+import { _T, NumberUtils } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
 import { Exception } from "../../_internal/mod.mts";
 
 class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
   extends _ClosedRangeBase<_T.safeint, T> {
   constructor(min: T, max: T) {
-    super(_normalizeFinite<T>(min), _normalizeFinite<T>(max));
+    super(
+      NumberUtils.normalizeFinite<T>(min),
+      NumberUtils.normalizeFinite<T>(max),
+    );
   }
 
   protected override _isBaseT(test: unknown): test is _T.safeint {

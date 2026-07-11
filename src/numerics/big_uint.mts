@@ -2,8 +2,8 @@ import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
-import { _clampBigInt, _normalizeOffset } from "./_utils.mts";
-import { _T, Io } from "../_common/mod.mts";
+import { _normalizeOffset } from "./_uint.mts";
+import { _T, BigIntUtils, Io } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Exception } from "../_internal/mod.mts";
 
@@ -179,7 +179,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   saturateFrom(value: bigint): T {
     _T.assertBigInt(value, "Input");
 
-    return _clampBigInt<T>(value, this.#range.min, this.#range.max);
+    return BigIntUtils.clamp<T>(value, this.#range.min, this.#range.max);
   }
 }
 

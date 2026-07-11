@@ -1,8 +1,8 @@
 import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _clampFinite, _normalizeOffset } from "./_utils.mts";
-import { _T, Io } from "../_common/mod.mts";
+import { _normalizeOffset } from "./_uint.mts";
+import { _T, Io, NumberUtils } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Exception } from "../_internal/mod.mts";
@@ -210,7 +210,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   saturateFrom(value: _T.safeint): T {
     _T.assertSafeInt(value, "Input");
 
-    return _clampFinite<T>(value, this.#range.min, this.#range.max);
+    return NumberUtils.clampFinite<T>(value, this.#range.min, this.#range.max);
   }
 }
 
