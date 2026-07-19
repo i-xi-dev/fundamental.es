@@ -1,7 +1,9 @@
 import * as _InputError from "../../../_internal/_input_error.mts";
-import { _T, _U } from "../../../_common/mod.mts";
+import { _T, _U, StringUtils } from "../../../_common/mod.mts";
 import { ByteFormat } from "../../../byte_format.mts";
 import { Radix, Uint8 } from "../../../numerics/mod.mts";
+
+const { EMPTY } = StringUtils;
 
 export type _PercentOptions = {
   encodeSet?: Array</* _T.uint8 */ number>;
@@ -120,7 +122,7 @@ export function _encode(
       return `${_U.Char.PERCENT_SIGN}${f.format(byte)}`;
     }
     return String.fromCharCode(byte);
-  }).join("");
+  }).join(EMPTY);
 }
 
 export function _staticEncode(

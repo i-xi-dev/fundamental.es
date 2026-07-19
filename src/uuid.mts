@@ -1,6 +1,8 @@
-import { _T } from "./_common/mod.mts";
+import { _T, StringUtils } from "./_common/mod.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { ByteOrder } from "./byte_order.mts";
+
+const { EMPTY } = StringUtils;
 
 export type _ToStringOptions = {
   asUrn?: boolean;
@@ -190,7 +192,7 @@ export namespace Uuid {
       throw new TypeError("Input must be an UUID of type `string`");
     }
 
-    const hex = str.replace(/^urn:uuid:/, "").replace(/-/g, "");
+    const hex = str.replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
     const bytes = Uint8Array.fromHex(hex);
     return new _Uuid(bytes);
   }

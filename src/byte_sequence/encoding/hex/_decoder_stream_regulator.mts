@@ -1,10 +1,13 @@
+import { StringUtils } from "../../../_common/mod.mts";
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
+
+const { EMPTY } = StringUtils;
 
 export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;
 
   constructor() {
-    this.#pending = "";
+    this.#pending = EMPTY;
   }
 
   regulate(text: string): string {
@@ -12,7 +15,7 @@ export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
     const surplus = temp.length % 2;
 
     if (surplus === 0) {
-      this.#pending = "";
+      this.#pending = EMPTY;
       return temp;
     } else {
       const pendingLength = temp.length - surplus;
@@ -23,7 +26,7 @@ export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
 
   flush(): string {
     const remains = this.#pending;
-    this.#pending = "";
+    this.#pending = EMPTY;
     return remains;
   }
 }
