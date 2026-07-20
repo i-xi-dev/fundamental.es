@@ -6,6 +6,15 @@ export function isFinite(test: unknown): test is finite {
   return Number.isFinite(test);
 }
 
+export function assertFinite(
+  test: unknown,
+  targetLabel: string,
+): asserts test is finite {
+  if (isFinite(test) !== true) {
+    throw Exception.TypeMismatch.finite(targetLabel);
+  }
+}
+
 export function isSafeInt(test: unknown): test is safeint {
   return Number.isSafeInteger(test);
 }

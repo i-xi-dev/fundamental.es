@@ -40,6 +40,10 @@ export namespace TypeMismatchError {
     );
   }
 
+  export function finite(target: string): _TypeMismatchError {
+    return new _TypeMismatchError(target, "a finite number of type `number`");
+  }
+
   export function iterable(target: string): _TypeMismatchError {
     return new _TypeMismatchError(target, "an `Iterable`");
   }
