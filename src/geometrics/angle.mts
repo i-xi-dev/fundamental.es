@@ -1,4 +1,4 @@
-import { _T } from "../_common/mod.mts";
+import { _T, StringUtils } from "../_common/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
@@ -66,5 +66,12 @@ export class Angle {
 
   valueOf(): _T.degrees {
     return this.#degs;
+  }
+
+  // オプション指定したければIntl.NumberFormatでやれば良い
+  toString(): string {
+    let radAsStr = this.toRadians().toFixed(3);
+    radAsStr = radAsStr.replace(/.?0+$/, StringUtils.EMPTY);
+    return `${radAsStr} rad`;
   }
 }
