@@ -1,7 +1,5 @@
 {
-  "INPUT:LENGTH_MISMATCH:_": "The length of input must be {0}",
   "INPUT:PATTERN_MISMATCH:ASCII_RANGE_EX": "Input must not contain controls or characters outside of the US-ASCII range",
   "INPUT:PATTERN_MISMATCH:LATIN1_RANGE": "Input must not contain characters outside of the Latin1 range",
-  "INPUT:RANGE_IMPOSSIBLE": "The lower and upper bounds of the range are contradictory",
-  "INPUT:TOO_SHORT:_": "The length of input must be {0} or greater"
+  "INPUT:RANGE_IMPOSSIBLE": "The lower and upper bounds of the range are contradictory"
 }

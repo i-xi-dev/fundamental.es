@@ -1,4 +1,3 @@
-import * as _InputError from "../_internal/_input_error.mts";
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
@@ -74,7 +73,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw _InputError.lengthMismatch(this.#byteLength);
+      throw Exception.LengthMismatch.exact("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
