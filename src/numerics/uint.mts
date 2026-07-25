@@ -4,7 +4,11 @@ import { _normalizeOffset } from "./_uint.mts";
 import { _T, Io, NumberUtils } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { Exception } from "../_internal/mod.mts";
+import {
+  LengthMismatchError,
+  RangeOverflowError,
+  TypeMismatchError,
+} from "../_internal/mod.mts";
 
 export interface Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -73,7 +77,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw Exception.LengthMismatch.exact("input", this.#byteLength);
+      throw LengthMismatchError.exact("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -90,14 +94,14 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw Exception.RangeOverflow.uintN(this.#bitLength, "Input");
+      throw RangeOverflowError.uintN(this.#bitLength, "Input");
     }
     return result as T;
   }
 
   toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
+      throw TypeMismatchError.uintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -124,7 +128,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     f: (fa: _T.safeint, fb: _T.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
+      throw TypeMismatchError.uintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -167,7 +171,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
 
   rotateLeft(value: _T.safeint, offset: _T.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw Exception.TypeMismatch.uintN(this.#bitLength, "Input");
+      throw TypeMismatchError.uintN(this.#bitLength, "Input");
     }
     _T.assertSafeInt(offset, "Offset");
 

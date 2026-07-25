@@ -1,5 +1,5 @@
-import { Exception } from "../../../_internal/mod.mts";
 import { finite, safeint } from "../_typedef/_number.mts";
+import { TypeMismatchError } from "../../../_internal/mod.mts";
 import { uint8 } from "../_typedef/_uint.mts";
 
 export function isFinite(test: unknown): test is finite {
@@ -11,7 +11,7 @@ export function assertFinite(
   targetLabel: string,
 ): asserts test is finite {
   if (isFinite(test) !== true) {
-    throw Exception.TypeMismatch.finite(targetLabel);
+    throw TypeMismatchError.finite(targetLabel);
   }
 }
 
@@ -24,7 +24,7 @@ export function assertSafeInt(
   targetLabel: string,
 ): asserts test is safeint {
   if (isSafeInt(test) !== true) {
-    throw Exception.TypeMismatch.safeInt(targetLabel);
+    throw TypeMismatchError.safeInt(targetLabel);
   }
 }
 
@@ -37,7 +37,7 @@ export function assertNonNegativeSafeInt(
   targetLabel: string,
 ): asserts test is safeint {
   if (isNonNegativeSafeInt(test) !== true) {
-    throw Exception.TypeMismatch.nonNegativeSafeInt(targetLabel);
+    throw TypeMismatchError.nonNegativeSafeInt(targetLabel);
   }
 }
 
@@ -54,6 +54,6 @@ export function assertUint8(
   targetLabel: string,
 ): asserts test is uint8 {
   if (isUint8(test) !== true) {
-    throw Exception.TypeMismatch.uintN(8, targetLabel);
+    throw TypeMismatchError.uintN(8, targetLabel);
   }
 }

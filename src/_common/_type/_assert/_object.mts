@@ -1,5 +1,5 @@
-import { Exception } from "../../../_internal/mod.mts";
 import { isNullOrUndefined } from "./_primitive.mts";
+import { TypeMismatchError } from "../../../_internal/mod.mts";
 
 export function isIterable<T>(test: unknown): test is Iterable<T> {
   return (isNullOrUndefined(test) !== true) &&
@@ -14,7 +14,7 @@ export function assertIterable<T>(
   targetLabel: string,
 ): asserts test is Iterable<T> {
   if (isIterable(test) !== true) {
-    throw Exception.TypeMismatch.iterable(targetLabel);
+    throw TypeMismatchError.iterable(targetLabel);
   }
 }
 
@@ -31,6 +31,6 @@ export function assertAsyncIterable<T>(
   targetLabel: string,
 ): asserts test is AsyncIterable<T> {
   if (isAsyncIterable(test) !== true) {
-    throw Exception.TypeMismatch.asyncIterable(targetLabel);
+    throw TypeMismatchError.asyncIterable(targetLabel);
   }
 }

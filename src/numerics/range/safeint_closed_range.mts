@@ -1,7 +1,7 @@
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
 import { _T, NumberUtils } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
-import { Exception } from "../../_internal/mod.mts";
+import { TypeMismatchError } from "../../_internal/mod.mts";
 
 class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
   extends _ClosedRangeBase<_T.safeint, T> {
@@ -17,7 +17,7 @@ class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
   }
 
   protected override _typeError(): TypeError {
-    return Exception.TypeMismatch.safeInt("Input");
+    return TypeMismatchError.safeInt("Input");
   }
 }
 

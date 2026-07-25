@@ -4,7 +4,11 @@ import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { _T, BigIntUtils, Io } from "../_common/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { Exception } from "../_internal/mod.mts";
+import {
+  LengthMismatchError,
+  RangeOverflowError,
+  TypeMismatchError,
+} from "../_internal/mod.mts";
 
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -73,7 +77,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw Exception.LengthMismatch.exact("input", this.#byteLength);
+      throw LengthMismatchError.exact("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -88,14 +92,14 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw Exception.RangeOverflow.bigUintN(this.#bitLength, "Input");
+      throw RangeOverflowError.bigUintN(this.#bitLength, "Input");
     }
     return result as T;
   }
 
   toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
+      throw TypeMismatchError.bigUintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -122,7 +126,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     f: (fa: bigint, fb: bigint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
+      throw TypeMismatchError.bigUintN(this.#bitLength, "Input");
     }
 
     return f(a, b);
@@ -154,7 +158,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
 
   rotateLeft(value: bigint, offset: _T.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw Exception.TypeMismatch.bigUintN(this.#bitLength, "Input");
+      throw TypeMismatchError.bigUintN(this.#bitLength, "Input");
     }
     _T.assertSafeInt(offset, "Offset");
 
