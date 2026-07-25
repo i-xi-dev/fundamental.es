@@ -1,4 +1,4 @@
-import * as _InputError from "../../../_internal/_input_error.mts";
+import { _SyntaxError } from "../../../_internal/mod.mts";
 import { _T, _U, StringUtils } from "../../../_common/mod.mts";
 import { ByteFormat } from "../../../byte_format.mts";
 import { Radix, Uint8 } from "../../../numerics/mod.mts";
@@ -39,7 +39,7 @@ export namespace _PercentOptions {
   }
 }
 
-const _regex = /^[\u0020-\u007E]*$/;
+const _regex = /^[\u0020-\u007E]*$/; //XXX 共通assertにする
 
 export function _decode(
   text: string,
@@ -47,7 +47,7 @@ export function _decode(
 ): _T.Bytes {
   _T.assertString(text, "Input");
   if (_regex.test(text) !== true) {
-    throw _InputError.x_nonControlAsciiString();
+    throw _SyntaxError.asciiWithoutCc("Input");
   }
 
   const decoded = new Uint8Array(text.length); // 0x20-0x7E以外を含んでいたらエラーにしている為decoded.lengthがtext.lengthより増えることは無い

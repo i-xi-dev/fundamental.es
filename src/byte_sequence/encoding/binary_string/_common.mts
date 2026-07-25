@@ -1,15 +1,15 @@
-import * as _InputError from "../../../_internal/_input_error.mts";
+import { _SyntaxError } from "../../../_internal/mod.mts";
 import { _T, StringUtils } from "../../../_common/mod.mts";
 
 const { EMPTY } = StringUtils;
 
 // deno-lint-ignore no-control-regex
-const _regex = /^[\u0000-\u00FF]*$/;
+const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする
 
 export function _decode(text: string): _T.Bytes {
   _T.assertString(text, "Input");
   if (_regex.test(text) !== true) {
-    throw _InputError.x_isomorphicString();
+    throw _SyntaxError.latin1("Input");
   }
 
   return Uint8Array.from(text, (char) => char.charCodeAt(0)); // 第1引数はIterable<コードポイント単位>になるが、0xFF以上は弾いているので問題ない
