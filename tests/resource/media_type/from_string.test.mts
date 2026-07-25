@@ -155,7 +155,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/plain,");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertThrows(
@@ -163,7 +163,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString(" text/plain ,");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertStrictEquals(
@@ -317,7 +317,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/plain,%3C");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertThrows(
@@ -325,7 +325,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString(" text/plain ,%3C");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertStrictEquals(
@@ -637,7 +637,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("あ/");
     },
     TypeError,
-    "Type name is invalid",
+    "Type must be a valid type of MIME type",
   );
 
   assertThrows(
@@ -645,7 +645,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertThrows(
@@ -653,7 +653,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/;");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertThrows(
@@ -685,7 +685,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/t/t");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 
   assertThrows(
@@ -693,7 +693,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text/t,t");
     },
     TypeError,
-    "Subtype name is invalid",
+    "Subtype must be a valid subtype of MIME type",
   );
 });
 
