@@ -54,7 +54,7 @@ Deno.test("Numerics.Range.safeIntClosedRange() - error", () => {
       Numerics.Range.safeIntClosedRange(1, 0);
     },
     RangeError,
-    "The lower and upper bounds of the range are contradictory",
+    "The upper limit of the range must be greater than or equal to the lower limit",
   );
 });
 

@@ -15,3 +15,9 @@ export function underflow(
   const msg = `${target} must be ${lowerLimit} or greater`;
   return new RangeError(msg);
 }
+
+export function contradictory(): RangeError {
+  const msg =
+    `The upper limit of the range must be greater than or equal to the lower limit`;
+  return new RangeError(msg);
+}

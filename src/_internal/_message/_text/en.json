@@ -1,5 +1,4 @@
 {
   "INPUT:PATTERN_MISMATCH:ASCII_RANGE_EX": "Input must not contain controls or characters outside of the US-ASCII range",
-  "INPUT:PATTERN_MISMATCH:LATIN1_RANGE": "Input must not contain characters outside of the Latin1 range",
-  "INPUT:RANGE_IMPOSSIBLE": "The lower and upper bounds of the range are contradictory"
+  "INPUT:PATTERN_MISMATCH:LATIN1_RANGE": "Input must not contain characters outside of the Latin1 range"
 }

@@ -30,7 +30,7 @@ Deno.test("Numerics.Range.bigIntClosedRange() - error", () => {
       Numerics.Range.bigIntClosedRange(1n, 0n);
     },
     RangeError,
-    "The lower and upper bounds of the range are contradictory",
+    "The upper limit of the range must be greater than or equal to the lower limit",
   );
 });
 
