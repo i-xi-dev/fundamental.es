@@ -1,4 +1,4 @@
-import { TypeMismatchError } from "../../../_internal/mod.mts";
+import { _TypeError } from "../../../_internal/mod.mts";
 
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
@@ -9,7 +9,7 @@ export function assertString(
   targetLabel: string,
 ): asserts test is string {
   if (isString(test) !== true) {
-    throw TypeMismatchError.string(targetLabel);
+    throw _TypeError.string(targetLabel);
   }
 }
 
@@ -22,7 +22,7 @@ export function assertNonEmptyString(
   targetLabel: string,
 ): asserts test is string {
   if (isNonEmptyString(test) !== true) {
-    throw TypeMismatchError.nonEmptyString(targetLabel);
+    throw _TypeError.nonEmptyString(targetLabel);
   }
 }
 

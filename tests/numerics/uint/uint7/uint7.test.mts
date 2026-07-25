@@ -76,7 +76,7 @@ Deno.test("Numerics.Uint7.fromBytes() - error", () => {
       testFromBytes([0x80]);
     },
     RangeError,
-    "Input must be a 7-bit unsigned integer of type `number`",
+    "Input must be 127 or less",
   );
 });
 

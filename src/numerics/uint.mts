@@ -1,14 +1,15 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
+import {
+  _LengthMismatchError,
+  _OperationError,
+  _RangeError,
+  _TypeError,
+} from "../_internal/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { _T, Io, NumberUtils } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
-import {
-  LengthMismatchError,
-  RangeOverflowError,
-  TypeMismatchError,
-} from "../_internal/mod.mts";
 
 export interface Uint<T extends _T.safeint> {
   get MIN_VALUE(): T;
@@ -50,7 +51,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       this.#range = Range.safeIntClosedRange<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
-      throw new TypeError("--internal-error");
+      throw _OperationError.invalid("Unsupported bit length");
     }
   }
 
@@ -77,7 +78,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
     _T.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw LengthMismatchError.exact("input", this.#byteLength);
+      throw _LengthMismatchError.exact("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -94,14 +95,14 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw RangeOverflowError.uintN(this.#bitLength, "Input");
+      throw _RangeError.overflow(this.#range.max, "Input");
     }
     return result as T;
   }
 
   toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw TypeMismatchError.uintN(this.#bitLength, "Input");
+      throw _TypeError.uintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -128,7 +129,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     f: (fa: _T.safeint, fb: _T.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw TypeMismatchError.uintN(this.#bitLength, "Input");
+      throw _TypeError.uintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -171,7 +172,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
 
   rotateLeft(value: _T.safeint, offset: _T.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw TypeMismatchError.uintN(this.#bitLength, "Input");
+      throw _TypeError.uintN(this.#bitLength, "Input");
     }
     _T.assertSafeInt(offset, "Offset");
 

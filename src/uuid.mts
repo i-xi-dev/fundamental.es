@@ -1,7 +1,7 @@
 import { _T, StringUtils } from "./_common/mod.mts";
+import { _TypeError } from "./_internal/mod.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { ByteOrder } from "./byte_order.mts";
-import { TypeMismatchError } from "./_internal/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -190,7 +190,7 @@ export namespace Uuid {
 
   export function fromString(str: string): Uuid {
     if (_isUuidString(str) !== true) {
-      throw TypeMismatchError.custom("Input", "an UUID of type `string`");
+      throw _TypeError.custom("Input", "an UUID of type `string`");
     }
 
     const hex = str.replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
@@ -200,7 +200,7 @@ export namespace Uuid {
 
   export function fromBigUint128(uint: _T.biguint128): Uuid {
     if (_isUuidBigInt(uint) !== true) {
-      throw TypeMismatchError.custom("Input", "an UUID of type `bigint`");
+      throw _TypeError.custom("Input", "an UUID of type `bigint`");
     }
 
     const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
@@ -209,7 +209,7 @@ export namespace Uuid {
 
   export function fromBytes(bytes: _T.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
-      throw TypeMismatchError.custom(
+      throw _TypeError.custom(
         "Input",
         "an UUID bytes of type `Uint8Array<ArrayBuffer>`",
       );

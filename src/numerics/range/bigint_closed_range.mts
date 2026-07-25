@@ -1,7 +1,7 @@
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
 import { _T } from "../../_common/mod.mts";
+import { _TypeError } from "../../_internal/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
-import { TypeMismatchError } from "../../_internal/mod.mts";
 
 class _BigIntClosedRangeImpl<T extends bigint = bigint>
   extends _ClosedRangeBase<bigint, T> {
@@ -14,7 +14,7 @@ class _BigIntClosedRangeImpl<T extends bigint = bigint>
   }
 
   protected override _typeError(): TypeError {
-    return TypeMismatchError.bigInt("Input");
+    return _TypeError.bigInt("Input");
   }
 }
 

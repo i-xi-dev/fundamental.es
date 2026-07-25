@@ -1,4 +1,4 @@
-import { TypeMismatchError } from "../../../_internal/mod.mts";
+import { _TypeError } from "../../../_internal/mod.mts";
 
 export function isArrayBuffer(test: unknown): test is ArrayBuffer {
   return test instanceof ArrayBuffer;
@@ -9,7 +9,7 @@ export function assertArrayBuffer(
   targetLabel: string,
 ): asserts test is ArrayBuffer {
   if (isArrayBuffer(test) !== true) {
-    throw TypeMismatchError.arrayBuffer(targetLabel);
+    throw _TypeError.arrayBuffer(targetLabel);
   }
 }
 
@@ -24,6 +24,6 @@ export function assertNonSharedUint8Array(
   targetLabel: string,
 ): asserts test is Uint8Array<ArrayBuffer> {
   if (isNonSharedUint8Array(test) !== true) {
-    throw TypeMismatchError.bytes(targetLabel);
+    throw _TypeError.bytes(targetLabel);
   }
 }
