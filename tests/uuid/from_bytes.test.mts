@@ -12,7 +12,7 @@ Deno.test("Uuid.fromBytes()", () => {
       Uuid.fromBytes(0 as unknown as Uint8Array<ArrayBuffer>);
     },
     TypeError,
-    "Input must be an UUID bytes of type `Uint8Array`",
+    "Input must be an UUID bytes of type `Uint8Array<ArrayBuffer>`",
   );
 
   assertThrows(
@@ -20,7 +20,7 @@ Deno.test("Uuid.fromBytes()", () => {
       Uuid.fromBytes(new Uint8Array(15));
     },
     TypeError,
-    "Input must be an UUID bytes of type `Uint8Array`",
+    "Input must be an UUID bytes of type `Uint8Array<ArrayBuffer>`",
   );
 
   assertThrows(
@@ -28,6 +28,6 @@ Deno.test("Uuid.fromBytes()", () => {
       Uuid.fromBytes(new Uint8Array(17));
     },
     TypeError,
-    "Input must be an UUID bytes of type `Uint8Array`",
+    "Input must be an UUID bytes of type `Uint8Array<ArrayBuffer>`",
   );
 });
