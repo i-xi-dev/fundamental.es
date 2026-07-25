@@ -38,6 +38,6 @@ Deno.test("Resource.MediaType.prototype.withParameters(Array)", () => {
       i7.withParameters([["a", "1"], ["a", "2"]]);
     },
     TypeError,
-    "Duplicate parameter names",
+    "Parameters must be an `Array` that does not contain duplicate parameters",
   );
 });

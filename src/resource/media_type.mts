@@ -3,8 +3,6 @@ import { _TypeError } from "../_internal/mod.mts";
 
 const { EMPTY, RangeSet } = StringUtils;
 
-// XXX パラメータ ソートする
-
 /**
  * 文字列の先頭からメディアタイプのタイプ名を抽出し返却
  *
@@ -100,6 +98,12 @@ type _CompareOptions = {
   caseInsensitiveParameters: Array<string>;
 };
 
+// パラメーターはRFC 6838にもとづいて
+// - パラメータ名の重複は許可しない
+// - 順序に意味はない
+// とする
+
+//TODO parametersはコンストラクターでソートする
 /**
  * The object representation of MIME type.
  * The `MediaType` instances are immutable.
@@ -128,7 +132,10 @@ export class MediaType {
       ];
     }));
     if (parameters.length !== parameterMap.size) {
-      throw new TypeError("Duplicate parameter names");
+      throw _TypeError.custom(
+        "Parameters",
+        "an `Array` that does not contain duplicate parameters",
+      );
     }
 
     this.#typeName = typeName.toLowerCase();
@@ -224,7 +231,10 @@ export class MediaType {
     const { collected: typeName, progression: typeNameLength } =
       _collectTypeName(work);
     if (typeNameLength <= 0) {
-      throw new TypeError("Type name not found");
+      throw _TypeError.custom(
+        "Input",
+        "a string starting with a valid MIME type’s type",
+      );
     }
 
     // [mimesniff 4.4.]-4,5 はコンストラクターではじかれる

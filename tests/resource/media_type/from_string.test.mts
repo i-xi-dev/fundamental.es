@@ -621,7 +621,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("text");
     },
     TypeError,
-    "Type name not found",
+    "Input must be a string starting with a valid MIME type’s type",
   );
 
   assertThrows(
@@ -629,7 +629,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("あ");
     },
     TypeError,
-    "Type name not found",
+    "Input must be a string starting with a valid MIME type’s type",
   );
 
   assertThrows(
@@ -661,7 +661,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("/test");
     },
     TypeError,
-    "Type name not found",
+    "Input must be a string starting with a valid MIME type’s type",
   );
 
   assertThrows(
@@ -669,7 +669,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("/");
     },
     TypeError,
-    "Type name not found",
+    "Input must be a string starting with a valid MIME type’s type",
   );
 
   assertThrows(
@@ -677,7 +677,7 @@ Deno.test("Resource.MediaType.fromString(string)", () => {
       Resource.MediaType.fromString("");
     },
     TypeError,
-    "Type name not found",
+    "Input must be a string starting with a valid MIME type’s type",
   );
 
   assertThrows(
