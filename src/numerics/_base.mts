@@ -1,5 +1,5 @@
-import { _T } from "../_common/mod.mts";
+import { _Type } from "../_common/mod.mts";
 
-export function _isNonNegative(value: _T.finite | bigint): boolean {
-  return (_T.isNumber(value) || _T.isBigInt(value)) && (value >= 0);
+export function _isNonNegative(value: _Type.finite | bigint): boolean {
+  return (_Type.isNumber(value) || _Type.isBigInt(value)) && (value >= 0);
 }

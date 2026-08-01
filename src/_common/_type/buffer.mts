@@ -1,5 +1,3 @@
-import { _TypeError } from "../../../_internal/mod.mts";
-
 export function isArrayBuffer(test: unknown): test is ArrayBuffer {
   return test instanceof ArrayBuffer;
 }

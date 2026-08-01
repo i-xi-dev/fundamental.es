@@ -1,4 +1,4 @@
-import { _T, StringUtils } from "./_common/mod.mts";
+import { _Type, StringUtils } from "./_common/mod.mts";
 import { _TypeError } from "./_internal/mod.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { ByteOrder } from "./byte_order.mts";
@@ -10,26 +10,26 @@ export type _ToStringOptions = {
 };
 
 export interface Uuid {
-  get variant(): _T.uint4;
-  get version(): _T.uint4;
-  get timestamp(): _T.safeint | null;
+  get variant(): _Type.uint4;
+  get version(): _Type.uint4;
+  get timestamp(): _Type.safeint | null;
   toString(options?: _ToStringOptions): string;
-  // toBigUint128(): _T.biguint128;
-  // toBytes(): _T.Bytes;
-  //TODO equals(other: Uuid | _T.Bytes | string): boolean;
+  // toBigUint128(): _Type.biguint128;
+  // toBytes(): _Type.Bytes;
+  //TODO equals(other: Uuid | _Type.Bytes | string): boolean;
 }
 
 const _BYTES_SIZE = 16;
 
-function _parseBytes(bytes: _T.Bytes): {
-  variant: _T.uint4;
-  version: _T.uint4;
-  timestamp: _T.safeint | null;
+function _parseBytes(bytes: _Type.Bytes): {
+  variant: _Type.uint4;
+  version: _Type.uint4;
+  timestamp: _Type.safeint | null;
 } {
-  const variant = ((bytes[8] as _T.uint8) >> 4) as _T.uint4;
-  const version = ((bytes[6] as _T.uint8) >> 4) as _T.uint4;
+  const variant = ((bytes[8] as _Type.uint8) >> 4) as _Type.uint4;
+  const version = ((bytes[6] as _Type.uint8) >> 4) as _Type.uint4;
 
-  let timestamp: _T.safeint | null = null;
+  let timestamp: _Type.safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
     let work = (new DataView(bytes.buffer)).getBigUint64(0);
     work = work >> 16n;
@@ -40,12 +40,12 @@ function _parseBytes(bytes: _T.Bytes): {
 }
 
 class _Uuid implements Uuid {
-  readonly #bytes: _T.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
-  readonly #type: _T.uint4;
-  readonly #subtype: _T.uint4;
-  readonly #timestamp: _T.safeint | null; // v7専用
+  readonly #bytes: _Type.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
+  readonly #type: _Type.uint4;
+  readonly #subtype: _Type.uint4;
+  readonly #timestamp: _Type.safeint | null; // v7専用
 
-  constructor(bytes: _T.Bytes) {
+  constructor(bytes: _Type.Bytes) {
     this.#bytes = bytes;
     const { variant, version, timestamp } = _parseBytes(bytes);
 
@@ -54,15 +54,15 @@ class _Uuid implements Uuid {
     this.#timestamp = timestamp;
   }
 
-  get variant(): _T.uint4 {
+  get variant(): _Type.uint4 {
     return this.#type;
   }
 
-  get version(): _T.uint4 {
+  get version(): _Type.uint4 {
     return this.#subtype;
   }
 
-  get timestamp(): _T.safeint | null {
+  get timestamp(): _Type.safeint | null {
     return this.#timestamp;
   }
 
@@ -79,31 +79,31 @@ class _Uuid implements Uuid {
     return (options?.asUrn === true) ? `urn:uuid:${str}` : str;
   }
 
-  // toBigUint128(): _T.biguint128 {
+  // toBigUint128(): _Type.biguint128 {
   //   return BigInt(`0x${this.#bytes.toHex()}`);
   // }
 }
 
-function _generateRandom(): _T.Bytes {
+function _generateRandom(): _Type.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   // 7バイト目の上位4ビットは0100₂固定（13桁目の文字列表現は"4"固定）
-  bytes[6] = (bytes[6] as _T.uint8) & 0x0F | 0x40;
+  bytes[6] = (bytes[6] as _Type.uint8) & 0x0F | 0x40;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as _T.uint8) & 0x3F | 0x80;
+  bytes[8] = (bytes[8] as _Type.uint8) & 0x3F | 0x80;
 
   return bytes;
 }
 
-function _timestamp(): _T.safeint {
+function _timestamp(): _Type.safeint {
   const { performance } = globalThis;
   return Math.trunc(performance.timeOrigin + performance.now());
 }
 
 const _v7Counter = (function* () {
-  let last: _T.safeint = Number.MIN_SAFE_INTEGER;
-  let cnt: _T.safeint = 0;
+  let last: _Type.safeint = Number.MIN_SAFE_INTEGER;
+  let cnt: _Type.safeint = 0;
   while (true) {
     const curr = _timestamp();
     if (last < curr) {
@@ -120,7 +120,7 @@ const _v7Counter = (function* () {
   }
 })();
 
-function _generateUnixTimeBased(): _T.Bytes {
+function _generateUnixTimeBased(): _Type.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   const { timestamp, counter } = _v7Counter.next().value;
@@ -139,10 +139,10 @@ function _generateUnixTimeBased(): _T.Bytes {
   bytes.set(new Uint8Array(tsBuffer, 0, 2), 6);
 
   // 7バイト目の上位4ビットは0111₂固定（13桁目の文字列表現は"7"固定）
-  bytes[6] = (bytes[6] as _T.uint8) & 0x0F | 0x70;
+  bytes[6] = (bytes[6] as _Type.uint8) & 0x0F | 0x70;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as _T.uint8) & 0x3F | 0x80;
+  bytes[8] = (bytes[8] as _Type.uint8) & 0x3F | 0x80;
 
   return bytes;
 }
@@ -151,16 +151,16 @@ const _uuidRegex =
   /^(?:(?:urn:uuid:)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
 
 function _isUuidString(test: unknown): test is string {
-  return _T.isString(test) && _uuidRegex.test(test);
+  return _Type.isString(test) && _uuidRegex.test(test);
 }
 
-function _isUuidBigInt(test: unknown): test is _T.biguint128 {
-  return _T.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
+function _isUuidBigInt(test: unknown): test is _Type.biguint128 {
+  return _Type.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
     (test <= BigUint128.MAX_VALUE);
 }
 
-function _isUuidBytes(test: unknown): test is _T.Bytes {
-  return _T.isNonSharedUint8Array(test) && (test.byteLength === _BYTES_SIZE);
+function _isUuidBytes(test: unknown): test is _Type.Bytes {
+  return _Type.isNonSharedUint8Array(test) && (test.byteLength === _BYTES_SIZE);
 }
 
 export namespace Uuid {
@@ -198,7 +198,7 @@ export namespace Uuid {
     return new _Uuid(bytes);
   }
 
-  export function fromBigUint128(uint: _T.biguint128): Uuid {
+  export function fromBigUint128(uint: _Type.biguint128): Uuid {
     if (_isUuidBigInt(uint) !== true) {
       throw _TypeError.custom("Input", "an UUID of type `bigint`");
     }
@@ -207,7 +207,7 @@ export namespace Uuid {
     return new _Uuid(bytes);
   }
 
-  export function fromBytes(bytes: _T.Bytes): Uuid {
+  export function fromBytes(bytes: _Type.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
       throw _TypeError.custom(
         "Input",

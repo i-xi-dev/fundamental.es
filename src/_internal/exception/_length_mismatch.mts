@@ -1,4 +1,4 @@
-import { _T } from "../../_common/mod.mts";
+import { _Type } from "../../_common/mod.mts";
 
 const _Type1 = {
   TOO_LONG: 0b0010,
@@ -14,7 +14,7 @@ function _message(
   target: string,
   type1: number,
   type2: symbol,
-  len: _T.safeint,
+  len: _Type.safeint,
 ): string {
   const s1 = (type2 === _Type2.CHARS)
     ? `number of \`char\`s in ${target}`
@@ -32,7 +32,7 @@ function _message(
 
 export function charsCount(
   target: string,
-  expectedCount: _T.safeint,
+  expectedCount: _Type.safeint,
 ): RangeError {
   const msg = _message(
     target,
@@ -45,7 +45,7 @@ export function charsCount(
 
 export function charsTooLong(
   target: string,
-  upperBound: _T.safeint,
+  upperBound: _Type.safeint,
 ): RangeError {
   const msg = _message(target, _Type1.TOO_LONG, _Type2.CHARS, upperBound);
   return new RangeError(msg);
@@ -53,13 +53,16 @@ export function charsTooLong(
 
 export function charsTooShort(
   target: string,
-  lowerBound: _T.safeint,
+  lowerBound: _Type.safeint,
 ): RangeError {
   const msg = _message(target, _Type1.TOO_SHORT, _Type2.CHARS, lowerBound);
   return new RangeError(msg);
 }
 
-export function exact(target: string, expectedLength: _T.safeint): RangeError {
+export function exact(
+  target: string,
+  expectedLength: _Type.safeint,
+): RangeError {
   const msg = _message(
     target,
     _Type1.TOO_SHORT + _Type1.TOO_LONG,
@@ -69,12 +72,15 @@ export function exact(target: string, expectedLength: _T.safeint): RangeError {
   return new RangeError(msg);
 }
 
-export function tooLong(target: string, upperBound: _T.safeint): RangeError {
+export function tooLong(target: string, upperBound: _Type.safeint): RangeError {
   const msg = _message(target, _Type1.TOO_LONG, _Type2.ANY, upperBound);
   return new RangeError(msg);
 }
 
-export function tooShort(target: string, lowerBound: _T.safeint): RangeError {
+export function tooShort(
+  target: string,
+  lowerBound: _Type.safeint,
+): RangeError {
   const msg = _message(target, _Type1.TOO_SHORT, _Type2.ANY, lowerBound);
   return new RangeError(msg);
 }

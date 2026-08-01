@@ -1,5 +1,5 @@
 import { _Encoder } from "../_encoder.mts";
-import { _T } from "../../../_common/mod.mts";
+import { _Type } from "../../../_common/mod.mts";
 import { Base64EncoderOptions } from "./encoder_options.mts";
 
 export class Base64Encoder implements _Encoder {
@@ -9,7 +9,7 @@ export class Base64Encoder implements _Encoder {
     this.#options = Base64EncoderOptions.resolve(options);
   }
 
-  encode(bytes: _T.Bytes): string {
+  encode(bytes: _Type.Bytes): string {
     return bytes.toBase64(this.#options);
   }
 }

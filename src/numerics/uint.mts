@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _T, Io } from "../_common/mod.mts";
+import { _Assert, _Type, Io } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import {
   _LengthMismatchError,
@@ -12,38 +12,38 @@ import { _normalizeOffset } from "./_uint.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
 
-export interface Uint<T extends _T.safeint> {
+export interface Uint<T extends _Type.safeint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
-  get BIT_LENGTH(): _T.safeint;
-  get BYTE_LENGTH(): _T.safeint;
+  get BIT_LENGTH(): _Type.safeint;
+  get BYTE_LENGTH(): _Type.safeint;
   get [Symbol.toStringTag](): string;
-  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: /* T */ _T.safeint, byteOrder?: ByteOrder): _T.Bytes;
-  bitwiseAnd(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
-  bitwiseOr(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
-  bitwiseXOr(a: /* T */ _T.safeint, b: /* T */ _T.safeint): T;
+  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T;
+  toBytes(uint: /* T */ _Type.safeint, byteOrder?: ByteOrder): _Type.Bytes;
+  bitwiseAnd(a: /* T */ _Type.safeint, b: /* T */ _Type.safeint): T;
+  bitwiseOr(a: /* T */ _Type.safeint, b: /* T */ _Type.safeint): T;
+  bitwiseXOr(a: /* T */ _Type.safeint, b: /* T */ _Type.safeint): T;
   //XXX bitwiseNot()
-  rotateLeft(value: /* T */ _T.safeint, offset: _T.safeint): T;
+  rotateLeft(value: /* T */ _Type.safeint, offset: _Type.safeint): T;
   //XXX rotateRight()
-  truncateFrom(value: _T.safeint): T;
-  saturateFrom(value: _T.safeint): T;
+  truncateFrom(value: _Type.safeint): T;
+  saturateFrom(value: _Type.safeint): T;
 }
 
-function _extractByte(unit: _unit, pos: _T.safeint): _T.uint8 {
+function _extractByte(unit: _unit, pos: _Type.safeint): _Type.uint8 {
   const x1 = 0x100 ** pos;
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(x2 / (0x100 ** (pos - 1))) as _T.uint8;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as _Type.uint8;
 }
 
 export class _UintImpl<T extends _unit> implements Uint<T> {
-  readonly #bitLength: _T.safeint; // non-negative integer
-  readonly #byteLength: _T.safeint; // non-negative integer
+  readonly #bitLength: _Type.safeint; // non-negative integer
+  readonly #byteLength: _Type.safeint; // non-negative integer
   readonly #size: _unit;
-  readonly #range: Range.ClosedRange<_T.safeint, T>;
+  readonly #range: Range.ClosedRange<_Type.safeint, T>;
 
-  constructor(bitLength: _T.safeint) {
-    if (_T.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
+  constructor(bitLength: _Type.safeint) {
+    if (_Type.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2 ** bitLength;
@@ -64,11 +64,11 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     return this.#range.max;
   }
 
-  get BIT_LENGTH(): _T.safeint {
+  get BIT_LENGTH(): _Type.safeint {
     return this.#bitLength;
   }
 
-  get BYTE_LENGTH(): _T.safeint {
+  get BYTE_LENGTH(): _Type.safeint {
     return this.#byteLength;
   }
 
@@ -76,7 +76,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     return `Uint${this.#bitLength}`;
   }
 
-  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
+  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _LengthMismatchError.exact("input", this.#byteLength);
@@ -101,7 +101,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     return result as T;
   }
 
-  toBytes(uint: _T.safeint, byteOrder?: ByteOrder): _T.Bytes {
+  toBytes(uint: _Type.safeint, byteOrder?: ByteOrder): _Type.Bytes {
     if (this.#range.contains(uint) !== true) {
       throw _TypeError.uintN(this.#bitLength, "Input");
     }
@@ -112,8 +112,8 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       return Uint8Array.of(uint);
     }
 
-    const bytes: Array<_T.uint8> = [];
-    bytes.push((uint % 0x100) as _T.uint8);
+    const bytes: Array<_Type.uint8> = [];
+    bytes.push((uint % 0x100) as _Type.uint8);
     for (let i = 2; i <= 6; i++) { // 16-48
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));
@@ -125,9 +125,9 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   #bitwiseOp(
-    a: _T.safeint,
-    b: _T.safeint,
-    f: (fa: _T.safeint, fb: _T.safeint) => T,
+    a: _Type.safeint,
+    b: _Type.safeint,
+    f: (fa: _Type.safeint, fb: _Type.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
       throw _TypeError.uintN(this.#bitLength, "Input");
@@ -147,31 +147,31 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     return this.fromBytes(r);
   }
 
-  #and(a: _T.safeint, b: _T.safeint): T {
+  #and(a: _Type.safeint, b: _Type.safeint): T {
     return (a & b) as T;
   }
 
-  #or(a: _T.safeint, b: _T.safeint): T {
+  #or(a: _Type.safeint, b: _Type.safeint): T {
     return (a | b) as T;
   }
 
-  #xOr(a: _T.safeint, b: _T.safeint): T {
+  #xOr(a: _Type.safeint, b: _Type.safeint): T {
     return (a ^ b) as T;
   }
 
-  bitwiseAnd(a: _T.safeint, b: _T.safeint): T {
+  bitwiseAnd(a: _Type.safeint, b: _Type.safeint): T {
     return this.#bitwiseOp(a, b, this.#and);
   }
 
-  bitwiseOr(a: _T.safeint, b: _T.safeint): T {
+  bitwiseOr(a: _Type.safeint, b: _Type.safeint): T {
     return this.#bitwiseOp(a, b, this.#or);
   }
 
-  bitwiseXOr(a: _T.safeint, b: _T.safeint): T {
+  bitwiseXOr(a: _Type.safeint, b: _Type.safeint): T {
     return this.#bitwiseOp(a, b, this.#xOr);
   }
 
-  rotateLeft(value: _T.safeint, offset: _T.safeint): T {
+  rotateLeft(value: _Type.safeint, offset: _Type.safeint): T {
     if (this.#range.contains(value) !== true) {
       throw _TypeError.uintN(this.#bitLength, "Input");
     }
@@ -198,7 +198,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     //TODO bigint使うと遅い
   }
 
-  truncateFrom(value: _T.safeint): T {
+  truncateFrom(value: _Type.safeint): T {
     _Assert.safeInt(value, "Input");
 
     if (this.#range.contains(value)) {
@@ -212,17 +212,17 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     }
   }
 
-  saturateFrom(value: _T.safeint): T {
+  saturateFrom(value: _Type.safeint): T {
     _Assert.safeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }
 }
 
-export const Uint6: Uint<_T.uint6> = new _UintImpl(6);
-export const Uint7: Uint<_T.uint7> = new _UintImpl(7);
-export const Uint8: Uint<_T.uint8> = new _UintImpl(8);
-export const Uint16: Uint<_T.uint16> = new _UintImpl(16);
-export const Uint24: Uint<_T.uint24> = new _UintImpl(24);
-export const Uint32: Uint<_T.uint32> = new _UintImpl(32);
-export const Uint48: Uint<_T.uint48> = new _UintImpl(48);
+export const Uint6: Uint<_Type.uint6> = new _UintImpl(6);
+export const Uint7: Uint<_Type.uint7> = new _UintImpl(7);
+export const Uint8: Uint<_Type.uint8> = new _UintImpl(8);
+export const Uint16: Uint<_Type.uint16> = new _UintImpl(16);
+export const Uint24: Uint<_Type.uint24> = new _UintImpl(24);
+export const Uint32: Uint<_Type.uint32> = new _UintImpl(32);
+export const Uint48: Uint<_Type.uint48> = new _UintImpl(48);

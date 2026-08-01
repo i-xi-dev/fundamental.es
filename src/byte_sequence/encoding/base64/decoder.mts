@@ -1,5 +1,5 @@
 import { _Decoder } from "../_decoder.mts";
-import { _T } from "../../../_common/mod.mts";
+import { _Type } from "../../../_common/mod.mts";
 import { Base64DecoderOptions } from "./decoder_options.mts";
 
 export class Base64Decoder implements _Decoder {
@@ -9,7 +9,7 @@ export class Base64Decoder implements _Decoder {
     this.#options = Base64DecoderOptions.resolve(options);
   }
 
-  decode(text: string): _T.Bytes {
+  decode(text: string): _Type.Bytes {
     return Uint8Array.fromBase64(text, this.#options);
   }
 }

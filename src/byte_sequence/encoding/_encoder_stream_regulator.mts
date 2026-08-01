@@ -1,6 +1,6 @@
-import { _T } from "../../_common/mod.mts";
+import { _Type } from "../../_common/mod.mts";
 
 export interface _EncoderStreamRegulator {
-  regulate(bytes: _T.Bytes): _T.Bytes;
-  flush(): _T.Bytes;
+  regulate(bytes: _Type.Bytes): _Type.Bytes;
+  flush(): _Type.Bytes;
 }

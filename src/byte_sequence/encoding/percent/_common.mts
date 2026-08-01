@@ -1,4 +1,4 @@
-import { _Assert, _T, _U, StringUtils } from "../../../_common/mod.mts";
+import { _Assert, _Type, _U, StringUtils } from "../../../_common/mod.mts";
 import { _SyntaxError } from "../../../_internal/mod.mts";
 import { ByteFormat } from "../../../byte_format.mts";
 import { Radix, Uint8 } from "../../../numerics/mod.mts";
@@ -6,13 +6,13 @@ import { Radix, Uint8 } from "../../../numerics/mod.mts";
 const { EMPTY } = StringUtils;
 
 export type _PercentOptions = {
-  encodeSet?: Array</* _T.uint8 */ number>;
+  encodeSet?: Array</* _Type.uint8 */ number>;
   spaceAsPlus?: boolean;
 };
 
 function* _defaultEncodeSet() {
   for (let i = 0; i <= Uint8.MAX_VALUE; i++) {
-    yield i as _T.uint8;
+    yield i as _Type.uint8;
   }
 }
 
@@ -20,11 +20,11 @@ export namespace _PercentOptions {
   export function resolve(
     options?: _PercentOptions,
   ): Required<_PercentOptions> {
-    const set: Set<_T.uint8> = new Set();
+    const set: Set<_Type.uint8> = new Set();
 
     if (Array.isArray(options?.encodeSet) === true) {
       for (const b of options.encodeSet) {
-        if (_T.isUint8(b) === true) {
+        if (_Type.isUint8(b) === true) {
           set.add(b);
         }
       }
@@ -44,7 +44,7 @@ const _regex = /^[\u0020-\u007E]*$/; //XXX 共通assertにする
 export function _decode(
   text: string,
   options: Required<_PercentOptions>,
-): _T.Bytes {
+): _Type.Bytes {
   _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _SyntaxError.asciiWithoutCc("Input");
@@ -58,14 +58,14 @@ export function _decode(
   while (i < text.length) {
     const c = text.charAt(i);
 
-    let byte: _T.uint8;
+    let byte: _Type.uint8;
     if (c === _U.Char.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
-        byte = Number.parseInt(byteString, 16) as _T.uint8;
+        byte = Number.parseInt(byteString, 16) as _Type.uint8;
         i = i + 3;
       } else {
-        byte = c.charCodeAt(0) as _T.uint8;
+        byte = c.charCodeAt(0) as _Type.uint8;
         i = i + 1;
       }
     } else if (c === _U.Char.PLUS_SIGN) {
@@ -76,7 +76,7 @@ export function _decode(
       }
       i = i + 1;
     } else {
-      byte = c.charCodeAt(0) as _T.uint8;
+      byte = c.charCodeAt(0) as _Type.uint8;
       i = i + 1;
     }
 
@@ -93,7 +93,7 @@ export function _decode(
 export function _staticDecode(
   text: string,
   options?: _PercentOptions,
-): _T.Bytes {
+): _Type.Bytes {
   return _decode(text, _PercentOptions.resolve(options));
 }
 
@@ -104,7 +104,7 @@ const f = new ByteFormat({
 });
 
 export function _encode(
-  bytes: _T.Bytes,
+  bytes: _Type.Bytes,
   options: Required<_PercentOptions>,
 ): string {
   _Assert.nonSharedUint8Array(bytes, "Input");
@@ -126,7 +126,7 @@ export function _encode(
 }
 
 export function _staticEncode(
-  bytes: _T.Bytes,
+  bytes: _Type.Bytes,
   options?: _PercentOptions,
 ): string {
   return _encode(bytes, _PercentOptions.resolve(options));

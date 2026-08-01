@@ -1,4 +1,4 @@
-import { _T } from "../../../_common/mod.mts";
+import { _Type } from "../../../_common/mod.mts";
 import { Base64DecoderOptions } from "./decoder_options.mts";
 import { Base64EncoderOptions } from "./encoder_options.mts";
 
@@ -15,13 +15,13 @@ export type { Base64EncoderOptions as EncoderOptions };
 export function decode(
   text: string,
   options?: Base64DecoderOptions,
-): _T.Bytes {
+): _Type.Bytes {
   return Uint8Array.fromBase64(text, options);
 }
 
 /** @deprecated Use `Uint8Array.prototype.toBase64`. */
 export function encode(
-  bytes: _T.Bytes,
+  bytes: _Type.Bytes,
   options?: Base64EncoderOptions,
 ): string {
   return bytes.toBase64(options);

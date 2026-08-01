@@ -1,14 +1,14 @@
 import type { _EncoderStreamRegulator } from "../_encoder_stream_regulator.mts";
-import { _T } from "../../../_common/mod.mts";
+import { _Type } from "../../../_common/mod.mts";
 
 export class _Base64EncoderStreamRegulator implements _EncoderStreamRegulator {
-  #pending: _T.Bytes;
+  #pending: _Type.Bytes;
 
   constructor() {
     this.#pending = new Uint8Array(0);
   }
 
-  regulate(bytes: _T.Bytes): _T.Bytes {
+  regulate(bytes: _Type.Bytes): _Type.Bytes {
     const temp = new Uint8Array(this.#pending.length + bytes.length);
     temp.set(this.#pending);
     temp.set(bytes, this.#pending.length);
@@ -27,7 +27,7 @@ export class _Base64EncoderStreamRegulator implements _EncoderStreamRegulator {
     }
   }
 
-  flush(): _T.Bytes {
+  flush(): _Type.Bytes {
     const remains = this.#pending;
     this.#pending = new Uint8Array(0);
     return remains;

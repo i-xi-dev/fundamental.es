@@ -1,5 +1,5 @@
 import * as Byte from "../../byte/mod.mts";
-import { _T } from "../../_common/mod.mts";
+import { _Type } from "../../_common/mod.mts";
 import { Builder } from "../builder.mts";
 import { ByteOrder } from "../../byte_order.mts";
 import { Uint32 } from "../../numerics/mod.mts";
@@ -9,10 +9,10 @@ const _BLOCK_BYTES = 64;
 const _DATA_SIZE_BYTES = 8;
 
 type _ContextState = [
-  a: _T.uint32,
-  b: _T.uint32,
-  c: _T.uint32,
-  d: _T.uint32,
+  a: _Type.uint32,
+  b: _Type.uint32,
+  c: _Type.uint32,
+  d: _Type.uint32,
 ];
 
 const _S = {
@@ -46,10 +46,10 @@ function _initContextState(): _ContextState {
 }
 
 function _f(
-  x: _T.uint32,
-  y: _T.uint32,
-  z: _T.uint32,
-): /*uint32*/ _T.safeint {
+  x: _Type.uint32,
+  y: _Type.uint32,
+  z: _Type.uint32,
+): /*uint32*/ _Type.safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, y),
   //   Uint32.bitwiseAnd(Uint32.bitwiseXOr(x, 0xFFFFFFFF), z),
@@ -58,10 +58,10 @@ function _f(
 }
 
 function _g(
-  x: _T.uint32,
-  y: _T.uint32,
-  z: _T.uint32,
-): /*uint32*/ _T.safeint {
+  x: _Type.uint32,
+  y: _Type.uint32,
+  z: _Type.uint32,
+): /*uint32*/ _Type.safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, z),
   //   Uint32.bitwiseAnd(y, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
@@ -70,19 +70,19 @@ function _g(
 }
 
 function _h(
-  x: _T.uint32,
-  y: _T.uint32,
-  z: _T.uint32,
-): /*uint32*/ _T.safeint {
+  x: _Type.uint32,
+  y: _Type.uint32,
+  z: _Type.uint32,
+): /*uint32*/ _Type.safeint {
   // return Uint32.bitwiseXOr(Uint32.bitwiseXOr(x, y), z); この後ビット演算するわけではないので
   return (x ^ y ^ z);
 }
 
 function _i(
-  x: _T.uint32,
-  y: _T.uint32,
-  z: _T.uint32,
-): /*uint32*/ _T.safeint {
+  x: _Type.uint32,
+  y: _Type.uint32,
+  z: _Type.uint32,
+): /*uint32*/ _Type.safeint {
   // return Uint32.bitwiseXOr(
   //   y,
   //   Uint32.bitwiseOr(x, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
@@ -90,62 +90,62 @@ function _i(
   return (y ^ (x | (z ^ 0xFFFFFFFF)));
 }
 
-function _rotateLeft(x: _T.safeint, n: _S): _T.uint32 {
+function _rotateLeft(x: _Type.safeint, n: _S): _Type.uint32 {
   const sx = Uint32.truncateFrom(x);
   return Uint32.rotateLeft(sx, n);
 }
 
 function _ff(
-  a: _T.uint32,
-  b: _T.uint32,
-  c: _T.uint32,
-  d: _T.uint32,
-  x: _T.uint32,
+  a: _Type.uint32,
+  b: _Type.uint32,
+  c: _Type.uint32,
+  d: _Type.uint32,
+  x: _Type.uint32,
   s: _S,
-  ac: _T.uint32,
-): _T.uint32 {
+  ac: _Type.uint32,
+): _Type.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _f(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _gg(
-  a: _T.uint32,
-  b: _T.uint32,
-  c: _T.uint32,
-  d: _T.uint32,
-  x: _T.uint32,
+  a: _Type.uint32,
+  b: _Type.uint32,
+  c: _Type.uint32,
+  d: _Type.uint32,
+  x: _Type.uint32,
   s: _S,
-  ac: _T.uint32,
-): _T.uint32 {
+  ac: _Type.uint32,
+): _Type.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _g(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _hh(
-  a: _T.uint32,
-  b: _T.uint32,
-  c: _T.uint32,
-  d: _T.uint32,
-  x: _T.uint32,
+  a: _Type.uint32,
+  b: _Type.uint32,
+  c: _Type.uint32,
+  d: _Type.uint32,
+  x: _Type.uint32,
   s: _S,
-  ac: _T.uint32,
-): _T.uint32 {
+  ac: _Type.uint32,
+): _Type.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _h(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _ii(
-  a: _T.uint32,
-  b: _T.uint32,
-  c: _T.uint32,
-  d: _T.uint32,
-  x: _T.uint32,
+  a: _Type.uint32,
+  b: _Type.uint32,
+  c: _Type.uint32,
+  d: _Type.uint32,
+  x: _Type.uint32,
   s: _S,
-  ac: _T.uint32,
-): _T.uint32 {
+  ac: _Type.uint32,
+): _Type.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _i(b, c, d) + x + ac, s) + b,
   );
@@ -153,7 +153,7 @@ function _ii(
 
 function _readBlock(
   buffer: ArrayBuffer,
-  byteOffset: _T.safeint,
+  byteOffset: _Type.safeint,
 ): Uint32Array {
   const result = new Uint32Array(_BLOCK_BYTES / Uint32.BYTE_LENGTH);
 
@@ -166,7 +166,7 @@ function _readBlock(
 
 function _updateContextState(
   sourceBuffer: ArrayBuffer,
-  byteOffset: _T.safeint,
+  byteOffset: _Type.safeint,
   contextState: _ContextState,
 ): void {
   const block = _readBlock(sourceBuffer, byteOffset);
@@ -284,7 +284,7 @@ function _updateContextState(
 }
 
 //XXX inputのサイズを制限すべき
-function _compute(inputBytes: _T.Bytes): ArrayBuffer {
+function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
   const sourceByteCount = inputBytes.byteLength;
 
   const paddedByteCount =
@@ -322,7 +322,7 @@ function _compute(inputBytes: _T.Bytes): ArrayBuffer {
  *
  * @deprecated
  */
-export function _computeMd5(input: _T.Bytes): Promise<_T.Bytes> {
+export function _computeMd5(input: _Type.Bytes): Promise<_Type.Bytes> {
   return new Promise((resolve, reject) => {
     try {
       const digest = _compute(input);

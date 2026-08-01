@@ -1,28 +1,28 @@
-import { _Assert, _T } from "../_common/mod.mts";
+import { _Assert, _Type } from "../_common/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
-// export function _isNonNegativeSafeInt(value: /* _T.safeint*/ unknown): boolean {
-//   return _T.isSafeInt(value) && isNonNegative(value);
+// export function _isNonNegativeSafeInt(value: /* _Type.safeint*/ unknown): boolean {
+//   return _Type.isSafeInt(value) && isNonNegative(value);
 // }
 
-export function _isEvenSafeInt(test: /* _T.safeint*/ unknown): boolean {
-  return _T.isSafeInt(test) && ((test % 2) === 0);
+export function _isEvenSafeInt(test: /* _Type.safeint*/ unknown): boolean {
+  return _Type.isSafeInt(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(
-  value: _T.finite,
+  value: _Type.finite,
   roundingMode?: RoundingMode,
-): _T.safeint {
+): _Type.safeint {
   if (Number.isInteger(value)) {
-    return _normalizeFinite<_T.safeint>(value);
+    return _normalizeFinite<_Type.safeint>(value);
   }
 
-  const integralPart = _normalizeFinite<_T.safeint>(Math.trunc(value));
+  const integralPart = _normalizeFinite<_Type.safeint>(Math.trunc(value));
   const integralPartIsEven = _isEvenSafeInt(integralPart);
 
-  const nearestP = _normalizeFinite<_T.safeint>(Math.ceil(value));
-  const nearestN = _normalizeFinite<_T.safeint>(Math.floor(value));
+  const nearestP = _normalizeFinite<_Type.safeint>(Math.ceil(value));
+  const nearestN = _normalizeFinite<_Type.safeint>(Math.floor(value));
   const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
@@ -81,9 +81,9 @@ export namespace SafeInt {
   export const isEven = _isEvenSafeInt;
 
   export function round(
-    value: _T.finite,
+    value: _Type.finite,
     roundingMode?: RoundingMode,
-  ): _T.safeint {
+  ): _Type.safeint {
     _Assert.finite(value, "Input");
     return _roundToSafeInt(value, roundingMode);
   }

@@ -1,16 +1,18 @@
-import { _Assert, _T } from "../_common/mod.mts";
+import { _Assert, _Type } from "../_common/mod.mts";
 import { _RangeError } from "../_internal/mod.mts";
 
-export function _normalizeFinite<T extends _T.finite>(value: _T.finite): T {
+export function _normalizeFinite<T extends _Type.finite>(
+  value: _Type.finite,
+): T {
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
-// export function _isNonNegativeFinite(value: /* _T.finite */ unknown): boolean {
-//   return _T.isFinite(value) && _isNonNegative(value);
+// export function _isNonNegativeFinite(value: /* _Type.finite */ unknown): boolean {
+//   return _Type.isFinite(value) && _isNonNegative(value);
 // }
 
-export function _clampFinite<T extends _T.finite>(
-  value: _T.finite,
+export function _clampFinite<T extends _Type.finite>(
+  value: _Type.finite,
   min: T,
   max: T,
 ): T {
@@ -18,15 +20,15 @@ export function _clampFinite<T extends _T.finite>(
 }
 
 export namespace Finite {
-  export function normalize<T extends _T.finite>(value: _T.finite): T {
+  export function normalize<T extends _Type.finite>(value: _Type.finite): T {
     _Assert.finite(value, "Input");
     return _normalizeFinite(value);
   }
 
   // export const isNonNegative = _isNonNegativeFinite;
 
-  export function clamp<T extends _T.finite>(
-    value: _T.finite,
+  export function clamp<T extends _Type.finite>(
+    value: _Type.finite,
     min: T,
     max: T,
   ): T {

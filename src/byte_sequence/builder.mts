@@ -1,4 +1,4 @@
-import { _Assert, _T } from "../_common/mod.mts";
+import { _Assert, _Type } from "../_common/mod.mts";
 import {
   BigUint,
   BigUint64,
@@ -21,10 +21,10 @@ const _ClampMode = {
 
 type _ClampMode = typeof _ClampMode[keyof typeof _ClampMode];
 
-function _uintClamper<T extends _T.safeint>(
+function _uintClamper<T extends _Type.safeint>(
   x: Uint<T>,
   mode?: _ClampMode,
-): (v: _T.safeint) => T {
+): (v: _Type.safeint) => T {
   return (mode === _ClampMode.SATURATE)
     ? (v) => x.saturateFrom(v)
     : (v) => x.truncateFrom(v);
@@ -41,25 +41,25 @@ function _biguintClamper<T extends bigint>(
 
 type _LoadOptions_1 = {
   clampMode?: _ClampMode;
-  insertAt?: _T.safeint;
+  insertAt?: _Type.safeint;
 };
 
 type _LoadOptions_2 = {
-  insertAt?: _T.safeint;
+  insertAt?: _Type.safeint;
 };
 
 type _LoadOptions = {
   clampMode?: _ClampMode;
   byteOrder?: ByteOrder;
-  insertAt?: _T.safeint;
+  insertAt?: _Type.safeint;
 };
 
 type _ToBufferOptions = {
-  byteLength?: _T.safeint;
+  byteLength?: _Type.safeint;
   //XXX fixLength?: boolean;
 };
 
-function _randomBytes(byteLength: _T.safeint): ArrayBuffer {
+function _randomBytes(byteLength: _Type.safeint): ArrayBuffer {
   const buffer = new ArrayBuffer(byteLength);
   let bytesSpan: Uint8Array<ArrayBuffer>;
   let filled = 0;
@@ -83,12 +83,12 @@ function _randomBytes(byteLength: _T.safeint): ArrayBuffer {
 }
 
 function _normalizeResizer(
-  capacity: _T.safeint,
-  maxCapacity?: _T.safeint,
-): { resizable: boolean; maxByteLength?: _T.safeint } {
+  capacity: _Type.safeint,
+  maxCapacity?: _Type.safeint,
+): { resizable: boolean; maxByteLength?: _Type.safeint } {
   // capacityは型チェック済み前提
 
-  if (_T.isSafeInt(maxCapacity) && isNonNegative(maxCapacity)) {
+  if (_Type.isSafeInt(maxCapacity) && isNonNegative(maxCapacity)) {
     return {
       resizable: true,
       maxByteLength: (maxCapacity >= capacity) ? maxCapacity : capacity,
@@ -101,9 +101,9 @@ function _normalizeResizer(
 export class Builder {
   readonly #buffer: ArrayBuffer;
   readonly #view: Uint8Array<ArrayBuffer>;
-  #index: _T.safeint; // 進むのみ。戻す手段は提供しない
+  #index: _Type.safeint; // 進むのみ。戻す手段は提供しない
 
-  private constructor(capacity: _T.safeint, maxCapacity?: _T.safeint) {
+  private constructor(capacity: _Type.safeint, maxCapacity?: _Type.safeint) {
     const { resizable, maxByteLength } = _normalizeResizer(
       capacity,
       maxCapacity,
@@ -126,23 +126,23 @@ export class Builder {
     return (this.#buffer.detached === true);
   }
 
-  get capacity(): _T.safeint {
+  get capacity(): _Type.safeint {
     this.#assertAccessible();
     return this.#buffer.byteLength;
   }
 
   static create(
-    capacity: _T.safeint,
-    maxCapacity?: _T.safeint,
+    capacity: _Type.safeint,
+    maxCapacity?: _Type.safeint,
   ): Builder {
     _Assert.nonNegativeSafeInt(capacity, "Capacity");
-    if (_T.isNullOrUndefined(maxCapacity) !== true) {
+    if (_Type.isNullOrUndefined(maxCapacity) !== true) {
       _Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
     return new Builder(capacity, maxCapacity);
   }
 
-  loadUint8(byte: _T.safeint, options?: _LoadOptions_1): this {
+  loadUint8(byte: _Type.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -151,7 +151,7 @@ export class Builder {
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       this.#view[options.insertAt] = clamped;
     } else {
       this.#appendByte(clamped);
@@ -167,7 +167,7 @@ export class Builder {
     _Assert.arrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
     } else {
       this.#appendBytes(new Uint8Array(sourceBuffer));
@@ -176,7 +176,7 @@ export class Builder {
   }
 
   loadUint8Iterable(
-    uint8s: Iterable<_T.safeint>,
+    uint8s: Iterable<_Type.safeint>,
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
@@ -187,7 +187,7 @@ export class Builder {
     // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for (const uint8 of uint8s) {
         if (offset < this.#index) {
@@ -206,7 +206,7 @@ export class Builder {
   }
 
   async loadUint8AsyncIterable(
-    uint8s: AsyncIterable<_T.safeint>,
+    uint8s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
@@ -214,7 +214,7 @@ export class Builder {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for await (const uint8 of uint8s) {
         if (offset < this.#index) {
@@ -232,9 +232,9 @@ export class Builder {
     return this;
   }
 
-  #loadUintNIterable<T extends _T.safeint>(
+  #loadUintNIterable<T extends _Type.safeint>(
     uT: Uint<T>,
-    uintNs: Iterable<_T.safeint>,
+    uintNs: Iterable<_Type.safeint>,
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
@@ -243,7 +243,7 @@ export class Builder {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for (const uintN of uintNs) {
         if (offset < this.#index) {
@@ -272,7 +272,7 @@ export class Builder {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for (const biguintN of biguintNs) {
         if (offset < this.#index) {
@@ -290,9 +290,9 @@ export class Builder {
     return this;
   }
 
-  async #loadUintNAsyncIterable<T extends _T.safeint>(
+  async #loadUintNAsyncIterable<T extends _Type.safeint>(
     uT: Uint<T>,
-    uintNs: AsyncIterable<_T.safeint>,
+    uintNs: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
@@ -301,7 +301,7 @@ export class Builder {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for await (const uintN of uintNs) {
         if (offset < this.#index) {
@@ -330,7 +330,7 @@ export class Builder {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (_T.isSafeInt(options?.insertAt)) {
+    if (_Type.isSafeInt(options?.insertAt)) {
       let offset = options.insertAt;
       for await (const biguintN of biguintNs) {
         if (offset < this.#index) {
@@ -349,28 +349,28 @@ export class Builder {
   }
 
   loadUint16Iterable(
-    uint16s: Iterable<_T.safeint>,
+    uint16s: Iterable<_Type.safeint>,
     options?: _LoadOptions,
   ): this {
     return this.#loadUintNIterable(Uint16, uint16s, options);
   }
 
   loadUint16AsyncIterable(
-    uint16s: AsyncIterable<_T.safeint>,
+    uint16s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
     return this.#loadUintNAsyncIterable(Uint16, uint16s, options);
   }
 
   loadUint32Iterable(
-    uint32s: Iterable<_T.safeint>,
+    uint32s: Iterable<_Type.safeint>,
     options?: _LoadOptions,
   ): this {
     return this.#loadUintNIterable(Uint32, uint32s, options);
   }
 
   loadUint32AsyncIterable(
-    uint32s: AsyncIterable<_T.safeint>,
+    uint32s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
     return this.#loadUintNAsyncIterable(Uint32, uint32s, options);
@@ -390,7 +390,7 @@ export class Builder {
     return this.#loadBigUintNAsyncIterable(BigUint64, biguint64s, options);
   }
 
-  fillZeros(byteLength: _T.safeint, options?: _LoadOptions_2): this {
+  fillZeros(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -398,7 +398,7 @@ export class Builder {
     return this.loadArrayBuffer(new ArrayBuffer(byteLength), options);
   }
 
-  fillRandom(byteLength: _T.safeint, options?: _LoadOptions_2): this {
+  fillRandom(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -430,25 +430,26 @@ export class Builder {
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
     const length =
-      (_T.isSafeInt(options?.byteLength) && isNonNegative(options.byteLength))
+      (_Type.isSafeInt(options?.byteLength) &&
+          isNonNegative(options.byteLength))
         ? options.byteLength
         : this.#index;
     return this.#buffer.transferToFixedLength(length);
   }
 
-  toBytes(options?: _ToBufferOptions): _T.Bytes {
+  toBytes(options?: _ToBufferOptions): _Type.Bytes {
     return new Uint8Array(this.toArrayBuffer(options));
   }
 
   #assertOffsetInRangeOrNull(
     test: unknown,
-  ): asserts test is _T.safeint | null | undefined {
-    if (_T.isNullOrUndefined(test) === true) {
+  ): asserts test is _Type.safeint | null | undefined {
+    if (_Type.isNullOrUndefined(test) === true) {
       // null | undefined はok
       return;
     }
 
-    if (_T.isSafeInt(test) && isNonNegative(test) && (test < this.#index)) {
+    if (_Type.isSafeInt(test) && isNonNegative(test) && (test < this.#index)) {
       // 整数かつ #index 未満はok
       return;
     }
@@ -456,19 +457,19 @@ export class Builder {
     throw new RangeError("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
   }
 
-  #appendByte(byte: _T.uint8): void {
+  #appendByte(byte: _Type.uint8): void {
     this.#growIfNeeded(1);
     this.#view[this.#index] = byte;
     this.#index += 1;
   }
 
-  #appendBytes(bytes: _T.Bytes): void {
+  #appendBytes(bytes: _Type.Bytes): void {
     this.#growIfNeeded(bytes.byteLength);
     this.#view.set(bytes, this.#index);
     this.#index += bytes.byteLength;
   }
 
-  #setBytes(bytes: _T.Bytes, offset: _T.safeint): void {
+  #setBytes(bytes: _Type.Bytes, offset: _Type.safeint): void {
     const setEnd = offset + bytes.byteLength;
     this.#growIfNeeded(setEnd);
     this.#view.set(bytes, offset);
@@ -477,7 +478,7 @@ export class Builder {
     }
   }
 
-  #growIfNeeded(increaseLength: _T.safeint): void {
+  #growIfNeeded(increaseLength: _Type.safeint): void {
     const needed = (this.#index + increaseLength) > this.#buffer.byteLength;
 
     if (this.#buffer.resizable !== true) {

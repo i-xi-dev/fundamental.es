@@ -1,11 +1,11 @@
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
 import { _normalizeFinite } from "../finite.mts";
-import { _T } from "../../_common/mod.mts";
+import { _Type } from "../../_common/mod.mts";
 import { _TypeError } from "../../_internal/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
 
-class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
-  extends _ClosedRangeBase<_T.safeint, T> {
+class _SafeIntClosedRangeImpl<T extends _Type.safeint = _Type.safeint>
+  extends _ClosedRangeBase<_Type.safeint, T> {
   constructor(min: T, max: T) {
     super(
       _normalizeFinite<T>(min),
@@ -13,8 +13,8 @@ class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
     );
   }
 
-  protected override _isBaseT(test: unknown): test is _T.safeint {
-    return _T.isSafeInt(test);
+  protected override _isBaseT(test: unknown): test is _Type.safeint {
+    return _Type.isSafeInt(test);
   }
 
   protected override _typeError(): TypeError {
@@ -22,10 +22,10 @@ class _SafeIntClosedRangeImpl<T extends _T.safeint = _T.safeint>
   }
 }
 
-export function safeIntClosedRange<T extends _T.safeint = _T.safeint>(
+export function safeIntClosedRange<T extends _Type.safeint = _Type.safeint>(
   min: T,
   max: T,
-): ClosedRange<_T.safeint, T> {
+): ClosedRange<_Type.safeint, T> {
   //TODO assert min,max
   return new _SafeIntClosedRangeImpl<T>(min, max);
 }

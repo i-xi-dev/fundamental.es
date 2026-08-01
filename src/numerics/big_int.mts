@@ -1,4 +1,4 @@
-import { _Assert, _T } from "../_common/mod.mts";
+import { _Assert } from "../_common/mod.mts";
 import { _RangeError } from "../_internal/mod.mts";
 
 function _minOf(...values: bigint[]): bigint {

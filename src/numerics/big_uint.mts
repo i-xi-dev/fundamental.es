@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _T, Io } from "../_common/mod.mts";
+import { _Assert, _Type, Io } from "../_common/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _clampBigInt } from "./big_int.mts";
 import {
@@ -15,35 +15,35 @@ import { ByteOrder } from "../byte_order.mts";
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
-  get BIT_LENGTH(): _T.safeint;
-  get BYTE_LENGTH(): _T.safeint;
+  get BIT_LENGTH(): _Type.safeint;
+  get BYTE_LENGTH(): _Type.safeint;
   get [Symbol.toStringTag](): string;
-  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): _T.Bytes;
+  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T;
+  toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): _Type.Bytes;
   bitwiseAnd(a: /* T */ bigint, b: /* T */ bigint): T;
   bitwiseOr(a: /* T */ bigint, b: /* T */ bigint): T;
   bitwiseXOr(a: /* T */ bigint, b: /* T */ bigint): T;
   //XXX bitwiseNot()
-  rotateLeft(value: /* T */ bigint, offset: _T.safeint): T;
+  rotateLeft(value: /* T */ bigint, offset: _Type.safeint): T;
   //XXX rotateRight()
   truncateFrom(value: bigint): T;
   saturateFrom(value: bigint): T;
 }
 
-function _extractByte(unit: _biguint, pos: _T.safeint): _T.uint8 {
+function _extractByte(unit: _biguint, pos: _Type.safeint): _Type.uint8 {
   const x1 = 0x100n ** BigInt(pos);
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _T.uint8;
+  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _Type.uint8;
 }
 
 export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
-  readonly #bitLength: _T.safeint; // non-negative integer
-  readonly #byteLength: _T.safeint; // non-negative integer
+  readonly #bitLength: _Type.safeint; // non-negative integer
+  readonly #byteLength: _Type.safeint; // non-negative integer
   readonly #size: _biguint;
   readonly #range: Range.ClosedRange<_biguint, T>;
 
-  constructor(bitLength: _T.safeint) {
-    if (_T.isSafeInt(bitLength) && (bitLength > 0)) {
+  constructor(bitLength: _Type.safeint) {
+    if (_Type.isSafeInt(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2n ** BigInt(bitLength);
@@ -64,11 +64,11 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     return this.#range.max;
   }
 
-  get BIT_LENGTH(): _T.safeint {
+  get BIT_LENGTH(): _Type.safeint {
     return this.#bitLength;
   }
 
-  get BYTE_LENGTH(): _T.safeint {
+  get BYTE_LENGTH(): _Type.safeint {
     return this.#byteLength;
   }
 
@@ -76,7 +76,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     return `BigUint${this.#bitLength}`;
   }
 
-  fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
+  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _LengthMismatchError.exact("input", this.#byteLength);
@@ -99,7 +99,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     return result as T;
   }
 
-  toBytes(uint: bigint, byteOrder?: ByteOrder): _T.Bytes {
+  toBytes(uint: bigint, byteOrder?: ByteOrder): _Type.Bytes {
     if (this.#range.contains(uint) !== true) {
       throw _TypeError.bigUintN(this.#bitLength, "Input");
     }
@@ -110,8 +110,8 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
       return Uint8Array.of(Number(uint));
     }
 
-    const bytes: Array<_T.uint8> = [];
-    bytes.push(Number(uint % 0x100n) as _T.uint8);
+    const bytes: Array<_Type.uint8> = [];
+    bytes.push(Number(uint % 0x100n) as _Type.uint8);
     for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));
@@ -158,7 +158,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     return this.#bitwiseOp(a, b, this.#xOr);
   }
 
-  rotateLeft(value: bigint, offset: _T.safeint): T {
+  rotateLeft(value: bigint, offset: _Type.safeint): T {
     if (this.#range.contains(value) !== true) {
       throw _TypeError.bigUintN(this.#bitLength, "Input");
     }
@@ -188,5 +188,5 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   }
 }
 
-export const BigUint64: BigUint<_T.biguint64> = new _BigUintImpl(64);
-export const BigUint128: BigUint<_T.biguint128> = new _BigUintImpl(128);
+export const BigUint64: BigUint<_Type.biguint64> = new _BigUintImpl(64);
+export const BigUint128: BigUint<_Type.biguint128> = new _BigUintImpl(128);

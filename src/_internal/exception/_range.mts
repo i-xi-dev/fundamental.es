@@ -1,7 +1,7 @@
-import { _T } from "../../_common/mod.mts";
+import { _Type } from "../../_common/mod.mts";
 
 export function overflow(
-  upperLimit: _T.safeint | bigint,
+  upperLimit: _Type.safeint | bigint,
   target: string,
 ): RangeError {
   const msg = `${target} must be ${upperLimit} or less`;
@@ -9,7 +9,7 @@ export function overflow(
 }
 
 export function underflow(
-  lowerLimit: _T.safeint | bigint,
+  lowerLimit: _Type.safeint | bigint,
   target: string,
 ): RangeError {
   const msg = `${target} must be ${lowerLimit} or greater`;

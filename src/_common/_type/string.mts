@@ -1,5 +1,3 @@
-import { _TypeError } from "../../../_internal/mod.mts";
-
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
 }
