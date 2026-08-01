@@ -1,4 +1,4 @@
-import * as StringUtils from "./string_utils.mts";
+import * as StringUtils from "./string.mts";
 
 const { EMPTY, RangeSet } = StringUtils;
 

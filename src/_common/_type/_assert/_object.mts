@@ -1,6 +1,10 @@
 import { _TypeError } from "../../../_internal/mod.mts";
 import { isNullOrUndefined } from "./_primitive.mts";
 
+export function isNonNullObject(test: unknown): test is object {
+  return (typeof test === "object") && (isNullOrUndefined(test) !== true);
+}
+
 export function isIterable<T>(test: unknown): test is Iterable<T> {
   return (isNullOrUndefined(test) !== true) &&
     (isNullOrUndefined(
