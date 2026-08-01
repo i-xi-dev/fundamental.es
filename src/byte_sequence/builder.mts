@@ -1,13 +1,15 @@
 import { _T } from "../_common/mod.mts";
-import { ByteOrder } from "../byte_order.mts";
+import { Assert } from "../_internal/mod.mts";
 import {
   BigUint,
   BigUint64,
+  isNonNegative,
   Uint,
   Uint16,
   Uint32,
   Uint8,
 } from "../numerics/mod.mts";
+import { ByteOrder } from "../byte_order.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -81,19 +83,33 @@ function _randomBytes(byteLength: _T.safeint): ArrayBuffer {
   return buffer;
 }
 
+function _normalizeResizer(
+  capacity: _T.safeint,
+  maxCapacity?: _T.safeint,
+): { resizable: boolean; maxByteLength?: _T.safeint } {
+  // capacityは型チェック済み前提
+
+  if (_T.isSafeInt(maxCapacity) && isNonNegative(maxCapacity)) {
+    return {
+      resizable: true,
+      maxByteLength: (maxCapacity >= capacity) ? maxCapacity : capacity,
+    };
+  }
+
+  return { resizable: false };
+}
+
 export class Builder {
   readonly #buffer: ArrayBuffer;
   readonly #view: Uint8Array<ArrayBuffer>;
   #index: _T.safeint; // 進むのみ。戻す手段は提供しない
 
   private constructor(capacity: _T.safeint, maxCapacity?: _T.safeint) {
-    if (_T.isNonNegativeSafeInt(maxCapacity) === true) {
-      let maxByteLength: _T.safeint;
-      if (maxCapacity >= capacity) {
-        maxByteLength = maxCapacity;
-      } else {
-        maxByteLength = capacity;
-      }
+    const { resizable, maxByteLength } = _normalizeResizer(
+      capacity,
+      maxCapacity,
+    );
+    if (resizable === true) {
       this.#buffer = new ArrayBuffer(capacity, { maxByteLength });
     } else {
       this.#buffer = new ArrayBuffer(capacity);
@@ -120,9 +136,9 @@ export class Builder {
     capacity: _T.safeint,
     maxCapacity?: _T.safeint,
   ): Builder {
-    _T.assertNonNegativeSafeInt(capacity, "Capacity");
+    Assert.nonNegativeSafeInt(capacity, "Capacity");
     if (_T.isNullOrUndefined(maxCapacity) !== true) {
-      _T.assertNonNegativeSafeInt(maxCapacity, "Max-capacity");
+      Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
     return new Builder(capacity, maxCapacity);
   }
@@ -377,7 +393,7 @@ export class Builder {
 
   fillZeros(byteLength: _T.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    _T.assertNonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadArrayBuffer(new ArrayBuffer(byteLength), options);
@@ -385,7 +401,7 @@ export class Builder {
 
   fillRandom(byteLength: _T.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    _T.assertNonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadArrayBuffer(_randomBytes(byteLength), options);
@@ -414,9 +430,10 @@ export class Builder {
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
-    const length = _T.isNonNegativeSafeInt(options?.byteLength)
-      ? options?.byteLength
-      : this.#index;
+    const length =
+      (_T.isSafeInt(options?.byteLength) && isNonNegative(options.byteLength))
+        ? options.byteLength
+        : this.#index;
     return this.#buffer.transferToFixedLength(length);
   }
 
@@ -432,7 +449,7 @@ export class Builder {
       return;
     }
 
-    if (_T.isNonNegativeSafeInt(test) && (test < this.#index)) {
+    if (_T.isSafeInt(test) && isNonNegative(test) && (test < this.#index)) {
       // 整数かつ #index 未満はok
       return;
     }

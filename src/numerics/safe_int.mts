@@ -2,7 +2,11 @@ import { _normalizeFinite } from "./finite.mts";
 import { _T } from "../_common/mod.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
-export function _isEvenSafeInt(test: unknown): boolean {
+// export function _isNonNegativeSafeInt(value: /* _T.safeint*/ unknown): boolean {
+//   return _T.isSafeInt(value) && isNonNegative(value);
+// }
+
+export function _isEvenSafeInt(test: /* _T.safeint*/ unknown): boolean {
   return _T.isSafeInt(test) && ((test % 2) === 0);
 }
 
@@ -72,6 +76,8 @@ export function _roundToSafeInt(
 }
 
 export namespace SafeInt {
+  // export const isNonNegative = _isNonNegativeSafeInt;
+
   export const isEven = _isEvenSafeInt;
 
   export function round(

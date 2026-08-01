@@ -5,6 +5,10 @@ export function _normalizeFinite<T extends _T.finite>(value: _T.finite): T {
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
+// export function _isNonNegativeFinite(value: /* _T.finite */ unknown): boolean {
+//   return _T.isFinite(value) && _isNonNegative(value);
+// }
+
 export function _clampFinite<T extends _T.finite>(
   value: _T.finite,
   min: T,
@@ -18,6 +22,8 @@ export namespace Finite {
     _T.assertFinite(value, "Input");
     return _normalizeFinite(value);
   }
+
+  // export const isNonNegative = _isNonNegativeFinite;
 
   export function clamp<T extends _T.finite>(
     value: _T.finite,
