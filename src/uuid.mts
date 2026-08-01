@@ -13,8 +13,8 @@ export interface Uuid {
   get version(): _Type.uint4;
   get timestamp(): _Type.safeint | null;
   toString(options?: _ToStringOptions): string;
-  // toBigUint128(): _Type.biguint128;
-  // toBytes(): _Type.Bytes;
+  toBigUint128(): _Type.biguint128;
+  toBytes(): _Type.Bytes;
   //TODO equals(other: Uuid | _Type.Bytes | string): boolean;
 }
 
@@ -78,9 +78,13 @@ class _Uuid implements Uuid {
     return (options?.asUrn === true) ? `urn:uuid:${str}` : str;
   }
 
-  // toBigUint128(): _Type.biguint128 {
-  //   return BigInt(`0x${this.#bytes.toHex()}`);
-  // }
+  toBigUint128(): _Type.biguint128 {
+    return BigInt(`0x${this.#bytes.toHex()}`);
+  }
+
+  toBytes(): _Type.Bytes {
+    return Uint8Array.from(this.#bytes);
+  }
 }
 
 function _generateRandom(): _Type.Bytes {

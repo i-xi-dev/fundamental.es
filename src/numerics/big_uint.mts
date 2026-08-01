@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Error, _Type, Io } from "../_common/mod.mts";
+import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _clampBigInt } from "./big_int.mts";
 import { _normalizeOffset } from "./_uint.mts";
@@ -76,7 +76,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }
 
-    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
 
     const x = (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN)
       ? [...bytes]
@@ -98,7 +98,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
       throw _Error.Type.bigUintN(this.#bitLength, "Input");
     }
 
-    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
 
     if (this.#byteLength === 1) {
       return Uint8Array.of(Number(uint));

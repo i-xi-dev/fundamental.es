@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Error, _Type, Io } from "../_common/mod.mts";
+import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
@@ -76,7 +76,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }
 
-    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
 
     //XXX 32以下はUint32Arrayにした方が多分速い
 
@@ -100,7 +100,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       throw _Error.Type.uintN(this.#bitLength, "Input");
     }
 
-    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
 
     if (this.#byteLength === 1) {
       return Uint8Array.of(uint);
