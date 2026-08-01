@@ -1,5 +1,5 @@
+import { _Assert, _T } from "../_common/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
-import { _T } from "../_common/mod.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
 // export function _isNonNegativeSafeInt(value: /* _T.safeint*/ unknown): boolean {
@@ -84,7 +84,7 @@ export namespace SafeInt {
     value: _T.finite,
     roundingMode?: RoundingMode,
   ): _T.safeint {
-    _T.assertFinite(value, "Input");
+    _Assert.finite(value, "Input");
     return _roundToSafeInt(value, roundingMode);
   }
 }

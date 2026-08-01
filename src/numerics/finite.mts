@@ -1,4 +1,4 @@
-import { _T } from "../_common/mod.mts";
+import { _Assert, _T } from "../_common/mod.mts";
 import { _RangeError } from "../_internal/mod.mts";
 
 export function _normalizeFinite<T extends _T.finite>(value: _T.finite): T {
@@ -19,7 +19,7 @@ export function _clampFinite<T extends _T.finite>(
 
 export namespace Finite {
   export function normalize<T extends _T.finite>(value: _T.finite): T {
-    _T.assertFinite(value, "Input");
+    _Assert.finite(value, "Input");
     return _normalizeFinite(value);
   }
 
@@ -30,9 +30,9 @@ export namespace Finite {
     min: T,
     max: T,
   ): T {
-    _T.assertFinite(value, "Input");
-    _T.assertFinite(min, "Lower bound");
-    _T.assertFinite(max, "Upper bound");
+    _Assert.finite(value, "Input");
+    _Assert.finite(min, "Lower bound");
+    _Assert.finite(max, "Upper bound");
     if (min > max) {
       throw _RangeError.contradictory();
     }

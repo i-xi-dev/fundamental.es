@@ -1,5 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
+import { _Assert, _T, Io } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import {
   _LengthMismatchError,
@@ -8,7 +9,6 @@ import {
   _TypeError,
 } from "../_internal/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
-import { _T, Io } from "../_common/mod.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
 
@@ -77,7 +77,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   fromBytes(bytes: _T.Bytes, byteOrder?: ByteOrder): T {
-    _T.assertNonSharedUint8Array(bytes, "Input");
+    _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _LengthMismatchError.exact("input", this.#byteLength);
     }
@@ -175,7 +175,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw _TypeError.uintN(this.#bitLength, "Input");
     }
-    _T.assertSafeInt(offset, "Offset");
+    _Assert.safeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -199,7 +199,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   truncateFrom(value: _T.safeint): T {
-    _T.assertSafeInt(value, "Input");
+    _Assert.safeInt(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -213,7 +213,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   saturateFrom(value: _T.safeint): T {
-    _T.assertSafeInt(value, "Input");
+    _Assert.safeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }

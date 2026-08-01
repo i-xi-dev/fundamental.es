@@ -1,4 +1,4 @@
-import { _T, _U } from "./_common/mod.mts";
+import { _Assert, _T, _U } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
 
 type _FormatOptions = {
@@ -40,7 +40,7 @@ export class ByteFormat {
   }
 
   parse(str: string): _T.uint8 {
-    _T.assertNonEmptyString(str, "Input");
+    _Assert.nonEmptyString(str, "Input");
     if (this.#isFormatMatch(str) !== true) {
       throw new Error("TODO");
     }

@@ -1,4 +1,4 @@
-import { _T } from "../_common/mod.mts";
+import { _Assert, _T } from "../_common/mod.mts";
 import { _RangeError } from "../_internal/mod.mts";
 
 function _minOf(...values: bigint[]): bigint {
@@ -41,9 +41,9 @@ export namespace BigInt {
     min: T,
     max: T,
   ): T {
-    _T.assertBigInt(value, "Input");
-    _T.assertBigInt(min, "Lower bound");
-    _T.assertBigInt(max, "Upper bound");
+    _Assert.bigInt(value, "Input");
+    _Assert.bigInt(min, "Lower bound");
+    _Assert.bigInt(max, "Upper bound");
     if (min > max) {
       throw _RangeError.contradictory();
     }

@@ -1,5 +1,5 @@
+import { _Assert, _T, StringUtils } from "../../../_common/mod.mts";
 import { _SyntaxError } from "../../../_internal/mod.mts";
-import { _T, StringUtils } from "../../../_common/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -7,7 +7,7 @@ const { EMPTY } = StringUtils;
 const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする
 
 export function _decode(text: string): _T.Bytes {
-  _T.assertString(text, "Input");
+  _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _SyntaxError.latin1("Input");
   }
@@ -16,7 +16,7 @@ export function _decode(text: string): _T.Bytes {
 }
 
 export function _encode(bytes: _T.Bytes): string {
-  _T.assertNonSharedUint8Array(bytes, "Input");
+  _Assert.nonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => String.fromCharCode(byte)).join(EMPTY);
 }

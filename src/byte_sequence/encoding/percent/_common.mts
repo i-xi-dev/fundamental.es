@@ -1,5 +1,5 @@
+import { _Assert, _T, _U, StringUtils } from "../../../_common/mod.mts";
 import { _SyntaxError } from "../../../_internal/mod.mts";
-import { _T, _U, StringUtils } from "../../../_common/mod.mts";
 import { ByteFormat } from "../../../byte_format.mts";
 import { Radix, Uint8 } from "../../../numerics/mod.mts";
 
@@ -45,7 +45,7 @@ export function _decode(
   text: string,
   options: Required<_PercentOptions>,
 ): _T.Bytes {
-  _T.assertString(text, "Input");
+  _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _SyntaxError.asciiWithoutCc("Input");
   }
@@ -107,7 +107,7 @@ export function _encode(
   bytes: _T.Bytes,
   options: Required<_PercentOptions>,
 ): string {
-  _T.assertNonSharedUint8Array(bytes, "Input");
+  _Assert.nonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => {
     if ((byte === _U.CharCode.SPACE) && (options.spaceAsPlus === true)) {

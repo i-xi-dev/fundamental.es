@@ -10,27 +10,9 @@ export function isFinite(test: unknown): test is finite {
   return Number.isFinite(test);
 }
 
-export function assertFinite(
-  test: unknown,
-  targetLabel: string,
-): asserts test is finite {
-  if (isFinite(test) !== true) {
-    throw _TypeError.finite(targetLabel);
-  }
-}
-
 export function isSafeInt(test: unknown): test is safeint {
   return Number.isSafeInteger(test);
 } //TODO 「test is safeint」だと偽だった場合にnumber型ではないことにされてしまう
-
-export function assertSafeInt(
-  test: unknown,
-  targetLabel: string,
-): asserts test is safeint {
-  if (isSafeInt(test) !== true) {
-    throw _TypeError.safeInt(targetLabel);
-  }
-}
 
 function _inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);

@@ -1,5 +1,4 @@
-import { _T } from "../_common/mod.mts";
-import { Assert } from "../_internal/mod.mts";
+import { _Assert, _T } from "../_common/mod.mts";
 import {
   BigUint,
   BigUint64,
@@ -136,9 +135,9 @@ export class Builder {
     capacity: _T.safeint,
     maxCapacity?: _T.safeint,
   ): Builder {
-    Assert.nonNegativeSafeInt(capacity, "Capacity");
+    _Assert.nonNegativeSafeInt(capacity, "Capacity");
     if (_T.isNullOrUndefined(maxCapacity) !== true) {
-      Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
+      _Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
     return new Builder(capacity, maxCapacity);
   }
@@ -165,7 +164,7 @@ export class Builder {
   // - sourceBufferは読み取るだけなのでdetatch等しない（要らないなら自分で処分すること）
   loadArrayBuffer(sourceBuffer: ArrayBuffer, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    _T.assertArrayBuffer(sourceBuffer, "Input");
+    _Assert.arrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     if (_T.isSafeInt(options?.insertAt)) {
@@ -181,7 +180,7 @@ export class Builder {
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
-    _T.assertIterable(uint8s, "Input");
+    _Assert.iterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     // this.loadArrayBuffer(Uint8Array.from(uint8s).buffer);
@@ -211,7 +210,7 @@ export class Builder {
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
-    _T.assertAsyncIterable(uint8s, "Input");
+    _Assert.asyncIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
@@ -239,7 +238,7 @@ export class Builder {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    _T.assertIterable(uintNs, "Input");
+    _Assert.iterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -268,7 +267,7 @@ export class Builder {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    _T.assertIterable(biguintNs, "Input");
+    _Assert.iterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -297,7 +296,7 @@ export class Builder {
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
-    _T.assertAsyncIterable(uintNs, "Input");
+    _Assert.asyncIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -326,7 +325,7 @@ export class Builder {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    _T.assertAsyncIterable(biguintNs, "Input");
+    _Assert.asyncIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -393,7 +392,7 @@ export class Builder {
 
   fillZeros(byteLength: _T.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadArrayBuffer(new ArrayBuffer(byteLength), options);
@@ -401,7 +400,7 @@ export class Builder {
 
   fillRandom(byteLength: _T.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadArrayBuffer(_randomBytes(byteLength), options);
@@ -415,10 +414,10 @@ export class Builder {
   //   sourceBuffers: AsyncIterable<ArrayBuffer>, options?
   // ): Promise<this> {
   //   this.#assertAccessible();
-  //   _T.assertAsyncIterable(sourceBuffers, "Input");
+  //   _Assert.asyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
-  //     _T.assertArrayBuffer(sourceBuffer);
+  //     _Assert.arrayBuffer(sourceBuffer);
   //     this.#appendBytes(new Uint8Array(sourceBuffer));
   //   }
   //   return this;
