@@ -1,4 +1,4 @@
-import { _Type } from "../../_common/mod.mts";
+import * as _Type from "../_type/mod.mts";
 
 const _Type1 = {
   TOO_LONG: 0b0010,
@@ -59,7 +59,7 @@ export function charsTooShort(
   return new RangeError(msg);
 }
 
-export function exact(
+export function mismatch(
   target: string,
   expectedLength: _Type.safeint,
 ): RangeError {

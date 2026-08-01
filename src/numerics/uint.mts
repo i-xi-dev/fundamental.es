@@ -1,13 +1,7 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Type, Io } from "../_common/mod.mts";
+import { _Assert, _Error, _Type, Io } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
-import {
-  _LengthMismatchError,
-  _OperationError,
-  _RangeError,
-  _TypeError,
-} from "../_internal/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { ByteOrder } from "../byte_order.mts";
@@ -52,7 +46,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       this.#range = Range.safeIntClosedRange<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
-      throw _OperationError.invalid("Unsupported bit length");
+      throw _Error.Operation.invalid("Unsupported bit length");
     }
   }
 
@@ -79,7 +73,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw _LengthMismatchError.exact("input", this.#byteLength);
+      throw _Error.Length.mismatch("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -96,14 +90,14 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw _RangeError.overflow(this.#range.max, "Input");
+      throw _Error.Range.overflow(this.#range.max, "Input");
     }
     return result as T;
   }
 
   toBytes(uint: _Type.safeint, byteOrder?: ByteOrder): _Type.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw _TypeError.uintN(this.#bitLength, "Input");
+      throw _Error.Type.uintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -130,7 +124,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     f: (fa: _Type.safeint, fb: _Type.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw _TypeError.uintN(this.#bitLength, "Input");
+      throw _Error.Type.uintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -173,7 +167,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
 
   rotateLeft(value: _Type.safeint, offset: _Type.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw _TypeError.uintN(this.#bitLength, "Input");
+      throw _Error.Type.uintN(this.#bitLength, "Input");
     }
     _Assert.safeInt(offset, "Offset");
 

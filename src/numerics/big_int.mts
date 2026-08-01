@@ -1,5 +1,4 @@
-import { _Assert } from "../_common/mod.mts";
-import { _RangeError } from "../_internal/mod.mts";
+import { _Assert, _Error } from "../_common/mod.mts";
 
 function _minOf(...values: bigint[]): bigint {
   let min = values[0];
@@ -45,7 +44,7 @@ export namespace BigInt {
     _Assert.bigInt(min, "Lower bound");
     _Assert.bigInt(max, "Upper bound");
     if (min > max) {
-      throw _RangeError.contradictory();
+      throw _Error.Range.contradictory();
     }
 
     return _clampBigInt<T>(value, min, max);

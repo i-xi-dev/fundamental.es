@@ -1,5 +1,4 @@
-import { _TypeError } from "../_internal/mod.mts";
-import { HttpUtils, StringUtils } from "../_common/mod.mts";
+import { _Error, HttpUtils, StringUtils } from "../_common/mod.mts";
 
 const { EMPTY, RangeSet } = StringUtils;
 
@@ -119,10 +118,10 @@ export class MediaType {
     parameters: Array<_Parameter> = [],
   ) {
     if (StringUtils.rangesMatches(typeName, RangeSet.HTTP_TOKEN) !== true) {
-      throw _TypeError.custom("Type", "a valid type of MIME type");
+      throw _Error.Type.custom("Type", "a valid type of MIME type");
     }
     if (StringUtils.rangesMatches(subtypeName, RangeSet.HTTP_TOKEN) !== true) {
-      throw _TypeError.custom("Subtype", "a valid subtype of MIME type");
+      throw _Error.Type.custom("Subtype", "a valid subtype of MIME type");
     }
 
     const parameterMap = new Map(parameters.map((entry) => {
@@ -132,7 +131,7 @@ export class MediaType {
       ];
     }));
     if (parameters.length !== parameterMap.size) {
-      throw _TypeError.custom(
+      throw _Error.Type.custom(
         "Parameters",
         "an `Array` that does not contain duplicate parameters",
       );
@@ -231,7 +230,7 @@ export class MediaType {
     const { collected: typeName, progression: typeNameLength } =
       _collectTypeName(work);
     if (typeNameLength <= 0) {
-      throw _TypeError.custom(
+      throw _Error.Type.custom(
         "Input",
         "a string starting with a valid MIME type’s type",
       );

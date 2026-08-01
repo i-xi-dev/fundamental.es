@@ -1,5 +1,5 @@
 import * as _Type from "../_type/mod.mts";
-import { _TypeError } from "../../_internal/mod.mts";
+import * as _TypeError from "../_error/type.mts";
 
 export function string(
   test: unknown,

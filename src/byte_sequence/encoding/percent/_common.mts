@@ -1,5 +1,10 @@
-import { _Assert, _Type, _U, StringUtils } from "../../../_common/mod.mts";
-import { _SyntaxError } from "../../../_internal/mod.mts";
+import {
+  _Assert,
+  _Error,
+  _Type,
+  _U,
+  StringUtils,
+} from "../../../_common/mod.mts";
 import { ByteFormat } from "../../../byte_format.mts";
 import { Radix, Uint8 } from "../../../numerics/mod.mts";
 
@@ -47,7 +52,7 @@ export function _decode(
 ): _Type.Bytes {
   _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
-    throw _SyntaxError.asciiWithoutCc("Input");
+    throw _Error.Syntax.asciiWithoutCc("Input");
   }
 
   const decoded = new Uint8Array(text.length); // 0x20-0x7E以外を含んでいたらエラーにしている為decoded.lengthがtext.lengthより増えることは無い

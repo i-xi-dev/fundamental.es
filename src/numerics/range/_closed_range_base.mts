@@ -1,5 +1,5 @@
 import { _numeric } from "../../_common/_type/_typedef/_number.mts";
-import { _RangeError } from "../../_internal/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
 
 export abstract class _ClosedRangeBase<
@@ -13,7 +13,7 @@ export abstract class _ClosedRangeBase<
     if ((this._isBaseT(min) && this._isBaseT(max)) !== true) {
       throw this._typeError();
     } else if (min > max) {
-      throw _RangeError.contradictory();
+      throw _Error.Range.contradictory();
     }
 
     this.#min = min;
