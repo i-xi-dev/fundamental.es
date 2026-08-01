@@ -1,3 +1,6 @@
+import { _T } from "../_common/mod.mts";
+import { _RangeError } from "../_internal/mod.mts";
+
 function _minOf(...values: bigint[]): bigint {
   let min = values[0];
   let value: bigint;
@@ -24,10 +27,27 @@ function _maxOf(...values: bigint[]): bigint {
   return max;
 }
 
-export function clamp<T extends bigint>(
+export function _clampBigInt<T extends bigint>(
   value: bigint,
   min: T,
   max: T,
 ): T {
   return _minOf(_maxOf(value, min), max) as T;
+}
+
+export namespace BigInt {
+  export function clamp<T extends bigint>(
+    value: bigint,
+    min: T,
+    max: T,
+  ): T {
+    _T.assertBigInt(value, "Input");
+    _T.assertBigInt(min, "Lower bound");
+    _T.assertBigInt(max, "Upper bound");
+    if (min > max) {
+      throw _RangeError.contradictory();
+    }
+
+    return _clampBigInt<T>(value, min, max);
+  }
 }

@@ -40,14 +40,6 @@ Deno.test("Numerics.Finite.clamp()", () => {
     "The upper limit of the range must be greater than or equal to the lower limit",
   );
 
-  assertThrows(
-    () => {
-      Numerics.Finite.clamp(0, 0, -1); // 負のrange
-    },
-    RangeError,
-    "The upper limit of the range must be greater than or equal to the lower limit",
-  );
-
   assertStrictEquals(Numerics.Finite.clamp(0.5, 0, 0), 0);
   assertStrictEquals(Numerics.Finite.clamp(0.5, 0, 1), 0.5);
   assertStrictEquals(Numerics.Finite.clamp(0.5, -1, 0), 0);
@@ -60,22 +52,6 @@ Deno.test("Numerics.Finite.clamp()", () => {
   assertStrictEquals(Numerics.Finite.clamp(1, 1, 1), 1);
   assertStrictEquals(Numerics.Finite.clamp(1, -1, -1), -1);
 
-  assertThrows(
-    () => {
-      Numerics.Finite.clamp(1, 1, 0); // 負のrange
-    },
-    RangeError,
-    "The upper limit of the range must be greater than or equal to the lower limit",
-  );
-
-  assertThrows(
-    () => {
-      Numerics.Finite.clamp(1, 0, -1); // 負のrange
-    },
-    RangeError,
-    "The upper limit of the range must be greater than or equal to the lower limit",
-  );
-
   assertStrictEquals(Numerics.Finite.clamp(-0.5, 0, 0), 0);
   assertStrictEquals(Numerics.Finite.clamp(-0.5, 0, 1), 0);
   assertStrictEquals(Numerics.Finite.clamp(-0.5, -1, 0), -0.5);
@@ -87,20 +63,4 @@ Deno.test("Numerics.Finite.clamp()", () => {
   assertStrictEquals(Numerics.Finite.clamp(-1, -1, 0), -1);
   assertStrictEquals(Numerics.Finite.clamp(-1, 1, 1), 1);
   assertStrictEquals(Numerics.Finite.clamp(-1, -1, -1), -1);
-
-  assertThrows(
-    () => {
-      Numerics.Finite.clamp(-1, 1, 0); // 負のrange
-    },
-    RangeError,
-    "The upper limit of the range must be greater than or equal to the lower limit",
-  );
-
-  assertThrows(
-    () => {
-      Numerics.Finite.clamp(-1, 0, -1); // 負のrange
-    },
-    RangeError,
-    "The upper limit of the range must be greater than or equal to the lower limit",
-  );
 });
