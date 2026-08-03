@@ -1,35 +1,35 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteSequence } from "../../src/mod.mts";
 
-Deno.test("ByteSequence.Builder.prototype[Symbol.toStringTag]", () => {
-  const b = ByteSequence.Builder.create(0);
+Deno.test("ByteSequence._Builder.prototype[Symbol.toStringTag]", () => {
+  const b = ByteSequence._Builder.create(0);
   assertStrictEquals(b[Symbol.toStringTag], "ByteSequenceBuilder");
 });
 
-Deno.test("ByteSequence.Builder.prototype.detached", () => {
-  const b = ByteSequence.Builder.create(0);
+Deno.test("ByteSequence._Builder.prototype.detached", () => {
+  const b = ByteSequence._Builder.create(0);
   assertStrictEquals(b.detached, false);
 
   const _ = b.toArrayBuffer();
   assertStrictEquals(b.detached, true);
 });
 
-Deno.test("ByteSequence.Builder.prototype.capacity", () => {
-  const b = ByteSequence.Builder.create(0);
+Deno.test("ByteSequence._Builder.prototype.capacity", () => {
+  const b = ByteSequence._Builder.create(0);
   assertStrictEquals(b.capacity, 0);
 
-  const b2 = ByteSequence.Builder.create(10);
+  const b2 = ByteSequence._Builder.create(10);
   assertStrictEquals(b2.capacity, 10);
 });
 
-Deno.test("ByteSequence.Builder.create()", () => {
-  const b = ByteSequence.Builder.create(10);
+Deno.test("ByteSequence._Builder.create()", () => {
+  const b = ByteSequence._Builder.create(10);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 0);
 });
 
-Deno.test("ByteSequence.Builder.create() - fixed-length", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.create() - fixed-length", () => {
+  const b = ByteSequence._Builder.create(4);
   b.loadUint8(0);
   b.loadUint8(1);
   b.loadUint8(2);
@@ -51,8 +51,8 @@ Deno.test("ByteSequence.Builder.create() - fixed-length", () => {
   assertStrictEquals(bytes[3], 3);
 });
 
-Deno.test("ByteSequence.Builder.create() - expandabe-length", () => {
-  const b = ByteSequence.Builder.create(4, 8);
+Deno.test("ByteSequence._Builder.create() - expandabe-length", () => {
+  const b = ByteSequence._Builder.create(4, 8);
   b.loadUint8(0);
   b.loadUint8(1);
   b.loadUint8(2);
@@ -68,8 +68,8 @@ Deno.test("ByteSequence.Builder.create() - expandabe-length", () => {
   assertStrictEquals(bytes[4], 4);
 });
 
-Deno.test("ByteSequence.Builder.create() - expandabe-length - 2", () => {
-  const b = ByteSequence.Builder.create(4, 8);
+Deno.test("ByteSequence._Builder.create() - expandabe-length - 2", () => {
+  const b = ByteSequence._Builder.create(4, 8);
   b.loadUint8(0);
   b.loadUint8(1);
   b.loadUint8(2);
@@ -99,8 +99,8 @@ Deno.test("ByteSequence.Builder.create() - expandabe-length - 2", () => {
   assertStrictEquals(bytes[7], 7);
 });
 
-Deno.test("ByteSequence.Builder.create() - expandabe-length - 3", () => {
-  const b = ByteSequence.Builder.create(4, 2);
+Deno.test("ByteSequence._Builder.create() - expandabe-length - 3", () => {
+  const b = ByteSequence._Builder.create(4, 2);
   b.loadUint8(0);
   b.loadUint8(1);
   b.loadUint8(2);
@@ -122,10 +122,10 @@ Deno.test("ByteSequence.Builder.create() - expandabe-length - 3", () => {
   assertStrictEquals(bytes[3], 3);
 });
 
-Deno.test("ByteSequence.Builder.create() - error", () => {
+Deno.test("ByteSequence._Builder.create() - error", () => {
   assertThrows(
     () => {
-      ByteSequence.Builder.create(-1);
+      ByteSequence._Builder.create(-1);
     },
     TypeError,
     "Capacity must be a non-negative safe-integer of type `number`",
@@ -133,7 +133,7 @@ Deno.test("ByteSequence.Builder.create() - error", () => {
 
   assertThrows(
     () => {
-      ByteSequence.Builder.create(1, -1);
+      ByteSequence._Builder.create(1, -1);
     },
     TypeError,
     "Max-capacity must be a non-negative safe-integer of type `number`",
@@ -141,7 +141,7 @@ Deno.test("ByteSequence.Builder.create() - error", () => {
 
   assertThrows(
     () => {
-      ByteSequence.Builder.create(Number.MAX_SAFE_INTEGER);
+      ByteSequence._Builder.create(Number.MAX_SAFE_INTEGER);
     },
     RangeError,
     "", // V8が出している
@@ -149,15 +149,15 @@ Deno.test("ByteSequence.Builder.create() - error", () => {
 
   assertThrows(
     () => {
-      ByteSequence.Builder.create(10, Number.MAX_SAFE_INTEGER);
+      ByteSequence._Builder.create(10, Number.MAX_SAFE_INTEGER);
     },
     RangeError,
     "", // V8が出している
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8()", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8()", () => {
+  const b = ByteSequence._Builder.create(4);
   b.loadUint8(-1);
   b.loadUint8(0);
   b.loadUint8(0xFF);
@@ -168,7 +168,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8()", () => {
   assertStrictEquals(bytes[2], 0xFF);
   assertStrictEquals(bytes[3], 0);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   b2.loadUint8(-1, { clampMode: "truncate" });
   b2.loadUint8(0, { clampMode: "truncate" });
   b2.loadUint8(0xFF, { clampMode: "truncate" });
@@ -179,7 +179,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8()", () => {
   assertStrictEquals(bytes2[2], 0xFF);
   assertStrictEquals(bytes2[3], 0);
 
-  const b3 = ByteSequence.Builder.create(4);
+  const b3 = ByteSequence._Builder.create(4);
   b3.loadUint8(-1, { clampMode: "saturate" });
   b3.loadUint8(0, { clampMode: "saturate" });
   b3.loadUint8(0xFF, { clampMode: "saturate" });
@@ -191,8 +191,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8()", () => {
   assertStrictEquals(bytes3[3], 0xFF);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8() - error", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8() - error", () => {
+  const b = ByteSequence._Builder.create(4);
   const _ = b.toArrayBuffer();
 
   assertThrows(
@@ -204,8 +204,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8() - insertAt", () => {
+  const b = ByteSequence._Builder.create(4);
   b.loadUint8(-1);
   b.loadUint8(0);
   b.loadUint8(0xFF);
@@ -220,7 +220,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
   assertStrictEquals(bytes[2], 0x33);
   assertStrictEquals(bytes[3], 0x44);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   b2.loadUint8(0xFF);
   assertThrows(
     () => {
@@ -230,7 +230,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
     "Insertion position is out of range",
   );
 
-  const b3 = ByteSequence.Builder.create(4);
+  const b3 = ByteSequence._Builder.create(4);
   b3.loadUint8(0xFF);
   assertThrows(
     () => {
@@ -241,10 +241,10 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8() - insertAt", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
+Deno.test("ByteSequence._Builder.prototype.loadArrayBuffer()", () => {
   const testdata = Uint8Array.of(255, 254, 253);
 
-  const b = ByteSequence.Builder.create(4);
+  const b = ByteSequence._Builder.create(4);
   b.loadArrayBuffer(testdata.buffer);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 3);
@@ -254,7 +254,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
 
   const testdata2 = Uint8Array.of(255, 254, 253, 252);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   b2.loadArrayBuffer(testdata2.buffer);
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 4);
@@ -265,7 +265,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
 
   const testdata3 = Uint8Array.of(255, 254, 253, 252, 251);
 
-  const b3 = ByteSequence.Builder.create(0, 10);
+  const b3 = ByteSequence._Builder.create(0, 10);
   b3.loadArrayBuffer(testdata3.buffer);
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 5);
@@ -276,8 +276,8 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer()", () => {
   assertStrictEquals(bytes3[4], 251);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - error", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadArrayBuffer() - error", () => {
+  const b = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       const testdata = Uint8Array.of(255, 254, 253, 252, 251);
@@ -287,7 +287,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - error", () => {
     "`ArrayBuffer` cannot be resized",
   );
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b.loadArrayBuffer([255] as unknown as ArrayBuffer);
@@ -297,10 +297,10 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
+Deno.test("ByteSequence._Builder.prototype.loadArrayBuffer() - insertAt", () => {
   const testdata = Uint8Array.of(255, 254, 253);
 
-  const b = ByteSequence.Builder.create(24);
+  const b = ByteSequence._Builder.create(24);
   b.loadArrayBuffer(testdata.buffer);
   assertThrows(
     () => {
@@ -310,7 +310,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
     "Insertion position is out of range",
   );
 
-  const b2 = ByteSequence.Builder.create(24);
+  const b2 = ByteSequence._Builder.create(24);
   b2.loadArrayBuffer(testdata.buffer);
   assertThrows(
     () => {
@@ -320,7 +320,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
     "Insertion position is out of range",
   );
 
-  const b3 = ByteSequence.Builder.create(24);
+  const b3 = ByteSequence._Builder.create(24);
   b3.loadArrayBuffer(testdata.buffer);
   b3.loadArrayBuffer(testdata.buffer, { insertAt: 1 });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
@@ -330,7 +330,7 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
   assertStrictEquals(bytes3[2], 254);
   assertStrictEquals(bytes3[3], 253);
 
-  const b4 = ByteSequence.Builder.create(24);
+  const b4 = ByteSequence._Builder.create(24);
   b4.loadArrayBuffer(testdata.buffer);
   b4.loadArrayBuffer(testdata.buffer, { insertAt: 1 });
   b4.loadUint8(0x01);
@@ -343,8 +343,8 @@ Deno.test("ByteSequence.Builder.prototype.loadArrayBuffer() - insertAt", () => {
   assertStrictEquals(bytes4[4], 1);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable()", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8Iterable()", () => {
+  const b = ByteSequence._Builder.create(4);
   b.loadUint8Iterable([255, 254, 253]);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 3);
@@ -352,7 +352,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable()", () => {
   assertStrictEquals(bytes[1], 254);
   assertStrictEquals(bytes[2], 253);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   b2.loadUint8Iterable(Uint8Array.of(255, 254, 253));
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 3);
@@ -361,8 +361,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable()", () => {
   assertStrictEquals(bytes2[2], 253);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - error", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8Iterable() - error", () => {
+  const b = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b.loadUint8Iterable(["255", "254", "253"] as unknown as number[]);
@@ -371,7 +371,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - error", () => {
     "Input must be a safe-integer of type `number`", //XXX 主語を変えたい
   );
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b2.loadUint8Iterable("255" as unknown as number[]);
@@ -380,7 +380,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - error", () => {
     "Input must be a safe-integer of type `number`", //XXX 主語を変えたい
   );
 
-  const b3 = ByteSequence.Builder.create(4);
+  const b3 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b3.loadUint8Iterable(255 as unknown as number[]);
@@ -390,8 +390,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - insertAt", () => {
-  const b = ByteSequence.Builder.create(8);
+Deno.test("ByteSequence._Builder.prototype.loadUint8Iterable() - insertAt", () => {
+  const b = ByteSequence._Builder.create(8);
   b.loadUint8Iterable([255, 254, 253]);
   b.loadUint8Iterable([255, 254, 253], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -401,7 +401,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - insertAt", () =>
   assertStrictEquals(bytes[2], 254);
   assertStrictEquals(bytes[3], 253);
 
-  const b2 = ByteSequence.Builder.create(8);
+  const b2 = ByteSequence._Builder.create(8);
   b2.loadUint8Iterable(Uint8Array.of(255, 254, 253));
   assertThrows(
     () => {
@@ -412,14 +412,14 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8Iterable() - insertAt", () =>
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable()", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint8AsyncIterable()", async () => {
   async function* bs() {
     yield 255;
     yield 254;
     yield 253;
   }
 
-  const b = ByteSequence.Builder.create(4);
+  const b = ByteSequence._Builder.create(4);
   await b.loadUint8AsyncIterable(bs());
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 3);
@@ -428,8 +428,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable()", async () =>
   assertStrictEquals(bytes[2], 253);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - error", async () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint8AsyncIterable() - error", async () => {
+  const b3 = ByteSequence._Builder.create(4);
   await assertRejects(
     async () => {
       await b3.loadUint8AsyncIterable(255 as unknown as AsyncIterable<number>);
@@ -439,14 +439,14 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - error", asy
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - insertAt", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint8AsyncIterable() - insertAt", async () => {
   async function* bs() {
     yield 255;
     yield 254;
     yield 253;
   }
 
-  const b = ByteSequence.Builder.create(8);
+  const b = ByteSequence._Builder.create(8);
   await b.loadUint8AsyncIterable(bs());
   await b.loadUint8AsyncIterable(bs(), { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -457,8 +457,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint8AsyncIterable() - insertAt", 
   assertStrictEquals(bytes[3], 253);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable()", () => {
-  const b = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint16Iterable()", () => {
+  const b = ByteSequence._Builder.create(4);
   b.loadUint16Iterable([0xFFF0, 0x0033]);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 4);
@@ -467,7 +467,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable()", () => {
   assertStrictEquals(bytes[2], 0x33);
   assertStrictEquals(bytes[3], 0x00);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   b2.loadUint16Iterable([0xFFF0, 0x0033], { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 4);
@@ -476,7 +476,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable()", () => {
   assertStrictEquals(bytes2[2], 0x00);
   assertStrictEquals(bytes2[3], 0x33);
 
-  const b3 = ByteSequence.Builder.create(4);
+  const b3 = ByteSequence._Builder.create(4);
   b3.loadUint16Iterable([0xFFF0, 0x0033], { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 4);
@@ -486,8 +486,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable()", () => {
   assertStrictEquals(bytes3[3], 0x00);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - error", () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint16Iterable() - error", () => {
+  const b3 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b3.loadUint16Iterable(255 as unknown as number[]);
@@ -496,7 +496,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - error", () => {
     "Input must be an `Iterable`",
   );
 
-  const b4 = ByteSequence.Builder.create(4);
+  const b4 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b4.loadUint16Iterable([255, "x" as unknown as number]);
@@ -506,8 +506,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - insertAt", () => {
-  const b = ByteSequence.Builder.create(64);
+Deno.test("ByteSequence._Builder.prototype.loadUint16Iterable() - insertAt", () => {
+  const b = ByteSequence._Builder.create(64);
   b.loadUint16Iterable([0xFFF0, 0x0033]);
   b.loadUint16Iterable([0xFFF0, 0x0033], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -519,13 +519,13 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16Iterable() - insertAt", () =
   assertStrictEquals(bytes[4], 0x00);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable()", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint16AsyncIterable()", async () => {
   async function* bs() {
     yield 0xFFF0;
     yield 0x0033;
   }
 
-  const b = ByteSequence.Builder.create(4);
+  const b = ByteSequence._Builder.create(4);
   await b.loadUint16AsyncIterable(bs());
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 4);
@@ -534,7 +534,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable()", async () =
   assertStrictEquals(bytes[2], 0x33);
   assertStrictEquals(bytes[3], 0x00);
 
-  const b2 = ByteSequence.Builder.create(4);
+  const b2 = ByteSequence._Builder.create(4);
   await b2.loadUint16AsyncIterable(bs(), { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 4);
@@ -543,7 +543,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable()", async () =
   assertStrictEquals(bytes2[2], 0x00);
   assertStrictEquals(bytes2[3], 0x33);
 
-  const b3 = ByteSequence.Builder.create(4);
+  const b3 = ByteSequence._Builder.create(4);
   await b3.loadUint16AsyncIterable(bs(), { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 4);
@@ -553,8 +553,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable()", async () =
   assertStrictEquals(bytes3[3], 0x00);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - error", async () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint16AsyncIterable() - error", async () => {
+  const b3 = ByteSequence._Builder.create(4);
   await assertRejects(
     async () => {
       await b3.loadUint16AsyncIterable(255 as unknown as AsyncIterable<number>);
@@ -564,13 +564,13 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - error", as
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - insertAt", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint16AsyncIterable() - insertAt", async () => {
   async function* bs() {
     yield 0xFFF0;
     yield 0x0033;
   }
 
-  const b = ByteSequence.Builder.create(64);
+  const b = ByteSequence._Builder.create(64);
   await b.loadUint16AsyncIterable(bs());
   await b.loadUint16AsyncIterable(bs(), { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -582,8 +582,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint16AsyncIterable() - insertAt",
   assertStrictEquals(bytes[4], 0x00);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable()", () => {
-  const b = ByteSequence.Builder.create(8);
+Deno.test("ByteSequence._Builder.prototype.loadUint32Iterable()", () => {
+  const b = ByteSequence._Builder.create(8);
   b.loadUint32Iterable([0xFFF01234, 1]);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 8);
@@ -596,7 +596,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable()", () => {
   assertStrictEquals(bytes[6], 0);
   assertStrictEquals(bytes[7], 0);
 
-  const b2 = ByteSequence.Builder.create(8);
+  const b2 = ByteSequence._Builder.create(8);
   b2.loadUint32Iterable([0xFFF01234, 1], { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 8);
@@ -609,7 +609,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable()", () => {
   assertStrictEquals(bytes2[6], 0);
   assertStrictEquals(bytes2[7], 1);
 
-  const b3 = ByteSequence.Builder.create(8);
+  const b3 = ByteSequence._Builder.create(8);
   b3.loadUint32Iterable([0xFFF01234, 1], { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 8);
@@ -623,8 +623,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable()", () => {
   assertStrictEquals(bytes3[7], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable() - error", () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint32Iterable() - error", () => {
+  const b3 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b3.loadUint32Iterable(255 as unknown as number[]);
@@ -633,7 +633,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable() - error", () => {
     "Input must be an `Iterable`",
   );
 
-  const b4 = ByteSequence.Builder.create(4);
+  const b4 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b4.loadUint32Iterable([255, "x" as unknown as number]);
@@ -643,8 +643,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable() - insertAt", () => {
-  const b = ByteSequence.Builder.create(64);
+Deno.test("ByteSequence._Builder.prototype.loadUint32Iterable() - insertAt", () => {
+  const b = ByteSequence._Builder.create(64);
   b.loadUint32Iterable([0xFFF01234, 1]);
   b.loadUint32Iterable([0xFFF01234, 1], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -660,13 +660,13 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32Iterable() - insertAt", () =
   assertStrictEquals(bytes[8], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable()", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint32AsyncIterable()", async () => {
   async function* bs() {
     yield 0xFFF01234;
     yield 1;
   }
 
-  const b = ByteSequence.Builder.create(8);
+  const b = ByteSequence._Builder.create(8);
   await b.loadUint32AsyncIterable(bs());
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 8);
@@ -679,7 +679,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable()", async () =
   assertStrictEquals(bytes[6], 0);
   assertStrictEquals(bytes[7], 0);
 
-  const b2 = ByteSequence.Builder.create(8);
+  const b2 = ByteSequence._Builder.create(8);
   await b2.loadUint32AsyncIterable(bs(), { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 8);
@@ -692,7 +692,7 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable()", async () =
   assertStrictEquals(bytes2[6], 0);
   assertStrictEquals(bytes2[7], 1);
 
-  const b3 = ByteSequence.Builder.create(8);
+  const b3 = ByteSequence._Builder.create(8);
   await b3.loadUint32AsyncIterable(bs(), { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 8);
@@ -706,8 +706,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable()", async () =
   assertStrictEquals(bytes3[7], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable() - error", async () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.loadUint32AsyncIterable() - error", async () => {
+  const b3 = ByteSequence._Builder.create(4);
   await assertRejects(
     async () => {
       await b3.loadUint32AsyncIterable(255 as unknown as AsyncIterable<number>);
@@ -717,13 +717,13 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable() - error", as
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable() - insertAt", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadUint32AsyncIterable() - insertAt", async () => {
   async function* bs() {
     yield 0xFFF01234;
     yield 1;
   }
 
-  const b = ByteSequence.Builder.create(64);
+  const b = ByteSequence._Builder.create(64);
   await b.loadUint32AsyncIterable(bs());
   await b.loadUint32AsyncIterable(bs(), { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -739,8 +739,8 @@ Deno.test("ByteSequence.Builder.prototype.loadUint32AsyncIterable() - insertAt",
   assertStrictEquals(bytes[8], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable()", () => {
-  const b = ByteSequence.Builder.create(16);
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64Iterable()", () => {
+  const b = ByteSequence._Builder.create(16);
   b.loadBigUint64Iterable([0xFFF0123466554433n, 1n]);
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 16);
@@ -761,7 +761,7 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes[14], 0);
   assertStrictEquals(bytes[15], 0);
 
-  const b2 = ByteSequence.Builder.create(16);
+  const b2 = ByteSequence._Builder.create(16);
   b2.loadBigUint64Iterable([0xFFF0123466554433n, 1n], {
     byteOrder: "big-endian",
   });
@@ -784,7 +784,7 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes2[14], 0);
   assertStrictEquals(bytes2[15], 1);
 
-  const b3 = ByteSequence.Builder.create(16);
+  const b3 = ByteSequence._Builder.create(16);
   b3.loadBigUint64Iterable([0xFFF0123466554433n, 1n], {
     byteOrder: "little-endian",
   });
@@ -808,8 +808,8 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes3[15], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable() - error", () => {
-  const b3 = ByteSequence.Builder.create(16);
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64Iterable() - error", () => {
+  const b3 = ByteSequence._Builder.create(16);
   assertThrows(
     () => {
       b3.loadBigUint64Iterable(255 as unknown as bigint[]);
@@ -818,7 +818,7 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable() - error", () =
     "Input must be an `Iterable`",
   );
 
-  const b4 = ByteSequence.Builder.create(16);
+  const b4 = ByteSequence._Builder.create(16);
   assertThrows(
     () => {
       b4.loadBigUint64Iterable([255n, "x" as unknown as bigint]);
@@ -828,8 +828,8 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable() - error", () =
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable() - insertAt", () => {
-  const b = ByteSequence.Builder.create(64);
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64Iterable() - insertAt", () => {
+  const b = ByteSequence._Builder.create(64);
   b.loadBigUint64Iterable([0xFFF0123466554433n, 1n]);
   b.loadBigUint64Iterable([0xFFF0123466554433n, 1n], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -853,13 +853,13 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64Iterable() - insertAt", (
   assertStrictEquals(bytes[16], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable()", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64AsyncIterable()", async () => {
   async function* bs() {
     yield 0xFFF0123466554433n;
     yield 1n;
   }
 
-  const b = ByteSequence.Builder.create(16);
+  const b = ByteSequence._Builder.create(16);
   await b.loadBigUint64AsyncIterable(bs());
   const bytes = new Uint8Array(b.toArrayBuffer());
   assertStrictEquals(bytes.byteLength, 16);
@@ -880,7 +880,7 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable()", async (
   assertStrictEquals(bytes[14], 0);
   assertStrictEquals(bytes[15], 0);
 
-  const b2 = ByteSequence.Builder.create(16);
+  const b2 = ByteSequence._Builder.create(16);
   await b2.loadBigUint64AsyncIterable(bs(), { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
   assertStrictEquals(bytes2.byteLength, 16);
@@ -901,7 +901,7 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable()", async (
   assertStrictEquals(bytes2[14], 0);
   assertStrictEquals(bytes2[15], 1);
 
-  const b3 = ByteSequence.Builder.create(16);
+  const b3 = ByteSequence._Builder.create(16);
   await b3.loadBigUint64AsyncIterable(bs(), { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
   assertStrictEquals(bytes3.byteLength, 16);
@@ -923,8 +923,8 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable()", async (
   assertStrictEquals(bytes3[15], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable() - error", async () => {
-  const b3 = ByteSequence.Builder.create(16);
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64AsyncIterable() - error", async () => {
+  const b3 = ByteSequence._Builder.create(16);
   await assertRejects(
     async () => {
       await b3.loadBigUint64AsyncIterable(
@@ -936,13 +936,13 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable() - error",
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable() - insertAt", async () => {
+Deno.test("ByteSequence._Builder.prototype.loadBigUint64AsyncIterable() - insertAt", async () => {
   async function* bs() {
     yield 0xFFF0123466554433n;
     yield 1n;
   }
 
-  const b = ByteSequence.Builder.create(64);
+  const b = ByteSequence._Builder.create(64);
   await b.loadBigUint64AsyncIterable(bs());
   await b.loadBigUint64AsyncIterable(bs(), { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -966,8 +966,8 @@ Deno.test("ByteSequence.Builder.prototype.loadBigUint64AsyncIterable() - insertA
   assertStrictEquals(bytes[16], 0);
 });
 
-Deno.test("ByteSequence.Builder.prototype.fillZeros()", () => {
-  const b = ByteSequence.Builder.create(64);
+Deno.test("ByteSequence._Builder.prototype.fillZeros()", () => {
+  const b = ByteSequence._Builder.create(64);
   b.loadUint8Iterable([1, 2, 3, 4]);
   b.fillZeros(2);
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -979,7 +979,7 @@ Deno.test("ByteSequence.Builder.prototype.fillZeros()", () => {
   assertStrictEquals(bytes[4], 0);
   assertStrictEquals(bytes[5], 0);
 
-  const b2 = ByteSequence.Builder.create(64);
+  const b2 = ByteSequence._Builder.create(64);
   b2.loadUint8Iterable([1, 2, 3, 4]);
   b2.fillZeros(0);
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
@@ -989,7 +989,7 @@ Deno.test("ByteSequence.Builder.prototype.fillZeros()", () => {
   assertStrictEquals(bytes2[2], 3);
   assertStrictEquals(bytes2[3], 4);
 
-  const b3 = ByteSequence.Builder.create(64);
+  const b3 = ByteSequence._Builder.create(64);
   b3.loadUint8Iterable([1, 2, 3, 4]);
   b3.fillZeros(2, { insertAt: 1 });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
@@ -1000,8 +1000,8 @@ Deno.test("ByteSequence.Builder.prototype.fillZeros()", () => {
   assertStrictEquals(bytes3[3], 4);
 });
 
-Deno.test("ByteSequence.Builder.prototype.fillZeros() - error", () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.fillZeros() - error", () => {
+  const b3 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b3.fillZeros("-1" as unknown as number);
@@ -1010,7 +1010,7 @@ Deno.test("ByteSequence.Builder.prototype.fillZeros() - error", () => {
     "Input must be a non-negative safe-integer of type `number`",
   );
 
-  const b4 = ByteSequence.Builder.create(4);
+  const b4 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b4.fillZeros(1, { insertAt: 100 });
@@ -1020,8 +1020,8 @@ Deno.test("ByteSequence.Builder.prototype.fillZeros() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.fillRandom()", () => {
-  const b = ByteSequence.Builder.create(64);
+Deno.test("ByteSequence._Builder.prototype.fillRandom()", () => {
+  const b = ByteSequence._Builder.create(64);
   b.loadUint8Iterable([1, 2, 3, 4]);
   b.fillRandom(2);
   const bytes = new Uint8Array(b.toArrayBuffer());
@@ -1033,7 +1033,7 @@ Deno.test("ByteSequence.Builder.prototype.fillRandom()", () => {
   assertStrictEquals((bytes[4] >= 0) && (bytes[4] <= 0xFF), true);
   assertStrictEquals((bytes[5] >= 0) && (bytes[5] <= 0xFF), true);
 
-  const b2 = ByteSequence.Builder.create(64);
+  const b2 = ByteSequence._Builder.create(64);
   b2.loadUint8Iterable([1, 2, 3, 4]);
   b2.fillRandom(0);
   const bytes2 = new Uint8Array(b2.toArrayBuffer());
@@ -1043,7 +1043,7 @@ Deno.test("ByteSequence.Builder.prototype.fillRandom()", () => {
   assertStrictEquals(bytes2[2], 3);
   assertStrictEquals(bytes2[3], 4);
 
-  const b3 = ByteSequence.Builder.create(64);
+  const b3 = ByteSequence._Builder.create(64);
   b3.loadUint8Iterable([1, 2, 3, 4]);
   b3.fillRandom(2, { insertAt: 1 });
   const bytes3 = new Uint8Array(b3.toArrayBuffer());
@@ -1054,8 +1054,8 @@ Deno.test("ByteSequence.Builder.prototype.fillRandom()", () => {
   assertStrictEquals(bytes3[3], 4);
 });
 
-Deno.test("ByteSequence.Builder.prototype.fillRandom() - error", () => {
-  const b3 = ByteSequence.Builder.create(4);
+Deno.test("ByteSequence._Builder.prototype.fillRandom() - error", () => {
+  const b3 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b3.fillRandom("-1" as unknown as number);
@@ -1064,7 +1064,7 @@ Deno.test("ByteSequence.Builder.prototype.fillRandom() - error", () => {
     "Input must be a non-negative safe-integer of type `number`",
   );
 
-  const b4 = ByteSequence.Builder.create(4);
+  const b4 = ByteSequence._Builder.create(4);
   assertThrows(
     () => {
       b4.fillRandom(1, { insertAt: 100 });
@@ -1074,8 +1074,8 @@ Deno.test("ByteSequence.Builder.prototype.fillRandom() - error", () => {
   );
 });
 
-Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
-  const b = ByteSequence.Builder.create(4, 8);
+Deno.test("ByteSequence._Builder.prototype.toArrayBuffer()", () => {
+  const b = ByteSequence._Builder.create(4, 8);
   b.loadUint8(0xFF);
   b.loadUint8(0xFE);
   b.loadUint8(0xFD);
@@ -1085,7 +1085,7 @@ Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
   assertStrictEquals(bytes[1], 0xFE);
   assertStrictEquals(bytes[2], 0xFD);
 
-  const b2 = ByteSequence.Builder.create(4, 8);
+  const b2 = ByteSequence._Builder.create(4, 8);
   b2.loadUint8(0xFF);
   b2.loadUint8(0xFE);
   b2.loadUint8(0xFD);
@@ -1096,8 +1096,8 @@ Deno.test("ByteSequence.Builder.prototype.toArrayBuffer()", () => {
   assertStrictEquals(bytes2[1], 0xFE);
 });
 
-Deno.test("ByteSequence.Builder.prototype.toBytes()", () => {
-  const b = ByteSequence.Builder.create(4, 8);
+Deno.test("ByteSequence._Builder.prototype.toBytes()", () => {
+  const b = ByteSequence._Builder.create(4, 8);
   b.loadUint8(0xFF);
   b.loadUint8(0xFE);
   b.loadUint8(0xFD);
@@ -1107,7 +1107,7 @@ Deno.test("ByteSequence.Builder.prototype.toBytes()", () => {
   assertStrictEquals(bytes[1], 0xFE);
   assertStrictEquals(bytes[2], 0xFD);
 
-  const b2 = ByteSequence.Builder.create(4, 8);
+  const b2 = ByteSequence._Builder.create(4, 8);
   b2.loadUint8(0xFF);
   b2.loadUint8(0xFE);
   b2.loadUint8(0xFD);

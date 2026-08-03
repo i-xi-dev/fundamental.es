@@ -1,3 +1,3 @@
-export * as Digest from "./digest/mod.mts";
-export * as Encoding from "./encoding/mod.mts";
-export { Builder } from "./builder.mts";
+export { ByteSequence } from "./main.mts";
+
+export { Builder as _Builder } from "./builder.mts";

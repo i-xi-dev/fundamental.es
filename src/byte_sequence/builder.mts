@@ -429,11 +429,10 @@ export class Builder {
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
-    const length =
-      (_Type.isSafeInt(options?.byteLength) &&
-          isNonNegative(options.byteLength))
-        ? options.byteLength
-        : this.#index;
+    const length = (_Type.isSafeInt(options?.byteLength) &&
+        isNonNegative(options.byteLength))
+      ? options.byteLength
+      : this.#index;
     return this.#buffer.transferToFixedLength(length);
   }
 
