@@ -37,7 +37,7 @@ Deno.test("ByteSequence.fromArrayBuffer() - resizable", () => {
   const testdata = Uint8Array.of(255, 254, 253);
 
   const b = ByteSequence.fromArrayBuffer(testdata.buffer, { maxCapacity: 6 });
-  b.loadArrayBuffer(testdata.buffer);
+  b.loadFromArrayBuffer(testdata.buffer);
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 6);
   assertStrictEquals(bytes[0], 255);
@@ -62,7 +62,7 @@ Deno.test("ByteSequence.fromArrayBuffer() - error", () => {
       const bs = ByteSequence.fromArrayBuffer(
         Uint8Array.of(255, 254, 253).buffer,
       );
-      bs.loadArrayBuffer(Uint8Array.of(255, 254, 253).buffer);
+      bs.loadFromArrayBuffer(Uint8Array.of(255, 254, 253).buffer);
     },
     RangeError,
     "`ArrayBuffer` cannot be resized",

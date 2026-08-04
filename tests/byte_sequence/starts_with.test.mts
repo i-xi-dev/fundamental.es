@@ -5,10 +5,8 @@ Deno.test("ByteSequence.prototype.startsWith() - ByteSequence", () => {
   const bs0 = ByteSequence.create(64);
   const bs0b = ByteSequence.create(64);
 
-  const bs1 = ByteSequence.create(64);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
-  const bs1b = ByteSequence.create(64);
-  bs1b.loadUint8Iterable([255, 0, 127, 1]);
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
+  const bs1b = ByteSequence.fromArray([255, 0, 127, 1]);
 
   assertStrictEquals(bs0.startsWith(bs0), true);
   assertStrictEquals(bs0.startsWith(bs0b), true);
@@ -22,8 +20,7 @@ Deno.test("ByteSequence.prototype.startsWith() - ByteSequence", () => {
 Deno.test("ByteSequence.prototype.startsWith() - ArrayBufferView", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(64);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
 
   assertStrictEquals(bs0.startsWith(new Uint8Array(0)), true);
   assertStrictEquals(bs1.startsWith(bs1.toBytes()), true);
@@ -48,8 +45,7 @@ Deno.test("ByteSequence.prototype.startsWith() - ArrayBufferView", () => {
 Deno.test("ByteSequence.prototype.startsWith() - Array<number>", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(40);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
 
   assertStrictEquals(bs0.startsWith([]), true);
   assertStrictEquals(bs1.startsWith(bs1.toArray()), true);
@@ -63,10 +59,8 @@ Deno.test("ByteSequence.prototype.startsWith() - Array<number>", () => {
 Deno.test("ByteSequence.prototype.startsWith() - ArrayBuffer", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(40);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
-  const bs1b = ByteSequence.create(40);
-  bs1b.loadUint8Iterable([255, 0, 127, 1]);
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
+  const bs1b = ByteSequence.fromArray([255, 0, 127, 1]);
 
   assertStrictEquals(bs0.startsWith(bs0.toArrayBuffer()), true);
   assertStrictEquals(bs1.startsWith(bs1b.toArrayBuffer()), true);

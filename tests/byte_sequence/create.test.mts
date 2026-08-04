@@ -9,14 +9,14 @@ Deno.test("ByteSequence.create()", () => {
 
 Deno.test("ByteSequence.create() - fixed-length", () => {
   const b = ByteSequence.create(4);
-  b.loadUint8(0);
-  b.loadUint8(1);
-  b.loadUint8(2);
-  b.loadUint8(3);
+  b.setByte(0);
+  b.setByte(1);
+  b.setByte(2);
+  b.setByte(3);
 
   assertThrows(
     () => {
-      b.loadUint8(4);
+      b.setByte(4);
     },
     RangeError,
     "`ArrayBuffer` cannot be resized",
@@ -32,11 +32,11 @@ Deno.test("ByteSequence.create() - fixed-length", () => {
 
 Deno.test("ByteSequence.create() - expandabe-length", () => {
   const b = ByteSequence.create(4, 8);
-  b.loadUint8(0);
-  b.loadUint8(1);
-  b.loadUint8(2);
-  b.loadUint8(3);
-  b.loadUint8(4);
+  b.setByte(0);
+  b.setByte(1);
+  b.setByte(2);
+  b.setByte(3);
+  b.setByte(4);
 
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 5);
@@ -49,18 +49,18 @@ Deno.test("ByteSequence.create() - expandabe-length", () => {
 
 Deno.test("ByteSequence.create() - expandabe-length - 2", () => {
   const b = ByteSequence.create(4, 8);
-  b.loadUint8(0);
-  b.loadUint8(1);
-  b.loadUint8(2);
-  b.loadUint8(3);
-  b.loadUint8(4);
-  b.loadUint8(5);
-  b.loadUint8(6);
-  b.loadUint8(7);
+  b.setByte(0);
+  b.setByte(1);
+  b.setByte(2);
+  b.setByte(3);
+  b.setByte(4);
+  b.setByte(5);
+  b.setByte(6);
+  b.setByte(7);
 
   assertThrows(
     () => {
-      b.loadUint8(8);
+      b.setByte(8);
     },
     RangeError,
     "Exceeds the resize limit for `ArrayBuffer`",
@@ -80,14 +80,14 @@ Deno.test("ByteSequence.create() - expandabe-length - 2", () => {
 
 Deno.test("ByteSequence.create() - expandabe-length - 3", () => {
   const b = ByteSequence.create(4, 2);
-  b.loadUint8(0);
-  b.loadUint8(1);
-  b.loadUint8(2);
-  b.loadUint8(3);
+  b.setByte(0);
+  b.setByte(1);
+  b.setByte(2);
+  b.setByte(3);
 
   assertThrows(
     () => {
-      b.loadUint8(4);
+      b.setByte(4);
     },
     RangeError,
     "Exceeds the resize limit for `ArrayBuffer`",

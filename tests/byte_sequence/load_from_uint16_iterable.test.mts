@@ -1,14 +1,9 @@
-import { assertRejects, assertStrictEquals } from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteSequence } from "../../src/mod.mts";
 
-Deno.test("ByteSequence.prototype.loadUint16AsyncIterable()", async () => {
-  async function* bs() {
-    yield 0xFFF0;
-    yield 0x0033;
-  }
-
+Deno.test("ByteSequence.prototype.loadFromUint16Iterable()", () => {
   const b = ByteSequence.create(4);
-  await b.loadUint16AsyncIterable(bs());
+  b.loadFromUint16Iterable([0xFFF0, 0x0033]);
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 4);
   assertStrictEquals(bytes[0], 0xF0);
@@ -17,7 +12,7 @@ Deno.test("ByteSequence.prototype.loadUint16AsyncIterable()", async () => {
   assertStrictEquals(bytes[3], 0x00);
 
   const b2 = ByteSequence.create(4);
-  await b2.loadUint16AsyncIterable(bs(), { byteOrder: "big-endian" });
+  b2.loadFromUint16Iterable([0xFFF0, 0x0033], { byteOrder: "big-endian" });
   const bytes2 = new Uint8Array(b2.toArrayBufferWithDetach());
   assertStrictEquals(bytes2.byteLength, 4);
   assertStrictEquals(bytes2[0], 0xFF);
@@ -26,7 +21,7 @@ Deno.test("ByteSequence.prototype.loadUint16AsyncIterable()", async () => {
   assertStrictEquals(bytes2[3], 0x33);
 
   const b3 = ByteSequence.create(4);
-  await b3.loadUint16AsyncIterable(bs(), { byteOrder: "little-endian" });
+  b3.loadFromUint16Iterable([0xFFF0, 0x0033], { byteOrder: "little-endian" });
   const bytes3 = new Uint8Array(b3.toArrayBufferWithDetach());
   assertStrictEquals(bytes3.byteLength, 4);
   assertStrictEquals(bytes3[0], 0xF0);
@@ -35,26 +30,30 @@ Deno.test("ByteSequence.prototype.loadUint16AsyncIterable()", async () => {
   assertStrictEquals(bytes3[3], 0x00);
 });
 
-Deno.test("ByteSequence.prototype.loadUint16AsyncIterable() - error", async () => {
+Deno.test("ByteSequence.prototype.loadFromUint16Iterable() - error", () => {
   const b3 = ByteSequence.create(4);
-  await assertRejects(
-    async () => {
-      await b3.loadUint16AsyncIterable(255 as unknown as AsyncIterable<number>);
+  assertThrows(
+    () => {
+      b3.loadFromUint16Iterable(255 as unknown as number[]);
     },
     TypeError,
-    "Input must be an `AsyncIterable`",
+    "Input must be an `Iterable`",
+  );
+
+  const b4 = ByteSequence.create(4);
+  assertThrows(
+    () => {
+      b4.loadFromUint16Iterable([255, "x" as unknown as number]);
+    },
+    TypeError,
+    "Input must be a safe-integer of type `number`", //XXX 主語を変えたい
   );
 });
 
-Deno.test("ByteSequence.prototype.loadUint16AsyncIterable() - insertAt", async () => {
-  async function* bs() {
-    yield 0xFFF0;
-    yield 0x0033;
-  }
-
+Deno.test("ByteSequence.prototype.loadFromUint16Iterable() - insertAt", () => {
   const b = ByteSequence.create(64);
-  await b.loadUint16AsyncIterable(bs());
-  await b.loadUint16AsyncIterable(bs(), { insertAt: 1 });
+  b.loadFromUint16Iterable([0xFFF0, 0x0033]);
+  b.loadFromUint16Iterable([0xFFF0, 0x0033], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 5);
   assertStrictEquals(bytes[0], 0xF0);

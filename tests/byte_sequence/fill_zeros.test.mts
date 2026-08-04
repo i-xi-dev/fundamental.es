@@ -3,7 +3,7 @@ import { ByteSequence } from "../../src/mod.mts";
 
 Deno.test("ByteSequence.prototype.fillZeros()", () => {
   const b = ByteSequence.create(64);
-  b.loadUint8Iterable([1, 2, 3, 4]);
+  b.loadFromUint8Iterable([1, 2, 3, 4]);
   b.fillZeros(2);
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 6);
@@ -15,7 +15,7 @@ Deno.test("ByteSequence.prototype.fillZeros()", () => {
   assertStrictEquals(bytes[5], 0);
 
   const b2 = ByteSequence.create(64);
-  b2.loadUint8Iterable([1, 2, 3, 4]);
+  b2.loadFromUint8Iterable([1, 2, 3, 4]);
   b2.fillZeros(0);
   const bytes2 = new Uint8Array(b2.toArrayBufferWithDetach());
   assertStrictEquals(bytes2.byteLength, 4);
@@ -25,7 +25,7 @@ Deno.test("ByteSequence.prototype.fillZeros()", () => {
   assertStrictEquals(bytes2[3], 4);
 
   const b3 = ByteSequence.create(64);
-  b3.loadUint8Iterable([1, 2, 3, 4]);
+  b3.loadFromUint8Iterable([1, 2, 3, 4]);
   b3.fillZeros(2, { insertAt: 1 });
   const bytes3 = new Uint8Array(b3.toArrayBufferWithDetach());
   assertStrictEquals(bytes3.byteLength, 4);

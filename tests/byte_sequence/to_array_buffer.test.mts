@@ -2,8 +2,7 @@ import { assertNotStrictEquals, assertStrictEquals } from "@std/assert";
 import { ByteSequence } from "../../src/mod.mts";
 
 Deno.test("ByteSequence.prototype.toArrayBuffer()", () => {
-  const bs1 = ByteSequence.create(64);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
 
   const ab1a = bs1.toArrayBuffer();
   const ab1b = bs1.toArrayBuffer();

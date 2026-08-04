@@ -5,10 +5,8 @@ Deno.test("ByteSequence.prototype.equals() - ByteSequence", () => {
   const bs0 = ByteSequence.create(0);
   const bs0b = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(100);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
-  const bs1b = ByteSequence.create(100);
-  bs1b.loadUint8Iterable([255, 0, 127, 1]);
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
+  const bs1b = ByteSequence.fromArray([255, 0, 127, 1]);
 
   assertStrictEquals(bs0.equals(bs0), true);
   assertStrictEquals(bs0.equals(bs0b), true);
@@ -22,8 +20,7 @@ Deno.test("ByteSequence.prototype.equals() - ByteSequence", () => {
 Deno.test("ByteSequence.prototype.equals() - ArrayBufferView", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(100);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
 
   assertStrictEquals(bs0.equals(new Uint8Array(0)), true);
   assertStrictEquals(bs1.equals(bs1.toBytes()), true);
@@ -41,8 +38,7 @@ Deno.test("ByteSequence.prototype.equals() - ArrayBufferView", () => {
 Deno.test("ByteSequence.prototype.equals() - Array<number>", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(100);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
 
   assertStrictEquals(bs0.equals([]), true);
   assertStrictEquals(bs1.equals(bs1.toArray()), true);
@@ -56,10 +52,8 @@ Deno.test("ByteSequence.prototype.equals() - Array<number>", () => {
 Deno.test("ByteSequence.prototype.equals() - ArrayBuffer", () => {
   const bs0 = ByteSequence.create(0);
 
-  const bs1 = ByteSequence.create(100);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
-  const bs1b = ByteSequence.create(100);
-  bs1b.loadUint8Iterable([255, 0, 127, 1]);
+  const bs1 = ByteSequence.fromBytes(Uint8Array.of(255, 0, 127, 1));
+  const bs1b = ByteSequence.fromArray([255, 0, 127, 1]);
 
   assertStrictEquals(bs0.equals(bs0.toArrayBuffer()), true);
   assertStrictEquals(bs1.equals(bs1b.toArrayBuffer()), true);

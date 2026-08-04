@@ -311,7 +311,7 @@ function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
   }
 
   const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4); //TODO
-  builder.loadUint32Iterable(contextState, {
+  builder.loadFromUint32Iterable(contextState, {
     byteOrder: ByteOrder.LITTLE_ENDIAN,
   });
   return builder.toArrayBufferWithDetach();

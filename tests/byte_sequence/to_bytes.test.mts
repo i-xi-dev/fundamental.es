@@ -3,8 +3,7 @@ import { ByteSequence } from "../../src/mod.mts";
 
 Deno.test("ByteSequence.prototype.toBytes()", () => {
   const a1 = Uint8Array.of(3, 2, 1, 0);
-  const bs1 = ByteSequence.create(90);
-  bs1.loadUint8Iterable(a1);
+  const bs1 = ByteSequence.fromBytes(a1);
 
   const c1 = bs1.toBytes();
   assertStrictEquals(c1 instanceof Uint8Array, true);

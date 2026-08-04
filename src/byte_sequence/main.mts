@@ -105,10 +105,6 @@ export class ByteSequence {
     return "ByteSequence";
   }
 
-  get detached(): boolean {
-    return (this.#buffer.detached === true);
-  }
-
   get capacity(): _Type.safeint {
     this.#assertAccessible();
     return this.#buffer.byteLength;
@@ -124,7 +120,14 @@ export class ByteSequence {
     return this.#loadedCount;
   }
 
-  //TODO resizable
+  get resizable(): boolean {
+    this.#assertAccessible();
+    return this.#buffer.resizable;
+  }
+
+  get detached(): boolean {
+    return (this.#buffer.detached === true);
+  }
 
   static create(
     capacity: _Type.safeint,
@@ -137,7 +140,7 @@ export class ByteSequence {
     return new ByteSequence(capacity, maxCapacity);
   }
 
-  loadUint8(byte: _Type.safeint, options?: _LoadOptions_1): this {
+  setByte(byte: _Type.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -154,14 +157,13 @@ export class ByteSequence {
     return this;
   }
 
-  loadByte(byte: _Type.safeint, options?: _LoadOptions_1): this {
-    return this.loadUint8(byte, options);
-  }
-
   // - sourceBufferの部分範囲だけ追加したければ切り出してから渡せば良い
   // - SharedArrayBufferは弾く
   // - sourceBufferは読み取るだけなのでdetatch等しない（要らないなら自分で処分すること）
-  loadArrayBuffer(sourceBuffer: ArrayBuffer, options?: _LoadOptions_2): this {
+  loadFromArrayBuffer(
+    sourceBuffer: ArrayBuffer,
+    options?: _LoadOptions_2,
+  ): this {
     this.#assertAccessible();
     _Assert.arrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -174,7 +176,7 @@ export class ByteSequence {
     return this;
   }
 
-  loadUint8Iterable(
+  loadFromUint8Iterable(
     uint8s: Iterable<_Type.safeint>,
     options?: _LoadOptions_1,
   ): this {
@@ -182,7 +184,7 @@ export class ByteSequence {
     _Assert.iterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    // this.loadArrayBuffer(Uint8Array.from(uint8s).buffer);
+    // this.loadFromArrayBuffer(Uint8Array.from(uint8s).buffer);
     // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
@@ -204,11 +206,11 @@ export class ByteSequence {
     return this;
   }
 
-  loadBytes(bytes: _Type.Bytes, options?: _LoadOptions_1): this {
-    return this.loadUint8Iterable(bytes, options);
-  }
+  //XXX loadFromBytes(bytes: _Type.Bytes, options?: _LoadOptions_1): this {
+  //   return this.loadFromUint8Iterable(bytes, options);
+  // }
 
-  async loadUint8AsyncIterable(
+  async loadFromUint8AsyncIterable(
     uint8s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions_1,
   ): Promise<this> {
@@ -235,7 +237,7 @@ export class ByteSequence {
     return this;
   }
 
-  #loadUintNIterable<T extends _Type.safeint>(
+  #loadFromUintNIterable<T extends _Type.safeint>(
     uT: Uint<T>,
     uintNs: Iterable<_Type.safeint>,
     options?: _LoadOptions,
@@ -264,7 +266,7 @@ export class ByteSequence {
     return this;
   }
 
-  #loadBigUintNIterable<T extends bigint>(
+  #loadFromBigUintNIterable<T extends bigint>(
     uT: BigUint<T>,
     biguintNs: Iterable<bigint>,
     options?: _LoadOptions,
@@ -293,7 +295,7 @@ export class ByteSequence {
     return this;
   }
 
-  async #loadUintNAsyncIterable<T extends _Type.safeint>(
+  async #loadFromUintNAsyncIterable<T extends _Type.safeint>(
     uT: Uint<T>,
     uintNs: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
@@ -322,7 +324,7 @@ export class ByteSequence {
     return this;
   }
 
-  async #loadBigUintNAsyncIterable<T extends bigint>(
+  async #loadFromBigUintNAsyncIterable<T extends bigint>(
     uT: BigUint<T>,
     biguintNs: AsyncIterable<bigint>,
     options?: _LoadOptions,
@@ -351,46 +353,46 @@ export class ByteSequence {
     return this;
   }
 
-  loadUint16Iterable(
+  loadFromUint16Iterable(
     uint16s: Iterable<_Type.safeint>,
     options?: _LoadOptions,
   ): this {
-    return this.#loadUintNIterable(Uint16, uint16s, options);
+    return this.#loadFromUintNIterable(Uint16, uint16s, options);
   }
 
-  loadUint16AsyncIterable(
+  loadFromUint16AsyncIterable(
     uint16s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    return this.#loadUintNAsyncIterable(Uint16, uint16s, options);
+    return this.#loadFromUintNAsyncIterable(Uint16, uint16s, options);
   }
 
-  loadUint32Iterable(
+  loadFromUint32Iterable(
     uint32s: Iterable<_Type.safeint>,
     options?: _LoadOptions,
   ): this {
-    return this.#loadUintNIterable(Uint32, uint32s, options);
+    return this.#loadFromUintNIterable(Uint32, uint32s, options);
   }
 
-  loadUint32AsyncIterable(
+  loadFromUint32AsyncIterable(
     uint32s: AsyncIterable<_Type.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    return this.#loadUintNAsyncIterable(Uint32, uint32s, options);
+    return this.#loadFromUintNAsyncIterable(Uint32, uint32s, options);
   }
 
-  loadBigUint64Iterable(
+  loadFromBigUint64Iterable(
     biguint64s: Iterable<bigint>,
     options?: _LoadOptions,
   ): this {
-    return this.#loadBigUintNIterable(BigUint64, biguint64s, options);
+    return this.#loadFromBigUintNIterable(BigUint64, biguint64s, options);
   }
 
-  loadBigUint64AsyncIterable(
+  loadFromBigUint64AsyncIterable(
     biguint64s: AsyncIterable<bigint>,
     options?: _LoadOptions,
   ): Promise<this> {
-    return this.#loadBigUintNAsyncIterable(BigUint64, biguint64s, options);
+    return this.#loadFromBigUintNAsyncIterable(BigUint64, biguint64s, options);
   }
 
   fillZeros(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
@@ -398,7 +400,7 @@ export class ByteSequence {
     _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    return this.loadArrayBuffer(new ArrayBuffer(byteLength), options);
+    return this.loadFromArrayBuffer(new ArrayBuffer(byteLength), options);
   }
 
   fillRandom(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
@@ -406,7 +408,7 @@ export class ByteSequence {
     _Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    return this.loadArrayBuffer(_randomBytes(byteLength), options);
+    return this.loadFromArrayBuffer(_randomBytes(byteLength), options);
   }
 
   toArrayBuffer(): ArrayBuffer {
@@ -576,6 +578,11 @@ type _FromOptions = {
   maxCapacity?: _Type.safeint;
 };
 
+type _FromOptions_1 = {
+  maxCapacity?: _Type.safeint;
+  clampMode?: _ClampMode;
+};
+
 export namespace ByteSequence {
   export function fromArrayBuffer(
     src: ArrayBuffer,
@@ -590,12 +597,58 @@ export namespace ByteSequence {
         Math.max(src.byteLength, options.maxCapacity),
       )
       : ByteSequence.create(src.byteLength);
-    sq.loadArrayBuffer(src);
+    sq.loadFromArrayBuffer(src);
     return sq;
   }
 
-  //   export function fromBytes() {
-  //   }
-  //   export function fromArray() {
-  //   }
+  //XXX lengthが不明の場合どうする
+  // export function fromUint8Iterable(
+  //   uint8s: Iterable<_Type.safeint>,
+  //   options?: _FromOptions_1,
+  // ) {
+  // }
+
+  export function fromBytes(
+    src: _Type.Bytes,
+    options?: _FromOptions,
+  ): ByteSequence {
+    _Assert.nonSharedUint8Array(src, "Input");
+
+    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
+        isNonNegative(options.maxCapacity))
+      ? ByteSequence.create(
+        src.byteLength,
+        Math.max(src.byteLength, options.maxCapacity),
+      )
+      : ByteSequence.create(src.byteLength);
+    sq.loadFromUint8Iterable(src);
+    return sq;
+  }
+
+  export function fromArray(
+    src: Array</* _Type.uint8 */ _Type.safeint>,
+    options?: _FromOptions,
+  ): ByteSequence {
+    //TODO assert src
+
+    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
+        isNonNegative(options.maxCapacity))
+      ? ByteSequence.create(
+        src.length,
+        Math.max(src.length, options.maxCapacity),
+      )
+      : ByteSequence.create(src.length);
+    sq.loadFromUint8Iterable(src);
+    return sq;
+  }
+
+  //XXX fromUint8AsyncIterable() length不明なので見積を指定させる
+
+  export function zeros(byteLength: _Type.safeint, options?: _FromOptions) {
+    //TODO
+  }
+
+  export function random(byteLength: _Type.safeint, options?: _FromOptions) {
+    //TODO
+  }
 }

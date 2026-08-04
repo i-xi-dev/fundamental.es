@@ -1,9 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteSequence } from "../../src/mod.mts";
 
-Deno.test("ByteSequence.prototype.loadBigUint64Iterable()", () => {
+Deno.test("ByteSequence.prototype.loadFromBigUint64Iterable()", () => {
   const b = ByteSequence.create(16);
-  b.loadBigUint64Iterable([0xFFF0123466554433n, 1n]);
+  b.loadFromBigUint64Iterable([0xFFF0123466554433n, 1n]);
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 16);
   assertStrictEquals(bytes[0], 0x33);
@@ -24,7 +24,7 @@ Deno.test("ByteSequence.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes[15], 0);
 
   const b2 = ByteSequence.create(16);
-  b2.loadBigUint64Iterable([0xFFF0123466554433n, 1n], {
+  b2.loadFromBigUint64Iterable([0xFFF0123466554433n, 1n], {
     byteOrder: "big-endian",
   });
   const bytes2 = new Uint8Array(b2.toArrayBufferWithDetach());
@@ -47,7 +47,7 @@ Deno.test("ByteSequence.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes2[15], 1);
 
   const b3 = ByteSequence.create(16);
-  b3.loadBigUint64Iterable([0xFFF0123466554433n, 1n], {
+  b3.loadFromBigUint64Iterable([0xFFF0123466554433n, 1n], {
     byteOrder: "little-endian",
   });
   const bytes3 = new Uint8Array(b3.toArrayBufferWithDetach());
@@ -70,11 +70,11 @@ Deno.test("ByteSequence.prototype.loadBigUint64Iterable()", () => {
   assertStrictEquals(bytes3[15], 0);
 });
 
-Deno.test("ByteSequence.prototype.loadBigUint64Iterable() - error", () => {
+Deno.test("ByteSequence.prototype.loadFromBigUint64Iterable() - error", () => {
   const b3 = ByteSequence.create(16);
   assertThrows(
     () => {
-      b3.loadBigUint64Iterable(255 as unknown as bigint[]);
+      b3.loadFromBigUint64Iterable(255 as unknown as bigint[]);
     },
     TypeError,
     "Input must be an `Iterable`",
@@ -83,17 +83,17 @@ Deno.test("ByteSequence.prototype.loadBigUint64Iterable() - error", () => {
   const b4 = ByteSequence.create(16);
   assertThrows(
     () => {
-      b4.loadBigUint64Iterable([255n, "x" as unknown as bigint]);
+      b4.loadFromBigUint64Iterable([255n, "x" as unknown as bigint]);
     },
     TypeError,
     "Input must be a `bigint`", //XXX 主語を変えたい
   );
 });
 
-Deno.test("ByteSequence.prototype.loadBigUint64Iterable() - insertAt", () => {
+Deno.test("ByteSequence.prototype.loadFromBigUint64Iterable() - insertAt", () => {
   const b = ByteSequence.create(64);
-  b.loadBigUint64Iterable([0xFFF0123466554433n, 1n]);
-  b.loadBigUint64Iterable([0xFFF0123466554433n, 1n], { insertAt: 1 });
+  b.loadFromBigUint64Iterable([0xFFF0123466554433n, 1n]);
+  b.loadFromBigUint64Iterable([0xFFF0123466554433n, 1n], { insertAt: 1 });
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 17);
   assertStrictEquals(bytes[0], 0x33);
