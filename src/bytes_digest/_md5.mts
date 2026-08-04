@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import { _Type } from "../_common/mod.mts";
-import { _Builder } from "..//byte_sequence/mod.mts";
+import { ByteSequence } from "..//byte_sequence/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Uint32 } from "../numerics/mod.mts";
 
@@ -310,11 +310,11 @@ function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
     byteOffset = byteOffset + _BLOCK_BYTES;
   }
 
-  const builder = _Builder.create(Uint32.BYTE_LENGTH * 4); //TODO
+  const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4); //TODO
   builder.loadUint32Iterable(contextState, {
     byteOrder: ByteOrder.LITTLE_ENDIAN,
   });
-  return builder.toArrayBuffer();
+  return builder.toArrayBufferWithDetach();
 }
 
 /**
