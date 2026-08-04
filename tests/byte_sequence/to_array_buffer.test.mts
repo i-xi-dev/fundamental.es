@@ -30,18 +30,3 @@ Deno.test("ByteSequence.prototype.toArrayBuffer()", () => {
   assertStrictEquals(ab1bb[0], 255);
   assertStrictEquals(bs1.toBytes()[0], 255);
 });
-
-Deno.test("ByteSequence.prototype.toArrayBuffer() - byteLength", () => {
-  const bs1 = ByteSequence.create(64);
-  bs1.loadUint8Iterable(Uint8Array.of(255, 0, 127, 1));
-
-  const ab1a = bs1.toArrayBuffer({ byteLength: 3 });
-
-  assertStrictEquals(ab1a.byteLength, 3);
-
-  const ab1ab = new Uint8Array(ab1a);
-
-  assertStrictEquals(ab1ab[0], 255);
-  assertStrictEquals(ab1ab[1], 0);
-  assertStrictEquals(ab1ab[2], 127);
-});

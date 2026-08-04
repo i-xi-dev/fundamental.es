@@ -389,6 +389,20 @@ export class ByteSequence {
     return this.loadArrayBuffer(_randomBytes(byteLength), options);
   }
 
+  toArrayBuffer(): ArrayBuffer {
+    this.#assertAccessible();
+    return this.#buffer.slice(0, this.#loadedCount);
+  }
+
+  toBytes(): _Type.Bytes {
+    // this.#assertAccessible(); toArrayBufferで実施
+    return new Uint8Array(this.toArrayBuffer());
+  }
+
+  toArray(): Array<_Type.uint8> {
+    return Array.from(this.toBytes()) as Array<_Type.uint8>;
+  }
+
   //TODO
   // WebSocketStream なんかは ReadableStream<ArrayBuffer>
   // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
@@ -406,6 +420,8 @@ export class ByteSequence {
   //   return this;
   // }
 
+  //XXX toUint8Iterable, , ...
+
   #getSublength(options?: _ToOptions): _Type.safeint {
     if (
       _Type.isSafeInt(options?.byteLength) && isNonNegative(options.byteLength)
@@ -415,17 +431,11 @@ export class ByteSequence {
     return this.#loadedCount;
   }
 
-  toArrayBuffer(options?: _ToOptions): ArrayBuffer {
-    this.#assertAccessible();
-    return this.#buffer.slice(0, this.#getSublength(options));
-  }
-
-  toBytes(options?: _ToOptions): _Type.Bytes {
-    // this.#assertAccessible(); toArrayBufferで実施
-    return new Uint8Array(this.toArrayBuffer(options));
-  }
-
-  //XXX toUint8Iterable, toArray, ...
+  // subsequence(options?: _ToOptions): _Type.Bytes {
+  //   this.#assertAccessible();
+  //   const buffer = this.#buffer.slice(0, this.#getSublength(options));
+  //   return new Uint8Array(buffer);
+  // }
 
   toArrayBufferWithDetach(options?: _ToOptions): ArrayBuffer {
     this.#assertAccessible();
@@ -447,10 +457,6 @@ export class ByteSequence {
   // 書き換え可能状態なので注意
   #loadedBytes(): _Type.Bytes {
     return this.#view.subarray(0, this.#loadedCount);
-  }
-
-  toArray(options?: _ToOptions): Array<_Type.uint8> { //TODO options
-    return Array.from(this.#loadedBytes()) as Array<_Type.uint8>;
   }
 
   #assertOffsetInRangeOrNull(
@@ -547,5 +553,9 @@ export class ByteSequence {
 
 // export namespace ByteSequence {
 //   export function fromArrayBuffer() {
+//   }
+//   export function fromBytes() {
+//   }
+//   export function fromArray() {
 //   }
 // }
