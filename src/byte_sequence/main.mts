@@ -406,9 +406,26 @@ export class ByteSequence {
   //   return this;
   // }
 
-  toArrayBuffer(options?: _ToOptions): ArrayBuffer { //TODO options
-    return this.#buffer.slice(0, this.#loadedCount);
+  #getSublength(options?: _ToOptions): _Type.safeint {
+    if (
+      _Type.isSafeInt(options?.byteLength) && isNonNegative(options.byteLength)
+    ) {
+      return Math.min(options.byteLength, this.#loadedCount);
+    }
+    return this.#loadedCount;
   }
+
+  toArrayBuffer(options?: _ToOptions): ArrayBuffer {
+    this.#assertAccessible();
+    return this.#buffer.slice(0, this.#getSublength(options));
+  }
+
+  toBytes(options?: _ToOptions): _Type.Bytes {
+    // this.#assertAccessible(); toArrayBufferで実施
+    return new Uint8Array(this.toArrayBuffer(options));
+  }
+
+  //XXX toUint8Iterable, toArray, ...
 
   toArrayBufferWithDetach(options?: _ToOptions): ArrayBuffer {
     this.#assertAccessible();
@@ -425,10 +442,6 @@ export class ByteSequence {
 
   toBytesWithDetach(options?: _ToOptions): _Type.Bytes {
     return new Uint8Array(this.toArrayBufferWithDetach(options));
-  }
-
-  toBytes(options?: _ToOptions): _Type.Bytes { //TODO options
-    return this.#loadedBytes().slice();
   }
 
   // 書き換え可能状態なので注意
@@ -531,3 +544,8 @@ export class ByteSequence {
     }
   }
 }
+
+// export namespace ByteSequence {
+//   export function fromArrayBuffer() {
+//   }
+// }
