@@ -102,7 +102,7 @@ export class ByteSequence {
   }
 
   get [Symbol.toStringTag](): string {
-    return "ByteSequenceBuilder";
+    return "ByteSequence";
   }
 
   get detached(): boolean {
@@ -113,6 +113,18 @@ export class ByteSequence {
     this.#assertAccessible();
     return this.#buffer.byteLength;
   }
+
+  get maxCapacity(): _Type.safeint {
+    this.#assertAccessible();
+    return this.#buffer.maxByteLength;
+  }
+
+  get count(): _Type.safeint {
+    this.#assertAccessible();
+    return this.#loadedCount;
+  }
+
+  //TODO resizable
 
   static create(
     capacity: _Type.safeint,
@@ -140,6 +152,10 @@ export class ByteSequence {
       this.#appendByte(clamped);
     }
     return this;
+  }
+
+  loadByte(byte: _Type.safeint, options?: _LoadOptions_1): this {
+    return this.loadUint8(byte, options);
   }
 
   // - sourceBufferの部分範囲だけ追加したければ切り出してから渡せば良い
@@ -186,6 +202,10 @@ export class ByteSequence {
       }
     }
     return this;
+  }
+
+  loadBytes(bytes: _Type.Bytes, options?: _LoadOptions_1): this {
+    return this.loadUint8Iterable(bytes, options);
   }
 
   async loadUint8AsyncIterable(
@@ -400,6 +420,7 @@ export class ByteSequence {
   }
 
   toArray(): Array<_Type.uint8> {
+    // this.#assertAccessible(); toArrayBufferで実施
     return Array.from(this.toBytes()) as Array<_Type.uint8>;
   }
 
@@ -551,11 +572,30 @@ export class ByteSequence {
   }
 }
 
-// export namespace ByteSequence {
-//   export function fromArrayBuffer() {
-//   }
-//   export function fromBytes() {
-//   }
-//   export function fromArray() {
-//   }
-// }
+type _FromOptions = {
+  maxCapacity?: _Type.safeint;
+};
+
+export namespace ByteSequence {
+  export function fromArrayBuffer(
+    src: ArrayBuffer,
+    options?: _FromOptions,
+  ): ByteSequence {
+    _Assert.arrayBuffer(src, "Input");
+
+    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
+        isNonNegative(options.maxCapacity))
+      ? ByteSequence.create(
+        src.byteLength,
+        Math.max(src.byteLength, options.maxCapacity),
+      )
+      : ByteSequence.create(src.byteLength);
+    sq.loadArrayBuffer(src);
+    return sq;
+  }
+
+  //   export function fromBytes() {
+  //   }
+  //   export function fromArray() {
+  //   }
+}
