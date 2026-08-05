@@ -762,6 +762,9 @@ export namespace ByteSequence {
     return fromBytes(bytes, options);
   }
 
-  //XXX fromText()
+  // // UTF-8
+  // export function fromText(text: string): ByteSequence {
+  // }
+
   //XXX fromStream()
 }
