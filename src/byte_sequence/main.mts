@@ -5,6 +5,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
+import { Base64, BinaryString } from "../bytes_encoding/mod.mts";
 import {
   BigUint,
   BigUint64,
@@ -15,6 +16,7 @@ import {
   Uint8,
 } from "../numerics/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { Md5 } from "../bytes_digest/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -86,19 +88,10 @@ export class ByteSequence {
   readonly #view: Uint8Array<ArrayBuffer>;
   #loadedCount: _Type.safeint; // 進むのみ。戻す手段は提供しない
 
-  private constructor(capacity: _Type.safeint, maxCapacity?: _Type.safeint) {
-    const { resizable, maxByteLength } = _normalizeResizer(
-      capacity,
-      maxCapacity,
-    );
-    if (resizable === true) {
-      this.#buffer = new ArrayBuffer(capacity, { maxByteLength });
-    } else {
-      this.#buffer = new ArrayBuffer(capacity);
-    }
-
+  private constructor(buffer: ArrayBuffer, initialCount: _Type.safeint) {
+    this.#buffer = buffer;
     this.#view = new Uint8Array(this.#buffer);
-    this.#loadedCount = 0;
+    this.#loadedCount = initialCount;
   }
 
   get [Symbol.toStringTag](): string {
@@ -137,7 +130,20 @@ export class ByteSequence {
     if (_Type.isNullOrUndefined(maxCapacity) !== true) {
       _Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
-    return new ByteSequence(capacity, maxCapacity);
+
+    const { resizable, maxByteLength } = _normalizeResizer(
+      capacity,
+      maxCapacity,
+    );
+    const buffer = (resizable === true)
+      ? new ArrayBuffer(capacity, { maxByteLength })
+      : new ArrayBuffer(capacity);
+
+    return new ByteSequence(buffer, 0);
+  }
+
+  static #wrap(buffer: ArrayBuffer): ByteSequence {
+    return new ByteSequence(buffer, buffer.byteLength);
   }
 
   setByte(byte: _Type.safeint, options?: _LoadOptions_1): this {
@@ -426,6 +432,48 @@ export class ByteSequence {
     return Array.from(this.toBytes()) as Array<_Type.uint8>;
   }
 
+  toBase64(options?: Base64.EncoderOptions): string {
+    this.#assertAccessible();
+    return this.#loadedBytes().toBase64(options);
+  }
+
+  toBinaryString(): string {
+    this.#assertAccessible();
+    return BinaryString.encode(this.#loadedBytes());
+  }
+
+  toHex(): string {
+    this.#assertAccessible();
+    return this.#loadedBytes().toHex();
+  }
+
+  //XXX toPercent()
+
+  async toMd5(): Promise<ByteSequence> {
+    const bytes = await Md5.compute(this.#loadedBytes());
+    return ByteSequence.#wrap(bytes.buffer);
+  }
+
+  startsWith(other: ByteSequence | _Comparable): boolean {
+    this.#assertAccessible();
+
+    if (other instanceof ByteSequence) {
+      return _bytesStartsWith(this.#loadedBytes(), other.#loadedBytes());
+    } else {
+      return _bytesStartsWith(this.#loadedBytes(), other);
+    }
+  }
+
+  equals(other: ByteSequence | _Comparable): boolean {
+    this.#assertAccessible();
+
+    if (other instanceof ByteSequence) {
+      return _bytesEquals(this.#loadedBytes(), other.#loadedBytes());
+    } else {
+      return _bytesEquals(this.#loadedBytes(), other);
+    }
+  }
+
   //TODO
   // WebSocketStream なんかは ReadableStream<ArrayBuffer>
   // TextEncoderStream なんかは ReadableStream<Uint8Array<ArrayBuffer>>
@@ -552,26 +600,6 @@ export class ByteSequence {
 
     //TODO 非同期操作中もエラーにする
   }
-
-  startsWith(other: ByteSequence | _Comparable): boolean {
-    this.#assertAccessible();
-
-    if (other instanceof ByteSequence) {
-      return _bytesStartsWith(this.#loadedBytes(), other.#loadedBytes());
-    } else {
-      return _bytesStartsWith(this.#loadedBytes(), other);
-    }
-  }
-
-  equals(other: ByteSequence | _Comparable): boolean {
-    this.#assertAccessible();
-
-    if (other instanceof ByteSequence) {
-      return _bytesEquals(this.#loadedBytes(), other.#loadedBytes());
-    } else {
-      return _bytesEquals(this.#loadedBytes(), other);
-    }
-  }
 }
 
 type _FromOptions = {
@@ -584,6 +612,14 @@ type _FromOptions_1 = {
 };
 
 export namespace ByteSequence {
+  export function zeros(byteLength: _Type.safeint, options?: _FromOptions) {
+    //TODO
+  }
+
+  export function random(byteLength: _Type.safeint, options?: _FromOptions) {
+    //TODO
+  }
+
   export function fromArrayBuffer(
     src: ArrayBuffer,
     options?: _FromOptions,
@@ -613,16 +649,7 @@ export namespace ByteSequence {
     options?: _FromOptions,
   ): ByteSequence {
     _Assert.nonSharedUint8Array(src, "Input");
-
-    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
-        isNonNegative(options.maxCapacity))
-      ? ByteSequence.create(
-        src.byteLength,
-        Math.max(src.byteLength, options.maxCapacity),
-      )
-      : ByteSequence.create(src.byteLength);
-    sq.loadFromUint8Iterable(src);
-    return sq;
+    return fromArrayBuffer(src.buffer, options);
   }
 
   export function fromArray(
@@ -644,11 +671,21 @@ export namespace ByteSequence {
 
   //XXX fromUint8AsyncIterable() length不明なので見積を指定させる
 
-  export function zeros(byteLength: _Type.safeint, options?: _FromOptions) {
-    //TODO
+  export function fromBase64(
+    base64: string,
+    options?: Base64.DecoderOptions & _FromOptions,
+  ): ByteSequence {
+    _Assert.string(base64, "Input");
+
+    const bytes = Uint8Array.fromBase64(base64, options);
+    return fromBytes(bytes, options);
   }
 
-  export function random(byteLength: _Type.safeint, options?: _FromOptions) {
-    //TODO
+  export function fromBinaryString() {
   }
+
+  export function fromHex() {
+  }
+
+  //XXX fromPercent()
 }
