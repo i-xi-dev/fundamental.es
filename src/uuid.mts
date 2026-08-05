@@ -1,6 +1,6 @@
 import { _Error, _Type, StringUtils } from "./_common/mod.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
-import { ByteOrder } from "./byte_order.mts";
+import { _bytesEquals } from "./byte_sequence/_utils.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -13,9 +13,9 @@ export interface Uuid {
   get version(): _Type.uint4;
   get timestamp(): _Type.safeint | null;
   toString(options?: _ToStringOptions): string;
-  toBigUint128(): _Type.biguint128;
+  // toBigUint128(): _Type.biguint128;
   toBytes(): _Type.Bytes;
-  //TODO equals(other: Uuid | _Type.Bytes | string): boolean;
+  equals(other: Uuid | _Type.Bytes | string): boolean;
 }
 
 const _BYTES_SIZE = 16;
@@ -78,13 +78,31 @@ class _Uuid implements Uuid {
     return (options?.asUrn === true) ? `urn:uuid:${str}` : str;
   }
 
-  toBigUint128(): _Type.biguint128 {
-    return BigInt(`0x${this.#bytes.toHex()}`);
-  }
+  // toBigUint128(): _Type.biguint128 {
+  //   return BigInt(`0x${this.#bytes.toHex()}`);
+  // }
 
   toBytes(): _Type.Bytes {
     return Uint8Array.from(this.#bytes);
   }
+
+  equals(other: Uuid | _Type.Bytes | string): boolean {
+    if (other instanceof _Uuid) {
+      return _bytesEquals(this.#bytes, other.#bytes);
+    } else if (_Type.isNonSharedUint8Array(other) === true) {
+      return _bytesEquals(this.#bytes, other);
+    } else if (_isUuidString(other) === true) {
+      return _bytesEquals(this.#bytes, _fromString(other).toBytes());
+    } else {
+      return false;
+    }
+  }
+}
+
+function _fromString(str: string): Uuid {
+  const hex = str.replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
+  const bytes = Uint8Array.fromHex(hex);
+  return new _Uuid(bytes);
 }
 
 function _generateRandom(): _Type.Bytes {
@@ -195,20 +213,17 @@ export namespace Uuid {
     if (_isUuidString(str) !== true) {
       throw _Error.Type.custom("Input", "an UUID of type `string`");
     }
-
-    const hex = str.replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
-    const bytes = Uint8Array.fromHex(hex);
-    return new _Uuid(bytes);
+    return _fromString(str);
   }
 
-  export function fromBigUint128(uint: _Type.biguint128): Uuid {
-    if (_isUuidBigInt(uint) !== true) {
-      throw _Error.Type.custom("Input", "an UUID of type `bigint`");
-    }
-
-    const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
-    return new _Uuid(bytes);
-  }
+  // export function fromBigUint128(uint: _Type.biguint128): Uuid {
+  //   if (_isUuidBigInt(uint) !== true) {
+  //     throw _Error.Type.custom("Input", "an UUID of type `bigint`");
+  //   }
+  //
+  //   const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
+  //   return new _Uuid(bytes);
+  // }
 
   export function fromBytes(bytes: _Type.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
