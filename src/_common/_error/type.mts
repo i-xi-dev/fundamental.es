@@ -1,4 +1,4 @@
-import { _Type } from "../../_common/mod.mts";
+import { safeint } from "../_type/mod.mts";
 
 function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
@@ -19,7 +19,7 @@ export function bigInt(target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function bigUintN(bits: _Type.safeint, target: string): TypeError {
+export function bigUintN(bits: safeint, target: string): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`bigint\``,
@@ -65,12 +65,17 @@ export function safeInt(target: string): TypeError {
   return new TypeError(msg);
 }
 
+export function safeIntArray(target: string): TypeError {
+  const msg = _message(target, "an `Array` of safe-integers of type `number`");
+  return new TypeError(msg);
+}
+
 export function string(target: string): TypeError {
   const msg = _message(target, "a `string`");
   return new TypeError(msg);
 }
 
-export function uintN(bits: _Type.safeint, target: string): TypeError {
+export function uintN(bits: safeint, target: string): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`number\``,

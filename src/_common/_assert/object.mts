@@ -1,6 +1,15 @@
 import * as _Type from "../_type/mod.mts";
 import * as _TypeError from "../_error/type.mts";
 
+export function safeIntArray(
+  test: unknown,
+  targetLabel: string,
+): asserts test is Array<_Type.safeint> {
+  if (_Type.isSafeIntArray(test) !== true) {
+    throw _TypeError.safeIntArray(targetLabel);
+  }
+}
+
 export function iterable<T>(
   test: unknown,
   targetLabel: string,

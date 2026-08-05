@@ -675,10 +675,7 @@ export namespace ByteSequence {
     options?: _FromOptions,
   ) {
     _Assert.nonNegativeSafeInt(byteLength, "Input");
-
-    const sq = _create(byteLength, options);
-    sq.fillZeros(byteLength);
-    return sq;
+    return _create(byteLength, options).fillZeros(byteLength);
   }
 
   export function randomFilled(
@@ -686,10 +683,7 @@ export namespace ByteSequence {
     options?: _FromOptions,
   ) {
     _Assert.nonNegativeSafeInt(byteLength, "Input");
-
-    const sq = _create(byteLength, options);
-    sq.fillRandom(byteLength);
-    return sq;
+    return _create(byteLength, options).fillRandom(byteLength);
   }
 
   export function fromArrayBuffer(
@@ -697,10 +691,7 @@ export namespace ByteSequence {
     options?: _FromOptions,
   ): ByteSequence {
     _Assert.arrayBuffer(src, "Input");
-
-    const sq = _create(src.byteLength, options);
-    sq.loadFromArrayBuffer(src);
-    return sq;
+    return _create(src.byteLength, options).loadFromArrayBuffer(src);
   }
 
   //XXX lengthが不明の場合どうする
@@ -722,11 +713,8 @@ export namespace ByteSequence {
     src: Array</* _Type.uint8 */ _Type.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
-    //TODO assert src
-
-    const sq = _create(src.length, options);
-    sq.loadFromUint8Iterable(src);
-    return sq;
+    _Assert.safeIntArray(src, "Input");
+    return _create(src.length, options).loadFromUint8Iterable(src);
   }
 
   //XXX fromUint8AsyncIterable() length不明なので見積を指定させる
