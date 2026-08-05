@@ -6,6 +6,6 @@ export function bigInt(
   targetLabel: string,
 ): asserts test is bigint {
   if (_Type.isBigInt(test) !== true) {
-    throw _Error.Type.bigInt(targetLabel);
+    throw _Error.Type.mustBeBigInt(targetLabel);
   }
 }

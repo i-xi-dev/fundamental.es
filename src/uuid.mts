@@ -211,14 +211,14 @@ export namespace Uuid {
 
   export function fromString(str: string): Uuid {
     if (_isUuidString(str) !== true) {
-      throw _Error.Type.custom("Input", "an UUID of type `string`");
+      throw _Error.Type.mustBe("an UUID of type `string`", "Input");
     }
     return _fromString(str);
   }
 
   // export function fromBigUint128(uint: _Type.biguint128): Uuid {
   //   if (_isUuidBigInt(uint) !== true) {
-  //     throw _Error.Type.custom("Input", "an UUID of type `bigint`");
+  //     throw _Error.Type.mustBe("an UUID of type `bigint`", "Input");
   //   }
   //
   //   const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
@@ -227,9 +227,9 @@ export namespace Uuid {
 
   export function fromBytes(bytes: _Type.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
-      throw _Error.Type.custom(
-        "Input",
+      throw _Error.Type.mustBe(
         "an UUID bytes of type `Uint8Array<ArrayBuffer>`",
+        "Input",
       );
     }
 

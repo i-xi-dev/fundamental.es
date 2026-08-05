@@ -6,7 +6,7 @@ export function safeIntArray(
   targetLabel: string,
 ): asserts test is Array<_Type.safeint> {
   if (_Type.isSafeIntArray(test) !== true) {
-    throw _TypeError.safeIntArray(targetLabel);
+    throw _TypeError.mustBeSafeIntArray(targetLabel);
   }
 }
 
@@ -15,7 +15,7 @@ export function iterable<T>(
   targetLabel: string,
 ): asserts test is Iterable<T> {
   if (_Type.isIterable(test) !== true) {
-    throw _TypeError.iterable(targetLabel);
+    throw _TypeError.mustBeIterable(targetLabel);
   }
 }
 
@@ -24,7 +24,7 @@ export function asyncIterable<T>(
   targetLabel: string,
 ): asserts test is AsyncIterable<T> {
   if (_Type.isAsyncIterable(test) !== true) {
-    throw _TypeError.asyncIterable(targetLabel);
+    throw _TypeError.mustBeAsyncIterable(targetLabel);
   }
 }
 
@@ -33,7 +33,7 @@ export function arrayBuffer(
   targetLabel: string,
 ): asserts test is ArrayBuffer {
   if (_Type.isArrayBuffer(test) !== true) {
-    throw _TypeError.arrayBuffer(targetLabel);
+    throw _TypeError.mustBeArrayBuffer(targetLabel);
   }
 }
 
@@ -42,6 +42,6 @@ export function nonSharedUint8Array(
   targetLabel: string,
 ): asserts test is Uint8Array<ArrayBuffer> {
   if (_Type.isNonSharedUint8Array(test) !== true) {
-    throw _TypeError.bytes(targetLabel);
+    throw _TypeError.mustBeBytes(targetLabel);
   }
 }

@@ -8,7 +8,7 @@ const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする
 export function _decode(text: string): _Type.Bytes {
   _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
-    throw _Error.Syntax.latin1("Input");
+    throw _Error.Syntax.mustBeBinaryString("Input");
   }
 
   return Uint8Array.from(text, (char) => char.charCodeAt(0)); // 第1引数はIterable<コードポイント単位>になるが、0xFF以上は弾いているので問題ない

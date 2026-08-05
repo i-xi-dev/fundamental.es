@@ -7,7 +7,7 @@ export function finite(
   targetLabel: string,
 ): asserts test is _Type.finite {
   if (_Type.isFinite(test) !== true) {
-    throw _TypeError.finite(targetLabel);
+    throw _TypeError.mustBeFinite(targetLabel);
   }
 }
 
@@ -16,7 +16,7 @@ export function safeInt(
   targetLabel: string,
 ): asserts test is _Type.safeint {
   if (_Type.isSafeInt(test) !== true) {
-    throw _TypeError.safeInt(targetLabel);
+    throw _TypeError.mustBeSafeInt(targetLabel);
   }
 }
 
@@ -25,6 +25,6 @@ export function nonNegativeSafeInt(
   targetLabel: string,
 ): asserts test is _Type.safeint {
   if ((_Type.isSafeInt(test) && isNonNegative(test)) !== true) {
-    throw _TypeError.nonNegativeSafeInt(targetLabel);
+    throw _TypeError.mustBeNonNegativeSafeInt(targetLabel);
   }
 }

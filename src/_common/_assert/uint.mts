@@ -6,6 +6,6 @@ export function uint8(
   targetLabel: string,
 ): asserts test is _Type.uint8 {
   if (_Type.isUint8(test) !== true) {
-    throw _TypeError.uintN(8, targetLabel);
+    throw _TypeError.mustBeUintN(8, targetLabel);
   }
 }

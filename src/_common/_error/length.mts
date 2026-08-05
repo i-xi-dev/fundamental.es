@@ -30,7 +30,7 @@ function _message(
   return `The ${s1} must be ${len}${s2}`;
 }
 
-export function charsCount(
+export function charsCount( //TODO _Error.CharsCount.mismatchに分離する
   target: string,
   expectedCount: _Type.safeint,
 ): RangeError {
@@ -43,7 +43,7 @@ export function charsCount(
   return new RangeError(msg);
 }
 
-export function charsTooLong(
+export function charsTooLong( //TODO _Error.CharsCount.tooLongに分離する
   target: string,
   upperBound: _Type.safeint,
 ): RangeError {
@@ -51,7 +51,7 @@ export function charsTooLong(
   return new RangeError(msg);
 }
 
-export function charsTooShort(
+export function charsTooShort( //TODO _Error.CharsCount.tooShortに分離する
   target: string,
   lowerBound: _Type.safeint,
 ): RangeError {

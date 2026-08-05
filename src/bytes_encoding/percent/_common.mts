@@ -46,7 +46,7 @@ export function _decode(
 ): _Type.Bytes {
   _Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
-    throw _Error.Syntax.asciiWithoutCc("Input");
+    throw _Error.Syntax.mustBePercentEncoded("Input");
   }
 
   const decoded = new Uint8Array(text.length); // 0x20-0x7E以外を含んでいたらエラーにしている為decoded.lengthがtext.lengthより増えることは無い

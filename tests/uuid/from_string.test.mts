@@ -34,4 +34,12 @@ Deno.test("Uuid.fromString()", () => {
     TypeError,
     "Input must be an UUID of type `string`",
   );
+
+  assertThrows(
+    () => {
+      Uuid.fromString("0123456789ABCDEF0123456789ABCDEF");
+    },
+    TypeError,
+    "Input must be an UUID of type `string`",
+  );
 });

@@ -4,22 +4,27 @@ function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
 }
 
-export function arrayBuffer(target: string): TypeError {
+export function mustBe(typeDesc: string, target: string): TypeError {
+  const msg = _message(target, typeDesc);
+  return new TypeError(msg);
+}
+
+export function mustBeArrayBuffer(target: string): TypeError {
   const msg = _message(target, "an `ArrayBuffer`");
   return new TypeError(msg);
 }
 
-export function asyncIterable(target: string): TypeError {
+export function mustBeAsyncIterable(target: string): TypeError {
   const msg = _message(target, "an `AsyncIterable`");
   return new TypeError(msg);
 }
 
-export function bigInt(target: string): TypeError {
+export function mustBeBigInt(target: string): TypeError {
   const msg = _message(target, "a `bigint`");
   return new TypeError(msg);
 }
 
-export function bigUintN(bits: safeint, target: string): TypeError {
+export function mustBeBigUintN(bits: safeint, target: string): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`bigint\``,
@@ -27,7 +32,7 @@ export function bigUintN(bits: safeint, target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function bytes(target: string): TypeError {
+export function mustBeBytes(target: string): TypeError {
   const msg = _message(
     target,
     "an `Uint8Array` that references an `ArrayBuffer`",
@@ -35,47 +40,42 @@ export function bytes(target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function custom(target: string, typeDesc: string): TypeError {
-  const msg = _message(target, typeDesc);
-  return new TypeError(msg);
-}
-
-export function finite(target: string): TypeError {
+export function mustBeFinite(target: string): TypeError {
   const msg = _message(target, "a finite number of type `number`");
   return new TypeError(msg);
 }
 
-export function iterable(target: string): TypeError {
+export function mustBeIterable(target: string): TypeError {
   const msg = _message(target, "an `Iterable`");
   return new TypeError(msg);
 }
 
-export function nonEmptyString(target: string): TypeError {
+export function mustBeNonEmptyString(target: string): TypeError {
   const msg = _message(target, "a `string` with a length of at least 1.");
   return new TypeError(msg);
 }
 
-export function nonNegativeSafeInt(target: string): TypeError {
+export function mustBeNonNegativeSafeInt(target: string): TypeError {
   const msg = _message(target, "a non-negative safe-integer of type `number`");
   return new TypeError(msg);
 }
 
-export function safeInt(target: string): TypeError {
+export function mustBeSafeInt(target: string): TypeError {
   const msg = _message(target, "a safe-integer of type `number`");
   return new TypeError(msg);
 }
 
-export function safeIntArray(target: string): TypeError {
+export function mustBeSafeIntArray(target: string): TypeError {
   const msg = _message(target, "an `Array` of safe-integers of type `number`");
   return new TypeError(msg);
 }
 
-export function string(target: string): TypeError {
+export function mustBeString(target: string): TypeError {
   const msg = _message(target, "a `string`");
   return new TypeError(msg);
 }
 
-export function uintN(bits: safeint, target: string): TypeError {
+export function mustBeUintN(bits: safeint, target: string): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`number\``,

@@ -118,10 +118,10 @@ export class MediaType {
     parameters: Array<_Parameter> = [],
   ) {
     if (StringUtils.rangesMatches(typeName, RangeSet.HTTP_TOKEN) !== true) {
-      throw _Error.Type.custom("Type", "a valid type of MIME type");
+      throw _Error.Type.mustBe("a valid type of MIME type", "Type");
     }
     if (StringUtils.rangesMatches(subtypeName, RangeSet.HTTP_TOKEN) !== true) {
-      throw _Error.Type.custom("Subtype", "a valid subtype of MIME type");
+      throw _Error.Type.mustBe("a valid subtype of MIME type", "Subtype");
     }
 
     const parameterMap = new Map(parameters.map((entry) => {
@@ -131,9 +131,9 @@ export class MediaType {
       ];
     }));
     if (parameters.length !== parameterMap.size) {
-      throw _Error.Type.custom(
-        "Parameters",
+      throw _Error.Type.mustBe(
         "an `Array` that does not contain duplicate parameters",
+        "Parameters",
       );
     }
 
@@ -230,9 +230,9 @@ export class MediaType {
     const { collected: typeName, progression: typeNameLength } =
       _collectTypeName(work);
     if (typeNameLength <= 0) {
-      throw _Error.Type.custom(
-        "Input",
+      throw _Error.Type.mustBe(
         "a string starting with a valid MIME type’s type",
+        "Input",
       );
     }
 

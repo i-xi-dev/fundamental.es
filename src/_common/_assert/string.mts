@@ -6,7 +6,7 @@ export function string(
   targetLabel: string,
 ): asserts test is string {
   if (_Type.isString(test) !== true) {
-    throw _TypeError.string(targetLabel);
+    throw _TypeError.mustBeString(targetLabel);
   }
 }
 
@@ -15,6 +15,6 @@ export function nonEmptyString(
   targetLabel: string,
 ): asserts test is string {
   if (_Type.isNonEmptyString(test) !== true) {
-    throw _TypeError.nonEmptyString(targetLabel);
+    throw _TypeError.mustBeNonEmptyString(targetLabel);
   }
 }

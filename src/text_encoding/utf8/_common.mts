@@ -1,4 +1,6 @@
-import { _Type } from "../../_common/mod.mts";
+import { _Error, _Type } from "../../_common/mod.mts";
+
+export const _NAME = "UTF-8";
 
 export type _Utf8EncoderOptions = {
   prependBOM?: boolean;
@@ -24,7 +26,9 @@ export function _encode(
   encoder: TextEncoder = _getEncoder(),
 ): _Type.Bytes {
   if (options.fatal === true) {
-    //TODO 孤立サロゲートを含んでいたらエラー
+    if (text.isWellFormed() !== true) {
+      throw _Error.TextEncoding.encodingFailed(_NAME, "Input");
+    }
   }
 
   if ((options.prependBOM === true) && (text.startsWith("\uFEFF") !== true)) {

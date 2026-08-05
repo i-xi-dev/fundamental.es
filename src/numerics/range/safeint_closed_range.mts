@@ -17,7 +17,7 @@ class _SafeIntClosedRangeImpl<T extends _Type.safeint = _Type.safeint>
   }
 
   protected override _typeError(): TypeError {
-    return _Error.Type.safeInt("Input");
+    return _Error.Type.mustBeSafeInt("Input");
   }
 }
 
