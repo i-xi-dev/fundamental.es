@@ -22,4 +22,16 @@ Deno.test("Uuid.prototype.equals()", () => {
     u0.equals(Uint8Array.fromHex("0123456789ABCDEF0123456789ABCDEF")),
     true,
   );
+  assertStrictEquals(
+    u0.equals(Uint8Array.fromHex("0124456789ABCDEF0123456789ABCDEF")),
+    false,
+  );
+  assertStrictEquals(
+    u0.equals(Uint8Array.fromHex("0123456789ABCDEF0123456789ABCDEF00")),
+    false,
+  );
+  assertStrictEquals(
+    u0.equals(Uint8Array.fromHex("0123456789ABCDEF0123456789ABCD")),
+    false,
+  );
 });

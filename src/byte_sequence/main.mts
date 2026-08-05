@@ -659,13 +659,37 @@ type _FromOptions_1 = {
   clampMode?: _ClampMode;
 };
 
+function _create(
+  capacity: _Type.safeint,
+  options?: _FromOptions,
+): ByteSequence {
+  return (_Type.isSafeInt(options?.maxCapacity) &&
+      isNonNegative(options.maxCapacity))
+    ? ByteSequence.create(capacity, Math.max(capacity, options.maxCapacity))
+    : ByteSequence.create(capacity);
+}
+
 export namespace ByteSequence {
-  export function zeros(byteLength: _Type.safeint, options?: _FromOptions) {
-    //TODO
+  export function zerosFilled(
+    byteLength: _Type.safeint,
+    options?: _FromOptions,
+  ) {
+    _Assert.nonNegativeSafeInt(byteLength, "Input");
+
+    const sq = _create(byteLength, options);
+    sq.fillZeros(byteLength);
+    return sq;
   }
 
-  export function random(byteLength: _Type.safeint, options?: _FromOptions) {
-    //TODO
+  export function randomFilled(
+    byteLength: _Type.safeint,
+    options?: _FromOptions,
+  ) {
+    _Assert.nonNegativeSafeInt(byteLength, "Input");
+
+    const sq = _create(byteLength, options);
+    sq.fillRandom(byteLength);
+    return sq;
   }
 
   export function fromArrayBuffer(
@@ -674,13 +698,7 @@ export namespace ByteSequence {
   ): ByteSequence {
     _Assert.arrayBuffer(src, "Input");
 
-    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
-        isNonNegative(options.maxCapacity))
-      ? ByteSequence.create(
-        src.byteLength,
-        Math.max(src.byteLength, options.maxCapacity),
-      )
-      : ByteSequence.create(src.byteLength);
+    const sq = _create(src.byteLength, options);
     sq.loadFromArrayBuffer(src);
     return sq;
   }
@@ -706,13 +724,7 @@ export namespace ByteSequence {
   ): ByteSequence {
     //TODO assert src
 
-    const sq = (_Type.isSafeInt(options?.maxCapacity) &&
-        isNonNegative(options.maxCapacity))
-      ? ByteSequence.create(
-        src.length,
-        Math.max(src.length, options.maxCapacity),
-      )
-      : ByteSequence.create(src.length);
+    const sq = _create(src.length, options);
     sq.loadFromUint8Iterable(src);
     return sq;
   }

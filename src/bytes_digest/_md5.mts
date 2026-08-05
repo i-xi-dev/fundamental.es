@@ -310,7 +310,7 @@ function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
     byteOffset = byteOffset + _BLOCK_BYTES;
   }
 
-  const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4); //TODO
+  const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4);
   builder.loadFromUint32Iterable(contextState, {
     byteOrder: ByteOrder.LITTLE_ENDIAN,
   });
