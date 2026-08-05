@@ -729,10 +729,24 @@ export namespace ByteSequence {
     return fromBytes(bytes, options);
   }
 
-  export function fromBinaryString() {
+  export function fromBinaryString(
+    binstr: string,
+    options?: _FromOptions,
+  ): ByteSequence {
+    _Assert.string(binstr, "Input");
+
+    const bytes = BinaryString.decode(binstr);
+    return fromBytes(bytes, options);
   }
 
-  export function fromHexEncoded() {
+  export function fromHexEncoded(
+    hexstr: string,
+    options?: _FromOptions,
+  ): ByteSequence {
+    _Assert.string(hexstr, "Input");
+
+    const bytes = Uint8Array.fromHex(hexstr);
+    return fromBytes(bytes, options);
   }
 
   //XXX fromPercentEncoded()
