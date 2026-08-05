@@ -1,0 +1,3 @@
+sha256Integrity(): Promise<string>
+sha384Integrity(): Promise<string>
+sha512Integrity(): Promise<string>

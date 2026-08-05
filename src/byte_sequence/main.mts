@@ -432,7 +432,7 @@ export class ByteSequence {
     return Array.from(this.toBytes()) as Array<_Type.uint8>;
   }
 
-  toBase64(options?: Base64.EncoderOptions): string {
+  toBase64Encoded(options?: Base64.EncoderOptions): string {
     this.#assertAccessible();
     return this.#loadedBytes().toBase64(options);
   }
@@ -442,17 +442,60 @@ export class ByteSequence {
     return BinaryString.encode(this.#loadedBytes());
   }
 
-  toHex(): string {
+  toHexEncoded(): string {
     this.#assertAccessible();
     return this.#loadedBytes().toHex();
   }
 
-  //XXX toPercent()
+  //XXX toPercentEncoded()
 
-  async toMd5(): Promise<ByteSequence> {
+  /** @deprecated */
+  async toMd5Digest(): Promise<ByteSequence> {
+    this.#assertAccessible();
     const bytes = await Md5.compute(this.#loadedBytes());
     return ByteSequence.#wrap(bytes.buffer);
   }
+
+  /** @deprecated */
+  async toSha1Digest(): Promise<ByteSequence> {
+    this.#assertAccessible();
+    const buffer = await globalThis.crypto.subtle.digest(
+      "SHA-1",
+      this.#loadedBytes(),
+    );
+    return ByteSequence.#wrap(buffer);
+  }
+
+  async toSha256Digest(): Promise<ByteSequence> {
+    this.#assertAccessible();
+    const buffer = await globalThis.crypto.subtle.digest(
+      "SHA-256",
+      this.#loadedBytes(),
+    );
+    return ByteSequence.#wrap(buffer);
+  }
+
+  async toSha384Digest(): Promise<ByteSequence> {
+    this.#assertAccessible();
+    const buffer = await globalThis.crypto.subtle.digest(
+      "SHA-384",
+      this.#loadedBytes(),
+    );
+    return ByteSequence.#wrap(buffer);
+  }
+
+  async toSha512Digest(): Promise<ByteSequence> {
+    this.#assertAccessible();
+    const buffer = await globalThis.crypto.subtle.digest(
+      "SHA-512",
+      this.#loadedBytes(),
+    );
+    return ByteSequence.#wrap(buffer);
+  }
+
+  //XXX toUint16Iterable(byteOrder?: ByteOrder): Iterable<number>
+  //XXX toUint32Iterable(byteOrder?: ByteOrder): Iterable<number>
+  //XXX toBigUint64Iterable(byteOrder?: ByteOrder): Iterable<number>
 
   startsWith(other: ByteSequence | _Comparable): boolean {
     this.#assertAccessible();
@@ -473,6 +516,11 @@ export class ByteSequence {
       return _bytesEquals(this.#loadedBytes(), other);
     }
   }
+
+  //XXX duplicate(): ByteSequence
+  //XXX subsequence(): ByteSequence
+  //XXX byteAt(): uint8
+  //XXX [Symbol.iterator](): IterableIterator<uint8>
 
   //TODO
   // WebSocketStream なんかは ReadableStream<ArrayBuffer>
@@ -671,7 +719,7 @@ export namespace ByteSequence {
 
   //XXX fromUint8AsyncIterable() length不明なので見積を指定させる
 
-  export function fromBase64(
+  export function fromBase64Encoded(
     base64: string,
     options?: Base64.DecoderOptions & _FromOptions,
   ): ByteSequence {
@@ -684,8 +732,11 @@ export namespace ByteSequence {
   export function fromBinaryString() {
   }
 
-  export function fromHex() {
+  export function fromHexEncoded() {
   }
 
-  //XXX fromPercent()
+  //XXX fromPercentEncoded()
+
+  //XXX fromText()
+  //XXX fromStream()
 }
