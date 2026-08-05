@@ -5,7 +5,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
-import { Base64, BinaryString } from "../bytes_encoding/mod.mts";
+import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import {
   BigUint,
   BigUint64,
@@ -447,7 +447,10 @@ export class ByteSequence {
     return this.#loadedBytes().toHex();
   }
 
-  //XXX toPercentEncoded()
+  toPercentEncoded(options?: Percent.EncoderOptions): string {
+    this.#assertAccessible();
+    return Percent.encode(this.#loadedBytes(), options);
+  }
 
   /** @deprecated */
   async toMd5Digest(): Promise<ByteSequence> {
@@ -749,7 +752,15 @@ export namespace ByteSequence {
     return fromBytes(bytes, options);
   }
 
-  //XXX fromPercentEncoded()
+  export function fromPercentEncoded(
+    percent: string,
+    options?: Percent.DecoderOptions & _FromOptions,
+  ): ByteSequence {
+    _Assert.string(percent, "Input");
+
+    const bytes = Percent.decode(percent, options);
+    return fromBytes(bytes, options);
+  }
 
   //XXX fromText()
   //XXX fromStream()
