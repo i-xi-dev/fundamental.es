@@ -10,10 +10,14 @@ export { DecoderOptions, EncoderOptions };
 
 export function decode(
   bytes: _Type.Bytes,
-  options?: DecoderOptions & TextDecodeOptions,
+  options?: DecoderOptions, /* & TextDecodeOptions 関数が状態持つのはおかしい */
 ): string {
   const resolvedOptions = DecoderOptions.resolve(options);
-  return _decode(bytes, resolvedOptions, { stream: options?.stream === true });
+  return _decode(
+    bytes,
+    resolvedOptions,
+    /* { stream: options?.stream === true }, */
+  );
 }
 
 export function encode(

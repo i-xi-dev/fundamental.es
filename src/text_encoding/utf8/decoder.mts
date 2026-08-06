@@ -20,7 +20,7 @@ export class Utf8Decoder implements _Decoder {
     return this.#decoder.fatal;
   }
 
-  decode(bytes: _Type.Bytes, options?: TextDecodeOptions): string {
-    return _decode(bytes, this.#options, options, this.#decoder);
+  decode(bytes: _Type.Bytes /* , options?: TextDecodeOptions */): string {
+    return _decode(bytes, this.#options, /* options, */ this.#decoder);
   }
 }
