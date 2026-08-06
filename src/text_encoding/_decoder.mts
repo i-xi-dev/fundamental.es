@@ -1,5 +1,7 @@
 import { _Type } from "../_common/mod.mts";
 
 export interface _Decoder {
-  decode(bytes: _Type.Bytes): string;
+  encoding: string;
+  fatal: boolean;
+  decode(bytes: _Type.Bytes, options?: TextDecodeOptions): string;
 }
