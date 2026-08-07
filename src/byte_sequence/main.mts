@@ -17,6 +17,7 @@ import {
 } from "../numerics/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
+import { Utf8 } from "../text_encoding/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -417,6 +418,12 @@ export class ByteSequence {
     return this.loadFromArrayBuffer(_randomBytes(byteLength), options);
   }
 
+  // loadFromBase64Encoded()
+  // loadFromBinaryString()
+  // loadFromHexEncoded()
+  // loadFromPercentEncoded()
+  // → Encoderの結果を loadFromArrayBuffer() すれば良いので一旦不要
+
   toArrayBuffer(): ArrayBuffer {
     this.#assertAccessible();
     return this.#buffer.slice(0, this.#loadedCount);
@@ -520,7 +527,6 @@ export class ByteSequence {
     }
   }
 
-  //XXX duplicate(): ByteSequence
   //XXX subsequence(): ByteSequence
   //XXX byteAt(): uint8
   //XXX [Symbol.iterator](): IterableIterator<uint8>
@@ -762,9 +768,16 @@ export namespace ByteSequence {
     return fromBytes(bytes, options);
   }
 
-  // // UTF-8
-  // export function fromText(text: string): ByteSequence {
-  // }
+  // UTF-8
+  export function fromText(
+    text: string,
+    options?: Utf8.EncoderOptions & _FromOptions,
+  ): ByteSequence {
+    _Assert.string(text, "Input");
+
+    const bytes = Utf8.encode(text, options);
+    return fromBytes(bytes, options);
+  }
 
   //XXX fromStream()
 }
