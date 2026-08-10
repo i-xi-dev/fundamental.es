@@ -1,4 +1,4 @@
-import { _Assert, _Type } from "../_common/mod.mts";
+import { _Assert, _Error, _Type } from "../_common/mod.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
@@ -527,7 +527,41 @@ export class ByteSequence {
     }
   }
 
-  //XXX subsequence(): ByteSequence
+  cloneSubsequence(start?: _Type.safeint, end?: _Type.safeint): ByteSequence {
+    this.#assertAccessible();
+
+    if ((_Type.isNullOrUndefined(start) || _Type.isSafeInt(start)) !== true) {
+      throw _Error.Type.mustBeSafeInt("Start index");
+    }
+    if ((_Type.isNullOrUndefined(end) || _Type.isSafeInt(end)) !== true) {
+      throw _Error.Type.mustBeSafeInt("End index");
+    }
+
+    const adjStart = start ?? 0;
+    const adjEnd = end ?? this.#loadedCount;
+
+    if (adjStart < 0) {
+      throw _Error.Range.underflow(0, "Start index");
+    }
+    if (adjEnd < 0) {
+      throw _Error.Range.underflow(0, "End index");
+    }
+
+    if (adjStart > this.#loadedCount) {
+      throw _Error.Range.overflow(this.#loadedCount, "Start index");
+    }
+    if (adjEnd > this.#loadedCount) {
+      throw _Error.Range.overflow(this.#loadedCount, "End index");
+    }
+
+    if (adjStart > adjEnd) {
+      throw _Error.Range.contradictory();
+    }
+
+    const buffer = this.#buffer.slice(start, end); //XXX sliceの結果はresizable:falseになる
+    return ByteSequence.#wrap(buffer);
+  }
+
   //XXX byteAt(): uint8
   //XXX [Symbol.iterator](): IterableIterator<uint8>
 
@@ -558,12 +592,6 @@ export class ByteSequence {
     }
     return this.#loadedCount;
   }
-
-  // subsequence(options?: _ToOptions): _Type.Bytes {
-  //   this.#assertAccessible();
-  //   const buffer = this.#buffer.slice(0, this.#getSublength(options));
-  //   return new Uint8Array(buffer);
-  // }
 
   toArrayBufferWithDetach(options?: _ToOptions): ArrayBuffer {
     this.#assertAccessible();
