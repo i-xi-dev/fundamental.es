@@ -114,7 +114,7 @@ Deno.test("ByteSequence.prototype.cloneSubsequence()", () => {
     "End index must be a safe-integer of type `number`",
   );
 
-  const bs1 = ByteSequence.randomFilled(1000);
+  const bs1 = ByteSequence.random(1000);
   const bs1x = bs1.cloneSubsequence(100, 200);
 
   assertStrictEquals(

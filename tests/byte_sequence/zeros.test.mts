@@ -1,9 +1,12 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteSequence } from "../../src/mod.mts";
 
-Deno.test("ByteSequence.zerosFilled()", () => {
-  const b = ByteSequence.zerosFilled(4);
+Deno.test("ByteSequence.zeros()", () => {
+  const b = ByteSequence.zeros(4);
   assertStrictEquals(b.resizable, false);
+  assertStrictEquals(b.count, 4);
+  assertStrictEquals(b.capacity, 4);
+  assertStrictEquals(b.maxCapacity, 4);
   const bytes = new Uint8Array(b.toArrayBufferWithDetach());
   assertStrictEquals(bytes.byteLength, 4);
   assertStrictEquals(bytes[0], 0);
@@ -11,7 +14,7 @@ Deno.test("ByteSequence.zerosFilled()", () => {
   assertStrictEquals(bytes[2], 0);
   assertStrictEquals(bytes[3], 0);
 
-  const b2 = ByteSequence.zerosFilled(4, { maxCapacity: 6 });
+  const b2 = ByteSequence.zeros(4, { maxCapacity: 6 });
   assertStrictEquals(b2.resizable, true);
   const bytes2 = new Uint8Array(b2.toArrayBufferWithDetach());
   assertStrictEquals(bytes2.byteLength, 4);
@@ -21,10 +24,10 @@ Deno.test("ByteSequence.zerosFilled()", () => {
   assertStrictEquals(bytes2[3], 0);
 });
 
-Deno.test("ByteSequence.zerosFilled() - error", () => {
+Deno.test("ByteSequence.zeros() - error", () => {
   assertThrows(
     () => {
-      ByteSequence.zerosFilled("4" as unknown as number);
+      ByteSequence.zeros("4" as unknown as number);
     },
     TypeError,
     "Input must be a non-negative safe-integer of type `number`",

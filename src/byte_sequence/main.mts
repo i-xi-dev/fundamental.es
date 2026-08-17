@@ -562,8 +562,21 @@ export class ByteSequence {
     return ByteSequence.#wrap(buffer);
   }
 
-  //XXX byteAt(): uint8
-  //XXX [Symbol.iterator](): IterableIterator<uint8>
+  byteAt(index: _Type.safeint): _Type.uint8 {
+    _Assert.safeInt(index, "Input");
+    if (index < 0) {
+      throw _Error.Range.underflow(0, "Input");
+    }
+    if (index >= this.#loadedCount) {
+      throw _Error.Range.overflow(this.#loadedCount, "Input");
+    }
+
+    return this.#view[index] as _Type.uint8;
+  }
+
+  [Symbol.iterator](): IterableIterator</* _Type.uint8 */ number> {
+    return this.toBytes()[Symbol.iterator]();
+  }
 
   //TODO
   // WebSocketStream なんかは ReadableStream<ArrayBuffer>
@@ -593,6 +606,7 @@ export class ByteSequence {
     return this.#loadedCount;
   }
 
+  //TODO test
   toArrayBufferWithDetach(options?: _ToOptions): ArrayBuffer {
     this.#assertAccessible();
     // const buffer = (options?.fixLength === true)
@@ -606,6 +620,7 @@ export class ByteSequence {
     return this.#buffer.transferToFixedLength(length);
   }
 
+  //TODO test
   toBytesWithDetach(options?: _ToOptions): _Type.Bytes {
     return new Uint8Array(this.toArrayBufferWithDetach(options));
   }
@@ -707,7 +722,7 @@ function _create(
 }
 
 export namespace ByteSequence {
-  export function zerosFilled(
+  export function zeros(
     byteLength: _Type.safeint,
     options?: _FromOptions,
   ) {
@@ -715,7 +730,7 @@ export namespace ByteSequence {
     return _create(byteLength, options).fillZeros(byteLength);
   }
 
-  export function randomFilled(
+  export function random(
     byteLength: _Type.safeint,
     options?: _FromOptions,
   ) {
