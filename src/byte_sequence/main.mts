@@ -563,6 +563,8 @@ export class ByteSequence {
   }
 
   byteAt(index: _Type.safeint): _Type.uint8 {
+    this.#assertAccessible();
+
     _Assert.safeInt(index, "Input");
     if (index < 0) {
       throw _Error.Range.underflow(0, "Input");
@@ -575,6 +577,7 @@ export class ByteSequence {
   }
 
   [Symbol.iterator](): IterableIterator</* _Type.uint8 */ number> {
+    // this.#assertAccessible(); toBytesで実施
     return this.toBytes()[Symbol.iterator]();
   }
 
@@ -597,15 +600,6 @@ export class ByteSequence {
 
   //XXX toUint8Iterable, , ...
 
-  #getSublength(options?: _ToOptions): _Type.safeint {
-    if (
-      _Type.isSafeInt(options?.byteLength) && isNonNegative(options.byteLength)
-    ) {
-      return Math.min(options.byteLength, this.#loadedCount);
-    }
-    return this.#loadedCount;
-  }
-
   //TODO test
   toArrayBufferWithDetach(options?: _ToOptions): ArrayBuffer {
     this.#assertAccessible();
@@ -615,7 +609,7 @@ export class ByteSequence {
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
     const length = (_Type.isSafeInt(options?.byteLength) &&
         isNonNegative(options.byteLength))
-      ? options.byteLength
+      ? Math.min(options.byteLength, this.#loadedCount)
       : this.#loadedCount; //TODO options.byteLengthがloadedCountより大きい場合
     return this.#buffer.transferToFixedLength(length);
   }
