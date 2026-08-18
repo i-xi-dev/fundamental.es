@@ -8,17 +8,9 @@ const _S_MIN = 0;
 
 const _S_MAX = 1;
 
-function _normalizeSaturation(s: _Type.finite): _Type.finite {
-  return _clampFinite(s, _S_MIN, _S_MAX);
-}
-
 const _L_MIN = 0;
 
 const _L_MAX = 1;
-
-function _normalizeLightness(l: _Type.finite): _Type.finite {
-  return _clampFinite(l, _L_MIN, _L_MAX);
-}
 
 export type Hsl = {
   h: _Type.degrees;
@@ -59,8 +51,8 @@ export namespace _Hsl {
 
     return {
       h: Angle.Degrees.normalize(hsl.h),
-      s: _normalizeSaturation(hsl.s),
-      l: _normalizeLightness(hsl.l),
+      s: _clampFinite(hsl.s, _S_MIN, _S_MAX),
+      l: _clampFinite(hsl.l, _L_MIN, _L_MAX),
     };
   }
 

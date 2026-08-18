@@ -1,22 +1,31 @@
 import { _Assert, _Error, _Type } from "../../_common/mod.mts";
-import { _Hsl, Hsl as HslType } from "./hsl.mts";
+import { _Hsl, Hsl as _HslType } from "./hsl.mts";
+import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb } from "./_rgb.mts";
 import { _Rgb24Components, Rgb24Components } from "./rgb24_components.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 
 export class SRgbColor extends _RgbColor {
-  #_hsl: HslType | null = null;
+  #_hsl: _HslType | null = null;
+  #_hwb: _HwbType | null = null;
 
   private constructor(rgb: RgbComponents) {
     super(rgb);
   }
 
-  get #hsl(): HslType {
+  get #hsl(): _HslType {
     if (_Hsl.is(this.#_hsl) !== true) {
       this.#_hsl = _Hsl.fromRgbComponents(this.toRgbComponents());
     }
     return this.#_hsl;
+  }
+
+  get #hwb(): _HwbType {
+    if (_Hwb.is(this.#_hwb) !== true) {
+      this.#_hwb = _Hwb.fromRgbComponents(this.toRgbComponents());
+    }
+    return this.#_hwb;
   }
 
   get hue(): _Type.degrees {
@@ -31,13 +40,13 @@ export class SRgbColor extends _RgbColor {
     return this.#hsl.l;
   }
 
-  // get whiteness(): _Type.finite {
-  //   return this.#hwb.w;
-  // }
+  get whiteness(): _Type.finite {
+    return this.#hwb.w;
+  }
 
-  // get blackness(): _Type.finite {
-  //   return this.#hwb.b;
-  // }
+  get blackness(): _Type.finite {
+    return this.#hwb.b;
+  }
 
   static fromRgbComponents(rgb: RgbComponents): SRgbColor {
     _RgbComponents.assert(rgb, "Input");
@@ -70,7 +79,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  static fromHsl(hsl: HslType): SRgbColor {
+  static fromHsl(hsl: _HslType): SRgbColor {
     _Hsl.assert(hsl, "Input");
     const rgb = _Hsl.toRgbComponents(hsl);
     return new SRgbColor(rgb);
@@ -82,11 +91,16 @@ export class SRgbColor extends _RgbColor {
   // toBytes(): _Type.Bytes {
   // }
 
-  toHsl(): HslType {
+  toHsl(): _HslType {
     return { ...this.#hsl };
+  }
+
+  toHwb(): _HwbType {
+    return { ...this.#hwb };
   }
 }
 
 export namespace SRgbColor {
-  export type Hsl = HslType;
+  export type Hsl = _HslType;
+  export type Hwb = _HwbType;
 }
