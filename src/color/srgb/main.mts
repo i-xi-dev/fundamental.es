@@ -224,8 +224,15 @@ export namespace SRgbColor {
   export type Hsl = _HslType;
 
   export namespace Hsl {
-    export const fromRgbComponents = _Hsl.fromRgbComponents;
-    export const toRgbComponents = _Hsl.toRgbComponents;
+    export function fromRgbComponents(rgb: RgbComponents): Hsl {
+      _RgbComponents.assert(rgb, "Input");
+      return _Hsl.fromRgbComponents(rgb);
+    }
+
+    export function toRgbComponents(hsl: Hsl): RgbComponents {
+      _Hsl.assert(hsl, "Input");
+      return _Hsl.toRgbComponents(hsl);
+    }
   }
 
   export type Hwb = _HwbType;
