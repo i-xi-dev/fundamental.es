@@ -1,8 +1,8 @@
 import { _clampFinite } from "../../numerics/finite.mts";
 import { _Error, _Type } from "../../_common/mod.mts";
 import { _Hsl } from "./hsl.mts";
-import { _Rgb } from "./_rgb.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
+import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
 
 const _W_MIN = 0;
@@ -56,11 +56,7 @@ export namespace _Hwb {
 
   export function fromRgbComponents(rgb: RgbComponents): Hwb {
     const { h } = _Hsl.fromRgbComponents(rgb);
-    const { r, g, b } = _RgbComponents.normalize(
-      rgb,
-      _Rgb.COMPONENT_MIN,
-      _Rgb.COMPONENT_MAX,
-    );
+    const { r, g, b } = _SRgbRgb.normalize(rgb);
 
     const w = Math.min(r, g, b);
     const blackness = 1 - Math.max(r, g, b);

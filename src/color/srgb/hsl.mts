@@ -1,7 +1,7 @@
 import { _clampFinite } from "../../numerics/finite.mts";
 import { _Error, _Type } from "../../_common/mod.mts";
-import { _Rgb } from "./_rgb.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
+import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
 
 const _S_MIN = 0;
@@ -60,11 +60,7 @@ export namespace _Hsl {
   }
 
   export function fromRgbComponents(rgb: RgbComponents): Hsl {
-    const { r, g, b } = _RgbComponents.normalize(
-      rgb,
-      _Rgb.COMPONENT_MIN,
-      _Rgb.COMPONENT_MAX,
-    );
+    const { r, g, b } = _SRgbRgb.normalize(rgb);
 
     const maxRgb = Math.max(r, g, b);
     const minRgb = Math.min(r, g, b);

@@ -1,7 +1,7 @@
 import { _Error, _Type } from "../../_common/mod.mts";
-import { _Rgb } from "./_rgb.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/safe_int.mts";
+import { _SRgbRgb } from "./_rgb.mts";
 import { RoundingMode, Uint8 } from "../../numerics/mod.mts";
 
 export type Rgb24 = {
@@ -37,11 +37,7 @@ export namespace _Rgb24 {
 
   export function fromRgbComponents(rgb: RgbComponents): Rgb24 {
     _RgbComponents.assert(rgb, "Input");
-    const normalized = _RgbComponents.normalize(
-      rgb,
-      _Rgb.COMPONENT_MIN,
-      _Rgb.COMPONENT_MAX,
-    );
+    const normalized = _SRgbRgb.normalize(rgb);
 
     return {
       r: _roundToSafeInt(
