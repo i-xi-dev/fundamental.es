@@ -238,15 +238,29 @@ export namespace SRgbColor {
   export type Hwb = _HwbType;
 
   export namespace Hwb {
-    export const fromRgbComponents = _Hwb.fromRgbComponents;
-    export const toRgbComponents = _Hwb.toRgbComponents;
+    export function fromRgbComponents(rgb: RgbComponents): Hwb {
+      _RgbComponents.assert(rgb, "Input");
+      return _Hwb.fromRgbComponents(rgb);
+    }
+
+    export function toRgbComponents(hwb: Hwb): RgbComponents {
+      _Hwb.assert(hwb, "Input");
+      return _Hwb.toRgbComponents(hwb);
+    }
   }
 
   export type Rgb24 = _Rgb24Type;
 
   export namespace Rgb24 {
-    export const fromRgbComponents = _Rgb24.fromRgbComponents;
-    export const toRgbComponents = _Rgb24.toRgbComponents;
+    export function fromRgbComponents(rgb: RgbComponents): Rgb24 {
+      _RgbComponents.assert(rgb, "Input");
+      return _Rgb24.fromRgbComponents(rgb);
+    }
+
+    export function toRgbComponents(rgb24: Rgb24): RgbComponents {
+      _Rgb24.assert(rgb24, "Input");
+      return _Rgb24.toRgbComponents(rgb24);
+    }
   }
 }
 
