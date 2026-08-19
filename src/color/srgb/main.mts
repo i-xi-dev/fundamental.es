@@ -2,16 +2,24 @@ import { _Assert, _Error, _Type } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb } from "./_rgb.mts";
-import { _Rgb24Components, Rgb24Components } from "./rgb24_components.mts";
+import { _Rgb24, Rgb24 } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 
 export class SRgbColor extends _RgbColor {
+  #_rgb24: Rgb24 | null = null;
   #_hsl: _HslType | null = null;
   #_hwb: _HwbType | null = null;
 
   private constructor(rgb: RgbComponents) {
     super(rgb);
+  }
+
+  get #rgb24(): Rgb24 {
+    if (_Rgb24.is(this.#_rgb24) !== true) {
+      this.#_rgb24 = _Rgb24.fromRgbComponents(this.toRgbComponents());
+    }
+    return this.#_rgb24;
   }
 
   get #hsl(): _HslType {
@@ -59,10 +67,10 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(normalized);
   }
 
-  static fromRgb24(rgb24: Rgb24Components): SRgbColor {
-    _Rgb24Components.assert(rgb24, "Input");
+  static fromRgb24(rgb24: Rgb24): SRgbColor {
+    _Rgb24.assert(rgb24, "Input");
 
-    const rgb = _Rgb24Components.toRgbComponents(rgb24);
+    const rgb = _Rgb24.toRgbComponents(rgb24);
     return new SRgbColor(rgb);
   }
 
@@ -91,11 +99,19 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
-  // toRgb24(): Rgb24Components {
-  // }
+  toRgb24(): Rgb24 {
+    return { ...this.#rgb24 };
+  }
 
-  // toBytes(): _Type.Bytes {
-  // }
+  toBytes(): _Type.Bytes {
+    const { r, g, b } = this.#rgb24;
+    return Uint8Array.of(r, g, b);
+  }
+
+  toUint8ClampedArray(): Uint8ClampedArray<ArrayBuffer> {
+    const { r, g, b } = this.#rgb24;
+    return Uint8ClampedArray.of(r, g, b);
+  }
 
   toHsl(): _HslType {
     return { ...this.#hsl };
@@ -110,3 +126,5 @@ export namespace SRgbColor {
   export type Hsl = _HslType;
   export type Hwb = _HwbType;
 }
+
+//TODO プレーンなrgbと、アルファ付き
