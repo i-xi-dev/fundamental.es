@@ -2,12 +2,12 @@ import { _Assert, _Error, _Type } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb } from "./_rgb.mts";
-import { _Rgb24, Rgb24 } from "./rgb24.mts";
+import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 
 export class SRgbColor extends _RgbColor {
-  #_rgb24: Rgb24 | null = null;
+  #_rgb24: _Rgb24Type | null = null;
   #_hsl: _HslType | null = null;
   #_hwb: _HwbType | null = null;
 
@@ -15,7 +15,7 @@ export class SRgbColor extends _RgbColor {
     super(rgb);
   }
 
-  get #rgb24(): Rgb24 {
+  get #rgb24(): _Rgb24Type {
     if (_Rgb24.is(this.#_rgb24) !== true) {
       this.#_rgb24 = _Rgb24.fromRgbComponents(this.toRgbComponents());
     }
@@ -67,7 +67,7 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(normalized);
   }
 
-  static fromRgb24(rgb24: Rgb24): SRgbColor {
+  static fromRgb24(rgb24: _Rgb24Type): SRgbColor {
     _Rgb24.assert(rgb24, "Input");
 
     const rgb = _Rgb24.toRgbComponents(rgb24);
@@ -77,7 +77,11 @@ export class SRgbColor extends _RgbColor {
   static fromBytes(bytes: _Type.Bytes): SRgbColor {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength < 3) {
-      throw _Error.Type.mustBe("TODO", "Input");
+      throw _Error.Type.mustBe(
+        // "an `Uint8Array` with a length of 3 or greater",
+        "an `Uint8Array` with a length of 3",
+        "Input",
+      );
     }
 
     return SRgbColor.fromRgb24({
@@ -99,7 +103,7 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
-  toRgb24(): Rgb24 {
+  toRgb24(): _Rgb24Type {
     return { ...this.#rgb24 };
   }
 
@@ -108,10 +112,10 @@ export class SRgbColor extends _RgbColor {
     return Uint8Array.of(r, g, b);
   }
 
-  toUint8ClampedArray(): Uint8ClampedArray<ArrayBuffer> {
-    const { r, g, b } = this.#rgb24;
-    return Uint8ClampedArray.of(r, g, b);
-  }
+  // toUint8ClampedArray(): Uint8ClampedArray<ArrayBuffer> {
+  //   const { r, g, b } = this.#rgb24;
+  //   return Uint8ClampedArray.of(r, g, b);
+  // }
 
   toHsl(): _HslType {
     return { ...this.#hsl };
@@ -125,6 +129,7 @@ export class SRgbColor extends _RgbColor {
 export namespace SRgbColor {
   export type Hsl = _HslType;
   export type Hwb = _HwbType;
+  export type Rgb24 = _Rgb24Type;
 }
 
 //TODO プレーンなrgbと、アルファ付き
