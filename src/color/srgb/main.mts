@@ -85,6 +85,12 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
+  static fromHwb(hwb: _HwbType): SRgbColor {
+    _Hwb.assert(hwb, "Input");
+    const rgb = _Hwb.toRgbComponents(hwb);
+    return new SRgbColor(rgb);
+  }
+
   // toRgb24(): Rgb24Components {
   // }
 

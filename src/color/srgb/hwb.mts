@@ -37,7 +37,10 @@ export namespace _Hwb {
     targetLabel: string,
   ): asserts test is Hwb {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe("TODO", targetLabel);
+      throw _Error.Type.mustBe(
+        "an object with the `number`-type properties `h`, `w`, and `b`",
+        targetLabel,
+      );
     }
   }
 

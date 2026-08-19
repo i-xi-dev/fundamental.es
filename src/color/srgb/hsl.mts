@@ -42,7 +42,10 @@ export namespace _Hsl {
     targetLabel: string,
   ): asserts test is Hsl {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe("TODO", targetLabel);
+      throw _Error.Type.mustBe(
+        "an object with the `number`-type properties `h`, `s`, and `l`",
+        targetLabel,
+      );
     }
   }
 
