@@ -1,10 +1,10 @@
 import { _Assert, _Error, _Type } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
-import { _Rgb } from "./_rgb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
+import { _SRgbRgb } from "./_rgb.mts";
 import { StringUtils } from "../../_common/utils/mod.mts";
 
 const _hexRegex = /^#?[0-9a-f]{6}$/i;
@@ -62,17 +62,12 @@ export class SRgbColor extends _RgbColor {
   static fromRgbComponents(rgb: RgbComponents): SRgbColor {
     _RgbComponents.assert(rgb, "Input");
 
-    const normalized = _RgbComponents.normalize(
-      rgb,
-      _Rgb.COMPONENT_MIN,
-      _Rgb.COMPONENT_MAX,
-    );
+    const normalized = _SRgbRgb.normalize(rgb);
     return new SRgbColor(normalized);
   }
 
   static fromRgb24(rgb24: _Rgb24Type): SRgbColor {
     _Rgb24.assert(rgb24, "Input");
-
     const rgb = _Rgb24.toRgbComponents(rgb24);
     return new SRgbColor(rgb);
   }
@@ -217,7 +212,16 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  //TODO ,toInverted,toComplementary,blend,...
+  toInverted(): SRgbColor {
+    const inverted = _SRgbRgb.invert(this.toRgbComponents());
+    return new SRgbColor(inverted);
+  }
+
+  toComplementary(): SRgbColor {
+    return this.plusHue(180);
+  }
+
+  //XXX blend(color, mode)
 }
 
 export namespace SRgbColor {
@@ -261,6 +265,15 @@ export namespace SRgbColor {
       _Rgb24.assert(rgb24, "Input");
       return _Rgb24.toRgbComponents(rgb24);
     }
+  }
+
+  export namespace Rgb {
+    export function invert(rgb: RgbComponents): RgbComponents {
+      _RgbComponents.assert(rgb, "Input");
+      return _SRgbRgb.invert(_SRgbRgb.normalize(rgb));
+    }
+
+    //XXX export function complementaryOf
   }
 }
 
