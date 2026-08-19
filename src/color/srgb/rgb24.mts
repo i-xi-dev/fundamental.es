@@ -28,7 +28,10 @@ export namespace _Rgb24 {
     targetLabel: string,
   ): asserts test is Rgb24 {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe("TODO", targetLabel);
+      throw _Error.Type.mustBe(
+        "an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+        targetLabel,
+      );
     }
   }
 

@@ -25,7 +25,10 @@ export namespace _RgbComponents {
     targetLabel: string,
   ): asserts test is RgbComponents {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe("TODO", targetLabel);
+      throw _Error.Type.mustBe(
+        "an object with the `number`-type properties `r`, `g`, and `b`",
+        targetLabel,
+      );
     }
   }
 

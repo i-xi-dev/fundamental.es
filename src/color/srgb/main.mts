@@ -103,6 +103,9 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
+  // Uint8Arrayに fromHex() があるので不要
+  // static fromHexEncoded(hex: string): SRgbColor;
+
   toRgb24(): _Rgb24Type {
     return { ...this.#rgb24 };
   }
@@ -124,6 +127,29 @@ export class SRgbColor extends _RgbColor {
   toHwb(): _HwbType {
     return { ...this.#hwb };
   }
+
+  // Uint8Arrayに toHex() があるので不要
+  // toHexEncoded(): string;
+
+  // バイト列として等しければtrueとする
+  // HSLに変換→HSLから再変換 だけで精度の問題で違う色判定になるので
+  equals(other: SRgbColor): boolean { // 引数の型はSRgbColorのみとする（_Rgb24TypeとRgbComponentsなどの区別が付かないので）
+    if ((other instanceof SRgbColor) !== true) {
+      return false;
+    }
+
+    const { r: thisR, g: thisG, b: thisB } = this.#rgb24;
+    const { r: otherR, g: otherG, b: otherB } = other.#rgb24;
+    return (thisR === otherR) && (thisG === otherG) && (thisB === otherB);
+  }
+
+  #assert(test: unknown): asserts test is SRgbColor {
+    if ((test instanceof SRgbColor) !== true) {
+      throw _Error.Type.mustBe("a `SRgbColor` object", "Input");
+    }
+  }
+
+  //TODO ,toInverted,toComplementary,plusHue,withHue,plusSaturation,withSaturation,plusLightness,withLightness,blend,...
 }
 
 export namespace SRgbColor {

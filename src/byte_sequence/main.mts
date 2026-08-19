@@ -517,6 +517,7 @@ export class ByteSequence {
     }
   }
 
+  //XXX bytesEquals の方が良いか？
   equals(other: ByteSequence | _Comparable): boolean {
     this.#assertAccessible();
 

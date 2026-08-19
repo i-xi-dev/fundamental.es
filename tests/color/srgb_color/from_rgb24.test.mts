@@ -21,4 +21,57 @@ Deno.test("Color.SRgbColor.fromRgb24()", () => {
   assertStrictEquals(c4.red, 255 / 255);
   assertStrictEquals(c4.green, 100 / 255);
   assertStrictEquals(c4.blue, 0 / 255);
+
+  assertThrows(
+    () => {
+      const e = null as unknown as { r: number; g: number; b: number };
+      Color.SRgbColor.fromRgb24(e);
+    },
+    TypeError,
+    "Input must be an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+  );
+  assertThrows(
+    () => {
+      const e = { r: 0, g: 0 } as unknown as {
+        r: number;
+        g: number;
+        b: number;
+      };
+      Color.SRgbColor.fromRgb24(e);
+    },
+    TypeError,
+    "Input must be an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+  );
+  assertThrows(
+    () => {
+      const e = { g: 0, b: 0 } as unknown as {
+        r: number;
+        g: number;
+        b: number;
+      };
+      Color.SRgbColor.fromRgb24(e);
+    },
+    TypeError,
+    "Input must be an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+  );
+  assertThrows(
+    () => {
+      const e = { b: 0, r: 0 } as unknown as {
+        r: number;
+        g: number;
+        b: number;
+      };
+      Color.SRgbColor.fromRgb24(e);
+    },
+    TypeError,
+    "Input must be an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+  );
+  assertThrows(
+    () => {
+      const e = { r: 0, g: 0, b: 1.5 };
+      Color.SRgbColor.fromRgb24(e);
+    },
+    TypeError,
+    "Input must be an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
+  );
 });
