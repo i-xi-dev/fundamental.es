@@ -149,7 +149,25 @@ export class SRgbColor extends _RgbColor {
     }
   }
 
-  //TODO ,toInverted,toComplementary,plusHue,withHue,plusSaturation,withSaturation,plusLightness,withLightness,blend,...
+  plusHue(relativeHue: _Type.degrees): SRgbColor {
+    const { h, s, l } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h: h + relativeHue,
+      s,
+      l,
+    });
+  }
+
+  withHue(absoluteHue: _Type.degrees): SRgbColor {
+    const { s, l } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h: absoluteHue,
+      s,
+      l,
+    });
+  }
+
+  //TODO ,toInverted,toComplementary,plusSaturation,withSaturation,plusLightness,withLightness,blend,...
 }
 
 export namespace SRgbColor {
