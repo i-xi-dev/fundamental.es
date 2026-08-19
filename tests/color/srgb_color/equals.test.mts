@@ -21,7 +21,6 @@ Deno.test("Color.SRgbColor.prototype.equals()", () => {
   assertStrictEquals(c1.equals(c11), true);
   assertStrictEquals(c1.equals(c12), true);
   assertStrictEquals(c1.equals(c13), true);
-  console.log(JSON.stringify(c14.toRgb24()));
   assertStrictEquals(c1.equals(c14), true);
 
   assertStrictEquals(

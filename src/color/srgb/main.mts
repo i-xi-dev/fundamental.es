@@ -5,6 +5,9 @@ import { _Rgb } from "./_rgb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
+import { StringUtils } from "../../_common/utils/mod.mts";
+
+const _hexRegex = /^#?[0-9a-f]{6}$/i;
 
 export class SRgbColor extends _RgbColor {
   #_rgb24: _Rgb24Type | null = null;
@@ -76,7 +79,7 @@ export class SRgbColor extends _RgbColor {
 
   static fromBytes(bytes: _Type.Bytes): SRgbColor {
     _Assert.nonSharedUint8Array(bytes, "Input");
-    if (bytes.byteLength < 3) {
+    if (bytes.byteLength !== 3) {
       throw _Error.Type.mustBe(
         // "an `Uint8Array` with a length of 3 or greater",
         "an `Uint8Array` with a length of 3",
@@ -103,8 +106,18 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
-  // Uint8Arrayに fromHex() があるので不要
-  // static fromHexEncoded(hex: string): SRgbColor;
+  static fromHexEncoded(hex: string): SRgbColor {
+    _Assert.string(hex, "Input");
+    if (_hexRegex.test(hex) !== true) {
+      throw _Error.Type.mustBe(
+        'a hexadecimal color value in the "RRGGBB" format',
+        "Input",
+      );
+    }
+
+    const [r, g, b] = Uint8Array.fromHex(hex.replace("#", StringUtils.EMPTY));
+    return SRgbColor.fromRgb24({ r, g, b });
+  }
 
   toRgb24(): _Rgb24Type {
     return { ...this.#rgb24 };
@@ -128,8 +141,9 @@ export class SRgbColor extends _RgbColor {
     return { ...this.#hwb };
   }
 
-  // Uint8Arrayに toHex() があるので不要
-  // toHexEncoded(): string;
+  toHexEncoded(): string {
+    return this.toBytes().toHex();
+  }
 
   // バイト列として等しければtrueとする
   // HSLに変換→HSLから再変換 だけで精度の問題で違う色判定になるので
@@ -167,13 +181,66 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  //TODO ,toInverted,toComplementary,plusSaturation,withSaturation,plusLightness,withLightness,blend,...
+  plusSaturation(relativeSaturation: _Type.finite): SRgbColor {
+    const { h, s, l } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h,
+      s: s + relativeSaturation,
+      l,
+    });
+  }
+
+  withSaturation(absoluteSaturation: _Type.finite): SRgbColor {
+    const { h, l } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h,
+      s: absoluteSaturation,
+      l,
+    });
+  }
+
+  plusLightness(relativeLightness: _Type.finite): SRgbColor {
+    const { h, s, l } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h,
+      s,
+      l: l + relativeLightness,
+    });
+  }
+
+  withLightness(absoluteLightness: _Type.finite): SRgbColor {
+    const { h, s } = this.#hsl;
+    return SRgbColor.fromHsl({
+      h,
+      s,
+      l: absoluteLightness,
+    });
+  }
+
+  //TODO ,toInverted,toComplementary,blend,...
 }
 
 export namespace SRgbColor {
   export type Hsl = _HslType;
+
+  export namespace Hsl {
+    export const fromRgbComponents = _Hsl.fromRgbComponents;
+    export const toRgbComponents = _Hsl.toRgbComponents;
+  }
+
   export type Hwb = _HwbType;
+
+  export namespace Hwb {
+    export const fromRgbComponents = _Hwb.fromRgbComponents;
+    export const toRgbComponents = _Hwb.toRgbComponents;
+  }
+
   export type Rgb24 = _Rgb24Type;
+
+  export namespace Rgb24 {
+    export const fromRgbComponents = _Rgb24.fromRgbComponents;
+    export const toRgbComponents = _Rgb24.toRgbComponents;
+  }
 }
 
 //TODO プレーンなrgbと、アルファ付き

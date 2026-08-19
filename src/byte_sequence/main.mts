@@ -787,12 +787,12 @@ export namespace ByteSequence {
   }
 
   export function fromHexEncoded(
-    hexstr: string,
+    hex: string,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.string(hexstr, "Input");
+    _Assert.string(hex, "Input");
 
-    const bytes = Uint8Array.fromHex(hexstr);
+    const bytes = Uint8Array.fromHex(hex);
     return fromBytes(bytes, options);
   }
 
