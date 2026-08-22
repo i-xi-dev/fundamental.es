@@ -140,6 +140,10 @@ export class SRgbColor extends _RgbColor {
     return this.toBytes().toHex();
   }
 
+  override toString(): string {
+    return "#" + this.toHexEncoded();
+  }
+
   // バイト列として等しければtrueとする
   // HSLに変換→HSLから再変換 だけで精度の問題で違う色判定になるので
   equals(other: SRgbColor): boolean { // 引数の型はSRgbColorのみとする（_Rgb24TypeとRgbComponentsなどの区別が付かないので）
@@ -276,5 +280,3 @@ export namespace SRgbColor {
     //XXX export function complementaryOf
   }
 }
-
-//TODO プレーンなrgbと、アルファ付き

@@ -17,7 +17,10 @@ import {
 } from "../numerics/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
-import { Utf8 } from "../text_encoding/mod.mts";
+import {
+  EncoderOptions as TextEncoderOptions,
+  Utf8,
+} from "../text_encoding/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -809,7 +812,7 @@ export namespace ByteSequence {
   // UTF-8
   export function fromText(
     text: string,
-    options?: Utf8.EncoderOptions & _FromOptions,
+    options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
     _Assert.string(text, "Input");
 

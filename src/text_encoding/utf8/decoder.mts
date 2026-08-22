@@ -1,14 +1,14 @@
 import { _decode, _NAME } from "./_common.mts";
 import { _Decoder } from "../_decoder.mts";
-import { Utf8DecoderOptions } from "./decoder_options.mts";
 import { _Type } from "../../_common/mod.mts";
+import { DecoderOptions } from "../decoder_options.mts";
 
 export class Utf8Decoder implements _Decoder {
-  readonly #options: Required<Utf8DecoderOptions>;
+  readonly #options: Required<DecoderOptions>;
   readonly #decoder: TextDecoder;
 
-  constructor(options?: Utf8DecoderOptions) {
-    this.#options = Utf8DecoderOptions.resolve(options);
+  constructor(options?: DecoderOptions) {
+    this.#options = DecoderOptions.resolve(options);
     this.#decoder = new TextDecoder(_NAME, this.#options);
   }
 
