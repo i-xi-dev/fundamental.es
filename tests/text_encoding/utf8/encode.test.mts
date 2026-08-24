@@ -36,6 +36,14 @@ Deno.test("TextEncoding.Utf8.encode()", () => {
 
   assertThrows(
     () => {
+      TextEncoding.Utf8.encode([] as unknown as string);
+    },
+    TypeError,
+    "Input must be a `string`",
+  );
+
+  assertThrows(
+    () => {
       TextEncoding.Utf8.encode("0\uD8001", { fatal: true });
     },
     TypeError,

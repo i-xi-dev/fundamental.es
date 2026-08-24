@@ -1,5 +1,5 @@
+import { _Assert, _Type } from "../../_common/mod.mts";
 import { _decode, _encode } from "./_common.mts";
-import { _Type } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 
@@ -10,6 +10,8 @@ export function decode(
   bytes: _Type.Bytes,
   options?: DecoderOptions, /* & TextDecodeOptions 関数が状態持つのはおかしい */
 ): string {
+  _Assert.nonSharedUint8Array(bytes, "Input");
+
   const resolvedOptions = DecoderOptions.resolve(options);
   return _decode(
     bytes,
@@ -22,6 +24,8 @@ export function encode(
   text: string,
   options?: EncoderOptions,
 ): _Type.Bytes {
+  _Assert.string(text, "Input");
+
   const resolvedOptions = EncoderOptions.resolve(options);
   return _encode(text, resolvedOptions);
 }

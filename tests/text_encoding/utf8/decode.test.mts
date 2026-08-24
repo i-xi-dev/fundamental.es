@@ -33,6 +33,14 @@ Deno.test("TextEncoding.Utf8.decode()", () => {
 
   assertThrows(
     () => {
+      TextEncoding.Utf8.decode([] as unknown as Uint8Array<ArrayBuffer>);
+    },
+    TypeError,
+    "Input must be an `Uint8Array` that references an `ArrayBuffer`",
+  );
+
+  assertThrows(
+    () => {
       TextEncoding.Utf8.decode(Uint8Array.of(0xFF, 0xFF, 0xFF), {
         fatal: true,
       });
