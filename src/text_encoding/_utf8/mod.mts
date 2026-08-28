@@ -8,16 +8,11 @@ export { Utf8Encoder as Encoder } from "./encoder.mts";
 
 export function decode(
   bytes: _Type.Bytes,
-  options?: DecoderOptions, /* & TextDecodeOptions 関数が状態持つのはおかしい */
+  options?: DecoderOptions,
 ): string {
   _Assert.nonSharedUint8Array(bytes, "Input");
 
-  const resolvedOptions = DecoderOptions.resolve(options);
-  return _decode(
-    bytes,
-    resolvedOptions,
-    /* { stream: options?.stream === true }, */
-  );
+  return _decode(bytes, options);
 }
 
 export function encode(
@@ -26,6 +21,5 @@ export function encode(
 ): _Type.Bytes {
   _Assert.string(text, "Input");
 
-  const resolvedOptions = EncoderOptions.resolve(options);
-  return _encode(text, resolvedOptions);
+  return _encode(text, options);
 }

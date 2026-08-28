@@ -15,11 +15,10 @@ function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
 
 export function _decode(
   bytes: _Type.Bytes,
-  options: Required<DecoderOptions>,
-  /* decodeOptions?: TextDecodeOptions, */
-  decoder: TextDecoder = _getDecoder(options),
+  options?: DecoderOptions,
 ): string {
-  return decoder.decode(bytes /* , decodeOptions */);
+  const resolvedOptions = DecoderOptions.resolve(options);
+  return _getDecoder(resolvedOptions).decode(bytes);
 }
 
 let _encoder: TextEncoder | null = null;
@@ -32,17 +31,16 @@ function _getEncoder(): TextEncoder {
 
 export function _encode(
   text: string,
-  options: Required<EncoderOptions>,
-  encoder: TextEncoder = _getEncoder(),
+  options?: EncoderOptions,
 ): _Type.Bytes {
-  if (options.fatal === true) {
+  if (options?.fatal === true) {
     if (text.isWellFormed() !== true) {
       throw _Error.TextEncoding.encodingFailed(_NAME, "Input");
     }
   }
 
-  if ((options.prependBOM === true) && (text.startsWith("\uFEFF") !== true)) {
-    return encoder.encode("\uFEFF" + text);
+  if ((options?.prependBOM === true) && (text.startsWith("\uFEFF") !== true)) {
+    return _getEncoder().encode("\uFEFF" + text);
   }
-  return encoder.encode(text);
+  return _getEncoder().encode(text);
 }
