@@ -6,31 +6,19 @@ import { Decoder } from "./decoder.mts";
 import { Fallback } from "./fallback.mts";
 
 export abstract class _DecoderBase implements Decoder {
-  readonly #encoding: string;
-  readonly #bomBytes: _Type.Bytes;
-  readonly #ignoreBom: boolean;
-  // protected readonly _replacement: string;
-  protected readonly _fatal: boolean;
+  readonly #init: _DecoderInit;
 
   protected constructor(init: _DecoderInit) {
-    _Assert.nonEmptyString(init.name, "Encoding name");
-    _Assert.nonSharedUint8Array(init.bomBytes, "TODO");
-    _Assert.nonEmptyString(init.replacement, "TODO"); //TODO 1-char
-
-    this.#encoding = init.name;
-    this.#bomBytes = Uint8Array.of(...init.bomBytes);
-    this.#ignoreBom = init.ignoreBom === true;
-    // this._replacement = init.replacement;
-    this._fatal = init.fallback === Fallback.EXCEPTION;
+    this.#init = init;
   }
 
   get encoding(): string {
-    return this.#encoding;
+    return this.#init.name;
   }
 
-  // get fatal(): boolean {
-  //   return this._fatal;
-  // }
+  get fatal(): boolean {
+    return this.#init.fallback === Fallback.EXCEPTION;
+  }
 
   // get ignoreBom(): boolean {
   //   return this.#ignoreBom;
@@ -39,13 +27,16 @@ export abstract class _DecoderBase implements Decoder {
   decode(input: _Type.Bytes): string {
     _Assert.nonSharedUint8Array(input, "Input");
 
-    const bomToRemove = (this.#ignoreBom !== true) &&
-      _bytesStartsWith(input, this.#bomBytes);
+    const bomToRemove = (this.#init.ignoreBom !== true) &&
+      _bytesStartsWith(input, this.#init.bomBytes);
 
-    const output = this._decode(input);
+    const { decodedText, pendingBytes } = this.#init.decode(input);
+    if (pendingBytes !== null) {
+      throw new Error("TODO");
+    }
 
-    return (bomToRemove === true) ? output.substring(_BOM.length) : output;
+    return (bomToRemove === true)
+      ? decodedText.substring(_BOM.length)
+      : decodedText;
   }
-
-  protected abstract _decode(input: _Type.Bytes): string;
 }

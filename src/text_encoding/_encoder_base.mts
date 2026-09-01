@@ -5,24 +5,19 @@ import { Encoder } from "./encoder.mts";
 import { Fallback } from "./fallback.mts";
 
 export abstract class _EncoderBase implements Encoder {
-  readonly #encoding: string;
-  readonly #prependBom: boolean;
-  protected readonly _fatal: boolean;
+  readonly #init: _EncoderInit;
 
   protected constructor(init: _EncoderInit) {
-    this.#encoding = init.name;
-
-    this.#prependBom = init.prependBom === true;
-    this._fatal = init.fallback === Fallback.EXCEPTION;
+    this.#init = init;
   }
 
   get encoding(): string {
-    return this.#encoding;
+    return this.#init.name;
   }
 
-  // get fatal(): boolean {
-  //   return this._fatal;
-  // }
+  get fatal(): boolean {
+    return this.#init.fallback === Fallback.EXCEPTION;
+  }
 
   // get prependBom(): boolean {
   //   return this.#prependBom;
@@ -31,17 +26,19 @@ export abstract class _EncoderBase implements Encoder {
   encode(input: string): _Type.Bytes {
     _Assert.string(input, "Input");
 
-    const bomToPrepend = (this.#prependBom === true) &&
+    const bomToPrepend = (this.#init.prependBom === true) &&
       (input.startsWith(_BOM) !== true);
 
-    if (bomToPrepend === true) {
-      return this._encode(_BOM + input);
-    } else {
-      return this._encode(input);
+    const {
+      encodedBytes,
+      pendingText,
+    } = this.#init.encode((bomToPrepend === true) ? (_BOM + input) : input);
+    if (pendingText !== null) {
+      throw new Error("TODO");
     }
-  }
 
-  protected abstract _encode(_encode: string): _Type.Bytes;
+    return encodedBytes;
+  }
 
   //TODO
   // encodeInto(
