@@ -18,7 +18,8 @@ export abstract class _EncoderStreamBase implements EncoderStream {
         controller: TransformStreamDefaultController<_Type.Bytes>,
       ): void {
         try {
-          const { encodedBytes, pendingText } = init.encode(chunk, true);
+          const toEncode = `${self()._pendingText ?? ""}${chunk}`;
+          const { encodedBytes, pendingText } = init.encode(toEncode, true);
           self()._pendingText = pendingText;
           if (encodedBytes.length > 0) {
             controller.enqueue(encodedBytes);
@@ -30,7 +31,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
       flush(controller: TransformStreamDefaultController<_Type.Bytes>): void {
         try {
           if (_Type.isString(self()._pendingText) === true) {
-            const { encodedBytes } = init.encode(self()._pendingText!);
+            const { encodedBytes } = init.encode(self()._pendingText!); // エンコードエラーになるはず
             controller.enqueue(encodedBytes);
           }
         } catch (exception) {
