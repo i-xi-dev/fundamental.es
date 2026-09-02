@@ -9,6 +9,6 @@ export type _EncodeFunc = (input: string, allowPending?: boolean) => {
 export type _EncoderInit = {
   name: string;
   fallback?: Fallback;
-  prependBom?: boolean;
+  // prependBom?: boolean;
   encode: _EncodeFunc;
 };

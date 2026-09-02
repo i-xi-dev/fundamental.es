@@ -5,17 +5,17 @@ import * as _Utf8 from "../../../src/text_encoding/_utf8/mod.mts";
 Deno.test("_Utf8.encode()", () => {
   assertStrictEquals(stringifyNumbers(_Utf8.encode("01")), "48,49");
 
-  assertStrictEquals(
-    stringifyNumbers(_Utf8.encode("01", { prependBOM: true })),
-    "239,187,191,48,49",
-  );
+  // assertStrictEquals(
+  //   stringifyNumbers(_Utf8.encode("01", { prependBOM: true })),
+  //   "239,187,191,48,49",
+  // );
 
-  assertStrictEquals(
-    stringifyNumbers(
-      _Utf8.encode("\uFEFF01", { prependBOM: true }),
-    ),
-    "239,187,191,48,49",
-  );
+  // assertStrictEquals(
+  //   stringifyNumbers(
+  //     _Utf8.encode("\uFEFF01", { prependBOM: true }),
+  //   ),
+  //   "239,187,191,48,49",
+  // );
 
   assertStrictEquals(
     stringifyNumbers(_Utf8.encode("\uFEFF01")),

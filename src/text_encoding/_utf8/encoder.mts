@@ -1,6 +1,6 @@
 import { _EncodeFunc } from "../_encoder_init.mts";
 import { _EncoderBase } from "../_encoder_base.mts";
-import { _Error, _Type } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _NAME } from "./_common.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
@@ -53,7 +53,6 @@ export class Utf8Encoder extends _EncoderBase {
       fallback: (options?.fatal === true)
         ? Fallback.EXCEPTION
         : Fallback.REPLACEMENT,
-      prependBom: options?.prependBOM,
       encode: _createEncode(options?.fatal),
     });
   }

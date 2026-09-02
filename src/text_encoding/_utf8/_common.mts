@@ -39,8 +39,5 @@ export function _encode(
     }
   }
 
-  if ((options?.prependBOM === true) && (text.startsWith("\uFEFF") !== true)) {
-    return _getEncoder().encode("\uFEFF" + text);
-  }
   return _getEncoder().encode(text);
 }

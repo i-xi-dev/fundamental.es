@@ -7,14 +7,14 @@ Deno.test("_Utf8.Encoder", () => {
   assertStrictEquals(e1.encoding, "utf-8");
   assertStrictEquals(stringifyNumbers(e1.encode("01")), "48,49");
 
-  const e2 = new _Utf8.Encoder({ prependBOM: true });
-  assertStrictEquals(stringifyNumbers(e2.encode("01")), "239,187,191,48,49");
+  // const e2 = new _Utf8.Encoder({ prependBOM: true });
+  // assertStrictEquals(stringifyNumbers(e2.encode("01")), "239,187,191,48,49");
 
-  const e3 = new _Utf8.Encoder({ prependBOM: true });
-  assertStrictEquals(
-    stringifyNumbers(e3.encode("\uFEFF01")),
-    "239,187,191,48,49",
-  );
+  // const e3 = new _Utf8.Encoder({ prependBOM: true });
+  // assertStrictEquals(
+  //   stringifyNumbers(e3.encode("\uFEFF01")),
+  //   "239,187,191,48,49",
+  // );
 
   const e4 = new _Utf8.Encoder();
   assertStrictEquals(
