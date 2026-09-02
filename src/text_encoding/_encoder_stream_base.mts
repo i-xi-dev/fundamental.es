@@ -3,7 +3,7 @@ import { _EncoderInit } from "./_encoder_init.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
 
-export abstract class EncoderStreamBase implements EncoderStream {
+export abstract class _EncoderStreamBase implements EncoderStream {
   readonly #init: _EncoderInit;
   readonly #stream: TransformStream<string, _Type.Bytes>;
   _pendingText: string | null;

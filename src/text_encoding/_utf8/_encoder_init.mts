@@ -5,7 +5,7 @@ import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
 
 //TODO 外に出す
-const _HIGH_SURROGATE = /^[u\D800-u\DBFF]$/;
+const _HIGH_SURROGATE = /^[\uD800-\uDBFF]$/;
 
 function _regulate(text: string, allowPending?: boolean): {
   textToEncode: string;
