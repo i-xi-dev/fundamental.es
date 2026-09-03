@@ -1,5 +1,4 @@
-import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { stringifyNumbers } from "../../_.mts";
+import { assertRejects, assertStrictEquals } from "@std/assert";
 import * as _Utf8 from "../../../src/text_encoding/_utf8/mod.mts";
 
 Deno.test("_Utf8.EncoderStream", async () => {

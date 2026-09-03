@@ -5,7 +5,7 @@ import { EncoderOptions } from "../encoder_options.mts";
 
 export { Utf8Decoder as Decoder } from "./decoder.mts";
 export { Utf8Encoder as Encoder } from "./encoder.mts";
-
+export { Utf8DecoderStream as DecoderStream } from "./decoder_stream.mts";
 export { Utf8EncoderStream as EncoderStream } from "./encoder_stream.mts";
 
 export function decode(
