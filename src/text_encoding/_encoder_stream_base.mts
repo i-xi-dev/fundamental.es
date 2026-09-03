@@ -1,5 +1,5 @@
-import { _Type } from "../_common/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
+import { _Type } from "../_common/mod.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
 

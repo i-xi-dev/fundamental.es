@@ -1,5 +1,5 @@
 import { _Assert, _Type } from "../_common/mod.mts";
-import { _BOM } from "./_bom.mts";
+import { _BOM } from "./_utf.mts";
 import { _bytesStartsWith } from "../byte_sequence/_utils.mts";
 import { _DecoderInit } from "./_decoder_init.mts";
 import { Decoder } from "./decoder.mts";
