@@ -34,7 +34,7 @@ export abstract class _DecoderStreamBase implements DecoderStream {
           self()._pendingBytes = pendingBytes;
           if (decodedText.length > 0) {
             if (
-              (self()._enqueued !== true) && (init.ignoreBom === true) &&
+              (self()._enqueued !== true) && (init.ignoreBom !== true) &&
               decodedText.startsWith(_BOM)
             ) {
               controller.enqueue(decodedText.substring(1));
