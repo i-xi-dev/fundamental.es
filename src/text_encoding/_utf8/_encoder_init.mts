@@ -1,11 +1,8 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
 import { _NAME } from "./_common.mts";
-import { _Error } from "../../_common/mod.mts";
+import { _Error, Rune } from "../../_common/mod.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
-
-//TODO 外に出す
-const _HIGH_SURROGATE = /^[\uD800-\uDBFF]$/;
 
 function _regulate(text: string, allowPending?: boolean): {
   textToEncode: string;
@@ -13,7 +10,7 @@ function _regulate(text: string, allowPending?: boolean): {
 } {
   if ((allowPending === true) && (text.length > 0)) {
     const lastChar = text.at(-1)!;
-    if (_HIGH_SURROGATE.test(lastChar) === true) {
+    if (Rune.isHighSurrogate(lastChar) === true) {
       return {
         textToEncode: text.slice(0, -1),
         pendingText: lastChar,

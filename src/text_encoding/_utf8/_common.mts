@@ -13,7 +13,7 @@ function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
   return _decoders.get(key)!;
 }
 
-export function _decode(
+export function _staticDecode(
   bytes: _Type.Bytes,
   options?: DecoderOptions,
 ): string {
@@ -29,7 +29,7 @@ function _getEncoder(): TextEncoder {
   return _encoder;
 }
 
-export function _encode(
+export function _staticEncode(
   text: string,
   options?: EncoderOptions,
 ): _Type.Bytes {

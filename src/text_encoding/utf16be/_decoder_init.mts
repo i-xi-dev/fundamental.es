@@ -1,5 +1,6 @@
-import { _BYTES_PER_CHAR, _NAME } from "./_common.mts";
+import { _BYTES_PER_CHAR } from "../_utf16/_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
+import { _NAME } from "./_common.mts";
 import { _Type } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";

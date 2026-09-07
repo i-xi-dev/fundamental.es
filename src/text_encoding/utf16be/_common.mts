@@ -1,10 +1,9 @@
 import { _Error, _Type } from "../../_common/mod.mts";
+import { _encodeShared } from "../_utf16/_common.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 
 export const _NAME = "UTF-16BE";
-
-export const _BYTES_PER_CHAR = 2;
 
 const _decoders = new Map<string, TextDecoder>();
 function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
@@ -15,7 +14,7 @@ function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
   return _decoders.get(key)!;
 }
 
-export function _decode(
+export function _staticDecode(
   bytes: _Type.Bytes,
   options?: DecoderOptions,
 ): string {
@@ -23,24 +22,10 @@ export function _decode(
   return _getDecoder(resolvedOptions).decode(bytes);
 }
 
-//TODO
-// let _encoder: TextEncoder | null = null;
-// function _getEncoder(): TextEncoder {
-//   if (_encoder === null) {
-//     _encoder = new TextEncoder();
-//   }
-//   return _encoder;
-// }
-
-// export function _encode(
-//   text: string,
-//   options?: EncoderOptions,
-// ): _Type.Bytes {
-//   if (options?.fatal === true) {
-//     if (text.isWellFormed() !== true) {
-//       throw _Error.TextEncoding.encodingFailed(_NAME, "Input");
-//     }
-//   }
-
-//   return _getEncoder().encode(text);
-// }
+export function _staticEncode(
+  text: string,
+  options?: EncoderOptions,
+): _Type.Bytes {
+  const { encodedBytes } = _encodeShared(_NAME, false, text, options?.fatal);
+  return encodedBytes;
+}

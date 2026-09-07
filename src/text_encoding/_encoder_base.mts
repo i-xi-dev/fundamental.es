@@ -31,11 +31,4 @@ export abstract class _EncoderBase implements Encoder {
 
     return encodedBytes;
   }
-
-  //TODO
-  // encodeInto(
-  //   source: string,
-  //   destination: _Type.Bytes,
-  // ): TextEncoderEncodeIntoResult {
-  // }
 }

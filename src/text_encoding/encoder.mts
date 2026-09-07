@@ -5,4 +5,8 @@ export interface Encoder {
   encoding: string;
   // fatal: boolean;
   encode(text: string): _Type.Bytes;
+  // encodeInto(
+  //   source: string,
+  //   destination: _Type.Bytes,
+  // ): TextEncoderEncodeIntoResult;
 }
