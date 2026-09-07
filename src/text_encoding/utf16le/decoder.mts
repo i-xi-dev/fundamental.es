@@ -3,8 +3,8 @@ import { _DecoderBase } from "../_decoder_base.mts";
 import { _NAME } from "./_common.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 
-export class Utf16BeDecoder extends _DecoderBase {
+export class Utf16LeDecoder extends _DecoderBase {
   constructor(options?: DecoderOptions) {
-    super(_createDecoderInit(_NAME, false, options));
+    super(_createDecoderInit(_NAME, true, options));
   }
 }

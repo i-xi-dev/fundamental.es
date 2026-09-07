@@ -3,8 +3,8 @@ import { _EncoderBase } from "../_encoder_base.mts";
 import { _NAME } from "./_common.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 
-export class Utf16BeEncoder extends _EncoderBase {
+export class Utf16LeEncoder extends _EncoderBase {
   constructor(options?: EncoderOptions) {
-    super(_createEncoderInit(_NAME, false, options));
+    super(_createEncoderInit(_NAME, true, options));
   }
 }
