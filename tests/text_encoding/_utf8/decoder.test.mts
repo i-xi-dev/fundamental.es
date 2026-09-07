@@ -12,7 +12,7 @@ Deno.test("_Utf8.Decoder", () => {
     "0\uFEFF1",
   );
 
-  const e4b = new _Utf8.Decoder({ ignoreBOM: true });
+  const e4b = new _Utf8.Decoder({ ignoreBom: true });
   assertStrictEquals(
     e4b.decode(Uint8Array.of(239, 187, 191, 48, 239, 187, 191, 49)),
     "\uFEFF0\uFEFF1",

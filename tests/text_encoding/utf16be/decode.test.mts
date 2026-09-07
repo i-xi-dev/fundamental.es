@@ -17,7 +17,7 @@ Deno.test("TextEncoding.Utf16Be.decode()", () => {
   assertStrictEquals(
     TextEncoding.Utf16Be.decode(
       Uint8Array.of(0xFE, 0xFF, 0, 48, 0xFE, 0xFF, 0, 49),
-      { ignoreBOM: true },
+      { ignoreBom: true },
     ),
     "\uFEFF0\uFEFF1",
   );

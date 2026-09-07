@@ -1,5 +1,5 @@
 export type DecoderOptions = {
-  ignoreBOM?: boolean;
+  ignoreBom?: boolean;
   fatal?: boolean;
 };
 
@@ -8,7 +8,7 @@ export namespace DecoderOptions {
     options?: DecoderOptions,
   ): Required<DecoderOptions> {
     return {
-      ignoreBOM: options?.ignoreBOM === true,
+      ignoreBom: options?.ignoreBom === true,
       fatal: options?.fatal === true,
     };
   }

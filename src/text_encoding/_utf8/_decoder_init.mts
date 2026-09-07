@@ -106,7 +106,7 @@ export function _createDecoderInit(options?: DecoderOptions): _DecoderInit {
     fallback: (options?.fatal === true)
       ? Fallback.EXCEPTION
       : Fallback.REPLACEMENT, // 使用しない
-    ignoreBom: options?.ignoreBOM,
+    ignoreBom: options?.ignoreBom,
     decode: _createDecode(options?.fatal),
   };
 }

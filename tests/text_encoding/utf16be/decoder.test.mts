@@ -12,7 +12,7 @@ Deno.test("TextEncoding.Utf16Be.Decoder", () => {
     "0\uFEFF1",
   );
 
-  const e4b = new TextEncoding.Utf16Be.Decoder({ ignoreBOM: true });
+  const e4b = new TextEncoding.Utf16Be.Decoder({ ignoreBom: true });
   assertStrictEquals(
     e4b.decode(Uint8Array.of(0xFE, 0xFF, 0, 48, 0xFE, 0xFF, 0, 49)),
     "\uFEFF0\uFEFF1",

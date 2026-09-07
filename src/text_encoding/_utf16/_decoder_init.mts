@@ -1,6 +1,5 @@
 import { _BYTES_PER_CHAR } from "../_utf16/_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
-import { _NAME } from "./_common.mts";
 import { _Type } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
@@ -27,8 +26,8 @@ function _regulate(bytes: _Type.Bytes, allowPending?: boolean): {
   };
 }
 
-function _createDecode(fatal?: boolean): _DecodeFunc {
-  const decoder = new TextDecoder(_NAME, {
+function _createDecode(name: string, fatal?: boolean): _DecodeFunc {
+  const decoder = new TextDecoder(name, {
     fatal: fatal === true,
     ignoreBOM: true,
   });
@@ -45,14 +44,20 @@ function _createDecode(fatal?: boolean): _DecodeFunc {
   };
 }
 
-export function _createDecoderInit(options?: DecoderOptions): _DecoderInit {
+export function _createDecoderInit(
+  name: string,
+  littleEndian: boolean,
+  options?: DecoderOptions,
+): _DecoderInit {
   return {
-    name: _NAME.toLowerCase(),
-    bomBytes: Uint8Array.of(0xFE, 0xFF),
+    name: name.toLowerCase(),
+    bomBytes: (littleEndian === true)
+      ? Uint8Array.of(0xFF, 0xFE)
+      : Uint8Array.of(0xFE, 0xFF),
     fallback: (options?.fatal === true)
       ? Fallback.EXCEPTION
       : Fallback.REPLACEMENT, // 使用しない
-    ignoreBom: options?.ignoreBOM,
-    decode: _createDecode(options?.fatal),
+    ignoreBom: options?.ignoreBom,
+    decode: _createDecode(name, options?.fatal),
   };
 }

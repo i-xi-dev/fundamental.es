@@ -8,7 +8,13 @@ const _decoders = new Map<string, TextDecoder>();
 function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
   const key = JSON.stringify(options);
   if (_decoders.has(key) !== true) {
-    _decoders.set(key, new TextDecoder(_NAME, options));
+    _decoders.set(
+      key,
+      new TextDecoder(_NAME, {
+        fatal: options.fatal,
+        ignoreBOM: options.ignoreBom,
+      }),
+    );
   }
   return _decoders.get(key)!;
 }

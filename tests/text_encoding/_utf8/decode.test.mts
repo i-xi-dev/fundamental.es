@@ -14,7 +14,7 @@ Deno.test("_Utf8.decode()", () => {
   assertStrictEquals(
     _Utf8.decode(
       Uint8Array.of(239, 187, 191, 48, 239, 187, 191, 49),
-      { ignoreBOM: true },
+      { ignoreBom: true },
     ),
     "\uFEFF0\uFEFF1",
   );

@@ -26,7 +26,7 @@ Deno.test("_Utf8.DecoderStream", async () => {
   }
   assertStrictEquals(oStr2, "0\uFEFF1");
 
-  const e2x = new _Utf8.DecoderStream({ ignoreBOM: true });
+  const e2x = new _Utf8.DecoderStream({ ignoreBom: true });
   const i2x = ReadableStream.from((function* () {
     yield Uint8Array.of(239, 187, 191, 48, 239, 187, 191, 49);
   })());
