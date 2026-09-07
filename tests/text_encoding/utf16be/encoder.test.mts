@@ -33,4 +33,10 @@ Deno.test("TextEncoding.Utf16Be.Encoder", () => {
     TypeError,
     "Input must be a string that can be encoded in UTF-16BE",
   );
+
+  const e6a = new TextEncoding.Utf16Be.Encoder();
+  assertStrictEquals(
+    stringifyNumbers(e6a.encode("0\uD8001")),
+    "0,48,255,253,0,49",
+  );
 });

@@ -40,4 +40,10 @@ Deno.test("_Utf8.Encoder", () => {
     TypeError,
     "Input must be a string that can be encoded in UTF-8",
   );
+
+  const e6a = new _Utf8.Encoder();
+  assertStrictEquals(
+    stringifyNumbers(e6a.encode("0\uD8001")),
+    "48,239,191,189,49",
+  );
 });

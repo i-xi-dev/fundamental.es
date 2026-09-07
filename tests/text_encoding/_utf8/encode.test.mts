@@ -49,4 +49,9 @@ Deno.test("_Utf8.encode()", () => {
     TypeError,
     "Input must be a string that can be encoded in UTF-8",
   );
+
+  assertStrictEquals(
+    stringifyNumbers(_Utf8.encode("0\uD8001")),
+    "48,239,191,189,49",
+  );
 });
