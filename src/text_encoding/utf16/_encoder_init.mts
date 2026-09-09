@@ -1,5 +1,5 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
-import { _encodeShared } from "../_utf16/_common.mts";
+import { _encodeShared } from "./_common.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
 

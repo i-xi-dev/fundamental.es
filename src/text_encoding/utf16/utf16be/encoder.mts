@@ -1,7 +1,7 @@
-import { _createEncoderInit } from "../_utf16/_encoder_init.mts";
-import { _EncoderBase } from "../_encoder_base.mts";
+import { _createEncoderInit } from "../_encoder_init.mts";
+import { _EncoderBase } from "../../_encoder_base.mts";
 import { _NAME } from "./_common.mts";
-import { EncoderOptions } from "../encoder_options.mts";
+import { EncoderOptions } from "../../encoder_options.mts";
 
 export class Utf16BeEncoder extends _EncoderBase {
   constructor(options?: EncoderOptions) {

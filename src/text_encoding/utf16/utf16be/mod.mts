@@ -1,7 +1,7 @@
-import { _Assert, _Type } from "../../_common/mod.mts";
+import { _Assert, _Type } from "../../../_common/mod.mts";
 import { _staticDecode, _staticEncode } from "./_common.mts";
-import { DecoderOptions } from "../decoder_options.mts";
-import { EncoderOptions } from "../encoder_options.mts";
+import { DecoderOptions } from "../../decoder_options.mts";
+import { EncoderOptions } from "../../encoder_options.mts";
 
 export { Utf16BeDecoder as Decoder } from "./decoder.mts";
 export { Utf16BeEncoder as Encoder } from "./encoder.mts";

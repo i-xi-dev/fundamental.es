@@ -1,9 +1,9 @@
-import { _Error, _Type } from "../../_common/mod.mts";
-import { _encodeShared } from "../_utf16/_common.mts";
-import { DecoderOptions } from "../decoder_options.mts";
-import { EncoderOptions } from "../encoder_options.mts";
+import { _Error, _Type } from "../../../_common/mod.mts";
+import { _encodeShared } from "../_common.mts";
+import { DecoderOptions } from "../../decoder_options.mts";
+import { EncoderOptions } from "../../encoder_options.mts";
 
-export const _NAME = "UTF-16LE";
+export const _NAME = "UTF-16BE";
 
 const _decoders = new Map<string, TextDecoder>();
 function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
@@ -32,6 +32,6 @@ export function _staticEncode(
   text: string,
   options?: EncoderOptions,
 ): _Type.Bytes {
-  const { encodedBytes } = _encodeShared(_NAME, true, text, options?.fatal);
+  const { encodedBytes } = _encodeShared(_NAME, false, text, options?.fatal);
   return encodedBytes;
 }
