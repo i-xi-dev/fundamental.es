@@ -5,8 +5,8 @@ import { EncoderOptions } from "../../encoder_options.mts";
 
 export { Utf16LeDecoder as Decoder } from "./decoder.mts";
 export { Utf16LeEncoder as Encoder } from "./encoder.mts";
-// export { Utf16LeDecoderStream as DecoderStream } from "./decoder_stream.mts";
-// export { Utf16LeEncoderStream as EncoderStream } from "./encoder_stream.mts";
+export { Utf16LeDecoderStream as DecoderStream } from "./decoder_stream.mts";
+export { Utf16LeEncoderStream as EncoderStream } from "./encoder_stream.mts";
 
 export function decode(
   bytes: _Type.Bytes,
