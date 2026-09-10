@@ -1,6 +1,9 @@
 // export * as Utf16 from "./utf16/mod.mts";
 export * as Utf16Be from "./utf16/utf16be/mod.mts";
 export * as Utf16Le from "./utf16/utf16le/mod.mts";
+// export * as Utf32 from "./utf32/mod.mts";
+export * as Utf32Be from "./utf32/utf32be/mod.mts";
+export * as Utf32Le from "./utf32/utf32le/mod.mts";
 export type { Decoder } from "./decoder.mts";
 export { DecoderOptions } from "./decoder_options.mts";
 export type { Encoder } from "./encoder.mts";

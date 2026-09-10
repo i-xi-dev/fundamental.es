@@ -2,7 +2,7 @@ import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
 
-export const _BYTES_PER_CHAR = 2;
+export const _BYTES_PER_RUNE = 4;
 
 export function _encodeShared(
   name: string,
@@ -22,13 +22,14 @@ export function _encodeShared(
     }
   }
 
-  const dstBuffer = new ArrayBuffer(textToEncode.length * _BYTES_PER_CHAR);
+  const runes = [...textToEncode];
+  const runeCount = runes.length;
+
+  const dstBuffer = new ArrayBuffer(runeCount * _BYTES_PER_RUNE);
   const dstView = new DataView(dstBuffer);
 
   let writtenByteCount = 0;
 
-  const runes = [...textToEncode];
-  const runeCount = runes.length;
   for (let i = 0; i < runeCount; i++) {
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
@@ -41,22 +42,20 @@ export function _encodeShared(
           `TODO: ${codePoint}`,
         );
       } else {
-        dstView.setUint16(
+        dstView.setUint32(
           writtenByteCount,
           0xFFFD,
           littleEndian,
         );
-        writtenByteCount += _BYTES_PER_CHAR;
+        writtenByteCount += _BYTES_PER_RUNE;
       }
     } else {
-      for (let i = 0; i < rune.length; i++) {
-        dstView.setUint16(
-          writtenByteCount,
-          rune.charCodeAt(i),
-          littleEndian,
-        );
-        writtenByteCount += _BYTES_PER_CHAR;
-      }
+      dstView.setUint32(
+        writtenByteCount,
+        codePoint,
+        littleEndian,
+      );
+      writtenByteCount += _BYTES_PER_RUNE;
     }
   }
 
