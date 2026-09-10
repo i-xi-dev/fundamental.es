@@ -1,0 +1,50 @@
+import { _Assert, _Type } from "../../_common/mod.mts";
+import {
+  _staticDecode as _staticDecodeBe,
+  _staticEncode as _staticEncodeBe,
+} from "./utf16be/_common.mts";
+import {
+  _staticDecode as _staticDecodeLe,
+  _staticEncode as _staticEncodeLe,
+} from "./utf16le/_common.mts";
+import { DecoderOptions } from "../decoder_options.mts";
+import { EncoderOptions } from "../encoder_options.mts";
+import { _bytesStartsWith } from "../../byte_sequence/_utils.mts";
+
+export function decode(
+  bytes: _Type.Bytes,
+  littleEndian?: boolean,
+  options?: DecoderOptions,
+): string {
+  _Assert.nonSharedUint8Array(bytes, "Input");
+
+  if (littleEndian === true) {
+    return _staticDecodeLe(bytes, options);
+  } else if (littleEndian === false) {
+    return _staticDecodeBe(bytes, options);
+  } else {
+    if (_bytesStartsWith(bytes, [0xFE, 0xFF]) === true) {
+      return _staticDecodeBe(bytes, options);
+    } else if (_bytesStartsWith(bytes, [0xFF, 0xFE]) === true) {
+      return _staticDecodeLe(bytes, options);
+    } else {
+      //XXX throw
+    }
+  }
+}
+
+export function encode(
+  text: string,
+  littleEndian: boolean,
+  options?: EncoderOptions,
+): _Type.Bytes {
+  _Assert.string(text, "Input");
+
+  if (littleEndian === true) {
+    return _staticEncodeLe(text, options);
+  } else if (littleEndian === false) {
+    return _staticEncodeBe(text, options);
+  } else {
+    //XXX throw
+  }
+}
