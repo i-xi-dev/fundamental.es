@@ -31,13 +31,8 @@ function _regulate(
         littleEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN,
       );
       if (CodePoint.isHighSurrogate(lastUnit) === true) {
-        if (littleEndian === true) {
-          p.push(x.at(-2)!);
-          p.push(x.at(-1)!);
-        } else {
-          p.push(x.at(-1)!);
-          p.push(x.at(-2)!);
-        }
+        p.push(x.at(-1)!);
+        p.push(x.at(-2)!);
         x = x.subarray(0, -2);
       }
     }
