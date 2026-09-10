@@ -1,24 +1,8 @@
 import { _EncodeResult } from "../_encoder_init.mts";
-import { _Error, _Type, CodePoint, Rune } from "../../_common/mod.mts";
+import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
+import { _regulateForEncoder } from "../_utf.mts";
 
 export const _BYTES_PER_CHAR = 2;
-
-function _regulateForEncode(text: string, allowPending?: boolean): {
-  textToEncode: string;
-  pendingText: string | null;
-} {
-  if ((allowPending === true) && (text.length > 0)) {
-    const lastChar = text.at(-1)!;
-    if (Rune.isHighSurrogate(lastChar) === true) {
-      return {
-        textToEncode: text.slice(0, -1),
-        pendingText: lastChar,
-      };
-    }
-  }
-
-  return { textToEncode: text, pendingText: null };
-}
 
 export function _encodeShared(
   name: string,
@@ -27,7 +11,10 @@ export function _encodeShared(
   fatal?: boolean,
   allowPending?: boolean,
 ): _EncodeResult {
-  const { textToEncode, pendingText } = _regulateForEncode(input, allowPending);
+  const {
+    textToEncode,
+    pendingText,
+  } = _regulateForEncoder(input, allowPending);
 
   if (fatal === true) {
     if (textToEncode.isWellFormed() !== true) {

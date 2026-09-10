@@ -1,31 +1,18 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _NAME } from "./_common.mts";
-import { _Error, Rune } from "../../_common/mod.mts";
+import { _regulateForEncoder } from "../_utf.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
-
-function _regulate(text: string, allowPending?: boolean): {
-  textToEncode: string;
-  pendingText: string | null;
-} {
-  if ((allowPending === true) && (text.length > 0)) {
-    const lastChar = text.at(-1)!;
-    if (Rune.isHighSurrogate(lastChar) === true) {
-      return {
-        textToEncode: text.slice(0, -1),
-        pendingText: lastChar,
-      };
-    }
-  }
-
-  return { textToEncode: text, pendingText: null };
-}
 
 function _createEncode(fatal?: boolean): _EncodeFunc {
   const encoder = new TextEncoder();
 
   return (input: string, allowPending?: boolean) => {
-    const { textToEncode, pendingText } = _regulate(input, allowPending);
+    const {
+      textToEncode,
+      pendingText,
+    } = _regulateForEncoder(input, allowPending);
 
     if (fatal === true) {
       if (textToEncode.isWellFormed() !== true) {
