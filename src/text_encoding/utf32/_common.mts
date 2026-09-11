@@ -1,8 +1,75 @@
+import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
+import { Uint32 } from "../../numerics/uint.mts";
 
-export const _BYTES_PER_RUNE = 4;
+export const _BYTES_PER_RUNE = Uint32.BYTE_LENGTH;
+
+export function _decodeShared(
+  name: string,
+  littleEndian: boolean,
+  input: ArrayBuffer,
+  fatal?: boolean,
+  allowPending?: boolean,
+): _DecodeResult {
+  const srcView = new DataView(input);
+  const dstRunes: Array<_Type.rune> = [];
+
+  // let writtenRuneCount = 0;
+  const p: Array<_Type.safeint> = [];
+
+  const srcByteCount = srcView.byteLength;
+  const loopCount = (srcByteCount % _BYTES_PER_RUNE)
+    ? (srcByteCount + _BYTES_PER_RUNE)
+    : srcByteCount;
+  for (let i = 0; i < loopCount; i += _BYTES_PER_RUNE) {
+    let s = false;
+    let uint32: number;
+    if ((srcByteCount - i) < _BYTES_PER_RUNE) {
+      if (allowPending === true) {
+        for (let j = i; j < srcByteCount; j++) {
+          p.push(srcView.getUint8(j));
+        }
+        break;
+      } else {
+        // 4バイトで割り切れない場合TextDecoder("utf-16xx")に合わせる
+        if (fatal === true) {
+          throw new TypeError(`decode-error: invalid data`); //TODO
+        } else {
+          // 端数バイトはU+FFFDにデコードする）
+          s = true;
+          uint32 = Number.NaN;
+        }
+      }
+    } else {
+      uint32 = srcView.getUint32(i, littleEndian);
+    }
+
+    if (_Type.isCodePoint(uint32)) {
+      dstRunes.push(String.fromCodePoint(uint32));
+      // writtenRuneCount += 1;
+    } else {
+      if (fatal === true) {
+        throw new TypeError(
+          `decode-error: 0x${uint32.toString(16)}`, //TODO
+        );
+      } else {
+        dstRunes.push("\uFFFD");
+        // writtenRuneCount += 1;
+      }
+    }
+
+    if (s === true) {
+      break;
+    }
+  }
+
+  return {
+    decodedText: dstRunes.join(""),
+    pendingBytes: (p.length > 0) ? Uint8Array.from(p) : null,
+  };
+}
 
 export function _encodeShared(
   name: string,
@@ -36,19 +103,12 @@ export function _encodeShared(
 
     if (CodePoint.isSurrogate(codePoint) === true) {
       // 孤立サロゲート
-
-      if (fatal === true) {
-        throw new TypeError(
-          `TODO: ${codePoint}`,
-        );
-      } else {
-        dstView.setUint32(
-          writtenByteCount,
-          0xFFFD,
-          littleEndian,
-        );
-        writtenByteCount += _BYTES_PER_RUNE;
-      }
+      dstView.setUint32(
+        writtenByteCount,
+        0xFFFD,
+        littleEndian,
+      );
+      writtenByteCount += _BYTES_PER_RUNE;
     } else {
       dstView.setUint32(
         writtenByteCount,

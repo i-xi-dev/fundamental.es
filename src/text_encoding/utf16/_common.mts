@@ -1,8 +1,9 @@
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
+import { Uint16 } from "../../numerics/uint.mts";
 
-export const _BYTES_PER_CHAR = 2;
+export const _BYTES_PER_CHAR = Uint16.BYTE_LENGTH;
 
 export function _encodeShared(
   name: string,
@@ -35,19 +36,12 @@ export function _encodeShared(
 
     if (CodePoint.isSurrogate(codePoint) === true) {
       // 孤立サロゲート
-
-      if (fatal === true) {
-        throw new TypeError(
-          `TODO: ${codePoint}`,
-        );
-      } else {
-        dstView.setUint16(
-          writtenByteCount,
-          0xFFFD,
-          littleEndian,
-        );
-        writtenByteCount += _BYTES_PER_CHAR;
-      }
+      dstView.setUint16(
+        writtenByteCount,
+        0xFFFD,
+        littleEndian,
+      );
+      writtenByteCount += _BYTES_PER_CHAR;
     } else {
       for (let i = 0; i < rune.length; i++) {
         dstView.setUint16(

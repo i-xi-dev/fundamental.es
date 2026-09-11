@@ -13,7 +13,7 @@ export function string(
 export function nonEmptyString(
   test: unknown,
   targetLabel: string,
-): asserts test is string {
+): void {
   if (_Type.isNonEmptyString(test) !== true) {
     throw _TypeError.mustBeNonEmptyString(targetLabel);
   }
