@@ -75,7 +75,10 @@ function _normalizeResizer(
 ): { resizable: boolean; maxByteLength?: _Type.safeint } {
   // capacityは型チェック済み前提
 
-  if (_Type.isSafeInt(maxCapacity) && isNonNegative(maxCapacity)) {
+  if (
+    _Type.isNumber(maxCapacity) && Number.isSafeInteger(maxCapacity) &&
+    isNonNegative(maxCapacity)
+  ) {
     return {
       resizable: true,
       maxByteLength: (maxCapacity >= capacity) ? maxCapacity : capacity,
@@ -157,7 +160,10 @@ export class ByteSequence {
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       this.#view[options.insertAt] = clamped;
     } else {
       this.#appendByte(clamped);
@@ -176,7 +182,10 @@ export class ByteSequence {
     _Assert.arrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
     } else {
       this.#appendBytes(new Uint8Array(sourceBuffer));
@@ -196,7 +205,10 @@ export class ByteSequence {
     // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for (const uint8 of uint8s) {
         if (offset < this.#loadedCount) {
@@ -609,7 +621,8 @@ export class ByteSequence {
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
-    const length = (_Type.isSafeInt(options?.byteLength) &&
+    const length = (_Type.isNumber(options?.byteLength) &&
+        Number.isSafeInteger(options.byteLength) &&
         isNonNegative(options.byteLength))
       ? Math.min(options.byteLength, this.#loadedCount)
       : this.#loadedCount; //TODO options.byteLengthがloadedCountより大きい場合

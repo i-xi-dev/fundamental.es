@@ -1,5 +1,4 @@
 import { isNullOrUndefined } from "./primitive.mts";
-import { isSafeInt } from "./number.mts";
 import { safeint } from "./_typedef/mod.mts";
 
 export function isNonNullObject(test: unknown): test is object {
@@ -7,7 +6,7 @@ export function isNonNullObject(test: unknown): test is object {
 }
 
 export function isSafeIntArray(test: unknown): test is Array<safeint> {
-  return Array.isArray(test) && test.every((i) => isSafeInt(i));
+  return Array.isArray(test) && test.every((i) => Number.isSafeInteger(i));
 }
 
 export function isIterable<T>(test: unknown): test is Iterable<T> {

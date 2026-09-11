@@ -23,7 +23,9 @@ export class ByteFormat {
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
     this.#paddingChar = _U.Char.DIGIT_ZERO;
     this.#minPaddedLength =
-      (_Type.isSafeInt(options?.minLength) && isNonNegative(options.minLength))
+      (_Type.isNumber(options?.minLength) &&
+          Number.isSafeInteger(options.minLength) &&
+          isNonNegative(options.minLength))
         ? options.minLength
         : 0;
   }
