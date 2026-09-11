@@ -23,9 +23,9 @@ export namespace _Hwb {
   export function is(test: unknown): test is Hwb {
     if (_Type.isNonNullObject(test) === true) {
       if (("h" in test) && ("w" in test) && ("b" in test)) {
-        return _Type.isFinite(test.h) &&
-          _Type.isFinite(test.w) &&
-          _Type.isFinite(test.b);
+        return Number.isFinite(test.h) &&
+          Number.isFinite(test.w) &&
+          Number.isFinite(test.b);
       }
     }
 

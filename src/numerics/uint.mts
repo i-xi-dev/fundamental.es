@@ -37,7 +37,9 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   readonly #range: Range.ClosedRange<_Type.safeint, T>;
 
   constructor(bitLength: _Type.safeint) {
-    if (_Type.isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)) {
+    if (
+      Number.isSafeInteger(bitLength) && (bitLength > 0) && (bitLength <= 48)
+    ) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2 ** bitLength;

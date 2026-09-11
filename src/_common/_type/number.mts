@@ -1,12 +1,8 @@
-import { finite, safeint } from "./_typedef/_number.mts";
+import { safeint } from "./_typedef/_number.mts";
 import { uint8 } from "./_typedef/_uint.mts";
 
 export function isNumber(test: unknown): test is number {
   return (typeof test === "number");
-}
-
-export function isFinite(test: unknown): test is finite {
-  return Number.isFinite(test);
 }
 
 export function isSafeInt(test: unknown): test is safeint {

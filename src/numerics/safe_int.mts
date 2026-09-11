@@ -7,7 +7,7 @@ import { RoundingMode } from "./rounding_mode.mts";
 // }
 
 export function _isEvenSafeInt(test: /* _Type.safeint*/ unknown): boolean {
-  return _Type.isSafeInt(test) && ((test % 2) === 0);
+  return _Type.isSafeInt(test) && ((test % 2) === 0); //TODO 型とそれ以外は分ける
 }
 
 export function _roundToSafeInt(

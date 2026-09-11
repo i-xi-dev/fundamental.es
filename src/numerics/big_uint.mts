@@ -37,7 +37,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
   readonly #range: Range.ClosedRange<_biguint, T>;
 
   constructor(bitLength: _Type.safeint) {
-    if (_Type.isSafeInt(bitLength) && (bitLength > 0)) {
+    if (Number.isSafeInteger(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2n ** BigInt(bitLength);

@@ -6,10 +6,6 @@ export function _normalizeFinite<T extends _Type.finite>(
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
-// export function _isNonNegativeFinite(value: /* _Type.finite */ unknown): boolean {
-//   return _Type.isFinite(value) && _isNonNegative(value);
-// }
-
 export function _clampFinite<T extends _Type.finite>(
   value: _Type.finite,
   min: T,

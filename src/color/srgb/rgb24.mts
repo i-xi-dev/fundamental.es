@@ -14,9 +14,9 @@ export namespace _Rgb24 {
   export function is(test: unknown): test is Rgb24 {
     if (_Type.isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
-        return _Type.isSafeInt(test.r) &&
-          _Type.isSafeInt(test.g) &&
-          _Type.isSafeInt(test.b);
+        return Number.isSafeInteger(test.r) &&
+          Number.isSafeInteger(test.g) &&
+          Number.isSafeInteger(test.b);
       }
     }
 

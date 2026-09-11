@@ -13,7 +13,7 @@ class _SafeIntClosedRangeImpl<T extends _Type.safeint = _Type.safeint>
   }
 
   protected override _isBaseT(test: unknown): test is _Type.safeint {
-    return _Type.isSafeInt(test);
+    return Number.isSafeInteger(test);
   }
 
   protected override _typeError(): TypeError {

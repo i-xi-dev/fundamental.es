@@ -5,8 +5,8 @@ import { isNonNegative } from "../../numerics/mod.mts";
 export function finite(
   test: unknown,
   targetLabel: string,
-): asserts test is _Type.finite {
-  if (_Type.isFinite(test) !== true) {
+): void {
+  if (Number.isFinite(test) !== true) {
     throw _TypeError.mustBeFinite(targetLabel);
   }
 }

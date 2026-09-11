@@ -11,9 +11,9 @@ export namespace _RgbComponents {
   export function is(test: unknown): test is RgbComponents {
     if (_Type.isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
-        return _Type.isFinite(test.r) &&
-          _Type.isFinite(test.g) &&
-          _Type.isFinite(test.b);
+        return Number.isFinite(test.r) &&
+          Number.isFinite(test.g) &&
+          Number.isFinite(test.b);
       }
     }
 

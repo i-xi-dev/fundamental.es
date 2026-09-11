@@ -28,9 +28,9 @@ export namespace _Hsl {
   export function is(test: unknown): test is Hsl {
     if (_Type.isNonNullObject(test) === true) {
       if (("h" in test) && ("s" in test) && ("l" in test)) {
-        return _Type.isFinite(test.h) &&
-          _Type.isFinite(test.s) &&
-          _Type.isFinite(test.l);
+        return Number.isFinite(test.h) &&
+          Number.isFinite(test.s) &&
+          Number.isFinite(test.l);
       }
     }
 
