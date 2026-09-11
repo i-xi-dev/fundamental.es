@@ -239,7 +239,10 @@ export class ByteSequence {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for await (const uint8 of uint8s) {
         if (offset < this.#loadedCount) {
@@ -268,7 +271,10 @@ export class ByteSequence {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for (const uintN of uintNs) {
         if (offset < this.#loadedCount) {
@@ -297,7 +303,10 @@ export class ByteSequence {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for (const biguintN of biguintNs) {
         if (offset < this.#loadedCount) {
@@ -326,7 +335,10 @@ export class ByteSequence {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for await (const uintN of uintNs) {
         if (offset < this.#loadedCount) {
@@ -355,7 +367,10 @@ export class ByteSequence {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (_Type.isSafeInt(options?.insertAt)) {
+    if (
+      _Type.isNumber(options?.insertAt) &&
+      Number.isSafeInteger(options.insertAt)
+    ) {
       let offset = options.insertAt;
       for await (const biguintN of biguintNs) {
         if (offset < this.#loadedCount) {
@@ -544,10 +559,16 @@ export class ByteSequence {
   cloneSubsequence(start?: _Type.safeint, end?: _Type.safeint): ByteSequence {
     this.#assertAccessible();
 
-    if ((_Type.isNullOrUndefined(start) || _Type.isSafeInt(start)) !== true) {
+    if (
+      (_Type.isNullOrUndefined(start) ||
+        (_Type.isNumber(start) && Number.isSafeInteger(start))) !== true
+    ) {
       throw _Error.Type.mustBeSafeInt("Start index");
     }
-    if ((_Type.isNullOrUndefined(end) || _Type.isSafeInt(end)) !== true) {
+    if (
+      (_Type.isNullOrUndefined(end) ||
+        (_Type.isNumber(end) && Number.isSafeInteger(end))) !== true
+    ) {
       throw _Error.Type.mustBeSafeInt("End index");
     }
 
@@ -648,7 +669,8 @@ export class ByteSequence {
     }
 
     if (
-      _Type.isSafeInt(test) && isNonNegative(test) && (test < this.#loadedCount)
+      _Type.isNumber(test) && Number.isSafeInteger(test) &&
+      isNonNegative(test) && (test < this.#loadedCount)
     ) {
       // 整数かつ #loadedCount 未満はok
       return;
@@ -724,7 +746,8 @@ function _create(
   capacity: _Type.safeint,
   options?: _FromOptions,
 ): ByteSequence {
-  return (_Type.isSafeInt(options?.maxCapacity) &&
+  return (_Type.isNumber(options?.maxCapacity) &&
+      Number.isSafeInteger(options.maxCapacity) &&
       isNonNegative(options.maxCapacity))
     ? ByteSequence.create(capacity, Math.max(capacity, options.maxCapacity))
     : ByteSequence.create(capacity);

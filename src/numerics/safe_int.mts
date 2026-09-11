@@ -2,12 +2,8 @@ import { _Assert, _Type } from "../_common/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
-// export function _isNonNegativeSafeInt(value: /* _Type.safeint*/ unknown): boolean {
-//   return _Type.isSafeInt(value) && isNonNegative(value);
-// }
-
-export function _isEvenSafeInt(test: /* _Type.safeint*/ unknown): boolean {
-  return _Type.isSafeInt(test) && ((test % 2) === 0); //TODO 型とそれ以外は分ける
+export function _isEven(test: _Type.safeint): boolean {
+  return Number.isSafeInteger(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(
@@ -19,7 +15,7 @@ export function _roundToSafeInt(
   }
 
   const integralPart = _normalizeFinite<_Type.safeint>(Math.trunc(value));
-  const integralPartIsEven = _isEvenSafeInt(integralPart);
+  const integralPartIsEven = _isEven(integralPart);
 
   const nearestP = _normalizeFinite<_Type.safeint>(Math.ceil(value));
   const nearestN = _normalizeFinite<_Type.safeint>(Math.floor(value));
@@ -76,9 +72,9 @@ export function _roundToSafeInt(
 }
 
 export namespace SafeInt {
-  // export const isNonNegative = _isNonNegativeSafeInt;
+  // export const isNonNegative = _isNonNegative;
 
-  export const isEven = _isEvenSafeInt;
+  export const isEven = _isEven;
 
   export function round(
     value: _Type.finite,

@@ -14,8 +14,8 @@ export function finite(
 export function safeInt(
   test: unknown,
   targetLabel: string,
-): asserts test is _Type.safeint {
-  if (_Type.isSafeInt(test) !== true) {
+): void {
+  if (Number.isSafeInteger(test) !== true) {
     throw _TypeError.mustBeSafeInt(targetLabel);
   }
 }
@@ -23,8 +23,8 @@ export function safeInt(
 export function nonNegativeSafeInt(
   test: unknown,
   targetLabel: string,
-): asserts test is _Type.safeint {
-  if ((_Type.isSafeInt(test) && isNonNegative(test)) !== true) {
+): void {
+  if ((Number.isSafeInteger(test) && isNonNegative(test as number)) !== true) {
     throw _TypeError.mustBeNonNegativeSafeInt(targetLabel);
   }
 }
