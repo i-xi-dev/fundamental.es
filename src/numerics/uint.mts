@@ -4,6 +4,7 @@ import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
+import { Assert } from "./assert.mts";
 import { ByteOrder } from "../byte_order.mts";
 
 export interface Uint<T extends _Type.safeint> {
@@ -171,7 +172,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw _Error.Type.mustBeUintN(this.#bitLength, "Input");
     }
-    _Assert.safeInt(offset, "Offset");
+    Assert.safeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -195,7 +196,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   truncateFrom(value: _Type.safeint): T {
-    _Assert.safeInt(value, "Input");
+    Assert.safeInt(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -209,7 +210,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 
   saturateFrom(value: _Type.safeint): T {
-    _Assert.safeInt(value, "Input");
+    Assert.safeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }

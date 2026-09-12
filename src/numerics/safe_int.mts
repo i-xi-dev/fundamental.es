@@ -1,5 +1,6 @@
-import { _Assert, _Type } from "../_common/mod.mts";
+import { _Type } from "../_common/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
+import { Assert } from "./assert.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
 export function _isEven(test: _Type.safeint): boolean {
@@ -80,7 +81,7 @@ export namespace SafeInt {
     value: _Type.finite,
     roundingMode?: RoundingMode,
   ): _Type.safeint {
-    _Assert.finite(value, "Input");
+    Assert.finite(value, "Input");
     return _roundToSafeInt(value, roundingMode);
   }
 }

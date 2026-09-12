@@ -1,5 +1,5 @@
 import { _Assert, _Type, _U } from "./_common/mod.mts";
-import { isNonNegative, Radix } from "./numerics/mod.mts";
+import { Assert, isNonNegative, Radix } from "./numerics/mod.mts";
 import { Type } from "./type/mod.mts";
 
 type _FormatOptions = {
@@ -31,7 +31,7 @@ export class ByteFormat {
   }
 
   format(byte: /* _Type.uint8 */ _Type.safeint): string {
-    _Assert.uint8(byte, "Input");
+    Assert.uint8(byte, "Input");
 
     let str = byte.toString(this.#radix);
     if (this.#upperCase === true) {

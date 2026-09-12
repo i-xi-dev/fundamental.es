@@ -6,8 +6,8 @@ import {
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
-import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import {
+  Assert,
   BigUint,
   BigUint64,
   isNonNegative,
@@ -16,6 +16,7 @@ import {
   Uint32,
   Uint8,
 } from "../numerics/mod.mts";
+import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../text_encoding/mod.mts";
@@ -132,9 +133,9 @@ export class ByteSequence {
     capacity: _Type.safeint,
     maxCapacity?: _Type.safeint,
   ): ByteSequence {
-    _Assert.nonNegativeSafeInt(capacity, "Capacity");
+    Assert.nonNegativeSafeInt(capacity, "Capacity");
     if (_Type.isNullOrUndefined(maxCapacity) !== true) {
-      _Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
+      Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
 
     const { resizable, maxByteLength } = _normalizeResizer(
@@ -433,7 +434,7 @@ export class ByteSequence {
 
   fillZeros(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    _Assert.nonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(new ArrayBuffer(byteLength), options);
@@ -441,7 +442,7 @@ export class ByteSequence {
 
   fillRandom(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    _Assert.nonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(_randomBytes(byteLength), options);
@@ -601,7 +602,7 @@ export class ByteSequence {
   byteAt(index: _Type.safeint): _Type.uint8 {
     this.#assertAccessible();
 
-    _Assert.safeInt(index, "Input");
+    Assert.safeInt(index, "Input");
     if (index < 0) {
       throw _Error.Range.underflow(0, "Input");
     }
@@ -759,7 +760,7 @@ export namespace ByteSequence {
     byteLength: _Type.safeint,
     options?: _FromOptions,
   ) {
-    _Assert.nonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     return _create(byteLength, options).fillZeros(byteLength);
   }
 
@@ -767,7 +768,7 @@ export namespace ByteSequence {
     byteLength: _Type.safeint,
     options?: _FromOptions,
   ) {
-    _Assert.nonNegativeSafeInt(byteLength, "Input");
+    Assert.nonNegativeSafeInt(byteLength, "Input");
     return _create(byteLength, options).fillRandom(byteLength);
   }
 

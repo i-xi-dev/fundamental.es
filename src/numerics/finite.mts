@@ -1,4 +1,5 @@
-import { _Assert, _Error, _Type } from "../_common/mod.mts";
+import { _Error, _Type } from "../_common/mod.mts";
+import { Assert } from "./assert.mts";
 
 export function _normalizeFinite<T extends _Type.finite>(
   value: _Type.finite,
@@ -16,7 +17,7 @@ export function _clampFinite<T extends _Type.finite>(
 
 export namespace Finite {
   export function normalize<T extends _Type.finite>(value: _Type.finite): T {
-    _Assert.finite(value, "Input");
+    Assert.finite(value, "Input");
     return _normalizeFinite(value);
   }
 
@@ -27,9 +28,9 @@ export namespace Finite {
     min: T,
     max: T,
   ): T {
-    _Assert.finite(value, "Input");
-    _Assert.finite(min, "Lower bound");
-    _Assert.finite(max, "Upper bound");
+    Assert.finite(value, "Input");
+    Assert.finite(min, "Lower bound");
+    Assert.finite(max, "Upper bound");
     if (min > max) {
       throw _Error.Range.contradictory();
     }

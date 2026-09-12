@@ -4,6 +4,7 @@ import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
 import { _biguint } from "../_common/_type/_typedef/_number.mts";
 import { _clampBigInt } from "./big_int.mts";
 import { _normalizeOffset } from "./_uint.mts";
+import { Assert } from "./assert.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Type } from "../type/mod.mts";
 
@@ -157,7 +158,7 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
     if (this.#range.contains(value) !== true) {
       throw _Error.Type.mustBeBigUintN(this.#bitLength, "Input");
     }
-    _Assert.safeInt(offset, "Offset");
+    Assert.safeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
