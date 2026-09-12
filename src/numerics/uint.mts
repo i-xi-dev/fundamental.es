@@ -6,6 +6,7 @@ import { _normalizeOffset } from "./_uint.mts";
 import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { Assert } from "./assert.mts";
 import { ByteOrder } from "../byte_order.mts";
+import { Type } from "../type/mod.mts";
 
 export interface Uint<T extends _Type.safeint> {
   get MIN_VALUE(): T;
@@ -25,10 +26,10 @@ export interface Uint<T extends _Type.safeint> {
   saturateFrom(value: _Type.safeint): T;
 }
 
-function _extractByte(unit: _unit, pos: _Type.safeint): _Type.uint8 {
+function _extractByte(unit: _unit, pos: _Type.safeint): Type.uint8 {
   const x1 = 0x100 ** pos;
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(x2 / (0x100 ** (pos - 1))) as _Type.uint8;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as Type.uint8;
 }
 
 export class _UintImpl<T extends _unit> implements Uint<T> {
@@ -109,8 +110,8 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
       return Uint8Array.of(uint);
     }
 
-    const bytes: Array<_Type.uint8> = [];
-    bytes.push((uint % 0x100) as _Type.uint8);
+    const bytes: Array<Type.uint8> = [];
+    bytes.push((uint % 0x100) as Type.uint8);
     for (let i = 2; i <= 6; i++) { // 16-48
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));
@@ -216,9 +217,9 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
   }
 }
 
-export const Uint6: Uint<_Type.uint6> = new _UintImpl(6);
-export const Uint7: Uint<_Type.uint7> = new _UintImpl(7);
-export const Uint8: Uint<_Type.uint8> = new _UintImpl(8);
+export const Uint6: Uint<Type.uint6> = new _UintImpl(6);
+export const Uint7: Uint<Type.uint7> = new _UintImpl(7);
+export const Uint8: Uint<Type.uint8> = new _UintImpl(8);
 export const Uint16: Uint<_Type.uint16> = new _UintImpl(16);
 export const Uint24: Uint<_Type.uint24> = new _UintImpl(24);
 export const Uint32: Uint<_Type.uint32> = new _UintImpl(32);

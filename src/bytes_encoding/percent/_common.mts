@@ -6,13 +6,13 @@ import { Type } from "../../type/mod.mts";
 const { EMPTY } = StringUtils;
 
 export type _PercentOptions = {
-  encodeSet?: Array</* _Type.uint8 */ number>;
+  encodeSet?: Array</* Type.uint8 */ number>;
   spaceAsPlus?: boolean;
 };
 
 function* _defaultEncodeSet() {
   for (let i = 0; i <= Uint8.MAX_VALUE; i++) {
-    yield i as _Type.uint8;
+    yield i as Type.uint8;
   }
 }
 
@@ -20,11 +20,11 @@ export namespace _PercentOptions {
   export function resolve(
     options?: _PercentOptions,
   ): Required<_PercentOptions> {
-    const set: Set<_Type.uint8> = new Set();
+    const set: Set<Type.uint8> = new Set();
 
     if (Array.isArray(options?.encodeSet) === true) {
       for (const b of options.encodeSet) {
-        if (_Type.isUint8(b) === true) {
+        if (Type.isUint8(b) === true) {
           set.add(b);
         }
       }
@@ -58,14 +58,14 @@ export function _decode(
   while (i < text.length) {
     const c = text.charAt(i);
 
-    let byte: _Type.uint8;
+    let byte: Type.uint8;
     if (c === _U.Char.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
-        byte = Number.parseInt(byteString, 16) as _Type.uint8;
+        byte = Number.parseInt(byteString, 16) as Type.uint8;
         i = i + 3;
       } else {
-        byte = c.charCodeAt(0) as _Type.uint8;
+        byte = c.charCodeAt(0) as Type.uint8;
         i = i + 1;
       }
     } else if (c === _U.Char.PLUS_SIGN) {
@@ -76,7 +76,7 @@ export function _decode(
       }
       i = i + 1;
     } else {
-      byte = c.charCodeAt(0) as _Type.uint8;
+      byte = c.charCodeAt(0) as Type.uint8;
       i = i + 1;
     }
 

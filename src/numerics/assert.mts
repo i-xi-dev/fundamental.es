@@ -30,13 +30,4 @@ export namespace Assert {
       throw _Error.Type.mustBeNonNegativeSafeInt(targetLabel);
     }
   }
-
-  export function uint8(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is _Type.uint8 {
-    if (_Type.isUint8(test) !== true) {
-      throw _Error.Type.mustBeUintN(8, targetLabel);
-    }
-  }
 }

@@ -464,9 +464,9 @@ export class ByteSequence {
     return new Uint8Array(this.toArrayBuffer());
   }
 
-  toArray(): Array<_Type.uint8> {
+  toArray(): Array<Type.uint8> {
     // this.#assertAccessible(); toArrayBufferで実施
-    return Array.from(this.toBytes()) as Array<_Type.uint8>;
+    return Array.from(this.toBytes()) as Array<Type.uint8>;
   }
 
   toBase64Encoded(options?: Base64.EncoderOptions): string {
@@ -599,7 +599,7 @@ export class ByteSequence {
     return ByteSequence.#wrap(buffer);
   }
 
-  byteAt(index: _Type.safeint): _Type.uint8 {
+  byteAt(index: _Type.safeint): Type.uint8 {
     this.#assertAccessible();
 
     Assert.safeInt(index, "Input");
@@ -610,10 +610,10 @@ export class ByteSequence {
       throw _Error.Range.overflow(this.#loadedCount, "Input");
     }
 
-    return this.#view[index] as _Type.uint8;
+    return this.#view[index] as Type.uint8;
   }
 
-  [Symbol.iterator](): IterableIterator</* _Type.uint8 */ number> {
+  [Symbol.iterator](): IterableIterator</* Type.uint8 */ number> {
     // this.#assertAccessible(); toBytesで実施
     return this.toBytes()[Symbol.iterator]();
   }
@@ -681,7 +681,7 @@ export class ByteSequence {
     throw new RangeError("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
   }
 
-  #appendByte(byte: _Type.uint8): void {
+  #appendByte(byte: Type.uint8): void {
     this.#growIfNeeded(1);
     this.#view[this.#loadedCount] = byte;
     this.#loadedCount += 1;
@@ -796,7 +796,7 @@ export namespace ByteSequence {
   }
 
   export function fromArray(
-    src: Array</* _Type.uint8 */ _Type.safeint>,
+    src: Array</* Type.uint8 */ _Type.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
     _Assert.safeIntArray(src, "Input");

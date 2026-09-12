@@ -1,8 +1,9 @@
 import { _Type } from "../_common/mod.mts";
+import { Type } from "../type/mod.mts";
 import { Uint16 } from "../numerics/mod.mts";
 
-function _isByteArray(test: unknown): test is Array<_Type.uint8> {
-  return Array.isArray(test) && test.every((i) => _Type.isUint8(i));
+function _isByteArray(test: unknown): test is Array<Type.uint8> {
+  return Array.isArray(test) && test.every((i) => Type.isUint8(i));
 }
 
 export type _Comparable =
@@ -10,11 +11,11 @@ export type _Comparable =
   | SharedArrayBuffer
   | ArrayBufferView<ArrayBuffer>
   | ArrayBufferView<SharedArrayBuffer>
-  | Array</* _Type.uint8 */ number>;
+  | Array</* Type.uint8 */ number>;
 
 export function _comparableToBytes(
   input: _Comparable,
-): _Type.Bytes | Array<_Type.uint8> | null {
+): _Type.Bytes | Array<Type.uint8> | null {
   if (_Type.isNonSharedUint8Array(input) === true) {
     return input;
   } else if (_Type.isArrayBuffer(input) === true) {

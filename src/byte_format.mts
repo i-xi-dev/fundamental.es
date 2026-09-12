@@ -1,5 +1,5 @@
 import { _Assert, _Type, _U } from "./_common/mod.mts";
-import { Assert, isNonNegative, Radix } from "./numerics/mod.mts";
+import { isNonNegative, Radix } from "./numerics/mod.mts";
 import { Type } from "./type/mod.mts";
 
 type _FormatOptions = {
@@ -30,8 +30,8 @@ export class ByteFormat {
       : 0;
   }
 
-  format(byte: /* _Type.uint8 */ _Type.safeint): string {
-    Assert.uint8(byte, "Input");
+  format(byte: /* Type.uint8 */ _Type.safeint): string {
+    Type.Assert.uint8(byte, "Input");
 
     let str = byte.toString(this.#radix);
     if (this.#upperCase === true) {
@@ -41,13 +41,13 @@ export class ByteFormat {
     return str.padStart(this.#minPaddedLength, this.#paddingChar);
   }
 
-  parse(str: string): _Type.uint8 {
+  parse(str: string): Type.uint8 {
     _Assert.nonEmptyString(str, "Input");
     if (this.#isFormatMatch(str) !== true) {
       throw new Error("TODO");
     }
 
-    return Number.parseInt(str, this.#radix) as _Type.uint8;
+    return Number.parseInt(str, this.#radix) as Type.uint8;
   }
 
   #isFormatMatch(test: string): boolean {

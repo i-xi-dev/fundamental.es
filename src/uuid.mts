@@ -10,8 +10,8 @@ export type _ToStringOptions = {
 };
 
 export interface Uuid {
-  get variant(): _Type.uint4;
-  get version(): _Type.uint4;
+  get variant(): Type.uint4;
+  get version(): Type.uint4;
   get timestamp(): _Type.safeint | null;
   toString(options?: _ToStringOptions): string;
   // toBigUint128(): _Type.biguint128;
@@ -22,12 +22,12 @@ export interface Uuid {
 const _BYTES_SIZE = 16;
 
 function _parseBytes(bytes: _Type.Bytes): {
-  variant: _Type.uint4;
-  version: _Type.uint4;
+  variant: Type.uint4;
+  version: Type.uint4;
   timestamp: _Type.safeint | null;
 } {
-  const variant = ((bytes[8] as _Type.uint8) >> 4) as _Type.uint4;
-  const version = ((bytes[6] as _Type.uint8) >> 4) as _Type.uint4;
+  const variant = ((bytes[8] as Type.uint8) >> 4) as Type.uint4;
+  const version = ((bytes[6] as Type.uint8) >> 4) as Type.uint4;
 
   let timestamp: _Type.safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
@@ -41,8 +41,8 @@ function _parseBytes(bytes: _Type.Bytes): {
 
 class _Uuid implements Uuid {
   readonly #bytes: _Type.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
-  readonly #type: _Type.uint4;
-  readonly #subtype: _Type.uint4;
+  readonly #type: Type.uint4;
+  readonly #subtype: Type.uint4;
   readonly #timestamp: _Type.safeint | null; // v7専用
 
   constructor(bytes: _Type.Bytes) {
@@ -54,11 +54,11 @@ class _Uuid implements Uuid {
     this.#timestamp = timestamp;
   }
 
-  get variant(): _Type.uint4 {
+  get variant(): Type.uint4 {
     return this.#type;
   }
 
-  get version(): _Type.uint4 {
+  get version(): Type.uint4 {
     return this.#subtype;
   }
 
@@ -110,10 +110,10 @@ function _generateRandom(): _Type.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   // 7バイト目の上位4ビットは0100₂固定（13桁目の文字列表現は"4"固定）
-  bytes[6] = (bytes[6] as _Type.uint8) & 0x0F | 0x40;
+  bytes[6] = (bytes[6] as Type.uint8) & 0x0F | 0x40;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as _Type.uint8) & 0x3F | 0x80;
+  bytes[8] = (bytes[8] as Type.uint8) & 0x3F | 0x80;
 
   return bytes;
 }
@@ -161,10 +161,10 @@ function _generateUnixTimeBased(): _Type.Bytes {
   bytes.set(new Uint8Array(tsBuffer, 0, 2), 6);
 
   // 7バイト目の上位4ビットは0111₂固定（13桁目の文字列表現は"7"固定）
-  bytes[6] = (bytes[6] as _Type.uint8) & 0x0F | 0x70;
+  bytes[6] = (bytes[6] as Type.uint8) & 0x0F | 0x70;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as _Type.uint8) & 0x3F | 0x80;
+  bytes[8] = (bytes[8] as Type.uint8) & 0x3F | 0x80;
 
   return bytes;
 }

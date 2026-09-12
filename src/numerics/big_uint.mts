@@ -26,10 +26,10 @@ export interface BigUint<T extends bigint> {
   saturateFrom(value: bigint): T;
 }
 
-function _extractByte(unit: _biguint, pos: _Type.safeint): _Type.uint8 {
+function _extractByte(unit: _biguint, pos: _Type.safeint): Type.uint8 {
   const x1 = 0x100n ** BigInt(pos);
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _Type.uint8;
+  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as Type.uint8;
 }
 
 export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
@@ -106,8 +106,8 @@ export class _BigUintImpl<T extends _biguint> implements BigUint<T> {
       return Uint8Array.of(Number(uint));
     }
 
-    const bytes: Array<_Type.uint8> = [];
-    bytes.push(Number(uint % 0x100n) as _Type.uint8);
+    const bytes: Array<Type.uint8> = [];
+    bytes.push(Number(uint % 0x100n) as Type.uint8);
     for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));

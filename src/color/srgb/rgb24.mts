@@ -5,9 +5,9 @@ import { _SRgbRgb } from "./_rgb.mts";
 import { RoundingMode, Uint8 } from "../../numerics/mod.mts";
 
 export type Rgb24 = {
-  r: /* _Type.uint8 */ _Type.safeint;
-  g: /* _Type.uint8 */ _Type.safeint;
-  b: /* _Type.uint8 */ _Type.safeint;
+  r: /* Type.uint8 */ _Type.safeint;
+  g: /* Type.uint8 */ _Type.safeint;
+  b: /* Type.uint8 */ _Type.safeint;
 };
 
 export namespace _Rgb24 {
