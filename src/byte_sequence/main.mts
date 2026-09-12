@@ -808,7 +808,7 @@ export namespace ByteSequence {
     base64: string,
     options?: Base64.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    _Assert.string(base64, "Input");
+    Type.Assert.string(base64, "Input");
 
     const bytes = Uint8Array.fromBase64(base64, options);
     return fromBytes(bytes, options);
@@ -818,7 +818,7 @@ export namespace ByteSequence {
     binstr: string,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.string(binstr, "Input");
+    Type.Assert.string(binstr, "Input");
 
     const bytes = BinaryString.decode(binstr);
     return fromBytes(bytes, options);
@@ -828,7 +828,7 @@ export namespace ByteSequence {
     hex: string,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.string(hex, "Input");
+    Type.Assert.string(hex, "Input");
 
     const bytes = Uint8Array.fromHex(hex);
     return fromBytes(bytes, options);
@@ -838,7 +838,7 @@ export namespace ByteSequence {
     percent: string,
     options?: Percent.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    _Assert.string(percent, "Input");
+    Type.Assert.string(percent, "Input");
 
     const bytes = Percent.decode(percent, options);
     return fromBytes(bytes, options);
@@ -849,7 +849,7 @@ export namespace ByteSequence {
     text: string,
     options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
-    _Assert.string(text, "Input");
+    Type.Assert.string(text, "Input");
 
     const bytes = _Utf8.encode(text, options);
     return fromBytes(bytes, options);

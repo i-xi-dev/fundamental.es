@@ -6,6 +6,7 @@ import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { StringUtils } from "../../_common/utils/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 const _hexRegex = /^#?[0-9a-f]{6}$/i;
 
@@ -102,7 +103,7 @@ export class SRgbColor extends _RgbColor {
   }
 
   static fromHexEncoded(hex: string): SRgbColor {
-    _Assert.string(hex, "Input");
+    Type.Assert.string(hex, "Input");
     if (_hexRegex.test(hex) !== true) {
       throw _Error.Type.mustBe(
         'a hexadecimal color value in the "RRGGBB" format',

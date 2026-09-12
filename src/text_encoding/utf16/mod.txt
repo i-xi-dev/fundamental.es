@@ -38,7 +38,7 @@ export function encode(
   littleEndian: boolean,
   options?: EncoderOptions,
 ): _Type.Bytes {
-  _Assert.string(text, "Input");
+  Type.Assert.string(text, "Input");
 
   if (littleEndian === true) {
     return _staticEncodeLe(text, options);

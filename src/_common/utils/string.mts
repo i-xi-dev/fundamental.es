@@ -4,8 +4,8 @@ import { Type } from "../../type/mod.mts";
 export const EMPTY = "";
 
 export function charSequenceSortComparator(a: string, b: string): number {
-  _Assert.string(a, "Input-1");
-  _Assert.string(b, "Input-2");
+  Type.Assert.string(a, "Input-1");
+  Type.Assert.string(b, "Input-2");
 
   if (a < b) {
     return -1;
@@ -97,7 +97,7 @@ export function rangesMatches(
 }
 
 export function rangesTrim(input: string, rangeSet: CodePointRangeSet): string {
-  _Assert.string(input, "Input");
+  Type.Assert.string(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -113,7 +113,7 @@ export function rangesTrimEnd(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  _Assert.string(input, "Input");
+  Type.Assert.string(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -129,7 +129,7 @@ export function rangesCollectStart(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  _Assert.string(input, "Input");
+  Type.Assert.string(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -141,7 +141,7 @@ export function rangesCollectStart(
 }
 
 export function patternCollectStart(input: string, pattern: string): string {
-  _Assert.string(input, "Input");
+  Type.Assert.string(input, "Input");
   _Assert.nonEmptyString(pattern, "Pattern");
 
   return _patternCollectStart(input, pattern);

@@ -2,6 +2,7 @@ import { _Assert, _Type } from "../_common/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
 import { Encoder } from "./encoder.mts";
 import { Fallback } from "./fallback.mts";
+import { Type } from "../type/mod.mts";
 
 export abstract class _EncoderBase implements Encoder {
   readonly #init: _EncoderInit;
@@ -19,7 +20,7 @@ export abstract class _EncoderBase implements Encoder {
   }
 
   encode(input: string): _Type.Bytes {
-    _Assert.string(input, "Input");
+    Type.Assert.string(input, "Input");
 
     const {
       encodedBytes,

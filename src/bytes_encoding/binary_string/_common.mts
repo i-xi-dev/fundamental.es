@@ -1,4 +1,5 @@
 import { _Assert, _Error, _Type, StringUtils } from "../../_common/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -6,7 +7,7 @@ const { EMPTY } = StringUtils;
 const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする
 
 export function _decode(text: string): _Type.Bytes {
-  _Assert.string(text, "Input");
+  Type.Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _Error.Syntax.mustBeBinaryString("Input");
   }

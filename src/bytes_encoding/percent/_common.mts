@@ -1,6 +1,7 @@
 import { _Assert, _Error, _Type, _U, StringUtils } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -44,7 +45,7 @@ export function _decode(
   text: string,
   options: Required<_PercentOptions>,
 ): _Type.Bytes {
-  _Assert.string(text, "Input");
+  Type.Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _Error.Syntax.mustBePercentEncoded("Input");
   }
