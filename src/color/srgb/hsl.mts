@@ -3,6 +3,7 @@ import { _Error, _Type } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 const _S_MIN = 0;
 
@@ -14,8 +15,8 @@ const _L_MAX = 1;
 
 export type Hsl = {
   h: _Type.degrees;
-  s: _Type.finite;
-  l: _Type.finite;
+  s: TypeAlias.finite;
+  l: TypeAlias.finite;
 };
 
 function _f(n: number, { h, s, l }: Hsl): number {

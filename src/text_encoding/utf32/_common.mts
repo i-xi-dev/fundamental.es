@@ -2,6 +2,7 @@ import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
+import { TypeAlias } from "../../type/mod.mts";
 import { Uint32 } from "../../numerics/uint.mts";
 
 export const _BYTES_PER_RUNE = Uint32.BYTE_LENGTH;
@@ -17,7 +18,7 @@ export function _decodeShared(
   const dstRunes: Array<_Type.rune> = [];
 
   // let writtenRuneCount = 0;
-  const p: Array<_Type.safeint> = [];
+  const p: Array<TypeAlias.safeint> = [];
 
   const srcByteCount = srcView.byteLength;
   const loopCount = (srcByteCount % _BYTES_PER_RUNE)

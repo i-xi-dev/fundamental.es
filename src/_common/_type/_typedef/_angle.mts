@@ -1,6 +1,4 @@
-import { finite } from "./_number.mts";
-
-export type degrees = finite;
+export type degrees = /* finite */ number;
 
 export type radians = number;
 

@@ -4,6 +4,7 @@ import { _Type, CodePoint } from "../../_common/mod.mts";
 import { ByteOrder } from "../../mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
+import { TypeAlias } from "../../type/mod.mts";
 import { Uint16 } from "../../numerics/uint.mts";
 
 function _regulate(
@@ -14,7 +15,7 @@ function _regulate(
   bytesToDecode: _Type.Bytes;
   pendingBytes: _Type.Bytes | null;
 } {
-  const p: Array<_Type.safeint> = [];
+  const p: Array<TypeAlias.safeint> = [];
   let x: _Type.Bytes = bytes;
 
   if ((allowPending === true) && (x.length > 0)) {

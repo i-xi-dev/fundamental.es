@@ -1,4 +1,4 @@
-import { safeint } from "../_type/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
@@ -24,7 +24,10 @@ export function mustBeBigInt(target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function mustBeBigUintN(bits: safeint, target: string): TypeError {
+export function mustBeBigUintN(
+  bits: TypeAlias.safeint,
+  target: string,
+): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`bigint\``,
@@ -75,7 +78,10 @@ export function mustBeString(target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function mustBeUintN(bits: safeint, target: string): TypeError {
+export function mustBeUintN(
+  bits: TypeAlias.safeint,
+  target: string,
+): TypeError {
   const msg = _message(
     target,
     `a ${bits}-bit unsigned integer of type \`number\``,

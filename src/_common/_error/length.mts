@@ -1,4 +1,4 @@
-import * as _Type from "../_type/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 const _Type1 = {
   TOO_LONG: 0b0010,
@@ -14,7 +14,7 @@ function _message(
   target: string,
   type1: number,
   type2: symbol,
-  len: _Type.safeint,
+  len: TypeAlias.safeint,
 ): string {
   const s1 = (type2 === _Type2.CHARS)
     ? `number of \`char\`s in ${target}`
@@ -32,7 +32,7 @@ function _message(
 
 export function charsCount( //TODO _Error.CharsCount.mismatchに分離する
   target: string,
-  expectedCount: _Type.safeint,
+  expectedCount: TypeAlias.safeint,
 ): RangeError {
   const msg = _message(
     target,
@@ -45,7 +45,7 @@ export function charsCount( //TODO _Error.CharsCount.mismatchに分離する
 
 export function charsTooLong( //TODO _Error.CharsCount.tooLongに分離する
   target: string,
-  upperBound: _Type.safeint,
+  upperBound: TypeAlias.safeint,
 ): RangeError {
   const msg = _message(target, _Type1.TOO_LONG, _Type2.CHARS, upperBound);
   return new RangeError(msg);
@@ -53,7 +53,7 @@ export function charsTooLong( //TODO _Error.CharsCount.tooLongに分離する
 
 export function charsTooShort( //TODO _Error.CharsCount.tooShortに分離する
   target: string,
-  lowerBound: _Type.safeint,
+  lowerBound: TypeAlias.safeint,
 ): RangeError {
   const msg = _message(target, _Type1.TOO_SHORT, _Type2.CHARS, lowerBound);
   return new RangeError(msg);
@@ -61,7 +61,7 @@ export function charsTooShort( //TODO _Error.CharsCount.tooShortに分離する
 
 export function mismatch(
   target: string,
-  expectedLength: _Type.safeint,
+  expectedLength: TypeAlias.safeint,
 ): RangeError {
   const msg = _message(
     target,
@@ -72,14 +72,17 @@ export function mismatch(
   return new RangeError(msg);
 }
 
-export function tooLong(target: string, upperBound: _Type.safeint): RangeError {
+export function tooLong(
+  target: string,
+  upperBound: TypeAlias.safeint,
+): RangeError {
   const msg = _message(target, _Type1.TOO_LONG, _Type2.ANY, upperBound);
   return new RangeError(msg);
 }
 
 export function tooShort(
   target: string,
-  lowerBound: _Type.safeint,
+  lowerBound: TypeAlias.safeint,
 ): RangeError {
   const msg = _message(target, _Type1.TOO_SHORT, _Type2.ANY, lowerBound);
   return new RangeError(msg);

@@ -1,7 +1,7 @@
 import { _Error, _Type, StringUtils } from "./_common/mod.mts";
 import { _bytesEquals } from "./byte_sequence/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
-import { Type } from "./type/mod.mts";
+import { Type, TypeAlias } from "./type/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -12,7 +12,7 @@ export type _ToStringOptions = {
 export interface Uuid {
   get variant(): Type.uint4;
   get version(): Type.uint4;
-  get timestamp(): _Type.safeint | null;
+  get timestamp(): TypeAlias.safeint | null;
   toString(options?: _ToStringOptions): string;
   // toBigUint128(): _Type.biguint128;
   toBytes(): _Type.Bytes;
@@ -24,12 +24,12 @@ const _BYTES_SIZE = 16;
 function _parseBytes(bytes: _Type.Bytes): {
   variant: Type.uint4;
   version: Type.uint4;
-  timestamp: _Type.safeint | null;
+  timestamp: TypeAlias.safeint | null;
 } {
   const variant = ((bytes[8] as Type.uint8) >> 4) as Type.uint4;
   const version = ((bytes[6] as Type.uint8) >> 4) as Type.uint4;
 
-  let timestamp: _Type.safeint | null = null;
+  let timestamp: TypeAlias.safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
     let work = (new DataView(bytes.buffer)).getBigUint64(0);
     work = work >> 16n;
@@ -43,7 +43,7 @@ class _Uuid implements Uuid {
   readonly #bytes: _Type.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
   readonly #type: Type.uint4;
   readonly #subtype: Type.uint4;
-  readonly #timestamp: _Type.safeint | null; // v7専用
+  readonly #timestamp: TypeAlias.safeint | null; // v7専用
 
   constructor(bytes: _Type.Bytes) {
     this.#bytes = bytes;
@@ -62,7 +62,7 @@ class _Uuid implements Uuid {
     return this.#subtype;
   }
 
-  get timestamp(): _Type.safeint | null {
+  get timestamp(): TypeAlias.safeint | null {
     return this.#timestamp;
   }
 
@@ -118,14 +118,14 @@ function _generateRandom(): _Type.Bytes {
   return bytes;
 }
 
-function _timestamp(): _Type.safeint {
+function _timestamp(): TypeAlias.safeint {
   const { performance } = globalThis;
   return Math.trunc(performance.timeOrigin + performance.now());
 }
 
 const _v7Counter = (function* () {
-  let last: _Type.safeint = Number.MIN_SAFE_INTEGER;
-  let cnt: _Type.safeint = 0;
+  let last: TypeAlias.safeint = Number.MIN_SAFE_INTEGER;
+  let cnt: TypeAlias.safeint = 0;
   while (true) {
     const curr = _timestamp();
     if (last < curr) {

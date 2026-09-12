@@ -1,25 +1,25 @@
-import { _Type } from "../_common/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { Assert } from "./assert.mts";
 import { RoundingMode } from "./rounding_mode.mts";
+import { TypeAlias } from "../type/mod.mts";
 
-export function _isEven(test: _Type.safeint): boolean {
+export function _isEven(test: TypeAlias.safeint): boolean {
   return Number.isSafeInteger(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(
-  value: _Type.finite,
+  value: TypeAlias.finite,
   roundingMode?: RoundingMode,
-): _Type.safeint {
+): TypeAlias.safeint {
   if (Number.isInteger(value)) {
-    return _normalizeFinite<_Type.safeint>(value);
+    return _normalizeFinite<TypeAlias.safeint>(value);
   }
 
-  const integralPart = _normalizeFinite<_Type.safeint>(Math.trunc(value));
+  const integralPart = _normalizeFinite<TypeAlias.safeint>(Math.trunc(value));
   const integralPartIsEven = _isEven(integralPart);
 
-  const nearestP = _normalizeFinite<_Type.safeint>(Math.ceil(value));
-  const nearestN = _normalizeFinite<_Type.safeint>(Math.floor(value));
+  const nearestP = _normalizeFinite<TypeAlias.safeint>(Math.ceil(value));
+  const nearestN = _normalizeFinite<TypeAlias.safeint>(Math.floor(value));
   const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
@@ -78,9 +78,9 @@ export namespace SafeInt {
   export const isEven = _isEven;
 
   export function round(
-    value: _Type.finite,
+    value: TypeAlias.finite,
     roundingMode?: RoundingMode,
-  ): _Type.safeint {
+  ): TypeAlias.safeint {
     Assert.finite(value, "Input");
     return _roundToSafeInt(value, roundingMode);
   }

@@ -1,18 +1,18 @@
 import { _Assert, _Type, _U } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
-import { Type } from "./type/mod.mts";
+import { Type, TypeAlias } from "./type/mod.mts";
 
 type _FormatOptions = {
   radix?: Radix;
   upperCase?: boolean; // parse時は無視
-  minLength?: _Type.safeint; // parse時は無視
+  minLength?: TypeAlias.safeint; // parse時は無視
 };
 
 export class ByteFormat {
   readonly #radix: Radix;
   readonly #upperCase: boolean;
   readonly #paddingChar: _Type.char;
-  readonly #minPaddedLength: _Type.safeint;
+  readonly #minPaddedLength: TypeAlias.safeint;
 
   constructor(options?: _FormatOptions) {
     this.#radix = Object.values(Radix).includes(options?.radix as Radix)
@@ -30,7 +30,7 @@ export class ByteFormat {
       : 0;
   }
 
-  format(byte: /* Type.uint8 */ _Type.safeint): string {
+  format(byte: /* Type.uint8 */ TypeAlias.safeint): string {
     Type.Assert.uint8(byte, "Input");
 
     let str = byte.toString(this.#radix);

@@ -1,11 +1,13 @@
 import { isNullOrUndefined } from "./primitive.mts";
-import { safeint } from "./_typedef/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export function isNonNullObject(test: unknown): test is object {
   return (typeof test === "object") && (isNullOrUndefined(test) !== true);
 }
 
-export function isSafeIntArray(test: unknown): test is Array<safeint> {
+export function isSafeIntArray(
+  test: unknown,
+): test is Array<TypeAlias.safeint> {
   return Array.isArray(test) && test.every((i) => Number.isSafeInteger(i));
 }
 

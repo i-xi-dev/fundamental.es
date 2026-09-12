@@ -1,5 +1,5 @@
 import { _Type } from "../_common/mod.mts";
-import { Type } from "../type/mod.mts";
+import { Type, TypeAlias } from "../type/mod.mts";
 import { Uint16 } from "../numerics/mod.mts";
 
 function _isByteArray(test: unknown): test is Array<Type.uint8> {
@@ -72,7 +72,7 @@ export function _bytesEquals(
   return _bytesStartsWith(self, other);
 }
 
-export function _randomBytes(byteLength: _Type.safeint): ArrayBuffer {
+export function _randomBytes(byteLength: TypeAlias.safeint): ArrayBuffer {
   const buffer = new ArrayBuffer(byteLength);
   let bytesSpan: Uint8Array<ArrayBuffer>;
   let filled = 0;

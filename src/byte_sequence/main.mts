@@ -20,7 +20,7 @@ import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../text_encoding/mod.mts";
-import { Type } from "../type/mod.mts";
+import { Type, TypeAlias } from "../type/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -33,10 +33,10 @@ const _ClampMode = {
 
 type _ClampMode = typeof _ClampMode[keyof typeof _ClampMode];
 
-function _uintClamper<T extends _Type.safeint>(
+function _uintClamper<T extends TypeAlias.safeint>(
   x: Uint<T>,
   mode?: _ClampMode,
-): (v: _Type.safeint) => T {
+): (v: TypeAlias.safeint) => T {
   return (mode === _ClampMode.SATURATE)
     ? (v) => x.saturateFrom(v)
     : (v) => x.truncateFrom(v);
@@ -53,28 +53,28 @@ function _biguintClamper<T extends bigint>(
 
 type _LoadOptions_1 = {
   clampMode?: _ClampMode;
-  insertAt?: _Type.safeint;
+  insertAt?: TypeAlias.safeint;
 };
 
 type _LoadOptions_2 = {
-  insertAt?: _Type.safeint;
+  insertAt?: TypeAlias.safeint;
 };
 
 type _LoadOptions = {
   clampMode?: _ClampMode;
   byteOrder?: ByteOrder;
-  insertAt?: _Type.safeint;
+  insertAt?: TypeAlias.safeint;
 };
 
 type _ToOptions = {
-  byteLength?: _Type.safeint;
+  byteLength?: TypeAlias.safeint;
   //XXX fixLength?: boolean;
 };
 
 function _normalizeResizer(
-  capacity: _Type.safeint,
-  maxCapacity?: _Type.safeint,
-): { resizable: boolean; maxByteLength?: _Type.safeint } {
+  capacity: TypeAlias.safeint,
+  maxCapacity?: TypeAlias.safeint,
+): { resizable: boolean; maxByteLength?: TypeAlias.safeint } {
   // capacityは型チェック済み前提
 
   if (
@@ -93,9 +93,9 @@ function _normalizeResizer(
 export class ByteSequence {
   readonly #buffer: ArrayBuffer;
   readonly #view: Uint8Array<ArrayBuffer>;
-  #loadedCount: _Type.safeint; // 進むのみ。戻す手段は提供しない
+  #loadedCount: TypeAlias.safeint; // 進むのみ。戻す手段は提供しない
 
-  private constructor(buffer: ArrayBuffer, initialCount: _Type.safeint) {
+  private constructor(buffer: ArrayBuffer, initialCount: TypeAlias.safeint) {
     this.#buffer = buffer;
     this.#view = new Uint8Array(this.#buffer);
     this.#loadedCount = initialCount;
@@ -105,17 +105,17 @@ export class ByteSequence {
     return "ByteSequence";
   }
 
-  get capacity(): _Type.safeint {
+  get capacity(): TypeAlias.safeint {
     this.#assertAccessible();
     return this.#buffer.byteLength;
   }
 
-  get maxCapacity(): _Type.safeint {
+  get maxCapacity(): TypeAlias.safeint {
     this.#assertAccessible();
     return this.#buffer.maxByteLength;
   }
 
-  get count(): _Type.safeint {
+  get count(): TypeAlias.safeint {
     this.#assertAccessible();
     return this.#loadedCount;
   }
@@ -130,8 +130,8 @@ export class ByteSequence {
   }
 
   static create(
-    capacity: _Type.safeint,
-    maxCapacity?: _Type.safeint,
+    capacity: TypeAlias.safeint,
+    maxCapacity?: TypeAlias.safeint,
   ): ByteSequence {
     Assert.nonNegativeSafeInt(capacity, "Capacity");
     if (_Type.isNullOrUndefined(maxCapacity) !== true) {
@@ -153,7 +153,7 @@ export class ByteSequence {
     return new ByteSequence(buffer, buffer.byteLength);
   }
 
-  setByte(byte: _Type.safeint, options?: _LoadOptions_1): this {
+  setByte(byte: TypeAlias.safeint, options?: _LoadOptions_1): this {
     this.#assertAccessible();
     // byteの型はsaturateFrom/truncateFromでチェックされる
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -196,7 +196,7 @@ export class ByteSequence {
   }
 
   loadFromUint8Iterable(
-    uint8s: Iterable<_Type.safeint>,
+    uint8s: Iterable<TypeAlias.safeint>,
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
@@ -233,7 +233,7 @@ export class ByteSequence {
   // }
 
   async loadFromUint8AsyncIterable(
-    uint8s: AsyncIterable<_Type.safeint>,
+    uint8s: AsyncIterable<TypeAlias.safeint>,
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
@@ -262,9 +262,9 @@ export class ByteSequence {
     return this;
   }
 
-  #loadFromUintNIterable<T extends _Type.safeint>(
+  #loadFromUintNIterable<T extends TypeAlias.safeint>(
     uT: Uint<T>,
-    uintNs: Iterable<_Type.safeint>,
+    uintNs: Iterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
@@ -326,9 +326,9 @@ export class ByteSequence {
     return this;
   }
 
-  async #loadFromUintNAsyncIterable<T extends _Type.safeint>(
+  async #loadFromUintNAsyncIterable<T extends TypeAlias.safeint>(
     uT: Uint<T>,
-    uintNs: AsyncIterable<_Type.safeint>,
+    uintNs: AsyncIterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
@@ -391,28 +391,28 @@ export class ByteSequence {
   }
 
   loadFromUint16Iterable(
-    uint16s: Iterable<_Type.safeint>,
+    uint16s: Iterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ): this {
     return this.#loadFromUintNIterable(Uint16, uint16s, options);
   }
 
   loadFromUint16AsyncIterable(
-    uint16s: AsyncIterable<_Type.safeint>,
+    uint16s: AsyncIterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
     return this.#loadFromUintNAsyncIterable(Uint16, uint16s, options);
   }
 
   loadFromUint32Iterable(
-    uint32s: Iterable<_Type.safeint>,
+    uint32s: Iterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ): this {
     return this.#loadFromUintNIterable(Uint32, uint32s, options);
   }
 
   loadFromUint32AsyncIterable(
-    uint32s: AsyncIterable<_Type.safeint>,
+    uint32s: AsyncIterable<TypeAlias.safeint>,
     options?: _LoadOptions,
   ): Promise<this> {
     return this.#loadFromUintNAsyncIterable(Uint32, uint32s, options);
@@ -432,7 +432,7 @@ export class ByteSequence {
     return this.#loadFromBigUintNAsyncIterable(BigUint64, biguint64s, options);
   }
 
-  fillZeros(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
+  fillZeros(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -440,7 +440,7 @@ export class ByteSequence {
     return this.loadFromArrayBuffer(new ArrayBuffer(byteLength), options);
   }
 
-  fillRandom(byteLength: _Type.safeint, options?: _LoadOptions_2): this {
+  fillRandom(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
     Assert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
@@ -558,7 +558,10 @@ export class ByteSequence {
     }
   }
 
-  cloneSubsequence(start?: _Type.safeint, end?: _Type.safeint): ByteSequence {
+  cloneSubsequence(
+    start?: TypeAlias.safeint,
+    end?: TypeAlias.safeint,
+  ): ByteSequence {
     this.#assertAccessible();
 
     if (
@@ -599,7 +602,7 @@ export class ByteSequence {
     return ByteSequence.#wrap(buffer);
   }
 
-  byteAt(index: _Type.safeint): Type.uint8 {
+  byteAt(index: TypeAlias.safeint): Type.uint8 {
     this.#assertAccessible();
 
     Assert.safeInt(index, "Input");
@@ -664,7 +667,7 @@ export class ByteSequence {
 
   #assertOffsetInRangeOrNull(
     test: unknown,
-  ): asserts test is _Type.safeint | null | undefined {
+  ): asserts test is TypeAlias.safeint | null | undefined {
     if (_Type.isNullOrUndefined(test) === true) {
       // null | undefined はok
       return;
@@ -693,7 +696,7 @@ export class ByteSequence {
     this.#loadedCount += bytes.byteLength;
   }
 
-  #setBytes(bytes: _Type.Bytes, offset: _Type.safeint): void {
+  #setBytes(bytes: _Type.Bytes, offset: TypeAlias.safeint): void {
     const setEnd = offset + bytes.byteLength;
     this.#growIfNeeded(setEnd);
     this.#view.set(bytes, offset);
@@ -702,7 +705,7 @@ export class ByteSequence {
     }
   }
 
-  #growIfNeeded(increaseLength: _Type.safeint): void {
+  #growIfNeeded(increaseLength: TypeAlias.safeint): void {
     const needed =
       (this.#loadedCount + increaseLength) > this.#buffer.byteLength;
 
@@ -736,16 +739,16 @@ export class ByteSequence {
 }
 
 type _FromOptions = {
-  maxCapacity?: _Type.safeint;
+  maxCapacity?: TypeAlias.safeint;
 };
 
 type _FromOptions_1 = {
-  maxCapacity?: _Type.safeint;
+  maxCapacity?: TypeAlias.safeint;
   clampMode?: _ClampMode;
 };
 
 function _create(
-  capacity: _Type.safeint,
+  capacity: TypeAlias.safeint,
   options?: _FromOptions,
 ): ByteSequence {
   return (Type.isNumber(options?.maxCapacity) &&
@@ -757,7 +760,7 @@ function _create(
 
 export namespace ByteSequence {
   export function zeros(
-    byteLength: _Type.safeint,
+    byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
     Assert.nonNegativeSafeInt(byteLength, "Input");
@@ -765,7 +768,7 @@ export namespace ByteSequence {
   }
 
   export function random(
-    byteLength: _Type.safeint,
+    byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
     Assert.nonNegativeSafeInt(byteLength, "Input");
@@ -782,7 +785,7 @@ export namespace ByteSequence {
 
   //XXX lengthが不明の場合どうする
   // export function fromUint8Iterable(
-  //   uint8s: Iterable<_Type.safeint>,
+  //   uint8s: Iterable<TypeAlias.safeint>,
   //   options?: _FromOptions_1,
   // ) {
   // }
@@ -796,7 +799,7 @@ export namespace ByteSequence {
   }
 
   export function fromArray(
-    src: Array</* Type.uint8 */ _Type.safeint>,
+    src: Array</* Type.uint8 */ TypeAlias.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
     _Assert.safeIntArray(src, "Input");

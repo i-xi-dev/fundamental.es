@@ -3,11 +3,12 @@ import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/safe_int.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { RoundingMode, Uint8 } from "../../numerics/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export type Rgb24 = {
-  r: /* Type.uint8 */ _Type.safeint;
-  g: /* Type.uint8 */ _Type.safeint;
-  b: /* Type.uint8 */ _Type.safeint;
+  r: /* Type.uint8 */ TypeAlias.safeint;
+  g: /* Type.uint8 */ TypeAlias.safeint;
+  b: /* Type.uint8 */ TypeAlias.safeint;
 };
 
 export namespace _Rgb24 {

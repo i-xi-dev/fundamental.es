@@ -1,10 +1,10 @@
-import { _Type } from "../_common/mod.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 // for UintN.rotateLeft(x, offset)
 export function _normalizeOffset(
-  offset: _Type.safeint,
-  bitLength: _Type.safeint,
-): _Type.safeint {
+  offset: TypeAlias.safeint,
+  bitLength: TypeAlias.safeint,
+): TypeAlias.safeint {
   const normalizedOffset = offset % bitLength;
   return (normalizedOffset < 0)
     ? (normalizedOffset + bitLength)

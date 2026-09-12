@@ -4,6 +4,7 @@ import { _Hsl } from "./hsl.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 const _W_MIN = 0;
 
@@ -15,8 +16,8 @@ const _B_MAX = 1;
 
 export type Hwb = {
   h: _Type.degrees;
-  w: _Type.finite;
-  b: _Type.finite;
+  w: TypeAlias.finite;
+  b: TypeAlias.finite;
 };
 
 export namespace _Hwb {

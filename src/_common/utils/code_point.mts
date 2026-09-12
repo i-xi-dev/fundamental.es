@@ -1,11 +1,11 @@
-import { _Type } from "../mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 //TODO 移動
 
-export function isSurrogate(codePoint: _Type.safeint): boolean {
+export function isSurrogate(codePoint: TypeAlias.safeint): boolean {
   return (codePoint >= 0xD800) && (codePoint <= 0xDFFF);
 }
 
-export function isHighSurrogate(codePoint: _Type.safeint): boolean {
+export function isHighSurrogate(codePoint: TypeAlias.safeint): boolean {
   return (codePoint >= 0xD800) && (codePoint <= 0xDBFF);
 }
