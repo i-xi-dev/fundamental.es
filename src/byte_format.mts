@@ -1,5 +1,6 @@
 import { _Assert, _Type, _U } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
+import { Type } from "./type/mod.mts";
 
 type _FormatOptions = {
   radix?: Radix;
@@ -22,12 +23,11 @@ export class ByteFormat {
     //   ? options.paddingChar.charAt(0)
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
     this.#paddingChar = _U.Char.DIGIT_ZERO;
-    this.#minPaddedLength =
-      (_Type.isNumber(options?.minLength) &&
-          Number.isSafeInteger(options.minLength) &&
-          isNonNegative(options.minLength))
-        ? options.minLength
-        : 0;
+    this.#minPaddedLength = (Type.isNumber(options?.minLength) &&
+        Number.isSafeInteger(options.minLength) &&
+        isNonNegative(options.minLength))
+      ? options.minLength
+      : 0;
   }
 
   format(byte: /* _Type.uint8 */ _Type.safeint): string {

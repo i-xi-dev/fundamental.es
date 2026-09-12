@@ -1,4 +1,5 @@
 import { _Assert, _Type } from "../mod.mts";
+import { Type } from "../../type/mod.mts";
 
 export const EMPTY = "";
 
@@ -92,7 +93,7 @@ export function rangesMatches(
 
   const pattern = _patternFrom(rangeSet);
   const regex = new RegExp(`^${pattern}$`, "u");
-  return _Type.isString(test) && regex.test(test);
+  return Type.isString(test) && regex.test(test);
 }
 
 export function rangesTrim(input: string, rangeSet: CodePointRangeSet): string {

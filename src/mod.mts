@@ -8,4 +8,5 @@ export * as Resource from "./resource/mod.mts";
 export * as TextEncoding from "./text_encoding/mod.mts";
 export { ByteFormat } from "./byte_format.mts";
 export { ByteOrder } from "./byte_order.mts";
+export { Type } from "./type/mod.mts";
 export { Uuid } from "./uuid.mts";

@@ -19,6 +19,7 @@ import {
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../text_encoding/mod.mts";
+import { Type } from "../type/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -76,7 +77,7 @@ function _normalizeResizer(
   // capacityは型チェック済み前提
 
   if (
-    _Type.isNumber(maxCapacity) && Number.isSafeInteger(maxCapacity) &&
+    Type.isNumber(maxCapacity) && Number.isSafeInteger(maxCapacity) &&
     isNonNegative(maxCapacity)
   ) {
     return {
@@ -161,7 +162,7 @@ export class ByteSequence {
       : Uint8.truncateFrom(byte);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       this.#view[options.insertAt] = clamped;
@@ -183,7 +184,7 @@ export class ByteSequence {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
@@ -206,7 +207,7 @@ export class ByteSequence {
 
     const f = _uintClamper(Uint8, options?.clampMode);
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -240,7 +241,7 @@ export class ByteSequence {
 
     const f = _uintClamper(Uint8, options?.clampMode);
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -272,7 +273,7 @@ export class ByteSequence {
     const f = _uintClamper(uT, options?.clampMode);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -304,7 +305,7 @@ export class ByteSequence {
     const f = _biguintClamper(uT, options?.clampMode);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -336,7 +337,7 @@ export class ByteSequence {
     const f = _uintClamper(uT, options?.clampMode);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -368,7 +369,7 @@ export class ByteSequence {
     const f = _biguintClamper(uT, options?.clampMode);
 
     if (
-      _Type.isNumber(options?.insertAt) &&
+      Type.isNumber(options?.insertAt) &&
       Number.isSafeInteger(options.insertAt)
     ) {
       let offset = options.insertAt;
@@ -561,13 +562,13 @@ export class ByteSequence {
 
     if (
       (_Type.isNullOrUndefined(start) ||
-        (_Type.isNumber(start) && Number.isSafeInteger(start))) !== true
+        (Type.isNumber(start) && Number.isSafeInteger(start))) !== true
     ) {
       throw _Error.Type.mustBeSafeInt("Start index");
     }
     if (
       (_Type.isNullOrUndefined(end) ||
-        (_Type.isNumber(end) && Number.isSafeInteger(end))) !== true
+        (Type.isNumber(end) && Number.isSafeInteger(end))) !== true
     ) {
       throw _Error.Type.mustBeSafeInt("End index");
     }
@@ -642,7 +643,7 @@ export class ByteSequence {
     //   ? this.#bytes.buffer.transferToFixedLength(options?.byteLength)
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
-    const length = (_Type.isNumber(options?.byteLength) &&
+    const length = (Type.isNumber(options?.byteLength) &&
         Number.isSafeInteger(options.byteLength) &&
         isNonNegative(options.byteLength))
       ? Math.min(options.byteLength, this.#loadedCount)
@@ -669,7 +670,7 @@ export class ByteSequence {
     }
 
     if (
-      _Type.isNumber(test) && Number.isSafeInteger(test) &&
+      Type.isNumber(test) && Number.isSafeInteger(test) &&
       isNonNegative(test) && (test < this.#loadedCount)
     ) {
       // 整数かつ #loadedCount 未満はok
@@ -746,7 +747,7 @@ function _create(
   capacity: _Type.safeint,
   options?: _FromOptions,
 ): ByteSequence {
-  return (_Type.isNumber(options?.maxCapacity) &&
+  return (Type.isNumber(options?.maxCapacity) &&
       Number.isSafeInteger(options.maxCapacity) &&
       isNonNegative(options.maxCapacity))
     ? ByteSequence.create(capacity, Math.max(capacity, options.maxCapacity))

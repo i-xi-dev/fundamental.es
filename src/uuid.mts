@@ -1,6 +1,7 @@
 import { _Error, _Type, StringUtils } from "./_common/mod.mts";
-import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { _bytesEquals } from "./byte_sequence/_utils.mts";
+import { BigUint128, Uint8 } from "./numerics/mod.mts";
+import { Type } from "./type/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -172,11 +173,11 @@ const _uuidRegex =
   /^(?:(?:urn:uuid:)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
 
 function _isUuidString(test: unknown): test is string {
-  return _Type.isString(test) && _uuidRegex.test(test);
+  return Type.isString(test) && _uuidRegex.test(test);
 }
 
 function _isUuidBigInt(test: unknown): test is _Type.biguint128 {
-  return _Type.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
+  return Type.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
     (test <= BigUint128.MAX_VALUE);
 }
 

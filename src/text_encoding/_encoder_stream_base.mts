@@ -2,6 +2,7 @@ import { _EncoderInit } from "./_encoder_init.mts";
 import { _Type } from "../_common/mod.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
+import { Type } from "../type/mod.mts";
 
 export abstract class _EncoderStreamBase implements EncoderStream {
   readonly #init: _EncoderInit;
@@ -30,7 +31,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
       },
       flush(controller: TransformStreamDefaultController<_Type.Bytes>): void {
         try {
-          if (_Type.isString(self()._pendingText) === true) {
+          if (Type.isString(self()._pendingText) === true) {
             const { encodedBytes } = init.encode(self()._pendingText!); // エンコードエラーになるはず
             controller.enqueue(encodedBytes);
           }
