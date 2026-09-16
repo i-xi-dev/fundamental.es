@@ -1,7 +1,7 @@
 import { _encode, _PercentOptions } from "./_common.mts";
 import { _Encoder } from "../_encoder.mts";
-import { _Type } from "../../_common/mod.mts";
 import { PercentEncoderOptions } from "./encoder_options.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export class PercentEncoder implements _Encoder {
   readonly #options: Required<PercentEncoderOptions>;
@@ -10,7 +10,7 @@ export class PercentEncoder implements _Encoder {
     this.#options = _PercentOptions.resolve(options);
   }
 
-  encode(bytes: _Type.Bytes): string {
+  encode(bytes: TypeAlias.Bytes): string {
     return _encode(bytes, this.#options);
   }
 }

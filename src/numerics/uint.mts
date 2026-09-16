@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
+import { _Assert, _Error, _Io } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { Assert } from "./assert.mts";
@@ -13,8 +13,11 @@ export interface Uint<T extends TypeAlias.safeint> {
   get BIT_LENGTH(): TypeAlias.safeint;
   get BYTE_LENGTH(): TypeAlias.safeint;
   get [Symbol.toStringTag](): string;
-  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: /* T */ TypeAlias.safeint, byteOrder?: ByteOrder): _Type.Bytes;
+  fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T;
+  toBytes(
+    uint: /* T */ TypeAlias.safeint,
+    byteOrder?: ByteOrder,
+  ): TypeAlias.Bytes;
   bitwiseAnd(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
   bitwiseOr(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
   bitwiseXOr(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
@@ -76,7 +79,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     return `Uint${this.#bitLength}`;
   }
 
-  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T {
+  fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _Error.Length.mismatch("input", this.#byteLength);
@@ -101,7 +104,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     return result as T;
   }
 
-  toBytes(uint: TypeAlias.safeint, byteOrder?: ByteOrder): _Type.Bytes {
+  toBytes(uint: TypeAlias.safeint, byteOrder?: ByteOrder): TypeAlias.Bytes {
     if (this.#range.contains(uint) !== true) {
       throw _Error.Type.mustBeUintN(this.#bitLength, "Input");
     }

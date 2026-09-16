@@ -1,9 +1,9 @@
 import { _encode } from "./_common.mts";
 import { _Encoder } from "../_encoder.mts";
-import { _Type } from "../../_common/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export class BinaryStringEncoder implements _Encoder {
-  encode(bytes: _Type.Bytes): string {
+  encode(bytes: TypeAlias.Bytes): string {
     return _encode(bytes);
   }
 }

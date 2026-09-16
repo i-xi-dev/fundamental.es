@@ -1,5 +1,5 @@
-import { _Type } from "../_common/mod.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 export interface DigestAlgorithm {
-  compute(input: _Type.Bytes): Promise<_Type.Bytes>;
+  compute(input: TypeAlias.Bytes): Promise<TypeAlias.Bytes>;
 }

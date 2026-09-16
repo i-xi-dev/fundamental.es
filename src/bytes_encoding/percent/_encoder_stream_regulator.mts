@@ -1,15 +1,15 @@
 import type { _EncoderStreamRegulator } from "../_encoder_stream_regulator.mts";
-import { _Type } from "../../_common/mod.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export class _PercentEncoderStreamRegulator implements _EncoderStreamRegulator {
   constructor() {
   }
 
-  regulate(bytes: _Type.Bytes): _Type.Bytes {
+  regulate(bytes: TypeAlias.Bytes): TypeAlias.Bytes {
     return bytes;
   }
 
-  flush(): _Type.Bytes {
+  flush(): TypeAlias.Bytes {
     return new Uint8Array(0);
   }
 }

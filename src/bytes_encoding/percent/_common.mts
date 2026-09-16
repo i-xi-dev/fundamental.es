@@ -1,7 +1,7 @@
-import { _Assert, _Error, _Type, _U, StringUtils } from "../../_common/mod.mts";
+import { _Assert, _Error, _U, StringUtils } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
-import { Type } from "../../type/mod.mts";
+import { Type, TypeAlias } from "../../type/mod.mts";
 
 const { EMPTY } = StringUtils;
 
@@ -44,7 +44,7 @@ const _regex = /^[\u0020-\u007E]*$/; //XXX 共通assertにする
 export function _decode(
   text: string,
   options: Required<_PercentOptions>,
-): _Type.Bytes {
+): TypeAlias.Bytes {
   Type.Assert.string(text, "Input");
   if (_regex.test(text) !== true) {
     throw _Error.Syntax.mustBePercentEncoded("Input");
@@ -93,7 +93,7 @@ export function _decode(
 export function _staticDecode(
   text: string,
   options?: _PercentOptions,
-): _Type.Bytes {
+): TypeAlias.Bytes {
   return _decode(text, _PercentOptions.resolve(options));
 }
 
@@ -104,7 +104,7 @@ const f = new ByteFormat({
 });
 
 export function _encode(
-  bytes: _Type.Bytes,
+  bytes: TypeAlias.Bytes,
   options: Required<_PercentOptions>,
 ): string {
   _Assert.nonSharedUint8Array(bytes, "Input");
@@ -126,7 +126,7 @@ export function _encode(
 }
 
 export function _staticEncode(
-  bytes: _Type.Bytes,
+  bytes: TypeAlias.Bytes,
   options?: _PercentOptions,
 ): string {
   return _encode(bytes, _PercentOptions.resolve(options));

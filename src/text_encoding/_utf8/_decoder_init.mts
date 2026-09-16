@@ -1,8 +1,8 @@
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { _NAME } from "./_common.mts";
-import { _Type } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 // 2～4バイト文字の1バイト目か
 function _is1OfMulti(byte: number): boolean {
@@ -29,9 +29,9 @@ function _isXOfMulti(byte: number): boolean {
   return (byte >= 0x80) && (byte <= 0xBF);
 }
 
-function _regulate(bytes: _Type.Bytes, allowPending?: boolean): {
-  bytesToDecode: _Type.Bytes;
-  pendingBytes: _Type.Bytes | null;
+function _regulate(bytes: TypeAlias.Bytes, allowPending?: boolean): {
+  bytesToDecode: TypeAlias.Bytes;
+  pendingBytes: TypeAlias.Bytes | null;
 } {
   if ((allowPending === true) && (bytes.length > 0)) {
     const lastByte = bytes.at(-1)!;
@@ -87,7 +87,7 @@ function _createDecode(fatal?: boolean): _DecodeFunc {
     ignoreBOM: true,
   });
 
-  return (input: _Type.Bytes, allowPending?: boolean) => {
+  return (input: TypeAlias.Bytes, allowPending?: boolean) => {
     const { bytesToDecode, pendingBytes } = _regulate(input, allowPending);
 
     const decodedText = decoder.decode(bytesToDecode);

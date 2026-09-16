@@ -1,6 +1,6 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
+import { _Assert, _Error, _Io } from "../_common/mod.mts";
 import { _clampBigInt } from "./big_int.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { Assert } from "./assert.mts";
@@ -13,8 +13,8 @@ export interface BigUint<T extends bigint> {
   get BIT_LENGTH(): TypeAlias.safeint;
   get BYTE_LENGTH(): TypeAlias.safeint;
   get [Symbol.toStringTag](): string;
-  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T;
-  toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): _Type.Bytes;
+  fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T;
+  toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): TypeAlias.Bytes;
   bitwiseAnd(a: /* T */ bigint, b: /* T */ bigint): T;
   bitwiseOr(a: /* T */ bigint, b: /* T */ bigint): T;
   bitwiseXOr(a: /* T */ bigint, b: /* T */ bigint): T;
@@ -74,7 +74,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     return `BigUint${this.#bitLength}`;
   }
 
-  fromBytes(bytes: _Type.Bytes, byteOrder?: ByteOrder): T {
+  fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _Error.Length.mismatch("input", this.#byteLength);
@@ -97,7 +97,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     return result as T;
   }
 
-  toBytes(uint: bigint, byteOrder?: ByteOrder): _Type.Bytes {
+  toBytes(uint: bigint, byteOrder?: ByteOrder): TypeAlias.Bytes {
     if (this.#range.contains(uint) !== true) {
       throw _Error.Type.mustBeBigUintN(this.#bitLength, "Input");
     }

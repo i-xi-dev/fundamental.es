@@ -2,9 +2,13 @@
 
 // number、かつ、isFinite()が真になる値
 export type finite = number;
+export type degrees = finite;
+export type radians = finite;
+export type gradians = finite;
+export type turns = finite;
 
 // number、かつ、isSafeInteger()が真になる値
-export type safeint = number;
+export type safeint = finite;
 
 // number、かつ、isSafeInteger()が真、かつ、非負整数
 export type nnint = safeint;
@@ -32,3 +36,7 @@ export type char = string;
 
 // string、かつ、U+0000からU+10FFFFまでの1コードポイントからなる1文字
 export type rune = string;
+
+export type numeric = number | bigint;
+
+export type Bytes = Uint8Array<ArrayBuffer>;

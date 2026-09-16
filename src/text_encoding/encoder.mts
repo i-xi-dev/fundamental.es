@@ -1,12 +1,12 @@
-import { _Type } from "../_common/mod.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 // 標準のTextEncoderだとencodingが"utf-8"固定、encode()の第1引数が非必須の為、新たに定義
 export interface Encoder {
   encoding: string;
   // fatal: boolean;
-  encode(text: string): _Type.Bytes;
+  encode(text: string): TypeAlias.Bytes;
   // encodeInto(
   //   source: string,
-  //   destination: _Type.Bytes,
+  //   destination: TypeAlias.Bytes,
   // ): TextEncoderEncodeIntoResult;
 }

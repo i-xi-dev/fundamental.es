@@ -1,4 +1,4 @@
-import { _Assert, _Error, _Type } from "../../_common/mod.mts";
+import { _Assert, _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
@@ -40,7 +40,7 @@ export class SRgbColor extends _RgbColor {
     return this.#_hwb;
   }
 
-  get hue(): _Type.degrees {
+  get hue(): TypeAlias.degrees {
     return this.#hsl.h;
   }
 
@@ -73,7 +73,7 @@ export class SRgbColor extends _RgbColor {
     return new SRgbColor(rgb);
   }
 
-  static fromBytes(bytes: _Type.Bytes): SRgbColor {
+  static fromBytes(bytes: TypeAlias.Bytes): SRgbColor {
     _Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength !== 3) {
       throw _Error.Type.mustBe(
@@ -119,7 +119,7 @@ export class SRgbColor extends _RgbColor {
     return { ...this.#rgb24 };
   }
 
-  toBytes(): _Type.Bytes {
+  toBytes(): TypeAlias.Bytes {
     const { r, g, b } = this.#rgb24;
     return Uint8Array.of(r, g, b);
   }
@@ -163,7 +163,7 @@ export class SRgbColor extends _RgbColor {
     }
   }
 
-  plusHue(relativeHue: _Type.degrees): SRgbColor {
+  plusHue(relativeHue: TypeAlias.degrees): SRgbColor {
     const { h, s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: h + relativeHue,
@@ -172,7 +172,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  withHue(absoluteHue: _Type.degrees): SRgbColor {
+  withHue(absoluteHue: TypeAlias.degrees): SRgbColor {
     const { s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: absoluteHue,

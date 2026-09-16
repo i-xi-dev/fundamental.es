@@ -1,6 +1,6 @@
 import { _Encoder } from "../_encoder.mts";
-import { _Type } from "../../_common/mod.mts";
 import { Base64EncoderOptions } from "./encoder_options.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export class Base64Encoder implements _Encoder {
   readonly #options: Required<Base64EncoderOptions>;
@@ -9,7 +9,7 @@ export class Base64Encoder implements _Encoder {
     this.#options = Base64EncoderOptions.resolve(options);
   }
 
-  encode(bytes: _Type.Bytes): string {
+  encode(bytes: TypeAlias.Bytes): string {
     return bytes.toBase64(this.#options);
   }
 }

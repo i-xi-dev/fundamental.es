@@ -1,4 +1,4 @@
-import { _Assert, _Type } from "../../_common/mod.mts";
+import { _Assert } from "../../_common/mod.mts";
 import {
   _staticDecode as _staticDecodeBe,
   _staticEncode as _staticEncodeBe,
@@ -12,7 +12,7 @@ import { EncoderOptions } from "../encoder_options.mts";
 import { _bytesStartsWith } from "../../byte_sequence/_utils.mts";
 
 export function decode(
-  bytes: _Type.Bytes,
+  bytes: TypeAlias.Bytes,
   littleEndian?: boolean,
   options?: DecoderOptions,
 ): string {
@@ -37,7 +37,7 @@ export function encode(
   text: string,
   littleEndian: boolean,
   options?: EncoderOptions,
-): _Type.Bytes {
+): TypeAlias.Bytes {
   Type.Assert.string(text, "Input");
 
   if (littleEndian === true) {

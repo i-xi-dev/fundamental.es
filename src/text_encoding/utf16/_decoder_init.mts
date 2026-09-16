@@ -1,22 +1,22 @@
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
-import { _Type, CodePoint } from "../../_common/mod.mts";
 import { ByteOrder } from "../../mod.mts";
+import { CodePoint } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
 import { TypeAlias } from "../../type/mod.mts";
 import { Uint16 } from "../../numerics/uint.mts";
 
 function _regulate(
-  bytes: _Type.Bytes,
+  bytes: TypeAlias.Bytes,
   littleEndian: boolean,
   allowPending?: boolean,
 ): {
-  bytesToDecode: _Type.Bytes;
-  pendingBytes: _Type.Bytes | null;
+  bytesToDecode: TypeAlias.Bytes;
+  pendingBytes: TypeAlias.Bytes | null;
 } {
   const p: Array<TypeAlias.safeint> = [];
-  let x: _Type.Bytes = bytes;
+  let x: TypeAlias.Bytes = bytes;
 
   if ((allowPending === true) && (x.length > 0)) {
     if ((x.length % _BYTES_PER_CHAR) !== 0) {
@@ -57,7 +57,7 @@ function _createDecode(
     ignoreBOM: true,
   });
 
-  return (input: _Type.Bytes, allowPending?: boolean) => {
+  return (input: TypeAlias.Bytes, allowPending?: boolean) => {
     const { bytesToDecode, pendingBytes } = _regulate(
       input,
       littleEndian,

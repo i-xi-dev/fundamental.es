@@ -1,6 +1,7 @@
-import { _Error, _Type } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { EncoderOptions } from "../encoder_options.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export const _NAME = "UTF-8";
 
@@ -20,7 +21,7 @@ function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
 }
 
 export function _staticDecode(
-  bytes: _Type.Bytes,
+  bytes: TypeAlias.Bytes,
   options?: DecoderOptions,
 ): string {
   const resolvedOptions = DecoderOptions.resolve(options);
@@ -38,7 +39,7 @@ function _getEncoder(): TextEncoder {
 export function _staticEncode(
   text: string,
   options?: EncoderOptions,
-): _Type.Bytes {
+): TypeAlias.Bytes {
   if (options?.fatal === true) {
     if (text.isWellFormed() !== true) {
       throw _Error.TextEncoding.encodingFailed(_NAME, "Input");

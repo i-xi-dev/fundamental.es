@@ -1,6 +1,7 @@
-import { _Type } from "../_common/mod.mts";
+import { TypeAlias } from "../type/mod.mts";
 
-export interface DecoderStream extends TransformStream<_Type.Bytes, string> {
+export interface DecoderStream
+  extends TransformStream<TypeAlias.Bytes, string> {
   encoding: string;
   // fatal: boolean;
 }

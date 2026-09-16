@@ -1,8 +1,8 @@
-import { _Type } from "../_common/mod.mts";
 import { Fallback } from "./fallback.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 export type _EncodeResult = {
-  encodedBytes: _Type.Bytes;
+  encodedBytes: TypeAlias.Bytes;
   pendingText: string | null;
 };
 

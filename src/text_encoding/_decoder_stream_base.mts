@@ -3,11 +3,12 @@ import { _DecoderInit } from "./_decoder_init.mts";
 import { _Type } from "../_common/mod.mts";
 import { DecoderStream } from "./decoder_stream.mts";
 import { Fallback } from "./fallback.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 export abstract class _DecoderStreamBase implements DecoderStream {
   readonly #init: _DecoderInit;
-  readonly #stream: TransformStream<_Type.Bytes, string>;
-  _pendingBytes: _Type.Bytes | null;
+  readonly #stream: TransformStream<TypeAlias.Bytes, string>;
+  _pendingBytes: TypeAlias.Bytes | null;
   _enqueued: boolean;
 
   protected constructor(init: _DecoderInit) {
@@ -17,11 +18,11 @@ export abstract class _DecoderStreamBase implements DecoderStream {
     const self = () => this;
     this.#stream = new TransformStream({
       transform(
-        chunk: _Type.Bytes,
+        chunk: TypeAlias.Bytes,
         controller: TransformStreamDefaultController<string>,
       ): void {
         try {
-          let toDecode: _Type.Bytes;
+          let toDecode: TypeAlias.Bytes;
           const pendingBytesB = self()._pendingBytes;
           if (_Type.isNonSharedUint8Array(pendingBytesB) === true) {
             toDecode = new Uint8Array(pendingBytesB.length + chunk.length);
@@ -77,7 +78,7 @@ export abstract class _DecoderStreamBase implements DecoderStream {
     return this.#stream.readable;
   }
 
-  get writable(): WritableStream<_Type.Bytes> {
+  get writable(): WritableStream<TypeAlias.Bytes> {
     return this.#stream.writable;
   }
 }

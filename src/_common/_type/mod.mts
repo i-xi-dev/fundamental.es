@@ -1,4 +1,3 @@
-export * from "./_typedef/mod.mts";
 export * from "./buffer.mts";
 export * from "./object.mts";
 export * from "./primitive.mts";

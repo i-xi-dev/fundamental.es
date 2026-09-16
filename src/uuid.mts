@@ -15,13 +15,13 @@ export interface Uuid {
   get timestamp(): TypeAlias.safeint | null;
   toString(options?: _ToStringOptions): string;
   // toBigUint128(): TypeAlias.biguint128;
-  toBytes(): _Type.Bytes;
-  equals(other: Uuid | _Type.Bytes | string): boolean;
+  toBytes(): TypeAlias.Bytes;
+  equals(other: Uuid | TypeAlias.Bytes | string): boolean;
 }
 
 const _BYTES_SIZE = 16;
 
-function _parseBytes(bytes: _Type.Bytes): {
+function _parseBytes(bytes: TypeAlias.Bytes): {
   variant: Type.uint4;
   version: Type.uint4;
   timestamp: TypeAlias.safeint | null;
@@ -40,12 +40,12 @@ function _parseBytes(bytes: _Type.Bytes): {
 }
 
 class _Uuid implements Uuid {
-  readonly #bytes: _Type.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
+  readonly #bytes: TypeAlias.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
   readonly #type: Type.uint4;
   readonly #subtype: Type.uint4;
   readonly #timestamp: TypeAlias.safeint | null; // v7専用
 
-  constructor(bytes: _Type.Bytes) {
+  constructor(bytes: TypeAlias.Bytes) {
     this.#bytes = bytes;
     const { variant, version, timestamp } = _parseBytes(bytes);
 
@@ -83,11 +83,11 @@ class _Uuid implements Uuid {
   //   return BigInt(`0x${this.#bytes.toHex()}`);
   // }
 
-  toBytes(): _Type.Bytes {
+  toBytes(): TypeAlias.Bytes {
     return Uint8Array.from(this.#bytes);
   }
 
-  equals(other: Uuid | _Type.Bytes | string): boolean {
+  equals(other: Uuid | TypeAlias.Bytes | string): boolean {
     if (other instanceof _Uuid) {
       return _bytesEquals(this.#bytes, other.#bytes);
     } else if (_Type.isNonSharedUint8Array(other) === true) {
@@ -106,7 +106,7 @@ function _fromString(str: string): Uuid {
   return new _Uuid(bytes);
 }
 
-function _generateRandom(): _Type.Bytes {
+function _generateRandom(): TypeAlias.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   // 7バイト目の上位4ビットは0100₂固定（13桁目の文字列表現は"4"固定）
@@ -142,7 +142,7 @@ const _v7Counter = (function* () {
   }
 })();
 
-function _generateUnixTimeBased(): _Type.Bytes {
+function _generateUnixTimeBased(): TypeAlias.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   const { timestamp, counter } = _v7Counter.next().value;
@@ -181,7 +181,7 @@ function _isUuidBigInt(test: unknown): test is TypeAlias.biguint128 {
     (test <= BigUint128.MAX_VALUE);
 }
 
-function _isUuidBytes(test: unknown): test is _Type.Bytes {
+function _isUuidBytes(test: unknown): test is TypeAlias.Bytes {
   return _Type.isNonSharedUint8Array(test) && (test.byteLength === _BYTES_SIZE);
 }
 
@@ -226,7 +226,7 @@ export namespace Uuid {
   //   return new _Uuid(bytes);
   // }
 
-  export function fromBytes(bytes: _Type.Bytes): Uuid {
+  export function fromBytes(bytes: TypeAlias.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
       throw _Error.Type.mustBe(
         "an UUID bytes of type `Uint8Array<ArrayBuffer>`",

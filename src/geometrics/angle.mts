@@ -1,30 +1,31 @@
-import { _Type, StringUtils } from "../_common/mod.mts";
 import { Assert, Radix } from "../numerics/mod.mts";
+import { StringUtils } from "../_common/mod.mts";
+import { TypeAlias } from "../type/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
 
-function _normalizeDegrees(degs: number): _Type.degrees {
+function _normalizeDegrees(degs: number): TypeAlias.degrees {
   Assert.finite(degs, "Input");
 
   const t = degs % _ONE_TURN_DEGS;
   return (t < _ZERO_TURN_DEGS) ? (t + _ONE_TURN_DEGS) : t;
 }
 
-function _radiansToDegrees(rads: number): _Type.degrees {
+function _radiansToDegrees(rads: number): TypeAlias.degrees {
   Assert.finite(rads, "Input");
 
   const degs = rads * (180 / Math.PI);
   return _normalizeDegrees(degs);
 }
 
-function _degreesToRadians(degs: number): _Type.radians {
+function _degreesToRadians(degs: number): TypeAlias.radians {
   Assert.finite(degs, "Input");
 
   return _normalizeDegrees(degs) * (Math.PI / 180);
 }
 
-function _gradiansToDegrees(grads: number): _Type.degrees {
+function _gradiansToDegrees(grads: number): TypeAlias.degrees {
   Assert.finite(grads, "Input");
 
   const degs = grads * (180 / 200);
@@ -33,7 +34,7 @@ function _gradiansToDegrees(grads: number): _Type.degrees {
 
 //XXX _degreesToGradians
 
-function _turnsToDegrees(turns: number): _Type.degrees {
+function _turnsToDegrees(turns: number): TypeAlias.degrees {
   Assert.finite(turns, "Input");
 
   const degs = turns * _ONE_TURN_DEGS;
@@ -47,7 +48,7 @@ type _DmsStringOptions = {
 };
 
 function _degreesToDmsString(
-  degs: _Type.degrees,
+  degs: TypeAlias.degrees,
   options?: _DmsStringOptions,
 ): string {
   Assert.finite(degs, "Input");
@@ -70,29 +71,29 @@ function _degreesToDmsString(
 }
 
 export class Angle {
-  #degs: _Type.degrees;
+  #degs: TypeAlias.degrees;
 
-  private constructor(degs: _Type.degrees) {
+  private constructor(degs: TypeAlias.degrees) {
     this.#degs = _normalizeDegrees(degs);
   }
 
-  static ofDegrees(degs: /* _Type.degrees */ number): Angle {
+  static ofDegrees(degs: /* TypeAlias.degrees */ number): Angle {
     return new Angle(degs);
   }
 
-  static ofRadians(rads: /* _Type.radians */ number): Angle {
+  static ofRadians(rads: /* TypeAlias.radians */ number): Angle {
     return new Angle(_radiansToDegrees(rads));
   }
 
-  toDegrees(): _Type.degrees {
+  toDegrees(): TypeAlias.degrees {
     return this.#degs;
   }
 
-  toRadians(): _Type.radians {
+  toRadians(): TypeAlias.radians {
     return _degreesToRadians(this.#degs);
   }
 
-  valueOf(): _Type.degrees {
+  valueOf(): TypeAlias.degrees {
     return this.#degs;
   }
 

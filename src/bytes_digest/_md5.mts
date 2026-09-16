@@ -1,5 +1,4 @@
 import * as Byte from "../byte/mod.mts";
-import { _Type } from "../_common/mod.mts";
 import { ByteSequence } from "..//byte_sequence/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { TypeAlias } from "../type/mod.mts";
@@ -285,7 +284,7 @@ function _updateContextState(
 }
 
 //XXX inputのサイズを制限すべき
-function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
+function _compute(inputBytes: TypeAlias.Bytes): ArrayBuffer {
   const sourceByteCount = inputBytes.byteLength;
 
   const paddedByteCount =
@@ -323,7 +322,7 @@ function _compute(inputBytes: _Type.Bytes): ArrayBuffer {
  *
  * @deprecated
  */
-export function _computeMd5(input: _Type.Bytes): Promise<_Type.Bytes> {
+export function _computeMd5(input: TypeAlias.Bytes): Promise<TypeAlias.Bytes> {
   return new Promise((resolve, reject) => {
     try {
       const digest = _compute(input);

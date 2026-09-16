@@ -15,7 +15,7 @@ const _B_MIN = 0;
 const _B_MAX = 1;
 
 export type Hwb = {
-  h: _Type.degrees;
+  h: TypeAlias.degrees;
   w: TypeAlias.finite;
   b: TypeAlias.finite;
 };

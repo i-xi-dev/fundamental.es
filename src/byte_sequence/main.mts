@@ -228,7 +228,7 @@ export class ByteSequence {
     return this;
   }
 
-  //XXX loadFromBytes(bytes: _Type.Bytes, options?: _LoadOptions_1): this {
+  //XXX loadFromBytes(bytes: TypeAlias.Bytes, options?: _LoadOptions_1): this {
   //   return this.loadFromUint8Iterable(bytes, options);
   // }
 
@@ -459,7 +459,7 @@ export class ByteSequence {
     return this.#buffer.slice(0, this.#loadedCount);
   }
 
-  toBytes(): _Type.Bytes {
+  toBytes(): TypeAlias.Bytes {
     // this.#assertAccessible(); toArrayBufferで実施
     return new Uint8Array(this.toArrayBuffer());
   }
@@ -656,12 +656,12 @@ export class ByteSequence {
   }
 
   //TODO test
-  toBytesWithDetach(options?: _ToOptions): _Type.Bytes {
+  toBytesWithDetach(options?: _ToOptions): TypeAlias.Bytes {
     return new Uint8Array(this.toArrayBufferWithDetach(options));
   }
 
   // 書き換え可能状態なので注意
-  #loadedBytes(): _Type.Bytes {
+  #loadedBytes(): TypeAlias.Bytes {
     return this.#view.subarray(0, this.#loadedCount);
   }
 
@@ -690,13 +690,13 @@ export class ByteSequence {
     this.#loadedCount += 1;
   }
 
-  #appendBytes(bytes: _Type.Bytes): void {
+  #appendBytes(bytes: TypeAlias.Bytes): void {
     this.#growIfNeeded(bytes.byteLength);
     this.#view.set(bytes, this.#loadedCount);
     this.#loadedCount += bytes.byteLength;
   }
 
-  #setBytes(bytes: _Type.Bytes, offset: TypeAlias.safeint): void {
+  #setBytes(bytes: TypeAlias.Bytes, offset: TypeAlias.safeint): void {
     const setEnd = offset + bytes.byteLength;
     this.#growIfNeeded(setEnd);
     this.#view.set(bytes, offset);
@@ -791,7 +791,7 @@ export namespace ByteSequence {
   // }
 
   export function fromBytes(
-    src: _Type.Bytes,
+    src: TypeAlias.Bytes,
     options?: _FromOptions,
   ): ByteSequence {
     _Assert.nonSharedUint8Array(src, "Input");

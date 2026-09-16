@@ -1,9 +1,9 @@
-import { _numeric } from "../../_common/_type/_typedef/_number.mts";
 import { _Error } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
+import { TypeAlias } from "../../type/mod.mts";
 
 export abstract class _ClosedRangeBase<
-  BaseT extends _numeric,
+  BaseT extends TypeAlias.numeric,
   T extends BaseT = BaseT,
 > implements ClosedRange<BaseT, T> {
   readonly #min: T;

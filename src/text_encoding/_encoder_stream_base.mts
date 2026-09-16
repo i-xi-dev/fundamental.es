@@ -1,12 +1,11 @@
 import { _EncoderInit } from "./_encoder_init.mts";
-import { _Type } from "../_common/mod.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
-import { Type } from "../type/mod.mts";
+import { Type, TypeAlias } from "../type/mod.mts";
 
 export abstract class _EncoderStreamBase implements EncoderStream {
   readonly #init: _EncoderInit;
-  readonly #stream: TransformStream<string, _Type.Bytes>;
+  readonly #stream: TransformStream<string, TypeAlias.Bytes>;
   _pendingText: string | null;
 
   protected constructor(init: _EncoderInit) {
@@ -16,7 +15,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
     this.#stream = new TransformStream({
       transform(
         chunk: string,
-        controller: TransformStreamDefaultController<_Type.Bytes>,
+        controller: TransformStreamDefaultController<TypeAlias.Bytes>,
       ): void {
         try {
           const toEncode = `${self()._pendingText ?? ""}${chunk}`;
@@ -29,7 +28,9 @@ export abstract class _EncoderStreamBase implements EncoderStream {
           controller.error(exception);
         }
       },
-      flush(controller: TransformStreamDefaultController<_Type.Bytes>): void {
+      flush(
+        controller: TransformStreamDefaultController<TypeAlias.Bytes>,
+      ): void {
         try {
           if (Type.isString(self()._pendingText) === true) {
             const { encodedBytes } = init.encode(self()._pendingText!); // エンコードエラーになるはず
@@ -50,7 +51,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
     return this.#init.fallback === Fallback.EXCEPTION;
   }
 
-  get readable(): ReadableStream<_Type.Bytes> {
+  get readable(): ReadableStream<TypeAlias.Bytes> {
     return this.#stream.readable;
   }
 

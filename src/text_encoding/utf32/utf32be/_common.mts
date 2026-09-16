@@ -1,13 +1,14 @@
-import { _Error, _Type } from "../../../_common/mod.mts";
+import { _Error } from "../../../_common/mod.mts";
 import { _encodeShared } from "../_common.mts";
 import { DecoderOptions } from "../../decoder_options.mts";
 import { EncoderOptions } from "../../encoder_options.mts";
+import { TypeAlias } from "../../../type/mod.mts";
 
 export const _NAME = "UTF-32BE";
 
 //TODO
 // export function _staticDecode(
-//   bytes: _Type.Bytes,
+//   bytes: TypeAlias.Bytes,
 //   options?: DecoderOptions,
 // ): string {
 //   const resolvedOptions = DecoderOptions.resolve(options);
@@ -17,7 +18,7 @@ export const _NAME = "UTF-32BE";
 export function _staticEncode(
   text: string,
   options?: EncoderOptions,
-): _Type.Bytes {
+): TypeAlias.Bytes {
   const { encodedBytes } = _encodeShared(_NAME, false, text, options?.fatal);
   return encodedBytes;
 }
