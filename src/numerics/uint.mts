@@ -3,7 +3,6 @@ import * as Range from "./range/mod.mts";
 import { _Assert, _Error, _Io, _Type } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _normalizeOffset } from "./_uint.mts";
-import { _unit } from "../_common/_type/_typedef/_number.mts";
 import { Assert } from "./assert.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Type, TypeAlias } from "../type/mod.mts";
@@ -26,16 +25,19 @@ export interface Uint<T extends TypeAlias.safeint> {
   saturateFrom(value: TypeAlias.safeint): T;
 }
 
-function _extractByte(unit: _unit, pos: TypeAlias.safeint): Type.uint8 {
+function _extractByte(
+  unit: TypeAlias.nnint,
+  pos: TypeAlias.safeint,
+): Type.uint8 {
   const x1 = 0x100 ** pos;
   const x2 = (unit >= x1) ? (unit % x1) : unit;
   return Math.trunc(x2 / (0x100 ** (pos - 1))) as Type.uint8;
 }
 
-export class _UintImpl<T extends _unit> implements Uint<T> {
+export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   readonly #bitLength: TypeAlias.safeint; // non-negative integer
   readonly #byteLength: TypeAlias.safeint; // non-negative integer
-  readonly #size: _unit;
+  readonly #size: TypeAlias.nnint;
   readonly #range: Range.ClosedRange<TypeAlias.safeint, T>;
 
   constructor(bitLength: TypeAlias.safeint) {
@@ -220,7 +222,7 @@ export class _UintImpl<T extends _unit> implements Uint<T> {
 export const Uint6: Uint<Type.uint6> = new _UintImpl(6);
 export const Uint7: Uint<Type.uint7> = new _UintImpl(7);
 export const Uint8: Uint<Type.uint8> = new _UintImpl(8);
-export const Uint16: Uint<_Type.uint16> = new _UintImpl(16);
-export const Uint24: Uint<_Type.uint24> = new _UintImpl(24);
-export const Uint32: Uint<_Type.uint32> = new _UintImpl(32);
-export const Uint48: Uint<_Type.uint48> = new _UintImpl(48);
+export const Uint16: Uint<TypeAlias.uint16> = new _UintImpl(16);
+export const Uint24: Uint<TypeAlias.uint24> = new _UintImpl(24);
+export const Uint32: Uint<TypeAlias.uint32> = new _UintImpl(32);
+export const Uint48: Uint<TypeAlias.uint48> = new _UintImpl(48);

@@ -10,10 +10,10 @@ const _BLOCK_BYTES = 64;
 const _DATA_SIZE_BYTES = 8;
 
 type _ContextState = [
-  a: _Type.uint32,
-  b: _Type.uint32,
-  c: _Type.uint32,
-  d: _Type.uint32,
+  a: TypeAlias.uint32,
+  b: TypeAlias.uint32,
+  c: TypeAlias.uint32,
+  d: TypeAlias.uint32,
 ];
 
 const _S = {
@@ -47,9 +47,9 @@ function _initContextState(): _ContextState {
 }
 
 function _f(
-  x: _Type.uint32,
-  y: _Type.uint32,
-  z: _Type.uint32,
+  x: TypeAlias.uint32,
+  y: TypeAlias.uint32,
+  z: TypeAlias.uint32,
 ): /*uint32*/ TypeAlias.safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, y),
@@ -59,9 +59,9 @@ function _f(
 }
 
 function _g(
-  x: _Type.uint32,
-  y: _Type.uint32,
-  z: _Type.uint32,
+  x: TypeAlias.uint32,
+  y: TypeAlias.uint32,
+  z: TypeAlias.uint32,
 ): /*uint32*/ TypeAlias.safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, z),
@@ -71,18 +71,18 @@ function _g(
 }
 
 function _h(
-  x: _Type.uint32,
-  y: _Type.uint32,
-  z: _Type.uint32,
+  x: TypeAlias.uint32,
+  y: TypeAlias.uint32,
+  z: TypeAlias.uint32,
 ): /*uint32*/ TypeAlias.safeint {
   // return Uint32.bitwiseXOr(Uint32.bitwiseXOr(x, y), z); この後ビット演算するわけではないので
   return (x ^ y ^ z);
 }
 
 function _i(
-  x: _Type.uint32,
-  y: _Type.uint32,
-  z: _Type.uint32,
+  x: TypeAlias.uint32,
+  y: TypeAlias.uint32,
+  z: TypeAlias.uint32,
 ): /*uint32*/ TypeAlias.safeint {
   // return Uint32.bitwiseXOr(
   //   y,
@@ -91,62 +91,62 @@ function _i(
   return (y ^ (x | (z ^ 0xFFFFFFFF)));
 }
 
-function _rotateLeft(x: TypeAlias.safeint, n: _S): _Type.uint32 {
+function _rotateLeft(x: TypeAlias.safeint, n: _S): TypeAlias.uint32 {
   const sx = Uint32.truncateFrom(x);
   return Uint32.rotateLeft(sx, n);
 }
 
 function _ff(
-  a: _Type.uint32,
-  b: _Type.uint32,
-  c: _Type.uint32,
-  d: _Type.uint32,
-  x: _Type.uint32,
+  a: TypeAlias.uint32,
+  b: TypeAlias.uint32,
+  c: TypeAlias.uint32,
+  d: TypeAlias.uint32,
+  x: TypeAlias.uint32,
   s: _S,
-  ac: _Type.uint32,
-): _Type.uint32 {
+  ac: TypeAlias.uint32,
+): TypeAlias.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _f(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _gg(
-  a: _Type.uint32,
-  b: _Type.uint32,
-  c: _Type.uint32,
-  d: _Type.uint32,
-  x: _Type.uint32,
+  a: TypeAlias.uint32,
+  b: TypeAlias.uint32,
+  c: TypeAlias.uint32,
+  d: TypeAlias.uint32,
+  x: TypeAlias.uint32,
   s: _S,
-  ac: _Type.uint32,
-): _Type.uint32 {
+  ac: TypeAlias.uint32,
+): TypeAlias.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _g(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _hh(
-  a: _Type.uint32,
-  b: _Type.uint32,
-  c: _Type.uint32,
-  d: _Type.uint32,
-  x: _Type.uint32,
+  a: TypeAlias.uint32,
+  b: TypeAlias.uint32,
+  c: TypeAlias.uint32,
+  d: TypeAlias.uint32,
+  x: TypeAlias.uint32,
   s: _S,
-  ac: _Type.uint32,
-): _Type.uint32 {
+  ac: TypeAlias.uint32,
+): TypeAlias.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _h(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _ii(
-  a: _Type.uint32,
-  b: _Type.uint32,
-  c: _Type.uint32,
-  d: _Type.uint32,
-  x: _Type.uint32,
+  a: TypeAlias.uint32,
+  b: TypeAlias.uint32,
+  c: TypeAlias.uint32,
+  d: TypeAlias.uint32,
+  x: TypeAlias.uint32,
   s: _S,
-  ac: _Type.uint32,
-): _Type.uint32 {
+  ac: TypeAlias.uint32,
+): TypeAlias.uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _i(b, c, d) + x + ac, s) + b,
   );

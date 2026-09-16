@@ -1,4 +1,4 @@
-import { _Assert, _Type, _U } from "./_common/mod.mts";
+import { _Assert, _U } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";
 
@@ -11,7 +11,7 @@ type _FormatOptions = {
 export class ByteFormat {
   readonly #radix: Radix;
   readonly #upperCase: boolean;
-  readonly #paddingChar: _Type.char;
+  readonly #paddingChar: TypeAlias.char;
   readonly #minPaddedLength: TypeAlias.safeint;
 
   constructor(options?: _FormatOptions) {
