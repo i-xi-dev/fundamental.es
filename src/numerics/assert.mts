@@ -1,4 +1,4 @@
-import { _Error, _Type } from "../_common/mod.mts";
+import { _Error } from "../_common/mod.mts";
 import { _isNonNegative } from "./_base.mts";
 
 export namespace Assert {

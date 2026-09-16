@@ -32,7 +32,7 @@ export abstract class _ClosedRangeBase<
 
   protected abstract _typeError(): TypeError;
 
-  contains(test: BaseT): test is T {
+  contains(test: BaseT): boolean {
     return this._isBaseT(test) && (test >= this.#min) && (test <= this.#max);
   }
 

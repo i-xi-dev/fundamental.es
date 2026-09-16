@@ -1,5 +1,5 @@
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
-import { _Error, _Type } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _normalizeFinite } from "../finite.mts";
 import { ClosedRange } from "./closed_range.mts";
 import { TypeAlias } from "../../type/mod.mts";

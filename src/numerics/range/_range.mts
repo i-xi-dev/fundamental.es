@@ -4,6 +4,6 @@ export interface _Range<
   BaseT extends TypeAlias.numeric,
   T extends BaseT = BaseT,
 > {
-  contains(test: BaseT): test is T;
+  contains(test: BaseT): /* test is T */ boolean;
   //XXX overlaps(test: _Range<BaseT, BaseT>): boolean;
 }

@@ -19,7 +19,7 @@ export class ByteFormat {
       ? options!.radix!
       : Radix.HEXADECIMAL;
     this.#upperCase = options?.upperCase === true;
-    // this.#paddingChar = _Type.isNonEmptyString(options?.paddingChar)
+    // this.#paddingChar = Textual.isNonEmpty(options?.paddingChar)
     //   ? options.paddingChar.charAt(0)
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
     this.#paddingChar = _U.Char.DIGIT_ZERO;

@@ -1,9 +1,12 @@
 import { _EncodeResult } from "../_encoder_init.mts";
-import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
+import { CodePointRange } from "../../textual/mod.mts";
 import { Uint16 } from "../../numerics/uint.mts";
 
 export const _BYTES_PER_CHAR = Uint16.BYTE_LENGTH;
+
+const _surrogateRange = CodePointRange.SURROGATE();
 
 export function _encodeShared(
   name: string,
@@ -34,7 +37,7 @@ export function _encodeShared(
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
 
-    if (CodePoint.isSurrogate(codePoint) === true) {
+    if (_surrogateRange.contains(codePoint) === true) {
       // 孤立サロゲート
       dstView.setUint16(
         writtenByteCount,

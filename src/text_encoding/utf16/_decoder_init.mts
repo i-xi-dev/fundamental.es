@@ -1,11 +1,13 @@
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { ByteOrder } from "../../mod.mts";
-import { CodePoint } from "../../_common/mod.mts";
+import { CodePointRange } from "../../textual/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
 import { TypeAlias } from "../../type/mod.mts";
 import { Uint16 } from "../../numerics/uint.mts";
+
+const _highSurrogateRange = CodePointRange.HIGH_SURROGATE();
 
 function _regulate(
   bytes: TypeAlias.Bytes,
@@ -31,7 +33,7 @@ function _regulate(
         Uint8Array.of(x.at(-2)!, x.at(-1)!),
         littleEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN,
       );
-      if (CodePoint.isHighSurrogate(lastUnit) === true) {
+      if (_highSurrogateRange.contains(lastUnit) === true) {
         p.push(x.at(-1)!);
         p.push(x.at(-2)!);
         x = x.subarray(0, -2);

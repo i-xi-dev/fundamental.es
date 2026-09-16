@@ -1,9 +1,12 @@
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
-import { _Error, _Type, CodePoint } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
 import { TypeAlias } from "../../type/mod.mts";
 import { Uint32 } from "../../numerics/uint.mts";
+import { CodePointRange } from "../../textual/mod.mts";
+
+const _surrogateRange = CodePointRange.SURROGATE();
 
 export const _BYTES_PER_RUNE = Uint32.BYTE_LENGTH;
 
@@ -47,7 +50,7 @@ export function _decodeShared(
       uint32 = srcView.getUint32(i, littleEndian);
     }
 
-    if (_Type.isCodePoint(uint32)) {
+    if (_surrogateRange.contains(uint32) === true) {
       dstRunes.push(String.fromCodePoint(uint32));
       // writtenRuneCount += 1;
     } else {
@@ -102,7 +105,7 @@ export function _encodeShared(
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
 
-    if (CodePoint.isSurrogate(codePoint) === true) {
+    if (_surrogateRange.contains(codePoint) === true) {
       // 孤立サロゲート
       dstView.setUint32(
         writtenByteCount,

@@ -182,7 +182,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
-      return value;
+      return value as T;
     }
 
     if (this.#bitLength < 32) {

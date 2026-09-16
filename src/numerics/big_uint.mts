@@ -164,7 +164,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
-      return value;
+      return value as T;
     }
 
     const bigIntOffset = BigInt(normalizedOffset);
