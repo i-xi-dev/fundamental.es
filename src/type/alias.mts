@@ -24,5 +24,11 @@ export type biguint64 = bignnint;
 
 export type biguint128 = bignnint;
 
+// number、かつ、0～0x10FFFF
+export type codepoint = nnint;
+
 // string、かつ、U+0000からU+FFFFまでの1コードユニットからなる1文字
 export type char = string;
+
+// string、かつ、U+0000からU+10FFFFまでの1コードポイントからなる1文字
+export type rune = string;

@@ -15,7 +15,7 @@ export function _decodeShared(
   allowPending?: boolean,
 ): _DecodeResult {
   const srcView = new DataView(input);
-  const dstRunes: Array<_Type.rune> = [];
+  const dstRunes: Array<TypeAlias.rune> = [];
 
   // let writtenRuneCount = 0;
   const p: Array<TypeAlias.safeint> = [];

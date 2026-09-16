@@ -1,5 +1,5 @@
-import { _Assert, _Type } from "../mod.mts";
-import { Type } from "../../type/mod.mts";
+import { _Assert } from "../mod.mts";
+import { Type, TypeAlias } from "../../type/mod.mts";
 
 export const EMPTY = "";
 
@@ -21,9 +21,9 @@ export type CollectResult = {
   following?: boolean;
 };
 
-export type CodePointRange = [_Type.codepoint] | [
-  _Type.codepoint,
-  _Type.codepoint,
+export type CodePointRange = [TypeAlias.codepoint] | [
+  TypeAlias.codepoint,
+  TypeAlias.codepoint,
 ];
 
 export type CodePointRangeSet = Array<CodePointRange>;
