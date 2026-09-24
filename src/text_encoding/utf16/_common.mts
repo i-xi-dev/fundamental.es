@@ -6,8 +6,6 @@ import { Uint16 } from "../../numerics/uint.mts";
 
 export const _BYTES_PER_CHAR = Uint16.BYTE_LENGTH;
 
-const _surrogateRange = CodePointRange.SURROGATE();
-
 export function _encodeShared(
   name: string,
   littleEndian: boolean,
@@ -37,7 +35,7 @@ export function _encodeShared(
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
 
-    if (_surrogateRange.contains(codePoint) === true) {
+    if (CodePointRange.SURROGATE.contains(codePoint) === true) {
       // 孤立サロゲート
       dstView.setUint16(
         writtenByteCount,

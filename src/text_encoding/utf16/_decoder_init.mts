@@ -7,8 +7,6 @@ import { Fallback } from "../fallback.mts";
 import { TypeAlias } from "../../type/mod.mts";
 import { Uint16 } from "../../numerics/uint.mts";
 
-const _highSurrogateRange = CodePointRange.HIGH_SURROGATE();
-
 function _regulate(
   bytes: TypeAlias.Bytes,
   littleEndian: boolean,
@@ -33,7 +31,7 @@ function _regulate(
         Uint8Array.of(x.at(-2)!, x.at(-1)!),
         littleEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN,
       );
-      if (_highSurrogateRange.contains(lastUnit) === true) {
+      if (CodePointRange.HIGH_SURROGATE.contains(lastUnit) === true) {
         p.push(x.at(-1)!);
         p.push(x.at(-2)!);
         x = x.subarray(0, -2);
