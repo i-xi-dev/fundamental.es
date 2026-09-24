@@ -1,6 +1,7 @@
 import { _EncoderInit } from "./_encoder_init.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
+import { Text } from "../textual/mod.mts";
 import { Type, TypeAlias } from "../type/mod.mts";
 
 export abstract class _EncoderStreamBase implements EncoderStream {
@@ -18,7 +19,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
         controller: TransformStreamDefaultController<TypeAlias.Bytes>,
       ): void {
         try {
-          const toEncode = `${self()._pendingText ?? ""}${chunk}`;
+          const toEncode = `${self()._pendingText ?? Text.EMPTY}${chunk}`;
           const { encodedBytes, pendingText } = init.encode(toEncode, true);
           self()._pendingText = pendingText;
           if (encodedBytes.length > 0) {

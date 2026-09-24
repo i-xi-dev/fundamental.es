@@ -1,6 +1,7 @@
 import * as StringUtils from "./string.mts";
+import { Text } from "../../textual/mod.mts";
 
-const { EMPTY, RangeSet } = StringUtils;
+const { RangeSet } = StringUtils;
 
 /**
  * 文字列の先頭のHTTP quoted stringを取得し返却
@@ -17,7 +18,7 @@ export function collectHttpQuotedString(
   input: string,
 ): StringUtils.CollectResult {
   // 2.
-  let value = EMPTY;
+  let value = Text.EMPTY;
 
   // 3.
   if (input.startsWith('"') !== true) {
@@ -91,7 +92,7 @@ export function valuesOfHeaderFieldValue(value: string): Array<string> {
   let i = 0;
   let vEnd = false;
   let cc = 0;
-  let v = EMPTY;
+  let v = Text.EMPTY;
   while (i < value.length) {
     const collected = StringUtils.patternCollectStart(
       value.substring(i),
@@ -118,16 +119,16 @@ export function valuesOfHeaderFieldValue(value: string): Array<string> {
 
     if (vEnd === true) {
       values.push(StringUtils.rangesTrim(v, RangeSet.HTTP_TAB_OR_SPACE)); //XXX ループ内で毎回は…
-      v = EMPTY;
+      v = Text.EMPTY;
       vEnd = false;
     }
   }
-  if (v !== EMPTY) {
+  if (v !== Text.EMPTY) {
     values.push(StringUtils.rangesTrim(v, RangeSet.HTTP_TAB_OR_SPACE));
   }
   if (values.length < (cc + 1)) {
     // 末尾が","だった場合 //XXX スマートに（cc不要に）できるのでは？
-    values.push(EMPTY);
+    values.push(Text.EMPTY);
   }
 
   return values;

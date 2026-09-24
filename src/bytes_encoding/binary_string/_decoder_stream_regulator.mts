@@ -1,7 +1,5 @@
-import { StringUtils } from "../../_common/mod.mts";
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-
-const { EMPTY } = StringUtils;
+import { Text } from "../../textual/mod.mts";
 
 export class _BinaryStringDecoderStreamRegulator
   implements _DecoderStreamRegulator {
@@ -13,6 +11,6 @@ export class _BinaryStringDecoderStreamRegulator
   }
 
   flush(): string {
-    return EMPTY;
+    return Text.EMPTY;
   }
 }

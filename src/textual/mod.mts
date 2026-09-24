@@ -1,3 +1,4 @@
 export * from "./code_point.mts";
 export * from "./code_point_range.mts";
-export { isNonEmpty } from "./_base.mts";
+export * as Char from "./char.mts";
+export * as Text from "./text.mts";

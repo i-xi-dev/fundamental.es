@@ -1,3 +1,4 @@
+import { Text } from "../../textual/mod.mts";
 import { TypeAlias } from "../../type/mod.mts";
 
 const _Type1 = {
@@ -20,7 +21,7 @@ function _message(
     ? `number of \`char\`s in ${target}`
     : `length of ${target}`;
 
-  let s2 = "";
+  let s2 = Text.EMPTY;
   if (type1 === _Type1.TOO_LONG) {
     s2 = " or less";
   } else if (type1 === _Type1.TOO_SHORT) {

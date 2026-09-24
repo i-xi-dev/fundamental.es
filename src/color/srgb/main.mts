@@ -5,7 +5,7 @@ import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
-import { StringUtils } from "../../_common/utils/mod.mts";
+import { Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 const _hexRegex = /^#?[0-9a-f]{6}$/i;
@@ -111,7 +111,7 @@ export class SRgbColor extends _RgbColor {
       );
     }
 
-    const [r, g, b] = Uint8Array.fromHex(hex.replace("#", StringUtils.EMPTY));
+    const [r, g, b] = Uint8Array.fromHex(hex.replace("#", Text.EMPTY));
     return SRgbColor.fromRgb24({ r, g, b });
   }
 

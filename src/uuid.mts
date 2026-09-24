@@ -1,9 +1,8 @@
-import { _Error, _Type, StringUtils } from "./_common/mod.mts";
+import { _Error, _Type } from "./_common/mod.mts";
 import { _bytesEquals } from "./byte_sequence/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
+import { Text } from "./textual/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";
-
-const { EMPTY } = StringUtils;
 
 export type _ToStringOptions = {
   asUrn?: boolean;
@@ -101,7 +100,7 @@ class _Uuid implements Uuid {
 }
 
 function _fromString(str: string): Uuid {
-  const hex = str.replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
+  const hex = str.replace(/^urn:uuid:/, Text.EMPTY).replaceAll("-", Text.EMPTY);
   const bytes = Uint8Array.fromHex(hex);
   return new _Uuid(bytes);
 }

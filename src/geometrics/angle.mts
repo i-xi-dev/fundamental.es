@@ -1,5 +1,5 @@
 import { Assert, Radix } from "../numerics/mod.mts";
-import { StringUtils } from "../_common/mod.mts";
+import { Text } from "../textual/mod.mts";
 import { TypeAlias } from "../type/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
@@ -64,7 +64,7 @@ function _degreesToDmsString(
 
   const sNum = (msNum - mInt) * 60;
   const sInt = Math.trunc(sNum);
-  const sStr = ((sInt < 10) ? "0" : "") +
+  const sStr = ((sInt < 10) ? "0" : Text.EMPTY) +
     sNum.toFixed(options?.fractionalSecondDigits);
 
   return `${dStr}°${mStr}′${sStr}″`;
@@ -100,7 +100,7 @@ export class Angle {
   // オプション指定したければIntl.NumberFormatでやれば良い
   toString(): string {
     let radAsStr = this.toRadians().toFixed(3);
-    radAsStr = radAsStr.replace(/.?0+$/, StringUtils.EMPTY);
+    radAsStr = radAsStr.replace(/.?0+$/, Text.EMPTY);
     return `${radAsStr} rad`;
   }
 

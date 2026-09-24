@@ -4,7 +4,7 @@ import { _Error } from "../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
 import { TypeAlias } from "../../type/mod.mts";
 import { Uint32 } from "../../numerics/uint.mts";
-import { CodePointRange } from "../../textual/mod.mts";
+import { CodePointRange, Text } from "../../textual/mod.mts";
 
 export const _BYTES_PER_RUNE = Uint32.BYTE_LENGTH;
 
@@ -68,7 +68,7 @@ export function _decodeShared(
   }
 
   return {
-    decodedText: dstRunes.join(""),
+    decodedText: dstRunes.join(Text.EMPTY),
     pendingBytes: (p.length > 0) ? Uint8Array.from(p) : null,
   };
 }

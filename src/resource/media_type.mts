@@ -1,6 +1,7 @@
 import { _Error, HttpUtils, StringUtils } from "../_common/mod.mts";
+import { Text } from "../textual/mod.mts";
 
-const { EMPTY, RangeSet } = StringUtils;
+const { RangeSet } = StringUtils;
 
 /**
  * 文字列の先頭からメディアタイプのタイプ名を抽出し返却
@@ -10,7 +11,9 @@ const { EMPTY, RangeSet } = StringUtils;
  */
 function _collectTypeName(input: string): StringUtils.CollectResult {
   const u002FIndex = input.indexOf("/");
-  const typeName = (u002FIndex >= 0) ? input.substring(0, u002FIndex) : EMPTY;
+  const typeName = (u002FIndex >= 0)
+    ? input.substring(0, u002FIndex)
+    : Text.EMPTY;
 
   return {
     collected: typeName,
@@ -190,7 +193,7 @@ export class MediaType {
       const subtype = this.subtype;
       return subtype.substring(subtype.lastIndexOf("+"));
     }
-    return EMPTY;
+    return Text.EMPTY;
   }
 
   /**
@@ -245,7 +248,7 @@ export class MediaType {
     // [mimesniff 4.4.]-7,8
     const { collected: subtypeName, progression: subtypeNameEnd, following } =
       _collectSubtypeName(work);
-    work = (following === true) ? work.substring(subtypeNameEnd) : EMPTY;
+    work = (following === true) ? work.substring(subtypeNameEnd) : Text.EMPTY;
     i = i + subtypeNameEnd;
 
     // [mimesniff 4.4.]-9 はコンストラクターではじかれる
@@ -325,13 +328,13 @@ export class MediaType {
 
         // [mimesniff 4.4.]-11.8.2
         const { valueEndIndex, parseEnd } = _detectPrameterValueEnd(work);
-        work = (parseEnd === true) ? EMPTY : work.substring(valueEndIndex);
+        work = (parseEnd === true) ? Text.EMPTY : work.substring(valueEndIndex);
         i = i + valueEndIndex;
       } else {
         // [mimesniff 4.4.]-11.9.1
         const { valueEndIndex, parseEnd } = _detectPrameterValueEnd(work);
         paramValue = work.substring(0, valueEndIndex);
-        work = (parseEnd === true) ? EMPTY : work.substring(valueEndIndex);
+        work = (parseEnd === true) ? Text.EMPTY : work.substring(valueEndIndex);
         i = i + valueEndIndex;
 
         // [mimesniff 4.4.]-11.9.2
@@ -392,8 +395,8 @@ export class MediaType {
   //   }
   //
   //   // 1, 2, 3.
-  //   let textEncoding = EMPTY;
-  //   let mediaTypeEssence = EMPTY;
+  //   let textEncoding = Text.EMPTY;
+  //   let mediaTypeEssence = Text.EMPTY;
   //   let mediaType: MediaType | null = null;
   //   // 6.
   //   for (const typeString of typeStrings) {
@@ -407,7 +410,7 @@ export class MediaType {
   //       // 6.4.
   //       if (mediaTypeEssence !== mediaType.essence) {
   //         // 6.4.1.
-  //         textEncoding = EMPTY;
+  //         textEncoding = Text.EMPTY;
   //         // 6.4.2.
   //         if (mediaType.hasParameter(CHARSET)) {
   //           textEncoding = mediaType.getParameterValue(CHARSET) as string;
@@ -418,7 +421,7 @@ export class MediaType {
   //         // 6.5.
   //         if (
   //           (mediaType.hasParameter(CHARSET) !== true) &&
-  //           (textEncoding !== EMPTY)
+  //           (textEncoding !== Text.EMPTY)
   //         ) {
   //           // TODO mediaType.withParameters()
   //         }
@@ -460,7 +463,7 @@ export class MediaType {
     if (sortParams === true) {
       paramNames.sort();
     }
-    let params = EMPTY;
+    let params = Text.EMPTY;
     for (const paramName of paramNames) {
       params = params + ";" + paramName + "=";
 

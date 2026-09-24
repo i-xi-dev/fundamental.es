@@ -1,13 +1,11 @@
-import { StringUtils } from "../../_common/mod.mts";
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-
-const { EMPTY } = StringUtils;
+import { Text } from "../../textual/mod.mts";
 
 export class _Base64DecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;
 
   constructor() {
-    this.#pending = EMPTY;
+    this.#pending = Text.EMPTY;
   }
 
   regulate(text: string): string {
@@ -16,9 +14,9 @@ export class _Base64DecoderStreamRegulator implements _DecoderStreamRegulator {
 
     if (temp.length < 24) {
       this.#pending = temp;
-      return EMPTY;
+      return Text.EMPTY;
     } else if (surplus === 0) {
-      this.#pending = EMPTY;
+      this.#pending = Text.EMPTY;
       return temp;
     } else {
       const pendingLength = temp.length - surplus;
@@ -29,7 +27,7 @@ export class _Base64DecoderStreamRegulator implements _DecoderStreamRegulator {
 
   flush(): string {
     const remains = this.#pending;
-    this.#pending = EMPTY;
+    this.#pending = Text.EMPTY;
     return remains;
   }
 }

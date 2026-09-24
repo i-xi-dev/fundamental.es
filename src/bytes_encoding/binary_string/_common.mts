@@ -1,7 +1,6 @@
-import { _Assert, _Error, StringUtils } from "../../_common/mod.mts";
+import { _Assert, _Error } from "../../_common/mod.mts";
+import { Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
-
-const { EMPTY } = StringUtils;
 
 // deno-lint-ignore no-control-regex
 const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする
@@ -18,5 +17,7 @@ export function _decode(text: string): TypeAlias.Bytes {
 export function _encode(bytes: TypeAlias.Bytes): string {
   _Assert.nonSharedUint8Array(bytes, "Input");
 
-  return Array.from(bytes, (byte) => String.fromCharCode(byte)).join(EMPTY);
+  return Array.from(bytes, (byte) => String.fromCharCode(byte)).join(
+    Text.EMPTY,
+  );
 }

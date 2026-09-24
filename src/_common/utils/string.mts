@@ -1,7 +1,6 @@
 import { _Assert } from "../mod.mts";
+import { Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
-
-export const EMPTY = "";
 
 export function charSequenceSortComparator(a: string, b: string): number {
   Type.Assert.string(a, "Input-1");
@@ -77,7 +76,7 @@ function _patternFrom(rangeSet: CodePointRangeSet): string {
     } else {
       return `\\u{${range[0].toString(16)}}`;
     }
-  }).join(EMPTY);
+  }).join(Text.EMPTY);
   return "[" + pattern + "]+";
 }
 
@@ -106,7 +105,7 @@ export function rangesTrim(input: string, rangeSet: CodePointRangeSet): string {
 
   const pattern = _patternFrom(rangeSet);
   const regex = new RegExp(`(?:^${pattern}|${pattern}$)`, "gu");
-  return input.replace(regex, EMPTY);
+  return input.replace(regex, Text.EMPTY);
 }
 
 export function rangesTrimEnd(
@@ -122,7 +121,7 @@ export function rangesTrimEnd(
 
   const pattern = _patternFrom(rangeSet);
   const regex = new RegExp(`${pattern}$`, "u");
-  return input.replace(regex, EMPTY);
+  return input.replace(regex, Text.EMPTY);
 }
 
 export function rangesCollectStart(
@@ -151,7 +150,7 @@ function _patternCollectStart(input: string, pattern: string): string {
   const regex = new RegExp(`^${pattern}`, "u");
   const results = regex.exec(input);
   if (results === null) {
-    return EMPTY;
+    return Text.EMPTY;
   }
   return results[0] as string;
 }
