@@ -1,5 +1,5 @@
 import { _Assert } from "../mod.mts";
-import { Text } from "../../textual/mod.mts";
+import { CodePoint, Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {
@@ -33,14 +33,14 @@ export namespace RangeSet {
   /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
   export const HTTP_QUOTED_STRING_TOKEN: CodePointRangeSet = [
     [0x9],
-    [0x20, 0x7E],
+    [CodePoint.SPACE, 0x7E], // 0x20-0x7E
     [0x80, 0xFF],
   ] as const;
 
   /** [HTTP tab or space](https://fetch.spec.whatwg.org/#http-tab-or-space) */
   export const HTTP_TAB_OR_SPACE: CodePointRangeSet = [
     [0x9],
-    [0x20],
+    [CodePoint.SPACE], // 0x20
   ] as const;
 
   /** [HTTP token code point](https://mimesniff.spec.whatwg.org/#http-token-code-point) */
@@ -65,7 +65,7 @@ export namespace RangeSet {
     [0xA],
     [0xC],
     [0xD],
-    [0x20],
+    [CodePoint.SPACE], // 0x20
   ] as const;
 }
 

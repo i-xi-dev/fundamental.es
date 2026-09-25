@@ -1,7 +1,7 @@
 import { _Assert, _Error, _U } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
-import { Rune, Text } from "../../textual/mod.mts";
+import { CodePoint, Rune, Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 export type _PercentOptions = {
@@ -69,7 +69,7 @@ export function _decode(
       }
     } else if (c === Rune.PLUS_SIGN) {
       if (options.spaceAsPlus === true) {
-        byte = _U.CharCode.SPACE;
+        byte = CodePoint.SPACE;
       } else {
         byte = _U.CharCode.PLUS_SIGN; // c.charCodeAt(0) as uint8;
       }
@@ -109,11 +109,11 @@ export function _encode(
   _Assert.nonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => {
-    if ((byte === _U.CharCode.SPACE) && (options.spaceAsPlus === true)) {
+    if ((byte === CodePoint.SPACE) && (options.spaceAsPlus === true)) {
       return Rune.PLUS_SIGN;
     }
     if (
-      (byte < _U.CharCode.SPACE) ||
+      (byte < CodePoint.SPACE) ||
       (byte > _U.CharCode.TILDE) ||
       (byte === _U.CharCode.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)

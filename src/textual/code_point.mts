@@ -6,6 +6,9 @@ const _MIN = 0;
 const _MAX = 0x10FFFF;
 
 export namespace CodePoint {
+  /** U+0020 `" "` */
+  export const SPACE = 0x20;
+
   export function isCodePoint(test: unknown): boolean {
     return Number.isSafeInteger(test) &&
       ((test as TypeAlias.safeint) >= _MIN) &&
