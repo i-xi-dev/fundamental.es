@@ -1,11 +1,5 @@
 // 0x0 - 0xFFFF
 export const _CharCode = {
-  /** U+0025 `"%"` */
-  PERCENT_SIGN: 0x25,
-
-  /** U+002B `"+"` */
-  PLUS_SIGN: 0x2B,
-
   /** U+0030 `"0"` */
   DIGIT_ZERO: 0x30,
 

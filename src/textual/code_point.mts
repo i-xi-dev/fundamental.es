@@ -9,6 +9,12 @@ export namespace CodePoint {
   /** U+0020 `" "` */
   export const SPACE = 0x20;
 
+  /** U+0025 `"%"` */
+  export const PERCENT_SIGN = 0x25;
+
+  /** U+002B `"+"` */
+  export const PLUS_SIGN = 0x2B;
+
   export function isCodePoint(test: unknown): boolean {
     return Number.isSafeInteger(test) &&
       ((test as TypeAlias.safeint) >= _MIN) &&

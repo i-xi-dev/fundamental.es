@@ -33,7 +33,7 @@ export namespace _PercentOptions {
     return {
       encodeSet,
       spaceAsPlus: (options?.spaceAsPlus === true) &&
-        encodeSet.includes(_U.CharCode.PLUS_SIGN),
+        encodeSet.includes(CodePoint.PLUS_SIGN),
     };
   }
 }
@@ -71,7 +71,7 @@ export function _decode(
       if (options.spaceAsPlus === true) {
         byte = CodePoint.SPACE;
       } else {
-        byte = _U.CharCode.PLUS_SIGN; // c.charCodeAt(0) as uint8;
+        byte = CodePoint.PLUS_SIGN; // c.charCodeAt(0) as uint8;
       }
       i = i + 1;
     } else {
@@ -115,7 +115,7 @@ export function _encode(
     if (
       (byte < CodePoint.SPACE) ||
       (byte > _U.CharCode.TILDE) ||
-      (byte === _U.CharCode.PERCENT_SIGN) ||
+      (byte === CodePoint.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
       return `${Rune.PERCENT_SIGN}${f.format(byte)}`;
