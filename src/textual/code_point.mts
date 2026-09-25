@@ -1,3 +1,4 @@
+import * as Rune from "./rune.mts";
 import { Radix } from "../numerics/mod.mts";
 import { TypeAlias } from "../type/mod.mts";
 
@@ -16,7 +17,10 @@ export namespace CodePoint {
       throw new Error("TODO");
     }
     return `U+${
-      codepoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(4, "0")
+      codepoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(
+        4,
+        Rune.DIGIT_ZERO,
+      )
     }`;
   }
 }

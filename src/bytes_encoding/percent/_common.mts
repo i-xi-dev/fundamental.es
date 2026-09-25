@@ -1,7 +1,7 @@
 import { _Assert, _Error, _U } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
-import { Text } from "../../textual/mod.mts";
+import { Rune, Text } from "../../textual/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 export type _PercentOptions = {
@@ -58,7 +58,7 @@ export function _decode(
     const c = text.charAt(i);
 
     let byte: Type.uint8;
-    if (c === _U.Char.PERCENT_SIGN) {
+    if (c === Rune.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
         byte = Number.parseInt(byteString, 16) as Type.uint8;
@@ -67,7 +67,7 @@ export function _decode(
         byte = c.charCodeAt(0) as Type.uint8;
         i = i + 1;
       }
-    } else if (c === _U.Char.PLUS_SIGN) {
+    } else if (c === Rune.PLUS_SIGN) {
       if (options.spaceAsPlus === true) {
         byte = _U.CharCode.SPACE;
       } else {
@@ -110,7 +110,7 @@ export function _encode(
 
   return Array.from(bytes, (byte) => {
     if ((byte === _U.CharCode.SPACE) && (options.spaceAsPlus === true)) {
-      return _U.Char.PLUS_SIGN;
+      return Rune.PLUS_SIGN;
     }
     if (
       (byte < _U.CharCode.SPACE) ||
@@ -118,7 +118,7 @@ export function _encode(
       (byte === _U.CharCode.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
-      return `${_U.Char.PERCENT_SIGN}${f.format(byte)}`;
+      return `${Rune.PERCENT_SIGN}${f.format(byte)}`;
     }
     return String.fromCharCode(byte);
   }).join(Text.EMPTY);

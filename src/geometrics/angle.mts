@@ -1,5 +1,5 @@
 import { Assert, Radix } from "../numerics/mod.mts";
-import { Text } from "../textual/mod.mts";
+import { Rune, Text } from "../textual/mod.mts";
 import { TypeAlias } from "../type/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
@@ -60,11 +60,11 @@ function _degreesToDmsString(
 
   const msNum = (normalizedDegrees - dInt) * 60;
   const mInt = Math.trunc(msNum);
-  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, "0");
+  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, Rune.DIGIT_ZERO);
 
   const sNum = (msNum - mInt) * 60;
   const sInt = Math.trunc(sNum);
-  const sStr = ((sInt < 10) ? "0" : Text.EMPTY) +
+  const sStr = ((sInt < 10) ? Rune.DIGIT_ZERO : Text.EMPTY) +
     sNum.toFixed(options?.fractionalSecondDigits);
 
   return `${dStr}°${mStr}′${sStr}″`;

@@ -1,5 +1,6 @@
 import { _Assert, _U } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
+import { Rune } from "./textual/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";
 
 type _FormatOptions = {
@@ -22,7 +23,7 @@ export class ByteFormat {
     // this.#paddingChar = Text.isNonEmpty(options?.paddingChar)
     //   ? options.paddingChar.charAt(0)
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
-    this.#paddingChar = _U.Char.DIGIT_ZERO;
+    this.#paddingChar = Rune.DIGIT_ZERO;
     this.#minPaddedLength = (Type.isNumber(options?.minLength) &&
         Number.isSafeInteger(options.minLength) &&
         isNonNegative(options.minLength))
