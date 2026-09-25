@@ -1,4 +1,4 @@
-import { _Assert, _U } from "./_common/mod.mts";
+import { _Assert } from "./_common/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
 import { Rune } from "./textual/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";

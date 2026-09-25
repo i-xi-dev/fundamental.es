@@ -33,7 +33,7 @@ export namespace RangeSet {
   /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
   export const HTTP_QUOTED_STRING_TOKEN: CodePointRangeSet = [
     [0x9],
-    [CodePoint.SPACE, 0x7E], // 0x20-0x7E
+    [CodePoint.SPACE, CodePoint.TILDE], // 0x20-0x7E
     [0x80, 0xFF],
   ] as const;
 
@@ -51,12 +51,12 @@ export namespace RangeSet {
     [CodePoint.PLUS_SIGN], // 0x2B
     [0x2D],
     [0x2E],
-    [0x30, 0x39],
+    [CodePoint.DIGIT_ZERO, 0x39], // 0x30-0x39
     [0x41, 0x5A],
     [0x5E, 0x60],
     [0x61, 0x7A],
     [0x7C],
-    [0x7E],
+    [CodePoint.TILDE], // 0x7E
   ] as const;
 
   /** [HTTP whitespace](https://fetch.spec.whatwg.org/#http-whitespace) */

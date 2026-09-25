@@ -15,6 +15,12 @@ export namespace CodePoint {
   /** U+002B `"+"` */
   export const PLUS_SIGN = 0x2B;
 
+  /** U+0030 `"0"` */
+  export const DIGIT_ZERO = 0x30;
+
+  /** U+007E `"~"` */
+  export const TILDE = 0x7E;
+
   export function isCodePoint(test: unknown): boolean {
     return Number.isSafeInteger(test) &&
       ((test as TypeAlias.safeint) >= _MIN) &&

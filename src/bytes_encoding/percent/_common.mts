@@ -1,4 +1,4 @@
-import { _Assert, _Error, _U } from "../../_common/mod.mts";
+import { _Assert, _Error } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
 import { CodePoint, Rune, Text } from "../../textual/mod.mts";
@@ -114,7 +114,7 @@ export function _encode(
     }
     if (
       (byte < CodePoint.SPACE) ||
-      (byte > _U.CharCode.TILDE) ||
+      (byte > CodePoint.TILDE) ||
       (byte === CodePoint.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
