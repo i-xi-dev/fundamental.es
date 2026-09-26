@@ -31,7 +31,7 @@ function _regulate(
         Uint8Array.of(x.at(-2)!, x.at(-1)!),
         littleEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN,
       );
-      if (CodePointRange.HIGH_SURROGATE.contains(lastUnit) === true) {
+      if (CodePointRange.HIGH_SURROGATES.contains(lastUnit) === true) {
         p.push(x.at(-1)!);
         p.push(x.at(-2)!);
         x = x.subarray(0, -2);

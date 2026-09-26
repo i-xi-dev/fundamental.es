@@ -35,7 +35,7 @@ export function _encodeShared(
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
 
-    if (CodePointRange.SURROGATE.contains(codePoint) === true) {
+    if (CodePointRange.SURROGATES.contains(codePoint) === true) {
       // 孤立サロゲート
       dstView.setUint16(
         writtenByteCount,

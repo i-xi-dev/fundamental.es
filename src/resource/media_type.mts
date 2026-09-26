@@ -1,5 +1,5 @@
 import { _Error, HttpUtils, StringUtils } from "../_common/mod.mts";
-import { Rune, Text } from "../textual/mod.mts";
+import { Char16, Text } from "../textual/mod.mts";
 
 const { RangeSet } = StringUtils;
 
@@ -189,9 +189,9 @@ export class MediaType {
    * ```
    */
   get suffix(): string {
-    if (this.subtype.includes(Rune.PLUS_SIGN)) {
+    if (this.subtype.includes(Char16.PLUS_SIGN)) {
       const subtype = this.subtype;
-      return subtype.substring(subtype.lastIndexOf(Rune.PLUS_SIGN));
+      return subtype.substring(subtype.lastIndexOf(Char16.PLUS_SIGN));
     }
     return Text.EMPTY;
   }

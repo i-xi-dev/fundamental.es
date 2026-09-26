@@ -16,7 +16,7 @@ export function _decodeShared(
   allowPending?: boolean,
 ): _DecodeResult {
   const srcView = new DataView(input);
-  const dstRunes: Array<TypeAlias.rune> = [];
+  const dstRunes: Array<TypeAlias.char32> = [];
 
   // let writtenRuneCount = 0;
   const p: Array<TypeAlias.safeint> = [];
@@ -48,7 +48,7 @@ export function _decodeShared(
       uint32 = srcView.getUint32(i, littleEndian);
     }
 
-    if (CodePointRange.SURROGATE.contains(uint32) === true) {
+    if (CodePointRange.SURROGATES.contains(uint32) === true) {
       dstRunes.push(String.fromCodePoint(uint32));
       // writtenRuneCount += 1;
     } else {
@@ -103,7 +103,7 @@ export function _encodeShared(
     const rune = runes[i];
     const codePoint = rune.codePointAt(0)!;
 
-    if (CodePointRange.SURROGATE.contains(codePoint) === true) {
+    if (CodePointRange.SURROGATES.contains(codePoint) === true) {
       // 孤立サロゲート
       dstView.setUint32(
         writtenByteCount,

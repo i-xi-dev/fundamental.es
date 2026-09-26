@@ -1,5 +1,5 @@
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-import { Rune, Text } from "../../textual/mod.mts";
+import { Char16, Text } from "../../textual/mod.mts";
 
 export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;
@@ -10,7 +10,7 @@ export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
 
   regulate(text: string): string {
     const temp = this.#pending + text;
-    const lastIdx = temp.lastIndexOf(Rune.PERCENT_SIGN);
+    const lastIdx = temp.lastIndexOf(Char16.PERCENT_SIGN);
 
     if (lastIdx >= (temp.length - 2)) {
       this.#pending = temp.substring(lastIdx);

@@ -11,14 +11,14 @@ export const CodePointRange = {
   // export function ALL(): CodePointRange {
   // }
 
-  get SURROGATE(): CodePointRange {
+  get SURROGATES(): CodePointRange {
     if (!_surrogate?.deref()) {
       _surrogate = new WeakRef(Range.safeIntClosedRange(0xD800, 0xDFFF));
     }
     return _surrogate.deref()!;
   },
 
-  get HIGH_SURROGATE(): CodePointRange {
+  get HIGH_SURROGATES(): CodePointRange {
     if (!_highSurrogate?.deref()) {
       _highSurrogate = new WeakRef(Range.safeIntClosedRange(0xD800, 0xDBFF));
     }

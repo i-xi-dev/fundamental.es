@@ -4,7 +4,7 @@ import { TypeAlias } from "../../type/mod.mts";
 
 const _HIGH_SURROGATE = /^[\uD800-\uDBFF]$/;
 
-export function isHighSurrogate(rune: TypeAlias.rune): boolean {
+export function isHighSurrogate(rune: TypeAlias.char32): boolean {
   //TODO isString &&
   return _HIGH_SURROGATE.test(rune);
 }

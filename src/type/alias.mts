@@ -32,10 +32,10 @@ export type biguint128 = bignnint;
 export type codepoint = nnint;
 
 // string、かつ、U+0000からU+FFFFまでの1コードユニットからなる1文字
-export type char = string;
+export type char16 = string;
 
-// string、かつ、U+0000からU+10FFFFまでの1コードポイントからなる1文字
-export type rune = string;
+// string、かつ、U+0000以上の1コードポイントからなる1文字
+export type char32 = string;
 
 export type numeric = number | bigint;
 
