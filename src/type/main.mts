@@ -24,6 +24,10 @@ export function isUint8(test: unknown): test is uint8 {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
 }
 
+export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm違いの場合
+  return test instanceof ArrayBuffer;
+}
+
 export namespace Assert {
   export function bigInt(
     test: unknown,
@@ -49,6 +53,15 @@ export namespace Assert {
   ): asserts test is uint8 {
     if (isUint8(test) !== true) {
       throw _Error.Type.mustBeUintN(8, targetLabel);
+    }
+  }
+
+  export function arrayBuffer(
+    test: unknown,
+    targetLabel: string,
+  ): asserts test is ArrayBuffer {
+    if (isArrayBuffer(test) !== true) {
+      throw _Error.Type.mustBeArrayBuffer(targetLabel);
     }
   }
 }

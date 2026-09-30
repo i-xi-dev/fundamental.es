@@ -18,12 +18,12 @@ export function _comparableToBytes(
 ): TypeAlias.Bytes | Array<Type.uint8> | null {
   if (_Type.isNonSharedUint8Array(input) === true) {
     return input;
-  } else if (_Type.isArrayBuffer(input) === true) {
+  } else if (Type.isArrayBuffer(input) === true) {
     return new Uint8Array(input);
   } else if (_Type.isSharedArrayBuffer(input) === true) {
     return Uint8Array.from(new Uint8Array(input));
   } else if (ArrayBuffer.isView(input) === true) {
-    if (_Type.isArrayBuffer(input.buffer) === true) {
+    if (Type.isArrayBuffer(input.buffer) === true) {
       return new Uint8Array(input.buffer);
     }
     if (_Type.isSharedArrayBuffer(input.buffer) === true) {

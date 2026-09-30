@@ -181,7 +181,7 @@ export class ByteSequence {
     options?: _LoadOptions_2,
   ): this {
     this.#assertAccessible();
-    _Assert.arrayBuffer(sourceBuffer, "Input");
+    Type.Assert.arrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     if (
@@ -632,7 +632,7 @@ export class ByteSequence {
   //   _Assert.asyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
-  //     _Assert.arrayBuffer(sourceBuffer);
+  //     Type.Assert.arrayBuffer(sourceBuffer);
   //     this.#appendBytes(new Uint8Array(sourceBuffer));
   //   }
   //   return this;
@@ -779,7 +779,7 @@ export namespace ByteSequence {
     src: ArrayBuffer,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.arrayBuffer(src, "Input");
+    Type.Assert.arrayBuffer(src, "Input");
     return _create(src.byteLength, options).loadFromArrayBuffer(src);
   }
 

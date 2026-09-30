@@ -29,15 +29,6 @@ export function asyncIterable<T>(
   }
 }
 
-export function arrayBuffer(
-  test: unknown,
-  targetLabel: string,
-): asserts test is ArrayBuffer {
-  if (_Type.isArrayBuffer(test) !== true) {
-    throw _TypeError.mustBeArrayBuffer(targetLabel);
-  }
-}
-
 export function nonSharedUint8Array(
   test: unknown,
   targetLabel: string,
