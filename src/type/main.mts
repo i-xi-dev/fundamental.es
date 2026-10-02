@@ -16,6 +16,10 @@ export function isString(test: unknown): test is string {
   return (typeof test === "string");
 }
 
+export function isNullOrUndefined(test: unknown): test is null | undefined {
+  return (test === null) || (test === undefined);
+}
+
 function _inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }

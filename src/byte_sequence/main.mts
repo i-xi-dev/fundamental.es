@@ -134,7 +134,7 @@ export class ByteSequence {
     maxCapacity?: TypeAlias.safeint,
   ): ByteSequence {
     Assert.nonNegativeSafeInt(capacity, "Capacity");
-    if (_Type.isNullOrUndefined(maxCapacity) !== true) {
+    if (Type.isNullOrUndefined(maxCapacity) !== true) {
       Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
 
@@ -565,13 +565,13 @@ export class ByteSequence {
     this.#assertAccessible();
 
     if (
-      (_Type.isNullOrUndefined(start) ||
+      (Type.isNullOrUndefined(start) ||
         (Type.isNumber(start) && Number.isSafeInteger(start))) !== true
     ) {
       throw _Error.Type.mustBeSafeInt("Start index");
     }
     if (
-      (_Type.isNullOrUndefined(end) ||
+      (Type.isNullOrUndefined(end) ||
         (Type.isNumber(end) && Number.isSafeInteger(end))) !== true
     ) {
       throw _Error.Type.mustBeSafeInt("End index");
@@ -668,7 +668,7 @@ export class ByteSequence {
   #assertOffsetInRangeOrNull(
     test: unknown,
   ): asserts test is TypeAlias.safeint | null | undefined {
-    if (_Type.isNullOrUndefined(test) === true) {
+    if (Type.isNullOrUndefined(test) === true) {
       // null | undefined はok
       return;
     }
