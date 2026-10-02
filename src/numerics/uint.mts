@@ -107,7 +107,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
 
   toBytes(uint: TypeAlias.safeint, byteOrder?: ByteOrder): TypeAlias.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw _Error.Type.mustBeUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
@@ -134,7 +134,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     f: (fa: TypeAlias.safeint, fb: TypeAlias.safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw _Error.Type.mustBeUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -177,7 +177,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
 
   rotateLeft(value: TypeAlias.safeint, offset: TypeAlias.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw _Error.Type.mustBeUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
     Assert.safeInt(offset, "Offset");
 

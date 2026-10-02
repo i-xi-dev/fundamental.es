@@ -9,21 +9,6 @@ export function mustBe(typeDesc: string, target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function mustBeArrayBuffer(target: string): TypeError {
-  const msg = _message(target, "an `ArrayBuffer`");
-  return new TypeError(msg);
-}
-
-export function mustBeAsyncIterable(target: string): TypeError {
-  const msg = _message(target, "an `AsyncIterable`");
-  return new TypeError(msg);
-}
-
-export function mustBeBigInt(target: string): TypeError {
-  const msg = _message(target, "a `bigint`");
-  return new TypeError(msg);
-}
-
 export function mustBeBigUintN(
   bits: TypeAlias.safeint,
   target: string,
@@ -35,21 +20,8 @@ export function mustBeBigUintN(
   return new TypeError(msg);
 }
 
-export function mustBeBytes(target: string): TypeError {
-  const msg = _message(
-    target,
-    "an `Uint8Array` that references an `ArrayBuffer`",
-  );
-  return new TypeError(msg);
-}
-
 export function mustBeFinite(target: string): TypeError {
   const msg = _message(target, "a finite number of type `number`");
-  return new TypeError(msg);
-}
-
-export function mustBeIterable(target: string): TypeError {
-  const msg = _message(target, "an `Iterable`");
   return new TypeError(msg);
 }
 
@@ -70,21 +42,5 @@ export function mustBeSafeInt(target: string): TypeError {
 
 export function mustBeSafeIntArray(target: string): TypeError {
   const msg = _message(target, "an `Array` of safe-integers of type `number`");
-  return new TypeError(msg);
-}
-
-export function mustBeString(target: string): TypeError {
-  const msg = _message(target, "a `string`");
-  return new TypeError(msg);
-}
-
-export function mustBeUintN(
-  bits: TypeAlias.safeint,
-  target: string,
-): TypeError {
-  const msg = _message(
-    target,
-    `a ${bits}-bit unsigned integer of type \`number\``,
-  );
   return new TypeError(msg);
 }

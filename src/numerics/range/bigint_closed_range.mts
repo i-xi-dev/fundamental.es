@@ -14,7 +14,7 @@ class _BigIntClosedRangeImpl<T extends bigint = bigint>
   }
 
   protected override _typeError(): TypeError {
-    return _Error.Type.mustBeBigInt("Input");
+    return Type.Exception.mustBeBigInt("Input");
   }
 }
 

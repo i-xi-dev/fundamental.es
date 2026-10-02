@@ -1,5 +1,5 @@
 import type { uint8 } from "./_def.mts";
-import { _Error } from "../_common/mod.mts";
+import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
   isAsyncIterable,
@@ -15,7 +15,7 @@ export function bigInt(
   targetLabel: string,
 ): asserts test is bigint {
   if (isBigInt(test) !== true) {
-    throw _Error.Type.mustBeBigInt(targetLabel);
+    throw Exception.mustBeBigInt(targetLabel);
   }
 }
 
@@ -24,7 +24,7 @@ export function string(
   targetLabel: string,
 ): asserts test is string {
   if (isString(test) !== true) {
-    throw _Error.Type.mustBeString(targetLabel);
+    throw Exception.mustBeString(targetLabel);
   }
 }
 
@@ -33,7 +33,7 @@ export function iterable<T>(
   targetLabel: string,
 ): asserts test is Iterable<T> {
   if (isIterable(test) !== true) {
-    throw _Error.Type.mustBeIterable(targetLabel);
+    throw Exception.mustBeIterable(targetLabel);
   }
 }
 
@@ -42,7 +42,7 @@ export function asyncIterable<T>(
   targetLabel: string,
 ): asserts test is AsyncIterable<T> {
   if (isAsyncIterable(test) !== true) {
-    throw _Error.Type.mustBeAsyncIterable(targetLabel);
+    throw Exception.mustBeAsyncIterable(targetLabel);
   }
 }
 
@@ -51,7 +51,7 @@ export function uint8(
   targetLabel: string,
 ): asserts test is uint8 {
   if (isUint8(test) !== true) {
-    throw _Error.Type.mustBeUintN(8, targetLabel);
+    throw Exception.mustBeUintN(8, targetLabel);
   }
 }
 
@@ -60,7 +60,7 @@ export function arrayBuffer(
   targetLabel: string,
 ): asserts test is ArrayBuffer {
   if (isArrayBuffer(test) !== true) {
-    throw _Error.Type.mustBeArrayBuffer(targetLabel);
+    throw Exception.mustBeArrayBuffer(targetLabel);
   }
 }
 
@@ -69,6 +69,6 @@ export function nonSharedUint8Array(
   targetLabel: string,
 ): asserts test is Uint8Array<ArrayBuffer> {
   if (isNonSharedUint8Array(test) !== true) {
-    throw _Error.Type.mustBeBytes(targetLabel);
+    throw Exception.mustBeNonSharedUint8Array(targetLabel);
   }
 }
