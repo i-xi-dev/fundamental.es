@@ -1,26 +1,23 @@
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
-
-function _message(target: string, expectedType: string): string {
-  return `${target} must be ${expectedType}`;
-}
+import { _typeErrorMessage } from "./_message.mts";
 
 export function mustBeBigInt(target: string): TypeError {
-  const msg = _message(target, "a `bigint`");
+  const msg = _typeErrorMessage(target, "a `bigint`");
   return new TypeError(msg);
 }
 
 export function mustBeString(target: string): TypeError {
-  const msg = _message(target, "a `string`");
+  const msg = _typeErrorMessage(target, "a `string`");
   return new TypeError(msg);
 }
 
 export function mustBeIterable(target: string): TypeError {
-  const msg = _message(target, "an `Iterable`");
+  const msg = _typeErrorMessage(target, "an `Iterable`");
   return new TypeError(msg);
 }
 
 export function mustBeAsyncIterable(target: string): TypeError {
-  const msg = _message(target, "an `AsyncIterable`");
+  const msg = _typeErrorMessage(target, "an `AsyncIterable`");
   return new TypeError(msg);
 }
 
@@ -28,7 +25,7 @@ export function mustBeUintN(
   bits: TypeAlias.safeint,
   target: string,
 ): TypeError {
-  const msg = _message(
+  const msg = _typeErrorMessage(
     target,
     `a ${bits}-bit unsigned integer of type \`number\``,
   );
@@ -36,12 +33,12 @@ export function mustBeUintN(
 }
 
 export function mustBeArrayBuffer(target: string): TypeError {
-  const msg = _message(target, "an `ArrayBuffer`");
+  const msg = _typeErrorMessage(target, "an `ArrayBuffer`");
   return new TypeError(msg);
 }
 
 export function mustBeNonSharedUint8Array(target: string): TypeError {
-  const msg = _message(
+  const msg = _typeErrorMessage(
     target,
     "an `Uint8Array` that references an `ArrayBuffer`",
   );

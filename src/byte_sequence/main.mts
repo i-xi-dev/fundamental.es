@@ -1,7 +1,7 @@
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
 import * as Type from "../type/mod.mts";
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
-import { _Assert, _Error, _Type } from "../_common/mod.mts";
+import { _Assert, _Error } from "../_common/mod.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
@@ -9,9 +9,10 @@ import {
   _randomBytes,
 } from "./_utils.mts";
 import {
-  Assert,
   BigUint,
   BigUint64,
+  NumericTypeAssert,
+  NumericTypeException,
   SafeInt,
   Uint,
   Uint16,
@@ -133,9 +134,9 @@ export class ByteSequence {
     capacity: TypeAlias.safeint,
     maxCapacity?: TypeAlias.safeint,
   ): ByteSequence {
-    Assert.nonNegativeSafeInt(capacity, "Capacity");
+    NumericTypeAssert.nonNegativeSafeInt(capacity, "Capacity");
     if (Type.isNullOrUndefined(maxCapacity) !== true) {
-      Assert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
+      NumericTypeAssert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
     }
 
     const { resizable, maxByteLength } = _normalizeResizer(
@@ -434,7 +435,7 @@ export class ByteSequence {
 
   fillZeros(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(new ArrayBuffer(byteLength), options);
@@ -442,7 +443,7 @@ export class ByteSequence {
 
   fillRandom(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(_randomBytes(byteLength), options);
@@ -568,13 +569,13 @@ export class ByteSequence {
       (Type.isNullOrUndefined(start) ||
         (Type.isNumber(start) && Number.isSafeInteger(start))) !== true
     ) {
-      throw _Error.Type.mustBeSafeInt("Start index");
+      throw NumericTypeException.mustBeSafeInt("Start index");
     }
     if (
       (Type.isNullOrUndefined(end) ||
         (Type.isNumber(end) && Number.isSafeInteger(end))) !== true
     ) {
-      throw _Error.Type.mustBeSafeInt("End index");
+      throw NumericTypeException.mustBeSafeInt("End index");
     }
 
     const adjStart = start ?? 0;
@@ -605,7 +606,7 @@ export class ByteSequence {
   byteAt(index: TypeAlias.safeint): Type.uint8 {
     this.#assertAccessible();
 
-    Assert.safeInt(index, "Input");
+    NumericTypeAssert.safeInt(index, "Input");
     if (index < 0) {
       throw _Error.Range.underflow(0, "Input");
     }
@@ -761,7 +762,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
     return _create(byteLength, options).fillZeros(byteLength);
   }
 
@@ -769,7 +770,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
-    Assert.nonNegativeSafeInt(byteLength, "Input");
+    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
     return _create(byteLength, options).fillRandom(byteLength);
   }
 

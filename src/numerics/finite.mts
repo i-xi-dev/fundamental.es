@@ -1,6 +1,6 @@
+import * as NumericTypeAssert from "./_type_ext/assert.mts";
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _Error } from "../_common/mod.mts";
-import { Assert } from "./assert.mts";
 
 export function _normalizeFinite<T extends TypeAlias.finite>(
   value: TypeAlias.finite,
@@ -20,7 +20,7 @@ export namespace Finite {
   export function normalize<T extends TypeAlias.finite>(
     value: TypeAlias.finite,
   ): T {
-    Assert.finite(value, "Input");
+    NumericTypeAssert.finite(value, "Input");
     return _normalizeFinite(value);
   }
 
@@ -31,9 +31,9 @@ export namespace Finite {
     min: T,
     max: T,
   ): T {
-    Assert.finite(value, "Input");
-    Assert.finite(min, "Lower bound");
-    Assert.finite(max, "Upper bound");
+    NumericTypeAssert.finite(value, "Input");
+    NumericTypeAssert.finite(min, "Lower bound");
+    NumericTypeAssert.finite(max, "Upper bound");
     if (min > max) {
       throw _Error.Range.contradictory();
     }

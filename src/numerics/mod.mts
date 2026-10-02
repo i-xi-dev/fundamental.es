@@ -1,8 +1,9 @@
 export * from "./big_uint.mts";
 export * from "./uint.mts";
+export * as NumericTypeAssert from "./_type_ext/assert.mts";
+export * as NumericTypeException from "./_type_ext/error.mts";
 export * as Range from "./range/mod.mts";
 export { _isNonNegative as isNonNegative } from "./_base.mts";
-export { Assert } from "./assert.mts";
 export { BigInt } from "./big_int.mts";
 export { Finite } from "./finite.mts";
 export { Radix } from "./radix.mts";

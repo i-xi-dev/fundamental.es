@@ -20,23 +20,8 @@ export function mustBeBigUintN(
   return new TypeError(msg);
 }
 
-export function mustBeFinite(target: string): TypeError {
-  const msg = _message(target, "a finite number of type `number`");
-  return new TypeError(msg);
-}
-
 export function mustBeNonEmptyString(target: string): TypeError {
   const msg = _message(target, "a `string` with a length of at least 1.");
-  return new TypeError(msg);
-}
-
-export function mustBeNonNegativeSafeInt(target: string): TypeError {
-  const msg = _message(target, "a non-negative safe-integer of type `number`");
-  return new TypeError(msg);
-}
-
-export function mustBeSafeInt(target: string): TypeError {
-  const msg = _message(target, "a safe-integer of type `number`");
   return new TypeError(msg);
 }
 

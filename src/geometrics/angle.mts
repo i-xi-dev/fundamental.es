@@ -1,32 +1,32 @@
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
-import { Assert, Radix } from "../numerics/mod.mts";
 import { Char16, Text } from "../textuals/mod.mts";
+import { NumericTypeAssert, Radix } from "../numerics/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
 
 function _normalizeDegrees(degs: number): TypeAlias.degrees {
-  Assert.finite(degs, "Input");
+  NumericTypeAssert.finite(degs, "Input");
 
   const t = degs % _ONE_TURN_DEGS;
   return (t < _ZERO_TURN_DEGS) ? (t + _ONE_TURN_DEGS) : t;
 }
 
 function _radiansToDegrees(rads: number): TypeAlias.degrees {
-  Assert.finite(rads, "Input");
+  NumericTypeAssert.finite(rads, "Input");
 
   const degs = rads * (180 / Math.PI);
   return _normalizeDegrees(degs);
 }
 
 function _degreesToRadians(degs: number): TypeAlias.radians {
-  Assert.finite(degs, "Input");
+  NumericTypeAssert.finite(degs, "Input");
 
   return _normalizeDegrees(degs) * (Math.PI / 180);
 }
 
 function _gradiansToDegrees(grads: number): TypeAlias.degrees {
-  Assert.finite(grads, "Input");
+  NumericTypeAssert.finite(grads, "Input");
 
   const degs = grads * (180 / 200);
   return _normalizeDegrees(degs);
@@ -35,7 +35,7 @@ function _gradiansToDegrees(grads: number): TypeAlias.degrees {
 //XXX _degreesToGradians
 
 function _turnsToDegrees(turns: number): TypeAlias.degrees {
-  Assert.finite(turns, "Input");
+  NumericTypeAssert.finite(turns, "Input");
 
   const degs = turns * _ONE_TURN_DEGS;
   return _normalizeDegrees(degs);
@@ -51,7 +51,7 @@ function _degreesToDmsString(
   degs: TypeAlias.degrees,
   options?: _DmsStringOptions,
 ): string {
-  Assert.finite(degs, "Input");
+  NumericTypeAssert.finite(degs, "Input");
 
   const normalizedDegrees = _normalizeDegrees(degs);
 

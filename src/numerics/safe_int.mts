@@ -1,6 +1,7 @@
+import * as NumericTypeAssert from "./_type_ext/assert.mts";
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import { _isNonNegativeSafeInt } from "./_base.mts";
 import { _normalizeFinite } from "./finite.mts";
-import { Assert } from "./assert.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
 export function _isEven(test: TypeAlias.safeint): boolean {
@@ -73,9 +74,7 @@ export function _roundToSafeInt(
 }
 
 export namespace SafeInt {
-  export function isNonNegative(test: unknown): boolean {
-    return Number.isSafeInteger(test) && ((test as number) >= 0);
-  }
+  export const isNonNegative = _isNonNegativeSafeInt;
 
   export const isEven = _isEven;
 
@@ -83,7 +82,7 @@ export namespace SafeInt {
     value: TypeAlias.finite,
     roundingMode?: RoundingMode,
   ): TypeAlias.safeint {
-    Assert.finite(value, "Input");
+    NumericTypeAssert.finite(value, "Input");
     return _roundToSafeInt(value, roundingMode);
   }
 }
