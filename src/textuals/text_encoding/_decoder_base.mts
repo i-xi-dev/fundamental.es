@@ -1,9 +1,10 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _BOM } from "./_utf.mts";
 import { _bytesStartsWith } from "../../byte_sequence/_utils.mts";
 import { _DecoderInit } from "./_decoder_init.mts";
 import { Decoder } from "./decoder.mts";
 import { Fallback } from "./fallback.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 export abstract class _DecoderBase implements Decoder {
   readonly #init: _DecoderInit;

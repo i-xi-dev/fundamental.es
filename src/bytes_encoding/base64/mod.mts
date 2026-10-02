@@ -1,6 +1,6 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { Base64DecoderOptions } from "./decoder_options.mts";
 import { Base64EncoderOptions } from "./encoder_options.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export { Alphabet } from "./alphabet.mts";
 export { Base64Decoder as Decoder } from "./decoder.mts";

@@ -1,6 +1,6 @@
+import * as TypeAlias from "../type_alias/mod.mts";
 import { _Error } from "../_common/mod.mts";
 import { Assert } from "./assert.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 export function _normalizeFinite<T extends TypeAlias.finite>(
   value: TypeAlias.finite,

@@ -1,6 +1,6 @@
 import type { _Encoder } from "./_encoder.mts";
 import type { _EncoderStreamRegulator } from "./_encoder_stream_regulator.mts";
-import { TypeAlias } from "../type/mod.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 
 type _Controller = TransformStreamDefaultController<string>;
 

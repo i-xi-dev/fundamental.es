@@ -1,4 +1,6 @@
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
+import * as Type from "../type/mod.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 import { _Assert, _Error, _Type } from "../_common/mod.mts";
 import {
   _bytesEquals,
@@ -20,7 +22,6 @@ import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
-import { Type, TypeAlias } from "../type/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -853,7 +854,7 @@ export namespace ByteSequence {
     text: string,
     options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.Assert.string(text, "Input");
+    // Type.Assert.string(text, "Input"); _Utf8.encode() 内でチェックされるので不要
 
     const bytes = _Utf8.encode(text, options);
     return fromBytes(bytes, options);

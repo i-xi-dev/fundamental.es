@@ -1,4 +1,4 @@
-import { TypeAlias } from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 
 // 標準のTextDecoderだとdecode()の第2引数に options?: TextDecodeOptions がある為、新たに定義
 // （TextDecoderStreamがあるので要らない）

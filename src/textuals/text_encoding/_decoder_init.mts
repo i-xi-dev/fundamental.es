@@ -1,5 +1,5 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { Fallback } from "./fallback.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export type _DecodeResult = {
   decodedText: string;

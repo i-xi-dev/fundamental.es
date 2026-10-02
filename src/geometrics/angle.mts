@@ -1,6 +1,6 @@
+import * as TypeAlias from "../type_alias/mod.mts";
 import { Assert, Radix } from "../numerics/mod.mts";
 import { Char16, Text } from "../textuals/mod.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;

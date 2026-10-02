@@ -1,8 +1,8 @@
+import * as TypeAlias from "../../../../type_alias/mod.mts";
 import { _Error } from "../../../../_common/mod.mts";
 import { _encodeShared } from "../_common.mts";
 import { DecoderOptions } from "../../decoder_options.mts";
 import { EncoderOptions } from "../../encoder_options.mts";
-import { TypeAlias } from "../../../../type/mod.mts";
 
 export const _NAME = "UTF-32LE";
 

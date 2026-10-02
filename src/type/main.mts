@@ -1,7 +1,5 @@
-import type { safeint } from "./alias.mts";
+import type { safeint } from "../type_alias/mod.mts";
 import type { uint8 } from "./_def.mts";
-
-export type * from "./_def.mts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -68,5 +66,3 @@ export function isNonSharedUint8Array(
 ): test is Uint8Array<ArrayBuffer> { //XXX realm違いの場合
   return isUint8Array(test) && isArrayBuffer(test.buffer);
 }
-
-export * as Assert from "./assert/main.mts";

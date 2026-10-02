@@ -1,5 +1,5 @@
-import type { uint8 } from "../_def.mts";
-import { _Error } from "../../_common/mod.mts";
+import type { uint8 } from "./_def.mts";
+import { _Error } from "../_common/mod.mts";
 import {
   isArrayBuffer,
   isAsyncIterable,
@@ -8,7 +8,7 @@ import {
   isNonSharedUint8Array,
   isString,
   isUint8,
-} from "../main.mts";
+} from "./main.mts";
 
 export function bigInt(
   test: unknown,

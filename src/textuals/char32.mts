@@ -1,4 +1,4 @@
-import { Type } from "../type/mod.mts";
+import * as Type from "../type/mod.mts";
 
 export function isChar32(test: unknown): boolean {
   if (Type.isString(test) === true) {

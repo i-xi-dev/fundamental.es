@@ -1,7 +1,7 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _encode, _PercentOptions } from "./_common.mts";
 import { _Encoder } from "../_encoder.mts";
 import { PercentEncoderOptions } from "./encoder_options.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export class PercentEncoder implements _Encoder {
   readonly #options: Required<PercentEncoderOptions>;

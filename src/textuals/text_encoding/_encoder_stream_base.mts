@@ -1,8 +1,9 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
 import { EMPTY } from "../text/main.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 export abstract class _EncoderStreamBase implements EncoderStream {
   readonly #init: _EncoderInit;

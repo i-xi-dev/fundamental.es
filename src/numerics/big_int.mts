@@ -1,5 +1,5 @@
+import * as Type from "../type/mod.mts";
 import { _Error } from "../_common/mod.mts";
-import { Type } from "../type/mod.mts";
 
 function _minOf(...values: bigint[]): bigint {
   let min = values[0];

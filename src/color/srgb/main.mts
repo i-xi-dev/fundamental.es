@@ -1,3 +1,5 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
@@ -6,7 +8,6 @@ import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Text } from "../../textuals/mod.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 const _hexRegex = /^#?[0-9a-f]{6}$/i;
 

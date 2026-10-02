@@ -1,6 +1,7 @@
+import * as Type from "../type/mod.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 import { Assert } from "./assert.mts";
 import { CodePointRange } from "./code_point_range.mts";
-import { Type, TypeAlias } from "../type/mod.mts";
 
 export type RuneInfo = {
   codePoint: TypeAlias.codepoint;

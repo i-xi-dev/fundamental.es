@@ -1,8 +1,9 @@
+import * as Type from "./type/mod.mts";
+import * as TypeAlias from "./type_alias/mod.mts";
 import { _Error } from "./_common/mod.mts";
 import { _bytesEquals } from "./byte_sequence/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
-import { Type, TypeAlias } from "./type/mod.mts";
 
 export type _ToStringOptions = {
   asUrn?: boolean;

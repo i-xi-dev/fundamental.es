@@ -1,10 +1,10 @@
+import * as TypeAlias from "../../../type_alias/mod.mts";
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { ByteOrder } from "../../../byte_order.mts";
 import { CodePointRange } from "../../code_point_range.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
-import { TypeAlias } from "../../../type/mod.mts";
 import { Uint16 } from "../../../numerics/uint.mts";
 
 function _regulate(

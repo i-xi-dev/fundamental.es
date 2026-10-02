@@ -1,7 +1,7 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _decode, _PercentOptions } from "./_common.mts";
 import { _Decoder } from "../_decoder.mts";
 import { PercentDecoderOptions } from "./decoder_options.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export class PercentDecoder implements _Decoder {
   readonly #options: Required<PercentDecoderOptions>;

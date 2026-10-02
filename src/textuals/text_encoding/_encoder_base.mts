@@ -1,8 +1,9 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Assert } from "../../_common/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
 import { Encoder } from "./encoder.mts";
 import { Fallback } from "./fallback.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 export abstract class _EncoderBase implements Encoder {
   readonly #init: _EncoderInit;

@@ -1,7 +1,8 @@
+import * as Type from "../../../../type/mod.mts";
+import * as TypeAlias from "../../../../type_alias/mod.mts";
 import { _staticDecode, _staticEncode } from "./_common.mts";
 import { DecoderOptions } from "../../decoder_options.mts";
 import { EncoderOptions } from "../../encoder_options.mts";
-import { Type, TypeAlias } from "../../../../type/mod.mts";
 
 export { Utf16LeDecoder as Decoder } from "./decoder.mts";
 export { Utf16LeEncoder as Encoder } from "./encoder.mts";

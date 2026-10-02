@@ -1,8 +1,8 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _ClosedRangeBase } from "./_closed_range_base.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _normalizeFinite } from "../finite.mts";
 import { ClosedRange } from "./closed_range.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   extends _ClosedRangeBase<TypeAlias.safeint, T> {

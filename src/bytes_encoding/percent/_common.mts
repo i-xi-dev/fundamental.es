@@ -1,8 +1,9 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
 import { Char16, CodePoint, Text } from "../../textuals/mod.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* Type.uint8 */ number>;

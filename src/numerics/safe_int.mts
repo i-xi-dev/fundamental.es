@@ -1,7 +1,7 @@
+import * as TypeAlias from "../type_alias/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { Assert } from "./assert.mts";
 import { RoundingMode } from "./rounding_mode.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 export function _isEven(test: TypeAlias.safeint): boolean {
   return Number.isSafeInteger(test) && ((test % 2) === 0);

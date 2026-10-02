@@ -1,8 +1,8 @@
+import * as TypeAlias from "../../../type_alias/mod.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { _NAME } from "./_common.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
-import { TypeAlias } from "../../../type/mod.mts";
 
 // 2～4バイト文字の1バイト目か
 function _is1OfMulti(byte: number): boolean {

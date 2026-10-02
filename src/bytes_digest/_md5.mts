@@ -1,7 +1,7 @@
 import * as Byte from "../byte/mod.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 import { ByteSequence } from "..//byte_sequence/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
-import { TypeAlias } from "../type/mod.mts";
 import { Uint32 } from "../numerics/mod.mts";
 
 const _BLOCK_BYTES = 64;

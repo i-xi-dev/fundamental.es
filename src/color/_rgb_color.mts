@@ -1,5 +1,5 @@
+import * as TypeAlias from "../type_alias/mod.mts";
 import { RgbComponents } from "./rgb_components.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 export abstract class _RgbColor {
   readonly #r: TypeAlias.finite;

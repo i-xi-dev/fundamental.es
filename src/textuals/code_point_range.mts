@@ -1,5 +1,5 @@
+import * as TypeAlias from "../type_alias/mod.mts";
 import { Range } from "../numerics/mod.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 export type CodePointRange = Range.ClosedRange<TypeAlias.codepoint>;
 

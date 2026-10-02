@@ -1,6 +1,7 @@
+import * as Type from "../type/mod.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 import { _clampFinite } from "../numerics/finite.mts";
 import { _Error } from "../_common/mod.mts";
-import { Type, TypeAlias } from "../type/mod.mts";
 
 export interface RgbComponents {
   readonly r: TypeAlias.finite;

@@ -1,5 +1,5 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { Text } from "../../textuals/mod.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 const _Type1 = {
   TOO_LONG: 0b0010,

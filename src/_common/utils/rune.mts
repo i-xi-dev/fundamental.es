@@ -1,4 +1,4 @@
-import { TypeAlias } from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 
 //TODO 移動
 

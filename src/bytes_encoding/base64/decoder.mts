@@ -1,6 +1,6 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Decoder } from "../_decoder.mts";
 import { Base64DecoderOptions } from "./decoder_options.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export class Base64Decoder implements _Decoder {
   readonly #options: Required<Base64DecoderOptions>;

@@ -6,7 +6,7 @@ export * as Numerics from "./numerics/mod.mts";
 export * as Geometrics from "./geometrics/mod.mts";
 export * as Resource from "./resource/mod.mts";
 export * as Textuals from "./textuals/mod.mts";
+export * as Type from "./type/mod.mts";
 export { ByteFormat } from "./byte_format.mts";
 export { ByteOrder } from "./byte_order.mts";
-export { Type } from "./type/mod.mts";
 export { Uuid } from "./uuid.mts";

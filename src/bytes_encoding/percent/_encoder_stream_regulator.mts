@@ -1,5 +1,5 @@
 import type { _EncoderStreamRegulator } from "../_encoder_stream_regulator.mts";
-import { TypeAlias } from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 
 export class _PercentEncoderStreamRegulator implements _EncoderStreamRegulator {
   constructor() {

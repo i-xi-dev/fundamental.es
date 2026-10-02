@@ -1,6 +1,7 @@
+import * as Type from "../../type/mod.mts";
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { Text } from "../../textuals/mod.mts";
-import { Type, TypeAlias } from "../../type/mod.mts";
 
 // deno-lint-ignore no-control-regex
 const _regex = /^[\u0000-\u00FF]*$/; //XXX 共通assertにする

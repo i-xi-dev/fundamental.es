@@ -1,6 +1,6 @@
 import * as Char16 from "./char16.mts";
+import * as TypeAlias from "../type_alias/mod.mts";
 import { Radix } from "../numerics/mod.mts";
-import { TypeAlias } from "../type/mod.mts";
 
 const _MIN = 0;
 const _MAX = 0x10FFFF;

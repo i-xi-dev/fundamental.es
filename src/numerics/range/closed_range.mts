@@ -1,5 +1,5 @@
+import * as TypeAlias from "../../type_alias/mod.mts";
 import { _Range } from "./_range.mts";
-import { TypeAlias } from "../../type/mod.mts";
 
 export interface ClosedRange<
   BaseT extends TypeAlias.numeric,
