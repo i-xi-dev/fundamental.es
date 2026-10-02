@@ -1,5 +1,5 @@
 import * as Byte from "../byte/mod.mts";
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { ByteSequence } from "..//byte_sequence/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Uint32 } from "../numerics/mod.mts";

@@ -1,4 +1,4 @@
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { Assert, Radix } from "../numerics/mod.mts";
 import { Char16, Text } from "../textuals/mod.mts";
 

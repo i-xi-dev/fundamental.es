@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../../type_alias/mod.mts";
+import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error } from "../../../_common/mod.mts";

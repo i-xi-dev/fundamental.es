@@ -1,4 +1,4 @@
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import type { _Decoder } from "./_decoder.mts";
 import type { _DecoderStreamRegulator } from "./_decoder_stream_regulator.mts";
 

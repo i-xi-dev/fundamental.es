@@ -1,4 +1,4 @@
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 
 // for UintN.rotateLeft(x, offset)
 export function _normalizeOffset(

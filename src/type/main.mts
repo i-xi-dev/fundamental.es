@@ -1,4 +1,4 @@
-import type { safeint } from "../type_alias/mod.mts";
+import type { safeint } from "../_internal/type_alias/mod.mts";
 import type { uint8 } from "./_def.mts";
 
 export function isBigInt(test: unknown): test is bigint {

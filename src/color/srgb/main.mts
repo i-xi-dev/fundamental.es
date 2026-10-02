@@ -1,5 +1,5 @@
 import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../type_alias/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";

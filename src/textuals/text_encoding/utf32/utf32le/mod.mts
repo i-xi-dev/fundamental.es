@@ -1,5 +1,5 @@
 import * as Type from "../../../../type/mod.mts";
-import * as TypeAlias from "../../../../type_alias/mod.mts";
+import * as TypeAlias from "../../../../_internal/type_alias/mod.mts";
 import { /*_staticDecode,*/ _staticEncode } from "./_common.mts";
 import { DecoderOptions } from "../../decoder_options.mts";
 import { EncoderOptions } from "../../encoder_options.mts";

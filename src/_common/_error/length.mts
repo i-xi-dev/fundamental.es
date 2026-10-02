@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../type_alias/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { Text } from "../../textuals/mod.mts";
 
 const _Type1 = {

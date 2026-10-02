@@ -1,4 +1,4 @@
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { Assert } from "./assert.mts";
 import { RoundingMode } from "./rounding_mode.mts";

@@ -1,6 +1,6 @@
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
 import * as Type from "../type/mod.mts";
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _Assert, _Error, _Type } from "../_common/mod.mts";
 import {
   _bytesEquals,

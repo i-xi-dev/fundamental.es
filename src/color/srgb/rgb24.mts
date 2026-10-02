@@ -1,5 +1,5 @@
 import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../type_alias/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/safe_int.mts";

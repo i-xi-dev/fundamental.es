@@ -1,5 +1,5 @@
 import * as Type from "../type/mod.mts";
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { Uint16 } from "../numerics/mod.mts";
 
 function _isByteArray(test: unknown): test is Array<Type.uint8> {

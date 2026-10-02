@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../type_alias/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { _decode, _PercentOptions } from "./_common.mts";
 import { _Decoder } from "../_decoder.mts";
 import { PercentDecoderOptions } from "./decoder_options.mts";

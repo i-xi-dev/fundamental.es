@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../../type_alias/mod.mts";
+import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { _NAME } from "./_common.mts";
 import { DecoderOptions } from "../decoder_options.mts";

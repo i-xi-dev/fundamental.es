@@ -1,7 +1,7 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
 import * as Type from "../type/mod.mts";
-import * as TypeAlias from "../type_alias/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _clampBigInt } from "./big_int.mts";
 import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
