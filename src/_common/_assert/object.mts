@@ -11,24 +11,6 @@ export function safeIntArray(
   }
 }
 
-export function iterable<T>(
-  test: unknown,
-  targetLabel: string,
-): asserts test is Iterable<T> {
-  if (Type.isIterable(test) !== true) {
-    throw _TypeError.mustBeIterable(targetLabel);
-  }
-}
-
-export function asyncIterable<T>(
-  test: unknown,
-  targetLabel: string,
-): asserts test is AsyncIterable<T> {
-  if (Type.isAsyncIterable(test) !== true) {
-    throw _TypeError.mustBeAsyncIterable(targetLabel);
-  }
-}
-
 export function nonSharedUint8Array(
   test: unknown,
   targetLabel: string,

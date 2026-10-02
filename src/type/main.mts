@@ -89,6 +89,24 @@ export namespace Assert {
     }
   }
 
+  export function iterable<T>(
+    test: unknown,
+    targetLabel: string,
+  ): asserts test is Iterable<T> {
+    if (isIterable(test) !== true) {
+      throw _Error.Type.mustBeIterable(targetLabel);
+    }
+  }
+
+  export function asyncIterable<T>(
+    test: unknown,
+    targetLabel: string,
+  ): asserts test is AsyncIterable<T> {
+    if (isAsyncIterable(test) !== true) {
+      throw _Error.Type.mustBeAsyncIterable(targetLabel);
+    }
+  }
+
   export function uint8(
     test: unknown,
     targetLabel: string,

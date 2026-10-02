@@ -200,7 +200,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
-    _Assert.iterable(uint8s, "Input");
+    Type.Assert.iterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     // this.loadFromArrayBuffer(Uint8Array.from(uint8s).buffer);
@@ -237,7 +237,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
-    _Assert.asyncIterable(uint8s, "Input");
+    Type.Assert.asyncIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
@@ -268,7 +268,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    _Assert.iterable(uintNs, "Input");
+    Type.Assert.iterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -300,7 +300,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    _Assert.iterable(biguintNs, "Input");
+    Type.Assert.iterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -332,7 +332,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
-    _Assert.asyncIterable(uintNs, "Input");
+    Type.Assert.asyncIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -364,7 +364,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    _Assert.asyncIterable(biguintNs, "Input");
+    Type.Assert.asyncIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -629,7 +629,7 @@ export class ByteSequence {
   //   sourceBuffers: AsyncIterable<ArrayBuffer>, options?
   // ): Promise<this> {
   //   this.#assertAccessible();
-  //   _Assert.asyncIterable(sourceBuffers, "Input");
+  //   Type.Assert.asyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
   //     Type.Assert.arrayBuffer(sourceBuffer);
