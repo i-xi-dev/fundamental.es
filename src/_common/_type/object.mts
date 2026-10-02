@@ -1,9 +1,5 @@
 import { Type, TypeAlias } from "../../type/mod.mts";
 
-export function isNonNullObject(test: unknown): test is NonNullable<object> {
-  return (typeof test === "object") && (Type.isNullOrUndefined(test) !== true);
-}
-
 export function isSafeIntArray(
   test: unknown,
 ): test is Array<TypeAlias.safeint> {

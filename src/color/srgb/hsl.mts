@@ -1,9 +1,9 @@
 import { _clampFinite } from "../../numerics/finite.mts";
-import { _Error, _Type } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
-import { TypeAlias } from "../../type/mod.mts";
+import { Type, TypeAlias } from "../../type/mod.mts";
 
 const _S_MIN = 0;
 
@@ -27,7 +27,7 @@ function _f(n: number, { h, s, l }: Hsl): number {
 
 export namespace _Hsl {
   export function is(test: unknown): test is Hsl {
-    if (_Type.isNonNullObject(test) === true) {
+    if (Type.isNonNullObject(test) === true) {
       if (("h" in test) && ("s" in test) && ("l" in test)) {
         return Number.isFinite(test.h) &&
           Number.isFinite(test.s) &&

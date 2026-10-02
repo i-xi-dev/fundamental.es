@@ -1,9 +1,9 @@
-import { _Error, _Type } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/safe_int.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { RoundingMode, Uint8 } from "../../numerics/mod.mts";
-import { TypeAlias } from "../../type/mod.mts";
+import { Type, TypeAlias } from "../../type/mod.mts";
 
 export type Rgb24 = {
   r: /* Type.uint8 */ TypeAlias.safeint;
@@ -13,7 +13,7 @@ export type Rgb24 = {
 
 export namespace _Rgb24 {
   export function is(test: unknown): test is Rgb24 {
-    if (_Type.isNonNullObject(test) === true) {
+    if (Type.isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
         return Number.isSafeInteger(test.r) &&
           Number.isSafeInteger(test.g) &&

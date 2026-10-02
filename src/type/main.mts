@@ -20,6 +20,10 @@ export function isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);
 }
 
+export function isNonNullObject(test: unknown): test is NonNullable<object> {
+  return (typeof test === "object") && (isNullOrUndefined(test) !== true);
+}
+
 function _inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }

@@ -1,6 +1,6 @@
 import { _clampFinite } from "../numerics/finite.mts";
-import { _Error, _Type } from "../_common/mod.mts";
-import { TypeAlias } from "../type/mod.mts";
+import { _Error } from "../_common/mod.mts";
+import { Type, TypeAlias } from "../type/mod.mts";
 
 export interface RgbComponents {
   readonly r: TypeAlias.finite;
@@ -10,7 +10,7 @@ export interface RgbComponents {
 
 export namespace _RgbComponents {
   export function is(test: unknown): test is RgbComponents {
-    if (_Type.isNonNullObject(test) === true) {
+    if (Type.isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
         return Number.isFinite(test.r) &&
           Number.isFinite(test.g) &&
