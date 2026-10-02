@@ -1,5 +1,6 @@
 export type EncoderOptions = {
   fatal?: boolean;
+  //XXX prependBom?: boolean;
 };
 
 export namespace EncoderOptions {

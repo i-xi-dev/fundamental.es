@@ -28,6 +28,12 @@ export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm�
   return test instanceof ArrayBuffer;
 }
 
+export function isSharedArrayBuffer(test: unknown): test is SharedArrayBuffer { //XXX realm違いの場合
+  // ブラウザだと非securecontxtの場合そもそも存在しない
+  return ("SharedArrayBuffer" in globalThis) &&
+    (test instanceof SharedArrayBuffer);
+}
+
 export namespace Assert {
   export function bigInt(
     test: unknown,

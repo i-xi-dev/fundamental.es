@@ -1,5 +1,4 @@
-import { _Assert } from "./_common/mod.mts";
-import { Char16 } from "./textual/mod.mts";
+import { Assert, Char16 } from "./textual/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";
 
@@ -20,7 +19,7 @@ export class ByteFormat {
       ? options!.radix!
       : Radix.HEXADECIMAL;
     this.#upperCase = options?.upperCase === true;
-    // this.#paddingChar = Text.isNonEmpty(options?.paddingChar)
+    // this.#paddingChar = isNonEmptyString(options?.paddingChar)
     //   ? options.paddingChar.charAt(0)
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
     this.#paddingChar = Char16.DIGIT_ZERO;
@@ -43,7 +42,7 @@ export class ByteFormat {
   }
 
   parse(str: string): Type.uint8 {
-    _Assert.nonEmptyString(str, "Input");
+    Assert.nonEmptyString(str, "Input");
     if (this.#isFormatMatch(str) !== true) {
       throw new Error("TODO");
     }

@@ -247,7 +247,7 @@ export namespace Uuid {
 //   name: string,
 //   digestAlgorithm: DigestAlgorithm, // v3はMD5、v5はSha1、それ以外は不可
 // ): Promise<Uint8Array<ArrayBuffer>> {
-//   const nameBytes = Text.toBytes(name);
+//   const nameBytes = .toBytes(name);
 //
 //   const bytes = new Uint8Array(namespaceUuid.length + nameBytes.length);
 //   bytes.set(namespaceUuid, 0);

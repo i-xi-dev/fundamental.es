@@ -20,13 +20,13 @@ export function _comparableToBytes(
     return input;
   } else if (Type.isArrayBuffer(input) === true) {
     return new Uint8Array(input);
-  } else if (_Type.isSharedArrayBuffer(input) === true) {
+  } else if (Type.isSharedArrayBuffer(input) === true) {
     return Uint8Array.from(new Uint8Array(input));
   } else if (ArrayBuffer.isView(input) === true) {
     if (Type.isArrayBuffer(input.buffer) === true) {
       return new Uint8Array(input.buffer);
     }
-    if (_Type.isSharedArrayBuffer(input.buffer) === true) {
+    if (Type.isSharedArrayBuffer(input.buffer) === true) {
       return Uint8Array.from(new Uint8Array(input.buffer));
     }
   } else if (_isByteArray(input) === true) {

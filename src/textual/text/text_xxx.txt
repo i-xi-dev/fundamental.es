@@ -1,0 +1,34 @@
+import { Type, TypeAlias } from "../type/mod.mts";
+
+type _FromOptions = {
+  allowMalformed?: boolean;
+};
+
+export class CharSequence {
+  readonly #char16Count: TypeAlias.safeint;
+  readonly #value: string;
+
+  private constructor(value: string) {
+    this.#char16Count = value.length;
+    this.#value = value;
+  }
+
+  static fromString(value: string, options: _FromOptions): Text {
+    Type.Assert.string(value, "Input");
+
+    if (options?.allowMalformed !== true) {
+      if (value.isWellFormed() !== true) {
+        throw new Error("TODO");
+      }
+    }
+
+    return new Text(value);
+  }
+
+  toChar32s(): _char32s {
+    return this.#runes[Symbol.iterator]();
+  }
+
+  // toBytes(): TypeAlias.Bytes {
+  // }
+}
