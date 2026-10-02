@@ -15,7 +15,7 @@ export function iterable<T>(
   test: unknown,
   targetLabel: string,
 ): asserts test is Iterable<T> {
-  if (_Type.isIterable(test) !== true) {
+  if (Type.isIterable(test) !== true) {
     throw _TypeError.mustBeIterable(targetLabel);
   }
 }
@@ -24,7 +24,7 @@ export function asyncIterable<T>(
   test: unknown,
   targetLabel: string,
 ): asserts test is AsyncIterable<T> {
-  if (_Type.isAsyncIterable(test) !== true) {
+  if (Type.isAsyncIterable(test) !== true) {
     throw _TypeError.mustBeAsyncIterable(targetLabel);
   }
 }
