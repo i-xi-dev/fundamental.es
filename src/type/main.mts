@@ -34,6 +34,18 @@ export function isSharedArrayBuffer(test: unknown): test is SharedArrayBuffer { 
     (test instanceof SharedArrayBuffer);
 }
 
+export function isUint8Array(
+  test: unknown,
+): test is Uint8Array<ArrayBufferLike> { //XXX realm違いの場合
+  return test instanceof Uint8Array;
+}
+
+export function isNonSharedUint8Array(
+  test: unknown,
+): test is Uint8Array<ArrayBuffer> { //XXX realm違いの場合
+  return isUint8Array(test) && isArrayBuffer(test.buffer);
+}
+
 export namespace Assert {
   export function bigInt(
     test: unknown,

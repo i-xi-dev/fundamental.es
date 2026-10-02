@@ -1,4 +1,4 @@
-import { _Error, _Type } from "./_common/mod.mts";
+import { _Error } from "./_common/mod.mts";
 import { _bytesEquals } from "./byte_sequence/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
@@ -89,7 +89,7 @@ class _Uuid implements Uuid {
   equals(other: Uuid | TypeAlias.Bytes | string): boolean {
     if (other instanceof _Uuid) {
       return _bytesEquals(this.#bytes, other.#bytes);
-    } else if (_Type.isNonSharedUint8Array(other) === true) {
+    } else if (Type.isNonSharedUint8Array(other) === true) {
       return _bytesEquals(this.#bytes, other);
     } else if (_isUuidString(other) === true) {
       return _bytesEquals(this.#bytes, _fromString(other).toBytes());
@@ -181,7 +181,7 @@ function _isUuidBigInt(test: unknown): test is TypeAlias.biguint128 {
 }
 
 function _isUuidBytes(test: unknown): test is TypeAlias.Bytes {
-  return _Type.isNonSharedUint8Array(test) && (test.byteLength === _BYTES_SIZE);
+  return Type.isNonSharedUint8Array(test) && (test.byteLength === _BYTES_SIZE);
 }
 
 export namespace Uuid {

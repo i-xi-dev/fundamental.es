@@ -1,4 +1,3 @@
-import { _Type } from "../_common/mod.mts";
 import { Type, TypeAlias } from "../type/mod.mts";
 import { Uint16 } from "../numerics/mod.mts";
 
@@ -16,7 +15,7 @@ export type _Comparable =
 export function _comparableToBytes(
   input: _Comparable,
 ): TypeAlias.Bytes | Array<Type.uint8> | null {
-  if (_Type.isNonSharedUint8Array(input) === true) {
+  if (Type.isNonSharedUint8Array(input) === true) {
     return input;
   } else if (Type.isArrayBuffer(input) === true) {
     return new Uint8Array(input);
