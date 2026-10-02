@@ -1,5 +1,5 @@
 import * as StringUtils from "./string.mts";
-import { Text } from "../../textual/mod.mts";
+import { Text } from "../../textuals/mod.mts";
 
 const { RangeSet } = StringUtils;
 

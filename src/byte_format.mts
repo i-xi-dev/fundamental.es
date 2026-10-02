@@ -1,4 +1,4 @@
-import { Assert, Char16 } from "./textual/mod.mts";
+import { Assert, Char16 } from "./textuals/mod.mts";
 import { isNonNegative, Radix } from "./numerics/mod.mts";
 import { Type, TypeAlias } from "./type/mod.mts";
 

@@ -1,5 +1,5 @@
 import { _Error, HttpUtils, StringUtils } from "../_common/mod.mts";
-import { Char16, Text } from "../textual/mod.mts";
+import { Char16, Text } from "../textuals/mod.mts";
 
 const { RangeSet } = StringUtils;
 

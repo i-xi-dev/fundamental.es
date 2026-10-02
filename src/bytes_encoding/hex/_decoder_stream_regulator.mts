@@ -1,5 +1,5 @@
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-import { Text } from "../../textual/mod.mts";
+import { Text } from "../../textuals/mod.mts";
 
 export class _HexDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;

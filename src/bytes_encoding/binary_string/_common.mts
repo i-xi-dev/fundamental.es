@@ -1,5 +1,5 @@
 import { _Assert, _Error } from "../../_common/mod.mts";
-import { Text } from "../../textual/mod.mts";
+import { Text } from "../../textuals/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 // deno-lint-ignore no-control-regex

@@ -1,4 +1,4 @@
-import { Assert, CodePoint, Text } from "../../textual/mod.mts";
+import { Assert, CodePoint, Text } from "../../textuals/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {

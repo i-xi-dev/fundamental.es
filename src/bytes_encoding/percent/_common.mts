@@ -1,6 +1,6 @@
 import { _Assert, _Error } from "../../_common/mod.mts";
 import { ByteFormat } from "../../byte_format.mts";
-import { Char16, CodePoint, Text } from "../../textual/mod.mts";
+import { Char16, CodePoint, Text } from "../../textuals/mod.mts";
 import { Radix, Uint8 } from "../../numerics/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 

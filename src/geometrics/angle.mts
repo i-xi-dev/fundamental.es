@@ -1,5 +1,5 @@
 import { Assert, Radix } from "../numerics/mod.mts";
-import { Char16, Text } from "../textual/mod.mts";
+import { Char16, Text } from "../textuals/mod.mts";
 import { TypeAlias } from "../type/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;

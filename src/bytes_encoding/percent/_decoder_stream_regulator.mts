@@ -1,5 +1,5 @@
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-import { Char16, Text } from "../../textual/mod.mts";
+import { Char16, Text } from "../../textuals/mod.mts";
 
 export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;

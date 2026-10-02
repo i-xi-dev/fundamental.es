@@ -1,4 +1,4 @@
-import * as _Utf8 from "../text_encoding/_utf8/mod.mts";
+import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
 import { _Assert, _Error, _Type } from "../_common/mod.mts";
 import {
   _bytesEquals,
@@ -19,7 +19,7 @@ import {
 import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Md5 } from "../bytes_digest/mod.mts";
-import { EncoderOptions as TextEncoderOptions } from "../text_encoding/mod.mts";
+import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
 import { Type, TypeAlias } from "../type/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
