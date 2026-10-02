@@ -73,7 +73,9 @@ export function _roundToSafeInt(
 }
 
 export namespace SafeInt {
-  // export const isNonNegative = _isNonNegative;
+  export function isNonNegative(test: unknown): boolean {
+    return Number.isSafeInteger(test) && ((test as number) >= 0);
+  }
 
   export const isEven = _isEven;
 

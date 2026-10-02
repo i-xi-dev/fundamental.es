@@ -1,7 +1,7 @@
 import * as Type from "./type/mod.mts";
 import * as TypeAlias from "./_internal/type_alias/mod.mts";
 import { Assert, Char16 } from "./textuals/mod.mts";
-import { isNonNegative, Radix } from "./numerics/mod.mts";
+import { Radix, SafeInt } from "./numerics/mod.mts";
 
 type _FormatOptions = {
   radix?: Radix;
@@ -25,8 +25,7 @@ export class ByteFormat {
     //   : "0";//XXX 1-char ではなかった場合エラーにするか
     this.#paddingChar = Char16.DIGIT_ZERO;
     this.#minPaddedLength = (Type.isNumber(options?.minLength) &&
-        Number.isSafeInteger(options.minLength) &&
-        isNonNegative(options.minLength))
+        SafeInt.isNonNegative(options.minLength))
       ? options.minLength
       : 0;
   }

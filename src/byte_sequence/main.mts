@@ -12,7 +12,7 @@ import {
   Assert,
   BigUint,
   BigUint64,
-  isNonNegative,
+  SafeInt,
   Uint,
   Uint16,
   Uint32,
@@ -79,8 +79,7 @@ function _normalizeResizer(
   // capacityは型チェック済み前提
 
   if (
-    Type.isNumber(maxCapacity) && Number.isSafeInteger(maxCapacity) &&
-    isNonNegative(maxCapacity)
+    Type.isNumber(maxCapacity) && SafeInt.isNonNegative(maxCapacity)
   ) {
     return {
       resizable: true,
@@ -649,8 +648,7 @@ export class ByteSequence {
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
     const length = (Type.isNumber(options?.byteLength) &&
-        Number.isSafeInteger(options.byteLength) &&
-        isNonNegative(options.byteLength))
+        SafeInt.isNonNegative(options.byteLength))
       ? Math.min(options.byteLength, this.#loadedCount)
       : this.#loadedCount; //TODO options.byteLengthがloadedCountより大きい場合
     return this.#buffer.transferToFixedLength(length);
@@ -675,8 +673,8 @@ export class ByteSequence {
     }
 
     if (
-      Type.isNumber(test) && Number.isSafeInteger(test) &&
-      isNonNegative(test) && (test < this.#loadedCount)
+      Type.isNumber(test) && SafeInt.isNonNegative(test) &&
+      (test < this.#loadedCount)
     ) {
       // 整数かつ #loadedCount 未満はok
       return;
@@ -753,8 +751,7 @@ function _create(
   options?: _FromOptions,
 ): ByteSequence {
   return (Type.isNumber(options?.maxCapacity) &&
-      Number.isSafeInteger(options.maxCapacity) &&
-      isNonNegative(options.maxCapacity))
+      SafeInt.isNonNegative(options.maxCapacity))
     ? ByteSequence.create(capacity, Math.max(capacity, options.maxCapacity))
     : ByteSequence.create(capacity);
 }

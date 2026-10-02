@@ -24,7 +24,7 @@ export namespace Finite {
     return _normalizeFinite(value);
   }
 
-  // export const isNonNegative = _isNonNegativeFinite;
+  // export isNonNegativeFinite
 
   export function clamp<T extends TypeAlias.finite>(
     value: TypeAlias.finite,
