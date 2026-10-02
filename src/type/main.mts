@@ -1,6 +1,5 @@
-import { _Error } from "../_common/mod.mts";
-import { safeint } from "./alias.mts";
-import { uint8 } from "./_def.mts";
+import type { safeint } from "./alias.mts";
+import type { uint8 } from "./_def.mts";
 
 export type * from "./_def.mts";
 
@@ -70,58 +69,4 @@ export function isNonSharedUint8Array(
   return isUint8Array(test) && isArrayBuffer(test.buffer);
 }
 
-export namespace Assert {
-  export function bigInt(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is bigint {
-    if (isBigInt(test) !== true) {
-      throw _Error.Type.mustBeBigInt(targetLabel);
-    }
-  }
-
-  export function string(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is string {
-    if (isString(test) !== true) {
-      throw _Error.Type.mustBeString(targetLabel);
-    }
-  }
-
-  export function iterable<T>(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is Iterable<T> {
-    if (isIterable(test) !== true) {
-      throw _Error.Type.mustBeIterable(targetLabel);
-    }
-  }
-
-  export function asyncIterable<T>(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is AsyncIterable<T> {
-    if (isAsyncIterable(test) !== true) {
-      throw _Error.Type.mustBeAsyncIterable(targetLabel);
-    }
-  }
-
-  export function uint8(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is uint8 {
-    if (isUint8(test) !== true) {
-      throw _Error.Type.mustBeUintN(8, targetLabel);
-    }
-  }
-
-  export function arrayBuffer(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is ArrayBuffer {
-    if (isArrayBuffer(test) !== true) {
-      throw _Error.Type.mustBeArrayBuffer(targetLabel);
-    }
-  }
-}
+export * as Assert from "./assert/main.mts";

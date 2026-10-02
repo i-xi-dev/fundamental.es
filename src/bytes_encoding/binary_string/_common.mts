@@ -1,4 +1,4 @@
-import { _Assert, _Error } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { Text } from "../../textuals/mod.mts";
 import { Type, TypeAlias } from "../../type/mod.mts";
 
@@ -15,7 +15,7 @@ export function _decode(text: string): TypeAlias.Bytes {
 }
 
 export function _encode(bytes: TypeAlias.Bytes): string {
-  _Assert.nonSharedUint8Array(bytes, "Input");
+  Type.Assert.nonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => String.fromCharCode(byte)).join(
     Text.EMPTY,

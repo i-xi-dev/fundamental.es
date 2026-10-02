@@ -1,4 +1,3 @@
-import { _Assert } from "../../../../_common/mod.mts";
 import { _staticDecode, _staticEncode } from "./_common.mts";
 import { DecoderOptions } from "../../decoder_options.mts";
 import { EncoderOptions } from "../../encoder_options.mts";
@@ -13,7 +12,7 @@ export function decode(
   bytes: TypeAlias.Bytes,
   options?: DecoderOptions,
 ): string {
-  _Assert.nonSharedUint8Array(bytes, "Input");
+  Type.Assert.nonSharedUint8Array(bytes, "Input");
 
   return _staticDecode(bytes, options);
 }

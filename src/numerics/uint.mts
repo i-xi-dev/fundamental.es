@@ -1,7 +1,7 @@
 import * as Byte from "../byte/mod.mts";
 import * as Range from "./range/mod.mts";
-import { _Assert, _Error, _Io } from "../_common/mod.mts";
 import { _clampFinite } from "./finite.mts";
+import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { Assert } from "./assert.mts";
 import { ByteOrder } from "../byte_order.mts";
@@ -80,7 +80,7 @@ export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T {
-    _Assert.nonSharedUint8Array(bytes, "Input");
+    Type.Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }

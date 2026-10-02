@@ -1,4 +1,4 @@
-import { _Assert, _Error } from "../../_common/mod.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
@@ -74,7 +74,7 @@ export class SRgbColor extends _RgbColor {
   }
 
   static fromBytes(bytes: TypeAlias.Bytes): SRgbColor {
-    _Assert.nonSharedUint8Array(bytes, "Input");
+    Type.Assert.nonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength !== 3) {
       throw _Error.Type.mustBe(
         // "an `Uint8Array` with a length of 3 or greater",

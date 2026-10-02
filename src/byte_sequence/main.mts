@@ -794,7 +794,7 @@ export namespace ByteSequence {
     src: TypeAlias.Bytes,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.nonSharedUint8Array(src, "Input");
+    Type.Assert.nonSharedUint8Array(src, "Input");
     return fromArrayBuffer(src.buffer, options);
   }
 

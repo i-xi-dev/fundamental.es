@@ -1,4 +1,3 @@
-import { _Assert } from "../../_common/mod.mts";
 import {
   _staticDecode as _staticDecodeBe,
   _staticEncode as _staticEncodeBe,
@@ -16,7 +15,7 @@ export function decode(
   littleEndian?: boolean,
   options?: DecoderOptions,
 ): string {
-  _Assert.nonSharedUint8Array(bytes, "Input");
+  Type.Assert.nonSharedUint8Array(bytes, "Input");
 
   if (littleEndian === true) {
     return _staticDecodeLe(bytes, options);
