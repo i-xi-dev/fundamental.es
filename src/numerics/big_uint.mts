@@ -100,7 +100,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
 
   toBytes(uint: bigint, byteOrder?: ByteOrder): TypeAlias.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw _Error.Type.mustBeBigUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
@@ -127,7 +127,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     f: (fa: bigint, fb: bigint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw _Error.Type.mustBeBigUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
 
     return f(a, b);
@@ -159,7 +159,7 @@ export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
 
   rotateLeft(value: bigint, offset: TypeAlias.safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw _Error.Type.mustBeBigUintN(this.#bitLength, "Input");
+      throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
     NumericTypeAssert.safeInt(offset, "Offset");
 

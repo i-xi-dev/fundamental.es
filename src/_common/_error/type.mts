@@ -9,17 +9,6 @@ export function mustBe(typeDesc: string, target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function mustBeBigUintN(
-  bits: TypeAlias.safeint,
-  target: string,
-): TypeError {
-  const msg = _message(
-    target,
-    `a ${bits}-bit unsigned integer of type \`bigint\``,
-  );
-  return new TypeError(msg);
-}
-
 export function mustBeNonEmptyString(target: string): TypeError {
   const msg = _message(target, "a `string` with a length of at least 1.");
   return new TypeError(msg);

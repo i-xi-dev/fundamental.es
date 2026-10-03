@@ -32,6 +32,17 @@ export function mustBeUintN(
   return new TypeError(msg);
 }
 
+export function mustBeBigUintN(
+  bits: TypeAlias.safeint,
+  target: string,
+): TypeError {
+  const msg = _typeErrorMessage(
+    target,
+    `a ${bits}-bit unsigned integer of type \`bigint\``,
+  );
+  return new TypeError(msg);
+}
+
 export function mustBeArrayBuffer(target: string): TypeError {
   const msg = _typeErrorMessage(target, "an `ArrayBuffer`");
   return new TypeError(msg);
