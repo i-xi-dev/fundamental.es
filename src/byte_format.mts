@@ -1,6 +1,6 @@
 import * as Type from "./type/mod.mts";
 import * as TypeAlias from "./_internal/type_alias/mod.mts";
-import { Assert, Char16 } from "./textuals/mod.mts";
+import { Char16, TextualTypeAssert } from "./textuals/mod.mts";
 import { Radix, SafeInt } from "./numerics/mod.mts";
 
 type _FormatOptions = {
@@ -42,7 +42,7 @@ export class ByteFormat {
   }
 
   parse(str: string): Type.uint8 {
-    Assert.nonEmptyString(str, "Input");
+    TextualTypeAssert.nonEmptyString(str, "Input");
     if (this.#isFormatMatch(str) !== true) {
       throw new Error("TODO");
     }

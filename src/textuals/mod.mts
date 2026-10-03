@@ -5,5 +5,7 @@ export * as Char16 from "./char16.mts";
 export * as Char32 from "./char32.mts";
 export * as Encoding from "./text_encoding/mod.mts";
 export * as Text from "./text/mod.mts";
+export * as TextualTypeAssert from "./_type_ext/assert.mts";
+export * as TextualTypeException from "./_type_ext/error.mts";
 export { _isNonEmptyString as isNonEmptyString } from "./_base.mts";
 export { Assert } from "./assert.mts";
