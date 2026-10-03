@@ -17,3 +17,5 @@ export function encodingFailed(
     `${target} must be a string that can be encoded in ${encodingName}`;
   return new TypeError(msg);
 }
+
+//TODO /textuals/text_encoding/ にうつす

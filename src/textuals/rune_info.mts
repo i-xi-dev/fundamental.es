@@ -1,6 +1,6 @@
+import * as TextualTypeAssert from "./_type_ext/assert.mts";
 import * as Type from "../type/mod.mts";
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
-import { Assert } from "./assert.mts";
 import { CodePointRange } from "./code_point_range.mts";
 
 export type RuneInfo = {
@@ -20,7 +20,7 @@ export namespace RuneInfo {
     codePoint: TypeAlias.codepoint,
     options?: _FromOptions,
   ): RuneInfo {
-    Assert.codePoint(codePoint, "Input");
+    TextualTypeAssert.codePoint(codePoint, "Input");
 
     if (options?.allowLoneSurrogate !== true) {
       if (CodePointRange.SURROGATES.contains(codePoint) === true) {

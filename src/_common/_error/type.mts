@@ -1,5 +1,3 @@
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
-
 function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
 }

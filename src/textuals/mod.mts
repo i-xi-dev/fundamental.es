@@ -8,4 +8,3 @@ export * as Text from "./text/mod.mts";
 export * as TextualTypeAssert from "./_type_ext/assert.mts";
 export * as TextualTypeException from "./_type_ext/error.mts";
 export { _isNonEmptyString as isNonEmptyString } from "./_base.mts";
-export { Assert } from "./assert.mts";
