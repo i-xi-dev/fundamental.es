@@ -38,7 +38,7 @@ function _extractByte(
   return Math.trunc(x2 / (0x100 ** (pos - 1))) as Type.uint8;
 }
 
-export class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
+class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   readonly #bitLength: TypeAlias.safeint; // non-negative integer
   readonly #byteLength: TypeAlias.safeint; // non-negative integer
   readonly #size: TypeAlias.nnint;

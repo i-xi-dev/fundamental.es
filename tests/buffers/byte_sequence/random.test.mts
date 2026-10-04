@@ -1,0 +1,34 @@
+import { assertStrictEquals, assertThrows } from "@std/assert";
+import { Buffers, Type } from "../../../src/mod.mts";
+
+Deno.test("Buffers.ByteSequence.random()", () => {
+  const b = Buffers.ByteSequence.random(4);
+  assertStrictEquals(b.resizable, false);
+  const bytes = new Uint8Array(b.toArrayBufferWithDetach());
+  assertStrictEquals(bytes.byteLength, 4);
+  console.log(bytes.toHex());
+  assertStrictEquals(Type.isUint8(bytes[0]), true);
+  assertStrictEquals(Type.isUint8(bytes[1]), true);
+  assertStrictEquals(Type.isUint8(bytes[2]), true);
+  assertStrictEquals(Type.isUint8(bytes[3]), true);
+
+  const b2 = Buffers.ByteSequence.random(4, { maxCapacity: 6 });
+  assertStrictEquals(b2.resizable, true);
+  const bytes2 = new Uint8Array(b2.toArrayBufferWithDetach());
+  assertStrictEquals(bytes2.byteLength, 4);
+  console.log(bytes2.toHex());
+  assertStrictEquals(Type.isUint8(bytes2[0]), true);
+  assertStrictEquals(Type.isUint8(bytes2[1]), true);
+  assertStrictEquals(Type.isUint8(bytes2[2]), true);
+  assertStrictEquals(Type.isUint8(bytes2[3]), true);
+});
+
+Deno.test("Buffers.ByteSequence.random() - error", () => {
+  assertThrows(
+    () => {
+      Buffers.ByteSequence.random("4" as unknown as number);
+    },
+    TypeError,
+    "Input must be a non-negative safe-integer of type `number`",
+  );
+});

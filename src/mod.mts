@@ -1,4 +1,3 @@
-export * from "./byte_sequence/mod.mts";
 export * as Buffers from "./buffers/mod.mts";
 export * as Color from "./color/mod.mts";
 export * as Numerics from "./numerics/mod.mts";

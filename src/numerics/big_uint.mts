@@ -35,7 +35,7 @@ function _extractByte(
   return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as Type.uint8;
 }
 
-export class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
+class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   readonly #bitLength: TypeAlias.safeint; // non-negative integer
   readonly #byteLength: TypeAlias.safeint; // non-negative integer
   readonly #size: TypeAlias.bignnint;
