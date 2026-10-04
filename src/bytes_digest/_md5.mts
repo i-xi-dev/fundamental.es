@@ -1,7 +1,7 @@
-import * as Byte from "../byte/mod.mts";
 import * as TypeAlias from "../_internal/type_alias/mod.mts";
-import { ByteSequence } from "..//byte_sequence/mod.mts";
-import { ByteOrder } from "../byte_order.mts";
+import { Byte } from "../buffers/byte/mod.mts";
+import { ByteOrder } from "../buffers/byte_order.mts";
+import { ByteSequence } from "..//byte_sequence/mod.mts"; // 循環参照
 import { Uint32 } from "../numerics/mod.mts";
 
 const _BLOCK_BYTES = 64;
@@ -310,7 +310,7 @@ function _compute(inputBytes: TypeAlias.Bytes): ArrayBuffer {
     byteOffset = byteOffset + _BLOCK_BYTES;
   }
 
-  const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4);
+  const builder = ByteSequence.create(Uint32.BYTE_LENGTH * 4); //TODO 循環参照になる
   builder.loadFromUint32Iterable(contextState, {
     byteOrder: ByteOrder.LITTLE_ENDIAN,
   });

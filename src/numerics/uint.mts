@@ -1,4 +1,3 @@
-import * as Byte from "../byte/mod.mts";
 import * as NumericTypeAssert from "./_type_ext/assert.mts";
 import * as Range from "./range/mod.mts";
 import * as Type from "../type/mod.mts";
@@ -6,7 +5,8 @@ import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
-import { ByteOrder } from "../byte_order.mts";
+import { Byte } from "../buffers/byte/mod.mts";
+import { ByteOrder } from "../buffers/byte_order.mts";
 
 export interface Uint<T extends TypeAlias.safeint> {
   get MIN_VALUE(): T;

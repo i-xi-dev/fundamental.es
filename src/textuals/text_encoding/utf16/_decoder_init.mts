@@ -1,7 +1,7 @@
 import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
-import { ByteOrder } from "../../../byte_order.mts";
+import { ByteOrder } from "../../../buffers/byte_order.mts";
 import { CodePointRange } from "../../code_point_range.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";

@@ -11,7 +11,7 @@ export function mustBeNonEmptyString(target: string): TypeError {
 export function mustBeCodePoint(target: string): TypeError {
   const msg = _typeErrorMessage(
     target,
-    "an Unicode code point of type `number`",
+    "a Unicode code point of type `number`",
   );
   return new TypeError(msg);
 }

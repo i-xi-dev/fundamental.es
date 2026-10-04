@@ -8,6 +8,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
+import { Base64 } from "../buffers/bytes_encoding/base64/mod.mts";
 import {
   BigUint,
   BigUint64,
@@ -19,10 +20,11 @@ import {
   Uint32,
   Uint8,
 } from "../numerics/mod.mts";
-import { Base64, BinaryString, Percent } from "../bytes_encoding/mod.mts";
-import { ByteOrder } from "../byte_order.mts";
-import { Md5 } from "../bytes_digest/mod.mts";
+import { BinaryString } from "../buffers/bytes_encoding/binary_string/mod.mts";
+import { ByteOrder } from "../buffers/byte_order.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
+import { Md5 } from "../bytes_digest/mod.mts";
+import { Percent } from "../buffers/bytes_encoding/percent/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
