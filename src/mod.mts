@@ -1,6 +1,5 @@
 export * from "./byte_sequence/mod.mts";
 export * as Buffers from "./buffers/mod.mts";
-export * as BytesDigest from "./bytes_digest/mod.mts";
 export * as Color from "./color/mod.mts";
 export * as Numerics from "./numerics/mod.mts";
 export * as Geometrics from "./geometrics/mod.mts";

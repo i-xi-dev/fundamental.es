@@ -22,8 +22,8 @@ import {
 } from "../numerics/mod.mts";
 import { BinaryString } from "../buffers/bytes_encoding/binary_string/mod.mts";
 import { ByteOrder } from "../buffers/byte_order.mts";
+import { Digest } from "../buffers/bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
-import { Md5 } from "../bytes_digest/mod.mts";
 import { Percent } from "../buffers/bytes_encoding/percent/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
@@ -495,7 +495,7 @@ export class ByteSequence {
   /** @deprecated */
   async toMd5Digest(): Promise<ByteSequence> {
     this.#assertAccessible();
-    const bytes = await Md5.compute(this.#loadedBytes());
+    const bytes = await Digest.Md5.compute(this.#loadedBytes());
     return ByteSequence.#wrap(bytes.buffer);
   }
 

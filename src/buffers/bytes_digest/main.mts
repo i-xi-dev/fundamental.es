@@ -1,8 +1,8 @@
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { _computeMd5 } from "./_md5.mts";
 import { type DigestAlgorithm } from "./digest_algorithm.mts";
 
-export { type DigestAlgorithm };
+export { type DigestAlgorithm as Algorithm };
 
 /** @deprecated */
 export const Md5: DigestAlgorithm = {

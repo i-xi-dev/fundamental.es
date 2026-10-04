@@ -1,8 +1,8 @@
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
-import { Byte } from "../buffers/byte/mod.mts";
-import { ByteOrder } from "../buffers/byte_order.mts";
-import { ByteSequence } from "..//byte_sequence/mod.mts"; // 循環参照
-import { Uint32 } from "../numerics/mod.mts";
+import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import { Byte } from "../byte/mod.mts";
+import { ByteOrder } from "../byte_order.mts";
+import { ByteSequence } from "../../byte_sequence/mod.mts"; // 循環参照
+import { Uint32 } from "../../numerics/uint.mts";
 
 const _BLOCK_BYTES = 64;
 
