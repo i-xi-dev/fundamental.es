@@ -1,24 +1,24 @@
-import * as _Utf8 from "../../textuals/text_encoding/_utf8/mod.mts";
-import * as NumericTypeAssert from "../../numerics/_type_ext/assert.mts";
-import * as NumericTypeException from "../../numerics/_type_ext/error.mts";
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
-import { _Assert, _Error } from "../../_common/mod.mts";
+import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
+import * as NumericTypeAssert from "../numerics/_type_ext/assert.mts";
+import * as NumericTypeException from "../numerics/_type_ext/error.mts";
+import * as Type from "../type/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import { _Assert, _Error } from "../_common/mod.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
-import { Base64 } from "../bytes_encoding/base64/mod.mts";
-import { BigUint, BigUint64 } from "../../numerics/big_uint.mts";
-import { BinaryString } from "../bytes_encoding/binary_string/mod.mts";
-import { ByteOrder } from "../byte_order.mts";
-import { Digest } from "../bytes_digest/mod.mts";
-import { EncoderOptions as TextEncoderOptions } from "../../textuals/text_encoding/mod.mts";
-import { Percent } from "../bytes_encoding/percent/mod.mts";
-import { SafeInt } from "../../numerics/safe_int.mts";
-import { Uint, Uint16, Uint32, Uint8 } from "../../numerics/uint.mts";
+import { Base64 } from "./bytes_encoding/base64/mod.mts";
+import { BigUint, BigUint64 } from "../numerics/big_uint.mts";
+import { BinaryString } from "./bytes_encoding/binary_string/mod.mts";
+import { ByteOrder } from "./byte_order.mts";
+import { Digest } from "./bytes_digest/mod.mts";
+import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
+import { Percent } from "./bytes_encoding/percent/mod.mts";
+import { SafeInt } from "../numerics/safe_int.mts";
+import { Uint, Uint16, Uint32, Uint8 } from "../numerics/uint.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 

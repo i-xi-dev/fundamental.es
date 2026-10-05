@@ -1,7 +1,7 @@
 import * as Type from "./type/mod.mts";
 import * as TypeAlias from "./_internal/type_alias/mod.mts";
 import { _Error } from "./_common/mod.mts";
-import { _bytesEquals } from "./buffers/byte_sequence/_utils.mts";
+import { _bytesEquals } from "./buffers/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
 

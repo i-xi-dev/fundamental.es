@@ -1,6 +1,8 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
-import { Uint16 } from "../../numerics/uint.mts";
+import * as Type from "../type/mod.mts";
+import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import { Uint16 } from "../numerics/uint.mts";
+
+//TODO
 
 function _isByteArray(test: unknown): test is Array<Type.uint8> {
   return Array.isArray(test) && test.every((i) => Type.isUint8(i));
