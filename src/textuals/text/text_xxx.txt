@@ -14,7 +14,7 @@ export class CharSequence {
   }
 
   static fromString(value: string, options: _FromOptions): Text {
-    Type.Assert.string(value, "Input");
+    Type.assertString(value, "Input");
 
     if (options?.allowMalformed !== true) {
       if (value.isWellFormed() !== true) {

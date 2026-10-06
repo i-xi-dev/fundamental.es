@@ -1,7 +1,7 @@
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import * as Char16 from "../../textuals/char16.mts";
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
 import { Radix } from "../../numerics/radix.mts";
+import { Type } from "../../type/mod.mts";
 
 /** Bits per byte */
 export const BITS = 8;
@@ -36,7 +36,7 @@ export const BITS = 8;
 // }
 
 export function toString(byte: TypeAlias.safeint): string {
-  Type.Assert.uint8(byte, "Input");
+  Type.assertUint8(byte, "Input");
 
   // const resolvedOptions = _resolveToStringOptions(options);
   // let str = byte.toString(resolvedOptions.radix);

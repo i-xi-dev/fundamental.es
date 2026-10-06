@@ -1,6 +1,6 @@
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import * as _Utf8 from "../text_encoding/_utf8/mod.mts";
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 export const EMPTY = "";
 
@@ -43,7 +43,7 @@ type _char16s = IterableIterator<TypeAlias.char16, void, void>;
 
 //XXX allowMalformed
 export function toChar16Iterable(text: string): _char16s {
-  Type.Assert.string(text, "Input");
+  Type.assertString(text, "Input");
 
   return (function* (s: string) {
     for (let i = 0; i < s.length; i++) {
@@ -58,7 +58,7 @@ export function toChar16Iterable(text: string): _char16s {
 export function toCharCodeIterable(
   text: string,
 ): IterableIterator<TypeAlias.codepoint, void, void> {
-  Type.Assert.string(text, "Input");
+  Type.assertString(text, "Input");
 
   // return toChar16s(text).map((c) => c.codePointAt(0) as TypeAlias.codepoint);
   return (function* (s: string) {
@@ -77,7 +77,7 @@ type _char32s = IterableIterator<TypeAlias.char32, void, void>;
 
 //XXX allowMalformed
 export function toChar32Iterable(text: string): _char32s {
-  Type.Assert.string(text, "Input");
+  Type.assertString(text, "Input");
 
   return text[Symbol.iterator]();
   // return (function* (s: string) {
@@ -93,7 +93,7 @@ export function toChar32Iterable(text: string): _char32s {
 export function toCodePointIterable(
   text: string,
 ): IterableIterator<TypeAlias.codepoint, void, void> {
-  Type.Assert.string(text, "Input");
+  Type.assertString(text, "Input");
 
   // return toChar32s(text).map((c) => c.codePointAt(0) as TypeAlias.codepoint);
   return (function* (s: string) {

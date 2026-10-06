@@ -1,1 +1,1 @@
-export type * from "./_def.mts";
+export type * as TypeAlias from "./_def.mts";

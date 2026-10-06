@@ -1,4 +1,4 @@
-import * as Type from "../type/mod.mts";
+import { Type } from "../type/mod.mts";
 
 /** U+0020 `" "` */
 export const SPACE = " ";

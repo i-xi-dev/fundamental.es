@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Byte } from "../byte/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { ByteSequence } from "../byte_sequence.mts"; //TODO 循環参照

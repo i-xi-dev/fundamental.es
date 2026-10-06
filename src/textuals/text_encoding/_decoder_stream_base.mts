@@ -1,9 +1,9 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _BOM } from "./_utf.mts";
 import { _DecoderInit } from "./_decoder_init.mts";
 import { DecoderStream } from "./decoder_stream.mts";
 import { Fallback } from "./fallback.mts";
+import { Type } from "../../type/mod.mts";
 
 export abstract class _DecoderStreamBase implements DecoderStream {
   readonly #init: _DecoderInit;

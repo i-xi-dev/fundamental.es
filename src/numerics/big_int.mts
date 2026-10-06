@@ -1,5 +1,5 @@
-import * as Type from "../type/mod.mts";
 import { _Error } from "../_common/mod.mts";
+import { Type } from "../type/mod.mts";
 
 function _minOf(...values: bigint[]): bigint {
   let min = values[0];
@@ -41,9 +41,9 @@ export namespace BigInt {
     min: T,
     max: T,
   ): T {
-    Type.Assert.bigInt(value, "Input");
-    Type.Assert.bigInt(min, "Lower bound");
-    Type.Assert.bigInt(max, "Upper bound");
+    Type.assertBigInt(value, "Input");
+    Type.assertBigInt(min, "Lower bound");
+    Type.assertBigInt(max, "Upper bound");
     if (min > max) {
       throw _Error.Range.contradictory();
     }

@@ -8,9 +8,9 @@ import {
   isNonSharedUint8Array,
   isString,
   isUint8,
-} from "./main.mts";
+} from "./check.mts";
 
-export function bigInt(
+export function assertBigInt(
   test: unknown,
   targetLabel: string,
 ): asserts test is bigint {
@@ -19,7 +19,7 @@ export function bigInt(
   }
 }
 
-export function string(
+export function assertString(
   test: unknown,
   targetLabel: string,
 ): asserts test is string {
@@ -28,7 +28,7 @@ export function string(
   }
 }
 
-export function iterable<T>(
+export function assertIterable<T>(
   test: unknown,
   targetLabel: string,
 ): asserts test is Iterable<T> {
@@ -37,7 +37,7 @@ export function iterable<T>(
   }
 }
 
-export function asyncIterable<T>(
+export function assertAsyncIterable<T>(
   test: unknown,
   targetLabel: string,
 ): asserts test is AsyncIterable<T> {
@@ -46,7 +46,7 @@ export function asyncIterable<T>(
   }
 }
 
-export function uint8(
+export function assertUint8(
   test: unknown,
   targetLabel: string,
 ): asserts test is uint8 {
@@ -55,7 +55,7 @@ export function uint8(
   }
 }
 
-export function arrayBuffer(
+export function assertArrayBuffer(
   test: unknown,
   targetLabel: string,
 ): asserts test is ArrayBuffer {
@@ -64,7 +64,7 @@ export function arrayBuffer(
   }
 }
 
-export function nonSharedUint8Array(
+export function assertNonSharedUint8Array(
   test: unknown,
   targetLabel: string,
 ): asserts test is Uint8Array<ArrayBuffer> {

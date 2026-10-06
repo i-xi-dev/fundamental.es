@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 
 export { HexDecoder as Decoder } from "./decoder.mts";
 export { HexDecoderStream as DecoderStream } from "./decoder_stream.mts";

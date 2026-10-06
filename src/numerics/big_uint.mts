@@ -1,12 +1,12 @@
+import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import * as NumericTypeAssert from "./_type_ext/assert.mts";
 import * as Range from "./range/mod.mts";
-import * as Type from "../type/mod.mts";
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _clampBigInt } from "./big_int.mts";
 import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { Byte } from "../buffers/byte/mod.mts";
 import { ByteOrder } from "../buffers/byte_order.mts";
+import { Type } from "../type/mod.mts";
 
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -76,7 +76,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   }
 
   fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T {
-    Type.Assert.nonSharedUint8Array(bytes, "Input");
+    Type.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }
@@ -175,13 +175,13 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   }
 
   truncateFrom(value: bigint): T {
-    Type.Assert.bigInt(value, "Input");
+    Type.assertBigInt(value, "Input");
 
     return BigInt.asUintN(this.#bitLength, value) as T;
   }
 
   saturateFrom(value: bigint): T {
-    Type.Assert.bigInt(value, "Input");
+    Type.assertBigInt(value, "Input");
 
     return _clampBigInt<T>(value, this.#range.min, this.#range.max);
   }

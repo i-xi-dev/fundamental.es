@@ -1,5 +1,5 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 export function isSafeIntArray(
   test: unknown,

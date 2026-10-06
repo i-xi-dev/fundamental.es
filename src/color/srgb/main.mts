@@ -1,5 +1,4 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
@@ -8,6 +7,7 @@ import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Text } from "../../textuals/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 const _hexRegex = /^#?[0-9a-f]{6}$/i;
 
@@ -75,7 +75,7 @@ export class SRgbColor extends _RgbColor {
   }
 
   static fromBytes(bytes: TypeAlias.Bytes): SRgbColor {
-    Type.Assert.nonSharedUint8Array(bytes, "Input");
+    Type.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength !== 3) {
       throw _Error.Type.mustBe(
         // "an `Uint8Array` with a length of 3 or greater",
@@ -104,7 +104,7 @@ export class SRgbColor extends _RgbColor {
   }
 
   static fromHexEncoded(hex: string): SRgbColor {
-    Type.Assert.string(hex, "Input");
+    Type.assertString(hex, "Input");
     if (_hexRegex.test(hex) !== true) {
       throw _Error.Type.mustBe(
         'a hexadecimal color value in the "RRGGBB" format',

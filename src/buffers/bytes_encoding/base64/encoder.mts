@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _Encoder } from "../_encoder.mts";
 import { Base64EncoderOptions } from "./encoder_options.mts";
 

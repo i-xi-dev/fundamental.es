@@ -1,10 +1,10 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { CodePoint, Text, TextualTypeAssert } from "../../textuals/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {
-  Type.Assert.string(a, "Input-1");
-  Type.Assert.string(b, "Input-2");
+  Type.assertString(a, "Input-1");
+  Type.assertString(b, "Input-2");
 
   if (a < b) {
     return -1;
@@ -96,7 +96,7 @@ export function rangesMatches(
 }
 
 export function rangesTrim(input: string, rangeSet: CodePointRangeSet): string {
-  Type.Assert.string(input, "Input");
+  Type.assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -112,7 +112,7 @@ export function rangesTrimEnd(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  Type.Assert.string(input, "Input");
+  Type.assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -128,7 +128,7 @@ export function rangesCollectStart(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  Type.Assert.string(input, "Input");
+  Type.assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -140,7 +140,7 @@ export function rangesCollectStart(
 }
 
 export function patternCollectStart(input: string, pattern: string): string {
-  Type.Assert.string(input, "Input");
+  Type.assertString(input, "Input");
   TextualTypeAssert.nonEmptyString(pattern, "Pattern");
 
   return _patternCollectStart(input, pattern);

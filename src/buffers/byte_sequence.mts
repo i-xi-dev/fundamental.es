@@ -1,8 +1,7 @@
+import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
 import * as NumericTypeAssert from "../numerics/_type_ext/assert.mts";
 import * as NumericTypeException from "../numerics/_type_ext/error.mts";
-import * as Type from "../type/mod.mts";
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _Assert, _Error } from "../_common/mod.mts";
 import {
   _bytesEquals,
@@ -18,6 +17,7 @@ import { Digest } from "./bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
 import { Percent } from "./bytes_encoding/percent/mod.mts";
 import { SafeInt } from "../numerics/safe_int.mts";
+import { Type } from "../type/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../numerics/uint.mts";
 
 const _MAX_CAPACITY = 536_870_912;
@@ -178,7 +178,7 @@ export class ByteSequence {
     options?: _LoadOptions_2,
   ): this {
     this.#assertAccessible();
-    Type.Assert.arrayBuffer(sourceBuffer, "Input");
+    Type.assertArrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     if (
@@ -197,7 +197,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
-    Type.Assert.iterable(uint8s, "Input");
+    Type.assertIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     // this.loadFromArrayBuffer(Uint8Array.from(uint8s).buffer);
@@ -234,7 +234,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
-    Type.Assert.asyncIterable(uint8s, "Input");
+    Type.assertAsyncIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
@@ -265,7 +265,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    Type.Assert.iterable(uintNs, "Input");
+    Type.assertIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -297,7 +297,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    Type.Assert.iterable(biguintNs, "Input");
+    Type.assertIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -329,7 +329,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
-    Type.Assert.asyncIterable(uintNs, "Input");
+    Type.assertAsyncIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -361,7 +361,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    Type.Assert.asyncIterable(biguintNs, "Input");
+    Type.assertAsyncIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -626,10 +626,10 @@ export class ByteSequence {
   //   sourceBuffers: AsyncIterable<ArrayBuffer>, options?
   // ): Promise<this> {
   //   this.#assertAccessible();
-  //   Type.Assert.asyncIterable(sourceBuffers, "Input");
+  //   Type.assertAsyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
-  //     Type.Assert.arrayBuffer(sourceBuffer);
+  //     Type.assertArrayBuffer(sourceBuffer);
   //     this.#appendBytes(new Uint8Array(sourceBuffer));
   //   }
   //   return this;
@@ -774,7 +774,7 @@ export namespace ByteSequence {
     src: ArrayBuffer,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.Assert.arrayBuffer(src, "Input");
+    Type.assertArrayBuffer(src, "Input");
     return _create(src.byteLength, options).loadFromArrayBuffer(src);
   }
 
@@ -789,7 +789,7 @@ export namespace ByteSequence {
     src: TypeAlias.Bytes,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.Assert.nonSharedUint8Array(src, "Input");
+    Type.assertNonSharedUint8Array(src, "Input");
     return fromArrayBuffer(src.buffer, options);
   }
 
@@ -807,7 +807,7 @@ export namespace ByteSequence {
     base64: string,
     options?: Base64.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.Assert.string(base64, "Input");
+    Type.assertString(base64, "Input");
 
     const bytes = Uint8Array.fromBase64(base64, options);
     return fromBytes(bytes, options);
@@ -817,7 +817,7 @@ export namespace ByteSequence {
     binstr: string,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.Assert.string(binstr, "Input");
+    Type.assertString(binstr, "Input");
 
     const bytes = BinaryString.decode(binstr);
     return fromBytes(bytes, options);
@@ -827,7 +827,7 @@ export namespace ByteSequence {
     hex: string,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.Assert.string(hex, "Input");
+    Type.assertString(hex, "Input");
 
     const bytes = Uint8Array.fromHex(hex);
     return fromBytes(bytes, options);
@@ -837,7 +837,7 @@ export namespace ByteSequence {
     percent: string,
     options?: Percent.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.Assert.string(percent, "Input");
+    Type.assertString(percent, "Input");
 
     const bytes = Percent.decode(percent, options);
     return fromBytes(bytes, options);
@@ -848,7 +848,7 @@ export namespace ByteSequence {
     text: string,
     options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
-    // Type.Assert.string(text, "Input"); _Utf8.encode() 内でチェックされるので不要
+    // Type.assertString(text, "Input"); _Utf8.encode() 内でチェックされるので不要
 
     const bytes = _Utf8.encode(text, options);
     return fromBytes(bytes, options);

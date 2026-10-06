@@ -1,4 +1,4 @@
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { RgbComponents } from "./rgb_components.mts";
 
 export abstract class _RgbColor {

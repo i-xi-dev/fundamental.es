@@ -1,4 +1,4 @@
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { _typeErrorMessage } from "./_message.mts";
 
 export function mustBeBigInt(target: string): TypeError {

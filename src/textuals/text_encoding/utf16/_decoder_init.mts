@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";

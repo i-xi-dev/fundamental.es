@@ -1,10 +1,10 @@
-import * as Type from "../../type/mod.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _BOM } from "./_utf.mts";
 import { _bytesStartsWith } from "../../buffers/_utils.mts";
 import { _DecoderInit } from "./_decoder_init.mts";
 import { Decoder } from "./decoder.mts";
 import { Fallback } from "./fallback.mts";
+import { Type } from "../../type/mod.mts";
 
 export abstract class _DecoderBase implements Decoder {
   readonly #init: _DecoderInit;
@@ -26,7 +26,7 @@ export abstract class _DecoderBase implements Decoder {
   // }
 
   decode(input: TypeAlias.Bytes): string {
-    Type.Assert.nonSharedUint8Array(input, "Input");
+    Type.assertNonSharedUint8Array(input, "Input");
 
     const bomToRemove = (this.#init.ignoreBom !== true) &&
       _bytesStartsWith(input, this.#init.bomBytes);

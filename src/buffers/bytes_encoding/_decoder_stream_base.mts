@@ -1,6 +1,6 @@
 import type { _Decoder } from "./_decoder.mts";
 import type { _DecoderStreamRegulator } from "./_decoder_stream_regulator.mts";
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 type _Controller = TransformStreamDefaultController<TypeAlias.Bytes>;
 

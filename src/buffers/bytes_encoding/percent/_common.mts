@@ -1,8 +1,8 @@
-import * as Type from "../../../type/mod.mts";
-import * as TypeAlias from "../../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { Byte } from "../../byte/mod.mts";
 import { Char16, CodePoint, Text } from "../../../textuals/mod.mts";
+import { Type } from "../../../type/mod.mts";
 import { Uint8 } from "../../../numerics/uint.mts";
 
 export type _PercentOptions = {
@@ -45,7 +45,7 @@ export function _decode(
   text: string,
   options: Required<_PercentOptions>,
 ): TypeAlias.Bytes {
-  Type.Assert.string(text, "Input");
+  Type.assertString(text, "Input");
   if (_regex.test(text) !== true) {
     throw _Error.Syntax.mustBePercentEncoded("Input");
   }
@@ -101,7 +101,7 @@ export function _encode(
   bytes: TypeAlias.Bytes,
   options: Required<_PercentOptions>,
 ): string {
-  Type.Assert.nonSharedUint8Array(bytes, "Input");
+  Type.assertNonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => {
     if ((byte === CodePoint.SPACE) && (options.spaceAsPlus === true)) {

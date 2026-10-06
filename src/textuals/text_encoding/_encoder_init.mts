@@ -1,4 +1,4 @@
-import * as TypeAlias from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Fallback } from "./fallback.mts";
 
 export type _EncodeResult = {

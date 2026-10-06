@@ -1,5 +1,5 @@
+import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import * as NumericTypeAssert from "./_type_ext/assert.mts";
-import * as TypeAlias from "../_internal/type_alias/mod.mts";
 import { _isNonNegativeSafeInt } from "./_base.mts";
 import { _normalizeFinite } from "./finite.mts";
 import { RoundingMode } from "./rounding_mode.mts";
