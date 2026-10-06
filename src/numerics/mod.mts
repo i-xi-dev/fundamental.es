@@ -8,4 +8,4 @@ export { BigInt } from "./big_int.mts";
 export { Finite } from "./finite.mts";
 export { Radix } from "./radix.mts";
 export { RoundingMode } from "./rounding_mode.mts";
-export { SafeInt } from "./safe_int.mts";
+export { SafeInt } from "./safe_int/mod.mts";

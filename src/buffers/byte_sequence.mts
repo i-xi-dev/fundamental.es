@@ -16,7 +16,7 @@ import { ByteOrder } from "./byte_order.mts";
 import { Digest } from "./bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
 import { Percent } from "./bytes_encoding/percent/mod.mts";
-import { SafeInt } from "../numerics/safe_int.mts";
+import { SafeInt } from "../numerics/safe_int/mod.mts";
 import { Type } from "../type/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../numerics/uint.mts";
 
