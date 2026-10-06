@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _clampFinite } from "../../numerics/finite.mts";
+import { _clampFinite } from "../../numerics/_base.mts";
 import { _Error } from "../../_common/mod.mts";
 import { _Hsl } from "./hsl.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";

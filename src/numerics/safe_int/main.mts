@@ -1,12 +1,12 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as NumericTypeAssert from "../_type_ext/assert.mts";
 import * as Exception from "../_type_ext/error.mts";
 import {
   _isEvenSafeInt,
   _isNonNegativeSafeInt,
+  _normalizeFinite,
   _roundToSafeInt,
 } from "../_base.mts";
-import { _normalizeFinite } from "../finite.mts";
+import { Finite } from "../finite/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
 
 export function assertSafeInteger(
@@ -35,6 +35,6 @@ export function round(
   value: TypeAlias.finite,
   roundingMode?: RoundingMode,
 ): TypeAlias.safeint {
-  NumericTypeAssert.finite(value, "Input");
+  Finite.assertFinite(value, "Input");
   return _roundToSafeInt(value, roundingMode);
 }

@@ -1,10 +1,23 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { _normalizeFinite } from "./finite.mts";
 import { Type } from "../type/mod.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
 export function _isNonNegative(value: TypeAlias.finite | bigint): boolean {
   return (Type.isNumber(value) || Type.isBigInt(value)) && (value >= 0);
+}
+
+export function _normalizeFinite<T extends TypeAlias.finite>(
+  value: TypeAlias.finite,
+): T {
+  return ((value === 0) ? (value + 0) : value) as T; // -0を0
+}
+
+export function _clampFinite<T extends TypeAlias.finite>(
+  value: TypeAlias.finite,
+  min: T,
+  max: T,
+): T {
+  return _normalizeFinite<T>(Math.min(Math.max(value, min), max));
 }
 
 export function _isNonNegativeSafeInt(test: TypeAlias.safeint): boolean {

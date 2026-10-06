@@ -1,8 +1,8 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import * as Range from "./range/mod.mts";
 import { _clampBigInt } from "./_base.mts";
 import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
+import { BigIntegerClosedRange, type ClosedRange } from "./range/mod.mts";
 import { Byte } from "../buffers/byte/mod.mts";
 import { ByteOrder } from "../buffers/byte_order.mts";
 import { SafeInteger } from "./safe_int/mod.mts";
@@ -39,7 +39,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   readonly #bitLength: TypeAlias.safeint; // non-negative integer
   readonly #byteLength: TypeAlias.safeint; // non-negative integer
   readonly #size: TypeAlias.bignnint;
-  readonly #range: Range.ClosedRange<TypeAlias.bignnint, T>;
+  readonly #range: ClosedRange<TypeAlias.bignnint, T>;
 
   constructor(bitLength: TypeAlias.safeint) {
     if (Number.isSafeInteger(bitLength) && (bitLength > 0)) {
@@ -48,7 +48,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
       this.#size = 2n ** BigInt(bitLength);
       const min = 0n as T;
       const max = (this.#size - 1n) as T;
-      this.#range = Range.bigIntClosedRange<T>(min, max);
+      this.#range = BigIntegerClosedRange.of<T>(min, max);
     } else {
       // コンストラクターは公開しないのでありえない
       throw _Error.Operation.invalid("Unsupported bit length");

@@ -1,9 +1,9 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as NumericTypeException from "../_type_ext/error.mts";
-import { _ClosedRangeBase } from "./_closed_range_base.mts";
-import { _Error } from "../../_common/mod.mts";
-import { _normalizeFinite } from "../finite.mts";
-import { ClosedRange } from "./closed_range.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
+import * as NumericTypeException from "../../_type_ext/error.mts";
+import { _ClosedRangeBase } from "../_closed_range_base.mts";
+import { _Error } from "../../../_common/mod.mts";
+import { _normalizeFinite } from "../../_base.mts";
+import { ClosedRange } from "../closed_range.mts";
 
 class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   extends _ClosedRangeBase<TypeAlias.safeint, T> {
@@ -23,9 +23,7 @@ class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   }
 }
 
-export function safeIntClosedRange<
-  T extends TypeAlias.safeint = TypeAlias.safeint,
->(
+export function of<T extends TypeAlias.safeint = TypeAlias.safeint>(
   min: T,
   max: T,
 ): ClosedRange<TypeAlias.safeint, T> {

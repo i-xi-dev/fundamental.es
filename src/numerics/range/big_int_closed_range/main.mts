@@ -1,7 +1,7 @@
-import { _ClosedRangeBase } from "./_closed_range_base.mts";
-import { _Error } from "../../_common/mod.mts";
-import { ClosedRange } from "./closed_range.mts";
-import { Type } from "../../type/mod.mts";
+import { _ClosedRangeBase } from "../_closed_range_base.mts";
+import { _Error } from "../../../_common/mod.mts";
+import { ClosedRange } from "../closed_range.mts";
+import { Type } from "../../../type/mod.mts";
 
 class _BigIntClosedRangeImpl<T extends bigint = bigint>
   extends _ClosedRangeBase<bigint, T> {
@@ -18,7 +18,7 @@ class _BigIntClosedRangeImpl<T extends bigint = bigint>
   }
 }
 
-export function bigIntClosedRange<T extends bigint = bigint>(
+export function of<T extends bigint = bigint>(
   min: T,
   max: T,
 ): ClosedRange<bigint, T> {

@@ -16,3 +16,4 @@ export function codePoint(test: unknown, targetLabel: string): void {
     throw TextualTypeException.mustBeCodePoint(targetLabel);
   }
 }
+//TODO is～と同じ場所に移す
