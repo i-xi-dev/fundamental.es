@@ -5,9 +5,9 @@ import { RoundingMode } from "./rounding_mode.mts";
 
 export function _isNonNegative(value: TypeAlias.finite | bigint): boolean {
   return (Type.isNumber(value) || Type.isBigInt(value)) && (value >= 0);
-} //XXX 第1h引数はunknownでは
+}
 
-export function _isNonNegativeSafeInt(test: unknown): boolean {
+export function _isNonNegativeSafeInt(test: TypeAlias.safeint): boolean {
   return Number.isSafeInteger(test) && ((test as number) >= 0);
 }
 
@@ -78,4 +78,38 @@ export function _roundToSafeInt(
     default: // case RoundingMode.HALF_EXPAND:
       return sourceIsNegative ? halfDown() : halfUp();
   }
+}
+
+export function _minBigIntOf(...values: bigint[]): bigint {
+  let min = values[0];
+  let value: bigint;
+  for (let i = 1; i < values.length; i++) {
+    value = values[i];
+
+    if (value < min) {
+      min = value;
+    }
+  }
+  return min;
+}
+
+export function _maxBigIntOf(...values: bigint[]): bigint {
+  let max = values[0];
+  let value: bigint;
+  for (let i = 1; i < values.length; i++) {
+    value = values[i];
+
+    if (value > max) {
+      max = value;
+    }
+  }
+  return max;
+}
+
+export function _clampBigInt<T extends bigint>(
+  value: bigint,
+  min: T,
+  max: T,
+): T {
+  return _minBigIntOf(_maxBigIntOf(value, min), max) as T;
 }

@@ -27,7 +27,7 @@ export const BITS = 8;
 //     : Radix.HEXADECIMAL;
 //   const upperCase = options?.upperCase === true;
 //   let minLength = (Type.isNumber(options?.minLength) &&
-//       SafeInt.isNonNegative(options.minLength))
+//       SafeInteger.isNonNegative(options.minLength))
 //     ? options.minLength
 //     : 0;
 //   minLength = Math.max(minLength, _minPaddedLength[radix]);

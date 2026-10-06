@@ -10,20 +10,4 @@ export function finite(
   }
 }
 
-export function safeInt(
-  test: unknown,
-  targetLabel: string,
-): void {
-  if (Number.isSafeInteger(test) !== true) {
-    throw Exception.mustBeSafeInt(targetLabel);
-  }
-}
-
-export function nonNegativeSafeInt(
-  test: unknown,
-  targetLabel: string,
-): void {
-  if ((_isNonNegativeSafeInt(test)) !== true) {
-    throw Exception.mustBeNonNegativeSafeInt(targetLabel);
-  }
-}
+//TODO is～と同じ場所に移す

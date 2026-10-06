@@ -1,1 +1,1 @@
-export * as SafeInt from "./main.mts";
+export * as SafeInteger from "./main.mts";

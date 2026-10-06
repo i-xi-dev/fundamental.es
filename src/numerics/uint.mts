@@ -1,11 +1,11 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import * as NumericTypeAssert from "./_type_ext/assert.mts";
 import * as Range from "./range/mod.mts";
 import { _clampFinite } from "./finite.mts";
 import { _Error, _Io } from "../_common/mod.mts";
 import { _normalizeOffset } from "./_uint.mts";
 import { Byte } from "../buffers/byte/mod.mts";
 import { ByteOrder } from "../buffers/byte_order.mts";
+import { SafeInteger } from "./safe_int/mod.mts";
 import { Type } from "../type/mod.mts";
 
 export interface Uint<T extends TypeAlias.safeint> {
@@ -179,7 +179,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
-    NumericTypeAssert.safeInt(offset, "Offset");
+    SafeInteger.assertSafeInteger(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -203,7 +203,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   truncateFrom(value: TypeAlias.safeint): T {
-    NumericTypeAssert.safeInt(value, "Input");
+    SafeInteger.assertSafeInteger(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -217,7 +217,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   saturateFrom(value: TypeAlias.safeint): T {
-    NumericTypeAssert.safeInt(value, "Input");
+    SafeInteger.assertSafeInteger(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }

@@ -1,6 +1,5 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
-import * as NumericTypeAssert from "../numerics/_type_ext/assert.mts";
 import * as NumericTypeException from "../numerics/_type_ext/error.mts";
 import { _Assert, _Error } from "../_common/mod.mts";
 import {
@@ -16,7 +15,7 @@ import { ByteOrder } from "./byte_order.mts";
 import { Digest } from "./bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/mod.mts";
 import { Percent } from "./bytes_encoding/percent/mod.mts";
-import { SafeInt } from "../numerics/safe_int/mod.mts";
+import { SafeInteger } from "../numerics/safe_int/mod.mts";
 import { Type } from "../type/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../numerics/uint.mts";
 
@@ -76,7 +75,7 @@ function _normalizeResizer(
   // capacityは型チェック済み前提
 
   if (
-    Type.isNumber(maxCapacity) && SafeInt.isNonNegative(maxCapacity)
+    Type.isNumber(maxCapacity) && SafeInteger.isNonNegative(maxCapacity)
   ) {
     return {
       resizable: true,
@@ -130,9 +129,9 @@ export class ByteSequence {
     capacity: TypeAlias.safeint,
     maxCapacity?: TypeAlias.safeint,
   ): ByteSequence {
-    NumericTypeAssert.nonNegativeSafeInt(capacity, "Capacity");
+    SafeInteger.assertNonNegative(capacity, "Capacity");
     if (Type.isNullOrUndefined(maxCapacity) !== true) {
-      NumericTypeAssert.nonNegativeSafeInt(maxCapacity, "Max-capacity");
+      SafeInteger.assertNonNegative(maxCapacity, "Max-capacity");
     }
 
     const { resizable, maxByteLength } = _normalizeResizer(
@@ -431,7 +430,7 @@ export class ByteSequence {
 
   fillZeros(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
+    SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(new ArrayBuffer(byteLength), options);
@@ -439,7 +438,7 @@ export class ByteSequence {
 
   fillRandom(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
+    SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     return this.loadFromArrayBuffer(_randomBytes(byteLength), options);
@@ -602,7 +601,7 @@ export class ByteSequence {
   byteAt(index: TypeAlias.safeint): Type.uint8 {
     this.#assertAccessible();
 
-    NumericTypeAssert.safeInt(index, "Input");
+    SafeInteger.assertSafeInteger(index, "Input");
     if (index < 0) {
       throw _Error.Range.underflow(0, "Input");
     }
@@ -645,7 +644,7 @@ export class ByteSequence {
     //   : this.#bytes.buffer.transfer(options?.byteLength);
     // return buffer; //XXX-$105 v8のバグ resizableなArrayBufferのUint8ArrayでのtoHex()に失敗
     const length = (Type.isNumber(options?.byteLength) &&
-        SafeInt.isNonNegative(options.byteLength))
+        SafeInteger.isNonNegative(options.byteLength))
       ? Math.min(options.byteLength, this.#loadedCount)
       : this.#loadedCount; //TODO options.byteLengthがloadedCountより大きい場合
     return this.#buffer.transferToFixedLength(length);
@@ -670,7 +669,7 @@ export class ByteSequence {
     }
 
     if (
-      Type.isNumber(test) && SafeInt.isNonNegative(test) &&
+      Type.isNumber(test) && SafeInteger.isNonNegative(test) &&
       (test < this.#loadedCount)
     ) {
       // 整数かつ #loadedCount 未満はok
@@ -748,7 +747,7 @@ function _create(
   options?: _FromOptions,
 ): ByteSequence {
   return (Type.isNumber(options?.maxCapacity) &&
-      SafeInt.isNonNegative(options.maxCapacity))
+      SafeInteger.isNonNegative(options.maxCapacity))
     ? ByteSequence.create(capacity, Math.max(capacity, options.maxCapacity))
     : ByteSequence.create(capacity);
 }
@@ -758,7 +757,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
-    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
+    SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillZeros(byteLength);
   }
 
@@ -766,7 +765,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
-    NumericTypeAssert.nonNegativeSafeInt(byteLength, "Input");
+    SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillRandom(byteLength);
   }
 
