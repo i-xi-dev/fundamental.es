@@ -9,7 +9,7 @@ import {
   _randomBytes,
 } from "./_utils.mts";
 import { Base64 } from "./bytes_encoding/base64/mod.mts";
-import { BigUint, BigUint64 } from "../numerics/big_uint.mts";
+import { BigUint, BigUint64 } from "../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "./bytes_encoding/binary_string/mod.mts";
 import { ByteOrder } from "./byte_order.mts";
 import { Digest } from "./bytes_digest/mod.mts";
@@ -17,7 +17,7 @@ import { EncoderOptions as TextEncoderOptions } from "../textuals/text_encoding/
 import { Percent } from "./bytes_encoding/percent/mod.mts";
 import { SafeInteger } from "../numerics/safe_int/mod.mts";
 import { Type } from "../type/mod.mts";
-import { Uint, Uint16, Uint32, Uint8 } from "../numerics/uint.mts";
+import { Uint, Uint16, Uint32, Uint8 } from "../numerics/int_x/uint/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 

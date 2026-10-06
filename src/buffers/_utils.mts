@@ -1,6 +1,6 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { Type } from "../type/mod.mts";
-import { Uint16 } from "../numerics/uint.mts";
+import { Uint16 } from "../numerics/int_x/uint/mod.mts";
 
 //TODO
 

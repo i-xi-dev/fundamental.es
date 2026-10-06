@@ -3,7 +3,7 @@ import { _Error } from "../../../_common/mod.mts";
 import { Byte } from "../../byte/mod.mts";
 import { Char16, CodePoint, Text } from "../../../textuals/mod.mts";
 import { Type } from "../../../type/mod.mts";
-import { Uint8 } from "../../../numerics/uint.mts";
+import { Uint8 } from "../../../numerics/int_x/uint/mod.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* Type.uint8 */ number>;

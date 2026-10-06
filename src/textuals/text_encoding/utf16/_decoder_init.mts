@@ -5,7 +5,7 @@ import { ByteOrder } from "../../../buffers/byte_order.mts";
 import { CodePointRange } from "../../code_point_range.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
-import { Uint16 } from "../../../numerics/uint.mts";
+import { Uint16 } from "../../../numerics/int_x/uint/mod.mts";
 
 function _regulate(
   bytes: TypeAlias.Bytes,

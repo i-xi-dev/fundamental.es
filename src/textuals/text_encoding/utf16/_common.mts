@@ -2,7 +2,7 @@ import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
 import { CodePointRange } from "../../code_point_range.mts";
-import { Uint16 } from "../../../numerics/uint.mts";
+import { Uint16 } from "../../../numerics/int_x/uint/mod.mts";
 
 export const _BYTES_PER_CHAR = Uint16.BYTE_LENGTH;
 

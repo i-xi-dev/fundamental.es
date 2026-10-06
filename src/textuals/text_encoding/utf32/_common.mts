@@ -5,7 +5,7 @@ import { _Error } from "../../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
 import { CodePointRange } from "../../code_point_range.mts";
 import { EMPTY } from "../../text/main.mts";
-import { Uint32 } from "../../../numerics/uint.mts";
+import { Uint32 } from "../../../numerics/int_x/uint/mod.mts";
 
 export const _BYTES_PER_RUNE = Uint32.BYTE_LENGTH;
 

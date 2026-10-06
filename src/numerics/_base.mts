@@ -2,9 +2,13 @@ import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { Type } from "../type/mod.mts";
 import { RoundingMode } from "./rounding_mode.mts";
 
+// numeric -----------------------------------------------------------
+
 export function _isNonNegative(value: TypeAlias.finite | bigint): boolean {
   return (Type.isNumber(value) || Type.isBigInt(value)) && (value >= 0);
 }
+
+// finite ------------------------------------------------------------
 
 export function _normalizeFinite<T extends TypeAlias.finite>(
   value: TypeAlias.finite,
@@ -19,6 +23,8 @@ export function _clampFinite<T extends TypeAlias.finite>(
 ): T {
   return _normalizeFinite<T>(Math.min(Math.max(value, min), max));
 }
+
+// safeint -----------------------------------------------------------
 
 export function _isNonNegativeSafeInt(test: TypeAlias.safeint): boolean {
   return Number.isSafeInteger(test) && ((test as number) >= 0);
@@ -92,6 +98,8 @@ export function _roundToSafeInt(
       return sourceIsNegative ? halfDown() : halfUp();
   }
 }
+
+// bigint ------------------------------------------------------------
 
 export function _minBigIntOf(...values: bigint[]): bigint {
   let min = values[0];

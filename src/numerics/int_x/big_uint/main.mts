@@ -1,12 +1,12 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { _clampBigInt } from "./_base.mts";
-import { _Error, _Io } from "../_common/mod.mts";
-import { _normalizeOffset } from "./_uint.mts";
-import { BigIntegerClosedRange, type ClosedRange } from "./range/mod.mts";
-import { Byte } from "../buffers/byte/mod.mts";
-import { ByteOrder } from "../buffers/byte_order.mts";
-import { SafeInteger } from "./safe_int/mod.mts";
-import { Type } from "../type/mod.mts";
+import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
+import { _clampBigInt } from "../../_base.mts";
+import { _Error, _Io } from "../../../_common/mod.mts";
+import { _normalizeOffset } from "../_utils.mts";
+import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
+import { Byte } from "../../../buffers/byte/mod.mts";
+import { ByteOrder } from "../../../buffers/byte_order.mts";
+import { SafeInteger } from "../../safe_int/mod.mts";
+import { Type } from "../../../type/mod.mts";
 
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
