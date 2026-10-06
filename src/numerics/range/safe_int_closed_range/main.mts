@@ -1,8 +1,8 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
-import * as NumericTypeException from "../../_type_ext/error.mts";
 import { _ClosedRangeBase } from "../_closed_range_base.mts";
 import { _Error } from "../../../_common/mod.mts";
-import { _normalizeFinite } from "../../_base.mts";
+import { _normalizeFinite } from "../../_internal/common.mts";
+import { _NumericTypeError } from "../../_internal/type_error/mod.mts";
 import { ClosedRange } from "../closed_range.mts";
 
 class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
@@ -19,7 +19,7 @@ class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   }
 
   protected override _typeError(): TypeError {
-    return NumericTypeException.mustBeSafeInt("Input");
+    return _NumericTypeError.mustBeSafeInteger("Input");
   }
 }
 

@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
-import { _clampFinite } from "../../_base.mts";
+import { _clampFinite } from "../../_internal/common.mts";
 import { _Error, _Io } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";

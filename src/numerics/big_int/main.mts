@@ -1,4 +1,4 @@
-import { _clampBigInt } from "../_base.mts";
+import { _clampBigInt } from "../_internal/common.mts";
 import { _Error } from "../../_common/mod.mts";
 import { Type } from "../../type/mod.mts";
 

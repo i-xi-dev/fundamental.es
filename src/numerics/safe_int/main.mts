@@ -1,11 +1,11 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as Exception from "../_type_ext/error.mts";
 import {
   _isEvenSafeInt,
   _isNonNegativeSafeInt,
   _normalizeFinite,
   _roundToSafeInt,
-} from "../_base.mts";
+} from "../_internal/common.mts";
+import { _NumericTypeError } from "../_internal/type_error/mod.mts";
 import { Finite } from "../finite/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
 
@@ -14,7 +14,7 @@ export function assertSafeInteger(
   targetLabel: string,
 ): void {
   if (Number.isSafeInteger(test) !== true) {
-    throw Exception.mustBeSafeInt(targetLabel);
+    throw _NumericTypeError.mustBeSafeInteger(targetLabel);
   }
 }
 
@@ -25,7 +25,7 @@ export function assertNonNegative(
   targetLabel: string,
 ): void {
   if ((_isNonNegativeSafeInt(test)) !== true) {
-    throw Exception.mustBeNonNegativeSafeInt(targetLabel);
+    throw _NumericTypeError.mustBeNonNegativeSafeInteger(targetLabel);
   }
 }
 

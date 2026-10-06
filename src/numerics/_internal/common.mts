@@ -1,6 +1,6 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { Type } from "../type/mod.mts";
-import { RoundingMode } from "./rounding_mode.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { Type } from "../../type/mod.mts";
+import { RoundingMode } from "../rounding_mode.mts";
 
 // numeric -----------------------------------------------------------
 

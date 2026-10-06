@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { _clampFinite } from "../numerics/_base.mts";
+import { _clampFinite } from "../numerics/_internal/common.mts";
 import { _Error } from "../_common/mod.mts";
 import { Type } from "../type/mod.mts";
 

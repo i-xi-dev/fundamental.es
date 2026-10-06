@@ -1,6 +1,5 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import * as _Utf8 from "../textuals/text_encoding/_utf8/mod.mts";
-import * as NumericTypeException from "../numerics/_type_ext/error.mts";
 import { _Assert, _Error } from "../_common/mod.mts";
 import {
   _bytesEquals,
@@ -8,6 +7,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./_utils.mts";
+import { _NumericTypeError } from "../numerics/_internal/type_error/mod.mts";
 import { Base64 } from "./bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "./bytes_encoding/binary_string/mod.mts";
@@ -564,13 +564,13 @@ export class ByteSequence {
       (Type.isNullOrUndefined(start) ||
         (Type.isNumber(start) && Number.isSafeInteger(start))) !== true
     ) {
-      throw NumericTypeException.mustBeSafeInt("Start index");
+      throw _NumericTypeError.mustBeSafeInteger("Start index");
     }
     if (
       (Type.isNullOrUndefined(end) ||
         (Type.isNumber(end) && Number.isSafeInteger(end))) !== true
     ) {
-      throw NumericTypeException.mustBeSafeInt("End index");
+      throw _NumericTypeError.mustBeSafeInteger("End index");
     }
 
     const adjStart = start ?? 0;

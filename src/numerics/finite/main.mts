@@ -1,14 +1,14 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as NumericTypeException from "../_type_ext/error.mts";
-import { _clampFinite, _normalizeFinite } from "../_base.mts";
+import { _clampFinite, _normalizeFinite } from "../_internal/common.mts";
 import { _Error } from "../../_common/mod.mts";
+import { _NumericTypeError } from "../_internal/type_error/mod.mts";
 
 export function assertFinite(
   test: unknown,
   targetLabel: string,
 ): void {
   if (Number.isFinite(test) !== true) {
-    throw NumericTypeException.mustBeFinite(targetLabel);
+    throw _NumericTypeError.mustBeFinite(targetLabel);
   }
 }
 

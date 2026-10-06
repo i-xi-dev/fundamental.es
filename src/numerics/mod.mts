@@ -1,5 +1,4 @@
-export * as NumericTypeException from "./_type_ext/error.mts";
-export { _isNonNegative as isNonNegative } from "./_base.mts";
+export { _isNonNegative as isNonNegative } from "./_internal/common.mts";
 export {
   type BigUint,
   BigUint128,
