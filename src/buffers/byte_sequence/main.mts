@@ -13,7 +13,7 @@ import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "../bytes_encoding/binary_string/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
 import { Digest } from "../bytes_digest/mod.mts";
-import { EncoderOptions as TextEncoderOptions } from "../../textuals/text_encoding/mod.mts";
+import { EncoderOptions as TextEncoderOptions } from "../../textuals/text_encoding/encoder_options.mts";
 import { Percent } from "../bytes_encoding/percent/mod.mts";
 import { SafeInteger } from "../../numerics/safe_int/mod.mts";
 import { Type } from "../../type/mod.mts";

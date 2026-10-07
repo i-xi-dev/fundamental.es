@@ -1,7 +1,7 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _NAME } from "./_common.mts";
-import { _regulateForEncoder } from "../_utf.mts";
+import { _regulateForEncoder } from "../_common.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
 
