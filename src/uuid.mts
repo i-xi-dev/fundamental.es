@@ -1,6 +1,6 @@
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
+import { _bytesEquals } from "./buffers/_internal/common.mts";
 import { _Error } from "./_common/mod.mts";
-import { _bytesEquals } from "./buffers/_utils.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
 import { Type } from "./type/mod.mts";

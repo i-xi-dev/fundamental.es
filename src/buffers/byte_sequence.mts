@@ -6,7 +6,7 @@ import {
   _bytesStartsWith,
   _Comparable,
   _randomBytes,
-} from "./_utils.mts";
+} from "./_internal/common.mts";
 import { _NumericTypeError } from "../numerics/_internal/type_error/mod.mts";
 import { Base64 } from "./bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../numerics/int_x/big_uint/mod.mts";

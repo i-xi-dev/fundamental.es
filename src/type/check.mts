@@ -66,3 +66,7 @@ export function isNonSharedUint8Array(
 ): test is Uint8Array<ArrayBuffer> { //XXX realm違いの場合
   return isUint8Array(test) && isArrayBuffer(test.buffer);
 }
+
+export function isArrayOfUint8(test: unknown): test is Array<uint8> {
+  return Array.isArray(test) && test.every((i) => isUint8(i));
+}

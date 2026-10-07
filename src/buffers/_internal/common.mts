@@ -1,12 +1,6 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { Type } from "../type/mod.mts";
-import { Uint16 } from "../numerics/int_x/uint/mod.mts";
-
-//TODO
-
-function _isByteArray(test: unknown): test is Array<Type.uint8> {
-  return Array.isArray(test) && test.every((i) => Type.isUint8(i));
-}
+import { Type } from "../../type/mod.mts";
+import { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { Uint16 } from "../../numerics/int_x/uint/mod.mts";
 
 export type _Comparable =
   | ArrayBuffer
@@ -31,7 +25,7 @@ export function _comparableToBytes(
     if (Type.isSharedArrayBuffer(input.buffer) === true) {
       return Uint8Array.from(new Uint8Array(input.buffer));
     }
-  } else if (_isByteArray(input) === true) {
+  } else if (Type.isArrayOfUint8(input) === true) {
     return input;
   }
   return null;

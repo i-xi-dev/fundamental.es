@@ -1,6 +1,6 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _BOM } from "./_utf.mts";
-import { _bytesStartsWith } from "../../buffers/_utils.mts";
+import { _bytesStartsWith } from "../../buffers/_internal/common.mts";
 import { _DecoderInit } from "./_decoder_init.mts";
 import { Decoder } from "./decoder.mts";
 import { Fallback } from "./fallback.mts";
