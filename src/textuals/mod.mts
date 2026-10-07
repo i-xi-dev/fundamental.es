@@ -7,4 +7,3 @@ export { Text } from "./text/mod.mts";
 //TODO
 export * from "./rune_info.mts";
 export * as Encoding from "./text_encoding/mod.mts";
-export * as TextualTypeException from "./_type_ext/error.mts";

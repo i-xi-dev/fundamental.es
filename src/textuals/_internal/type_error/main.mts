@@ -1,4 +1,4 @@
-import { _typeErrorMessage } from "../../type/_message.mts";
+import { _typeErrorMessage } from "../../../type/_message.mts";
 
 export function mustBeNonEmptyString(target: string): TypeError {
   const msg = _typeErrorMessage(

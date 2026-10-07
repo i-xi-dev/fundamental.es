@@ -1,7 +1,7 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _TextualTypeError } from "../_internal/type_error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
-import * as TextualTypeException from "../_type_ext/error.mts";
 
 const _MIN = 0;
 const _MAX = 0x10FFFF;
@@ -29,7 +29,7 @@ export function isCodePoint(test: unknown): boolean {
 
 export function assertCodePoint(test: unknown, targetLabel: string): void {
   if (isCodePoint(test) !== true) {
-    throw TextualTypeException.mustBeCodePoint(targetLabel);
+    throw _TextualTypeError.mustBeCodePoint(targetLabel);
   }
 }
 
