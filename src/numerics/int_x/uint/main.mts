@@ -1,10 +1,11 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _clampFinite } from "../../_internal/common.mts";
-import { _Error, _Io } from "../../../_common/mod.mts";
+import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
 import { type ClosedRange, SafeIntegerClosedRange } from "../../range/mod.mts";
+import { Io } from "../../../_internal/io/mod.mts";
 import { SafeInteger } from "../../safe_int/mod.mts";
 import { Type } from "../../../type/mod.mts";
 
@@ -86,7 +87,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }
 
-    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
 
     //XXX 32以下はUint32Arrayにした方が多分速い
 
@@ -110,7 +111,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
       throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
 
-    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
 
     if (this.#byteLength === 1) {
       return Uint8Array.of(uint);

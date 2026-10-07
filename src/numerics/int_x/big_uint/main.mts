@@ -1,10 +1,11 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _clampBigInt } from "../../_internal/common.mts";
-import { _Error, _Io } from "../../../_common/mod.mts";
+import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
+import { Io } from "../../../_internal/io/mod.mts";
 import { SafeInteger } from "../../safe_int/mod.mts";
 import { Type } from "../../../type/mod.mts";
 
@@ -81,7 +82,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
       throw _Error.Length.mismatch("input", this.#byteLength);
     }
 
-    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
 
     const x = (resolvedByteOrder === ByteOrder.LITTLE_ENDIAN)
       ? [...bytes]
@@ -103,7 +104,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
       throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
 
-    const resolvedByteOrder = _Io.resolveByteOrder(byteOrder);
+    const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
 
     if (this.#byteLength === 1) {
       return Uint8Array.of(Number(uint));
