@@ -1,8 +1,8 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
-import { _NAME } from "./_common.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
+import { Utf8 } from "../../../_internal/utf8/mod.mts";
 
 // 2～4バイト文字の1バイト目か
 function _is1OfMulti(byte: number): boolean {
@@ -82,7 +82,7 @@ function _regulate(bytes: TypeAlias.Bytes, allowPending?: boolean): {
 }
 
 function _createDecode(fatal?: boolean): _DecodeFunc {
-  const decoder = new TextDecoder(_NAME, {
+  const decoder = new TextDecoder(Utf8.NAME, {
     fatal: fatal === true,
     ignoreBOM: true,
   });
@@ -101,7 +101,7 @@ function _createDecode(fatal?: boolean): _DecodeFunc {
 
 export function _createDecoderInit(options?: DecoderOptions): _DecoderInit {
   return {
-    name: _NAME.toLowerCase(),
+    name: Utf8.NAME.toLowerCase(),
     bomBytes: Uint8Array.of(0xEF, 0xBB, 0xBF),
     fallback: (options?.fatal === true)
       ? Fallback.EXCEPTION

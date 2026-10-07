@@ -1,6 +1,6 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { stringifyNumbers } from "../../../_.mts";
-import * as _Utf8 from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
+import { _Utf8 } from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
 
 Deno.test("_Utf8.Encoder", () => {
   const e1 = new _Utf8.Encoder();

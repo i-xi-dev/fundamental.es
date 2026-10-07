@@ -2,49 +2,19 @@ import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { EncoderOptions } from "../encoder_options.mts";
-
-export const _NAME = "UTF-8";
-
-const _decoders = new Map<string, TextDecoder>();
-function _getDecoder(options: Required<DecoderOptions>): TextDecoder {
-  const key = JSON.stringify(options);
-  if (_decoders.has(key) !== true) {
-    _decoders.set(
-      key,
-      new TextDecoder(_NAME, {
-        fatal: options.fatal,
-        ignoreBOM: options.ignoreBom,
-      }),
-    );
-  }
-  return _decoders.get(key)!;
-}
+import { Utf8 } from "../../../_internal/utf8/mod.mts";
 
 export function _staticDecode(
   bytes: TypeAlias.Bytes,
   options?: DecoderOptions,
 ): string {
   const resolvedOptions = DecoderOptions.resolve(options);
-  return _getDecoder(resolvedOptions).decode(bytes);
-}
-
-let _encoder: TextEncoder | null = null;
-function _getEncoder(): TextEncoder {
-  if (_encoder === null) {
-    _encoder = new TextEncoder();
-  }
-  return _encoder;
+  return Utf8.decode(bytes, resolvedOptions.fatal, resolvedOptions.ignoreBom);
 }
 
 export function _staticEncode(
   text: string,
   options?: EncoderOptions,
 ): TypeAlias.Bytes {
-  if (options?.fatal === true) {
-    if (text.isWellFormed() !== true) {
-      throw _Error.TextEncoding.encodingFailed(_NAME, "Input");
-    }
-  }
-
-  return _getEncoder().encode(text);
+  return Utf8.encode(text, options?.fatal === true);
 }

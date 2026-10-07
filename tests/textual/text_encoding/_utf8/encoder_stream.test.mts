@@ -1,5 +1,5 @@
 import { assertRejects, assertStrictEquals } from "@std/assert";
-import * as _Utf8 from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
+import { _Utf8 } from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
 
 Deno.test("_Utf8.EncoderStream", async () => {
   const e1 = new _Utf8.EncoderStream();

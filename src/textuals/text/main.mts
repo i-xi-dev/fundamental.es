@@ -1,8 +1,8 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as _Utf8 from "../text_encoding/_utf8/mod.mts";
 import { _isNonEmptyString } from "../_internal/common.mts";
 import { _TextualTypeError } from "../_internal/type_error/mod.mts";
 import { Type } from "../../type/mod.mts";
+import { Utf8 } from "../../_internal/utf8/mod.mts";
 
 export { _isNonEmptyString as isNonEmpty };
 
@@ -26,10 +26,8 @@ export function fromBytes(
   bytes: TypeAlias.Bytes,
   options?: _FromBytesOptions,
 ): string {
-  return _Utf8.decode(bytes, {
-    fatal: options?.allowMalformed !== true,
-    ignoreBom: false,
-  });
+  //TODO assert bytes
+  return Utf8.decode(bytes, options?.allowMalformed !== true, false);
 }
 
 //TODO fromBytesAsyncIterable
@@ -42,10 +40,10 @@ export function toBytes(
   text: string,
   options?: _ToBytesOptions,
 ): TypeAlias.Bytes {
-  return _Utf8.encode(text, {
-    fatal: options?.allowMalformed !== true,
-  });
+  return Utf8.encode(text, options?.allowMalformed !== true);
 }
+
+//TODO from/toBase64
 
 type _char16s = IterableIterator<TypeAlias.char16, void, void>;
 

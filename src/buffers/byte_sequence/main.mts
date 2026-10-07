@@ -1,5 +1,4 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as _Utf8 from "../../textuals/text_encoding/_utf8/mod.mts";
 import { _Assert, _Error } from "../../_common/mod.mts";
 import {
   _bytesEquals,
@@ -18,6 +17,7 @@ import { Percent } from "../bytes_encoding/percent/mod.mts";
 import { SafeInteger } from "../../numerics/safe_int/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../../numerics/int_x/uint/mod.mts";
+import { Utf8 } from "../../_internal/utf8/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -849,9 +849,9 @@ export namespace ByteSequence {
     text: string,
     options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
-    // Type.assertString(text, "Input"); _Utf8.encode() 内でチェックされるので不要
+    Type.assertString(text, "Input");
 
-    const bytes = _Utf8.encode(text, options);
+    const bytes = Utf8.encode(text, options?.fatal === true);
     return fromBytes(bytes, options);
   }
 
