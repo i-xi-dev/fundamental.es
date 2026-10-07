@@ -3,7 +3,7 @@ import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _regulateForEncoder } from "../_utf.mts";
-import { CodePointRange } from "../../code_point_range.mts";
+import { CodePointRange } from "../../code_point_range/mod.mts";
 import { EMPTY } from "../../text/main.mts";
 import { Uint32 } from "../../../numerics/int_x/uint/mod.mts";
 

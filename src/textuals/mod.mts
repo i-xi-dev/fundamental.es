@@ -1,10 +1,10 @@
-export * from "./code_point.mts";
-export * from "./code_point_range.mts";
+export { Char16 } from "./char16/mod.mts";
+export { Char32 } from "./char32/mod.mts";
+export { CodePoint } from "./code_point/mod.mts";
+export { CodePointRange } from "./code_point_range/mod.mts";
+export { Text } from "./text/mod.mts";
+
+//TODO
 export * from "./rune_info.mts";
-export * as Char16 from "./char16.mts";
-export * as Char32 from "./char32.mts";
 export * as Encoding from "./text_encoding/mod.mts";
-export * as Text from "./text/mod.mts";
-export * as TextualTypeAssert from "./_type_ext/assert.mts";
 export * as TextualTypeException from "./_type_ext/error.mts";
-export { _isNonEmptyString as isNonEmptyString } from "./_base.mts";

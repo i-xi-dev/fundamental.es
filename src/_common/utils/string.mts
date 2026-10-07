@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { CodePoint, Text, TextualTypeAssert } from "../../textuals/mod.mts";
+import { CodePoint, Text } from "../../textuals/mod.mts";
 import { Type } from "../../type/mod.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {
@@ -141,7 +141,7 @@ export function rangesCollectStart(
 
 export function patternCollectStart(input: string, pattern: string): string {
   Type.assertString(input, "Input");
-  TextualTypeAssert.nonEmptyString(pattern, "Pattern");
+  Text.assertNonEmpty(pattern, "Pattern");
 
   return _patternCollectStart(input, pattern);
 }

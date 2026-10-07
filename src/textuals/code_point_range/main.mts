@@ -1,5 +1,8 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
-import { type ClosedRange, SafeIntegerClosedRange } from "../numerics/mod.mts";
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import {
+  type ClosedRange,
+  SafeIntegerClosedRange,
+} from "../../numerics/mod.mts";
 
 export type CodePointRange = ClosedRange<TypeAlias.codepoint>;
 

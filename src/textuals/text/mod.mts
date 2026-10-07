@@ -1,1 +1,1 @@
-export * from "./main.mts";
+export * as Text from "./main.mts";

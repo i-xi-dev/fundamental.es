@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import * as Char16 from "../../textuals/char16.mts";
+import { Char16 } from "../../textuals/char16/mod.mts";
 import { Radix } from "../../numerics/radix.mts";
 import { Type } from "../../type/mod.mts";
 
@@ -62,7 +62,7 @@ export function toString(byte: TypeAlias.safeint): string {
 // }
 
 // export function fromString(str: string): Type.uint8 {
-//   TextualTypeAssert.nonEmptyString(str, "Input");
+//   Text.assertNonEmpty(str, "Input");
 //
 //   const { radix } = _resolveFromStringOptions(options);
 //
