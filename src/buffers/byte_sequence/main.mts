@@ -4,7 +4,6 @@ import {
   _Comparable,
   _randomBytes,
 } from "./../_internal/common.mts";
-import { _Error } from "../../_common/mod.mts";
 import { _NumericTypeError } from "../../numerics/_internal/type_error/mod.mts";
 import { Base64 } from "../bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
@@ -13,6 +12,7 @@ import { ByteOrder } from "../byte_order.mts";
 import { Digest } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../../textuals/text_encoding/encoder_options.mts";
 import { Percent } from "../bytes_encoding/percent/mod.mts";
+import { RangeException } from "../../_internal/range_error/mod.mts";
 import { SafeInteger } from "../../numerics/safe_int/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
@@ -577,21 +577,21 @@ export class ByteSequence {
     const adjEnd = end ?? this.#loadedCount;
 
     if (adjStart < 0) {
-      throw _Error.Range.underflow(0, "Start index");
+      throw RangeException.rangeUnderflow(0, "Start index");
     }
     if (adjEnd < 0) {
-      throw _Error.Range.underflow(0, "End index");
+      throw RangeException.rangeUnderflow(0, "End index");
     }
 
     if (adjStart > this.#loadedCount) {
-      throw _Error.Range.overflow(this.#loadedCount, "Start index");
+      throw RangeException.rangeOverflow(this.#loadedCount, "Start index");
     }
     if (adjEnd > this.#loadedCount) {
-      throw _Error.Range.overflow(this.#loadedCount, "End index");
+      throw RangeException.rangeOverflow(this.#loadedCount, "End index");
     }
 
     if (adjStart > adjEnd) {
-      throw _Error.Range.contradictory();
+      throw RangeException.rangeInvalid();
     }
 
     const buffer = this.#buffer.slice(start, end); //XXX sliceの結果はresizable:falseになる
@@ -603,10 +603,10 @@ export class ByteSequence {
 
     TypeAlias.assertSafeInteger(index, "Input");
     if (index < 0) {
-      throw _Error.Range.underflow(0, "Input");
+      throw RangeException.rangeUnderflow(0, "Input");
     }
     if (index >= this.#loadedCount) {
-      throw _Error.Range.overflow(this.#loadedCount, "Input");
+      throw RangeException.rangeOverflow(this.#loadedCount, "Input");
     }
 
     return this.#view[index] as Type.uint8;

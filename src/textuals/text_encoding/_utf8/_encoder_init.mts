@@ -1,7 +1,7 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
 import { _regulateForEncoder } from "../_common.mts";
 import { EncoderOptions } from "../encoder_options.mts";
-import { EncodingError } from "../error/mod.mts";
+import { EncodingException } from "../error/mod.mts";
 import { Fallback } from "../fallback.mts";
 import { Utf8 } from "../../../_internal/utf8/mod.mts";
 
@@ -16,7 +16,7 @@ function _createEncode(fatal?: boolean): _EncodeFunc {
 
     if (fatal === true) {
       if (textToEncode.isWellFormed() !== true) {
-        throw EncodingError.encodingFailed(Utf8.NAME, "Input");
+        throw EncodingException.encodingFailed(Utf8.NAME, "Input");
       }
     }
 

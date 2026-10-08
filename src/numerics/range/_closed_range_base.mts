@@ -1,6 +1,6 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _Error } from "../../_common/mod.mts";
 import { ClosedRange } from "./closed_range.mts";
+import { RangeException } from "../../_internal/range_error/mod.mts";
 
 export abstract class _ClosedRangeBase<
   BaseT extends TypeAlias.numeric,
@@ -13,7 +13,7 @@ export abstract class _ClosedRangeBase<
     if ((this._isBaseT(min) && this._isBaseT(max)) !== true) {
       throw this._typeError();
     } else if (min > max) {
-      throw _Error.Range.contradictory();
+      throw RangeException.rangeInvalid();
     }
 
     this.#min = min;

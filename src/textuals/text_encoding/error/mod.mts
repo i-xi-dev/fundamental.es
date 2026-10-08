@@ -1,1 +1,1 @@
-export * as EncodingError from "./encoding_error.mts";
+export * as EncodingException from "./encoding_error.mts";

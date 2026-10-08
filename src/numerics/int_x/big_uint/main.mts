@@ -5,6 +5,7 @@ import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
 import { Io } from "../../../_internal/io/mod.mts";
+import { RangeException } from "../../../_internal/range_error/mod.mts";
 import { Type } from "../../../type/mod.mts";
 import { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 
@@ -93,7 +94,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     }
 
     if (result > this.#range.max) { // #bitLength % 8 === 0のときは発生しない
-      throw _Error.Range.overflow(this.#range.max, "Input");
+      throw RangeException.rangeOverflow(this.#range.max, "Input");
     }
     return result as T;
   }

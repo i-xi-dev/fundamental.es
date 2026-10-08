@@ -1,6 +1,6 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { TypeAlias } from "../type_alias/mod.mts";
 
-export function overflow(
+export function rangeOverflow(
   upperLimit: TypeAlias.safeint | bigint,
   target: string,
 ): RangeError {
@@ -8,7 +8,7 @@ export function overflow(
   return new RangeError(msg);
 }
 
-export function underflow(
+export function rangeUnderflow(
   lowerLimit: TypeAlias.safeint | bigint,
   target: string,
 ): RangeError {
@@ -16,7 +16,7 @@ export function underflow(
   return new RangeError(msg);
 }
 
-export function contradictory(): RangeError {
+export function rangeInvalid(): RangeError {
   const msg =
     `The upper limit of the range must be greater than or equal to the lower limit`;
   return new RangeError(msg);

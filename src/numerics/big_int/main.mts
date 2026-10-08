@@ -1,5 +1,5 @@
 import { _clampBigInt } from "../_internal/common.mts";
-import { _Error } from "../../_common/mod.mts";
+import { RangeException } from "../../_internal/range_error/mod.mts";
 import { Type } from "../../type/mod.mts";
 
 export function clamp<T extends bigint>(
@@ -11,7 +11,7 @@ export function clamp<T extends bigint>(
   Type.assertBigInt(min, "Lower bound");
   Type.assertBigInt(max, "Upper bound");
   if (min > max) {
-    throw _Error.Range.contradictory();
+    throw RangeException.rangeInvalid();
   }
 
   return _clampBigInt<T>(value, min, max);
