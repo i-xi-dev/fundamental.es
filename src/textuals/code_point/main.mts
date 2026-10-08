@@ -1,4 +1,4 @@
-import { _TextualTypeError } from "../_internal/type_error/mod.mts";
+import { _TextualException } from "../_internal/error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";

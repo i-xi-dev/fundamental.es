@@ -1,7 +1,7 @@
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _regulateForEncoder } from "../_common.mts";
+import { _TextualException } from "../../_internal/error/mod.mts";
 import { CodePointRange } from "../../code_point_range/mod.mts";
-import { EncodingException } from "../error/mod.mts";
 
 export const _BYTES_PER_CHAR = 2; // === Uint16.BYTE_LENGTH;
 
@@ -19,7 +19,7 @@ export function _encodeShared(
 
   if (fatal === true) {
     if (textToEncode.isWellFormed() !== true) {
-      throw EncodingException.encodingFailed(name, "Input");
+      throw _TextualException.encodingFailed(name, "Input");
     }
   }
 

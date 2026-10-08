@@ -1,6 +1,6 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _isNonEmptyString } from "../_internal/common.mts";
-import { _TextualTypeError } from "../_internal/type_error/mod.mts";
+import { _TextualException } from "../_internal/error/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { Utf8 } from "../../_internal/utf8/mod.mts";
 
@@ -11,7 +11,7 @@ export function assertNonEmpty(
   targetLabel: string,
 ): void {
   if (_isNonEmptyString(test) !== true) {
-    throw _TextualTypeError.mustBeNonEmptyString(targetLabel);
+    throw _TextualException.mustBeNonEmptyString(targetLabel);
   }
 }
 
