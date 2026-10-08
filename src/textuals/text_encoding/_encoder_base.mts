@@ -1,5 +1,4 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _Assert } from "../../_common/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
 import { Encoder } from "./encoder.mts";
 import { Fallback } from "./fallback.mts";

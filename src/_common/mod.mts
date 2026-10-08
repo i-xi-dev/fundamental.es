@@ -1,3 +1,2 @@
 export * from "./utils/mod.mts";
-export * as _Assert from "./_assert/mod.mts";
 export * as _Error from "./_error/mod.mts";

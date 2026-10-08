@@ -2,9 +2,8 @@ import { _EncodeResult } from "../_encoder_init.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _regulateForEncoder } from "../_common.mts";
 import { CodePointRange } from "../../code_point_range/mod.mts";
-import { Uint16 } from "../../../numerics/int_x/uint/mod.mts";
 
-export const _BYTES_PER_CHAR = Uint16.BYTE_LENGTH;
+export const _BYTES_PER_CHAR = 2; // === Uint16.BYTE_LENGTH;
 
 export function _encodeShared(
   name: string,

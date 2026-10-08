@@ -1,11 +1,11 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _Assert, _Error } from "../../_common/mod.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
   _Comparable,
   _randomBytes,
 } from "./../_internal/common.mts";
+import { _Error } from "../../_common/mod.mts";
 import { _NumericTypeError } from "../../numerics/_internal/type_error/mod.mts";
 import { Base64 } from "../bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
@@ -15,6 +15,7 @@ import { Digest } from "../bytes_digest/mod.mts";
 import { EncoderOptions as TextEncoderOptions } from "../../textuals/text_encoding/encoder_options.mts";
 import { Percent } from "../bytes_encoding/percent/mod.mts";
 import { SafeInteger } from "../../numerics/safe_int/mod.mts";
+import { SafeIntegerArray } from "../../numerics/array/safe_int_array/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../../numerics/int_x/uint/mod.mts";
 import { Utf8 } from "../../_internal/utf8/mod.mts";
@@ -798,7 +799,7 @@ export namespace ByteSequence {
     src: Array</* Type.uint8 */ TypeAlias.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
-    _Assert.safeIntArray(src, "Input");
+    SafeIntegerArray.assertSafeIntegerArray(src, "Input");
     return _create(src.length, options).loadFromUint8Iterable(src);
   }
 

@@ -22,3 +22,4 @@ export { Finite } from "./finite/mod.mts";
 export { Radix } from "./radix.mts";
 export { RoundingMode } from "./rounding_mode.mts";
 export { SafeInteger } from "./safe_int/mod.mts";
+export { SafeIntegerArray } from "./array/mod.mts";
