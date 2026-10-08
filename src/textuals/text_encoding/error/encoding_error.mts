@@ -1,3 +1,5 @@
+import { _encodingFailed } from "../../../_internal/utf8/main.mts";
+
 // TextDecoderのデコード失敗はTypeErrorなので、そちらに寄せた
 
 export function decodingFailed(
@@ -9,13 +11,4 @@ export function decodingFailed(
   return new TypeError(msg);
 }
 
-export function encodingFailed(
-  encodingName: string,
-  target: string,
-): TypeError {
-  const msg =
-    `${target} must be a string that can be encoded in ${encodingName}`;
-  return new TypeError(msg);
-}
-
-//TODO /textuals/text_encoding/ にうつす
+export { _encodingFailed as encodingFailed };

@@ -34,13 +34,22 @@ function _getEncoder(): TextEncoder {
   return _encoder;
 }
 
+export function _encodingFailed(
+  encodingName: string,
+  target: string,
+): TypeError {
+  const msg =
+    `${target} must be a string that can be encoded in ${encodingName}`;
+  return new TypeError(msg);
+}
+
 export function encode(
   text: string,
   fatal: boolean,
 ): TypeAlias.Bytes {
   if (fatal === true) {
     if (text.isWellFormed() !== true) {
-      throw _Error.TextEncoding.encodingFailed(NAME, "Input");
+      throw _encodingFailed(NAME, "Input");
     }
   }
 

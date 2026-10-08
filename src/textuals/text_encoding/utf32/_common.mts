@@ -1,10 +1,10 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
-import { _Error } from "../../../_common/mod.mts";
 import { _regulateForEncoder } from "../_common.mts";
 import { CodePointRange } from "../../code_point_range/mod.mts";
 import { EMPTY } from "../../text/main.mts";
+import { EncodingError } from "../error/mod.mts";
 
 export const _BYTES_PER_RUNE = 4; // === Uint32.BYTE_LENGTH;
 
@@ -87,7 +87,7 @@ export function _encodeShared(
 
   if (fatal === true) {
     if (textToEncode.isWellFormed() !== true) {
-      throw _Error.TextEncoding.encodingFailed(name, "Input");
+      throw EncodingError.encodingFailed(name, "Input");
     }
   }
 
