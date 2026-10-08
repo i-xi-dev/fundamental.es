@@ -1,10 +1,7 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _TextualTypeError } from "../_internal/type_error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
-
-const _MIN = 0;
-const _MAX = 0x10FFFF;
+import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 /** U+0020 `" "` */
 export const SPACE = 0x20;
@@ -21,20 +18,8 @@ export const DIGIT_ZERO = 0x30;
 /** U+007E `"~"` */
 export const TILDE = 0x7E;
 
-export function isCodePoint(test: unknown): boolean {
-  return Number.isSafeInteger(test) &&
-    ((test as TypeAlias.safeint) >= _MIN) &&
-    ((test as TypeAlias.safeint) <= _MAX);
-}
-
-export function assertCodePoint(test: unknown, targetLabel: string): void {
-  if (isCodePoint(test) !== true) {
-    throw _TextualTypeError.mustBeCodePoint(targetLabel);
-  }
-}
-
 export function toString(codepoint: TypeAlias.codepoint): string {
-  if (isCodePoint(codepoint) !== true) {
+  if (TypeAlias.isCodePoint(codepoint) !== true) {
     throw new Error("TODO");
   }
   return `U+${

@@ -1,7 +1,7 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { CodePoint } from "./code_point/mod.mts";
 import { CodePointRange } from "./code_point_range/mod.mts";
 import { Type } from "../type/mod.mts";
+import { TypeAlias } from "../_internal/type_alias/mod.mts";
 
 export type RuneInfo = {
   codePoint: TypeAlias.codepoint;
@@ -20,7 +20,7 @@ export namespace RuneInfo {
     codePoint: TypeAlias.codepoint,
     options?: _FromOptions,
   ): RuneInfo {
-    CodePoint.assertCodePoint(codePoint, "Input");
+    TypeAlias.assertCodePoint(codePoint, "Input");
 
     if (options?.allowLoneSurrogate !== true) {
       if (CodePointRange.SURROGATES.contains(codePoint) === true) {

@@ -1,4 +1,3 @@
-import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _clampBigInt } from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
@@ -6,8 +5,8 @@ import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
 import { Io } from "../../../_internal/io/mod.mts";
-import { SafeInteger } from "../../safe_int/mod.mts";
 import { Type } from "../../../type/mod.mts";
+import { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
@@ -162,7 +161,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
-    SafeInteger.assertSafeInteger(offset, "Offset");
+    TypeAlias.assertSafeInteger(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {

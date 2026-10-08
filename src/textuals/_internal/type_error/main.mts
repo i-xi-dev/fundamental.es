@@ -7,11 +7,3 @@ export function mustBeNonEmptyString(target: string): TypeError {
   );
   return new TypeError(msg);
 }
-
-export function mustBeCodePoint(target: string): TypeError {
-  const msg = _typeErrorMessage(
-    target,
-    "a Unicode code point of type `number`",
-  );
-  return new TypeError(msg);
-}
