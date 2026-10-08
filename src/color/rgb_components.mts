@@ -1,6 +1,5 @@
 import type { TypeAlias } from "../_internal/type_alias/mod.mts";
 import { _clampFinite } from "../numerics/_internal/common.mts";
-import { _Error } from "../_common/mod.mts";
 import { Type } from "../type/mod.mts";
 
 export interface RgbComponents {
@@ -27,7 +26,7 @@ export namespace _RgbComponents {
     targetLabel: string,
   ): asserts test is RgbComponents {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         "an object with the `number`-type properties `r`, `g`, and `b`",
         targetLabel,
       );

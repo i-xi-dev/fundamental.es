@@ -564,13 +564,13 @@ export class ByteSequence {
       (Type.isNullOrUndefined(start) ||
         (Type.isNumber(start) && Number.isSafeInteger(start))) !== true
     ) {
-      throw _Error.Type.mustBeSafeInteger("Start index");
+      throw TypeAlias.Exception.mustBeSafeInteger("Start index");
     }
     if (
       (Type.isNullOrUndefined(end) ||
         (Type.isNumber(end) && Number.isSafeInteger(end))) !== true
     ) {
-      throw _Error.Type.mustBeSafeInteger("End index");
+      throw TypeAlias.Exception.mustBeSafeInteger("End index");
     }
 
     const adjStart = start ?? 0;

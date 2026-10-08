@@ -1,5 +1,4 @@
 import type { safeint } from "./_def.mts";
-import * as _TypeError from "../../_common/_error/type.mts";
 import { Type } from "../../type/mod.mts";
 
 const _MIN_CODE_POINT = 0;

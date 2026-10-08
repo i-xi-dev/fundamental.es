@@ -1,8 +1,8 @@
-import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _ClosedRangeBase } from "../_closed_range_base.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _normalizeFinite } from "../../_internal/common.mts";
 import { ClosedRange } from "../closed_range.mts";
+import { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 
 class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   extends _ClosedRangeBase<TypeAlias.safeint, T> {
@@ -18,7 +18,7 @@ class _SafeIntClosedRangeImpl<T extends TypeAlias.safeint = TypeAlias.safeint>
   }
 
   protected override _typeError(): TypeError {
-    return _Error.Type.mustBeSafeInteger("Input");
+    return TypeAlias.Exception.mustBeSafeInteger("Input");
   }
 }
 

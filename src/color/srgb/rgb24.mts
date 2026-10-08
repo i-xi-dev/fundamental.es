@@ -1,5 +1,4 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _Error } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/_internal/common.mts";
 import { _SRgbRgb } from "./_rgb.mts";
@@ -30,7 +29,7 @@ export namespace _Rgb24 {
     targetLabel: string,
   ): asserts test is Rgb24 {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         "an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
         targetLabel,
       );

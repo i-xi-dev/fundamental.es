@@ -1,9 +1,5 @@
-import { _typeErrorMessage } from "../../../type/_message.mts";
+import { mustBe } from "../../../type/error.mts";
 
 export function mustBeNonEmptyString(target: string): TypeError {
-  const msg = _typeErrorMessage(
-    target,
-    "a `string` with a length of at least 1.",
-  );
-  return new TypeError(msg);
+  return mustBe("a `string` with a length of at least 1.", target);
 }

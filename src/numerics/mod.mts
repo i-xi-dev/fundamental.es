@@ -1,5 +1,11 @@
 export { _isNonNegative as isNonNegative } from "./_internal/common.mts";
 export {
+  assertFinite,
+  assertSafeInteger,
+  assertSafeIntegerArray,
+  isSafeIntegerArray,
+} from "../_internal/type_alias/main.mts";
+export {
   type BigUint,
   BigUint128,
   BigUint64,

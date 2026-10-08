@@ -1,5 +1,4 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { _Error } from "../../_common/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
@@ -77,7 +76,7 @@ export class SRgbColor extends _RgbColor {
   static fromBytes(bytes: TypeAlias.Bytes): SRgbColor {
     Type.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength !== 3) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         // "an `Uint8Array` with a length of 3 or greater",
         "an `Uint8Array` with a length of 3",
         "Input",
@@ -106,7 +105,7 @@ export class SRgbColor extends _RgbColor {
   static fromHexEncoded(hex: string): SRgbColor {
     Type.assertString(hex, "Input");
     if (_hexRegex.test(hex) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         'a hexadecimal color value in the "RRGGBB" format',
         "Input",
       );
@@ -160,7 +159,7 @@ export class SRgbColor extends _RgbColor {
 
   #assert(test: unknown): asserts test is SRgbColor {
     if ((test instanceof SRgbColor) !== true) {
-      throw _Error.Type.mustBe("a `SRgbColor` object", "Input");
+      throw Type.Exception.mustBe("a `SRgbColor` object", "Input");
     }
   }
 

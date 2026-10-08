@@ -1,6 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
-import { _Error } from "../../_common/mod.mts";
 import { _Hsl } from "./hsl.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
@@ -39,7 +38,7 @@ export namespace _Hwb {
     targetLabel: string,
   ): asserts test is Hwb {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         "an object with the `number`-type properties `h`, `w`, and `b`",
         targetLabel,
       );

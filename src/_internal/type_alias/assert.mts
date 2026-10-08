@@ -1,4 +1,4 @@
-import * as _TypeError from "../../_common/_error/type.mts";
+import * as Exception from "./error.mts";
 import { isCodePoint, isSafeIntegerArray } from "./check.mts";
 
 export function assertFinite(
@@ -6,7 +6,7 @@ export function assertFinite(
   targetLabel: string,
 ): void {
   if (Number.isFinite(test) !== true) {
-    throw _TypeError.mustBeFinite(targetLabel);
+    throw Exception.mustBeFinite(targetLabel);
   }
 }
 
@@ -15,13 +15,13 @@ export function assertSafeInteger(
   targetLabel: string,
 ): void {
   if (Number.isSafeInteger(test) !== true) {
-    throw _TypeError.mustBeSafeInteger(targetLabel);
+    throw Exception.mustBeSafeInteger(targetLabel);
   }
 }
 
 export function assertCodePoint(test: unknown, targetLabel: string): void {
   if (isCodePoint(test) !== true) {
-    throw _TypeError.mustBeCodePoint(targetLabel);
+    throw Exception.mustBeCodePoint(targetLabel);
   }
 }
 
@@ -30,6 +30,6 @@ export function assertSafeIntegerArray(
   targetLabel: string,
 ): void {
   if (isSafeIntegerArray(test) !== true) {
-    throw _TypeError.mustBeSafeIntArray(targetLabel);
+    throw Exception.mustBeSafeIntegerArray(targetLabel);
   }
 }

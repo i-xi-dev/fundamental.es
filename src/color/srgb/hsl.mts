@@ -1,6 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
-import { _Error } from "../../_common/mod.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
@@ -44,7 +43,7 @@ export namespace _Hsl {
     targetLabel: string,
   ): asserts test is Hsl {
     if (is(test) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         "an object with the `number`-type properties `h`, `s`, and `l`",
         targetLabel,
       );

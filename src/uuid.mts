@@ -1,6 +1,5 @@
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
-import { _Error } from "./_common/mod.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
 import { Type } from "./type/mod.mts";
@@ -212,14 +211,14 @@ export namespace Uuid {
 
   export function fromString(str: string): Uuid {
     if (_isUuidString(str) !== true) {
-      throw _Error.Type.mustBe("an UUID of type `string`", "Input");
+      throw Type.Exception.mustBe("an UUID of type `string`", "Input");
     }
     return _fromString(str);
   }
 
   // export function fromBigUint128(uint: TypeAlias.biguint128): Uuid {
   //   if (_isUuidBigInt(uint) !== true) {
-  //     throw _Error.Type.mustBe("an UUID of type `bigint`", "Input");
+  //     throw Type.Exception.mustBe("an UUID of type `bigint`", "Input");
   //   }
   //
   //   const bytes = BigUint128.toBytes(uint, ByteOrder.BIG_ENDIAN);
@@ -228,7 +227,7 @@ export namespace Uuid {
 
   export function fromBytes(bytes: TypeAlias.Bytes): Uuid {
     if (_isUuidBytes(bytes) !== true) {
-      throw _Error.Type.mustBe(
+      throw Type.Exception.mustBe(
         "an UUID bytes of type `Uint8Array<ArrayBuffer>`",
         "Input",
       );
