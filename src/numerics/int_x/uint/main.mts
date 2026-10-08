@@ -84,7 +84,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T {
     Type.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.length !== this.#byteLength) {
-      throw _Error.Length.mismatch("input", this.#byteLength);
+      throw RangeException.lengthUnexpected("input", this.#byteLength);
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
