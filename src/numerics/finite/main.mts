@@ -1,5 +1,4 @@
 import { _clampFinite, _normalizeFinite } from "../_internal/common.mts";
-import { _NumericTypeError } from "../_internal/type_error/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 

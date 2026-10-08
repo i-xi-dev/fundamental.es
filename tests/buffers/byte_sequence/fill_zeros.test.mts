@@ -39,10 +39,18 @@ Deno.test("Buffers.ByteSequence.prototype.fillZeros() - error", () => {
   const b3 = Buffers.ByteSequence.create(4);
   assertThrows(
     () => {
-      b3.fillZeros("-1" as unknown as number);
+      b3.fillZeros("1" as unknown as number);
     },
     TypeError,
-    "Input must be a non-negative safe-integer of type `number`",
+    "Input must be a safe-integer of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      b3.fillZeros(-1);
+    },
+    RangeError,
+    "Input must be a `number` within the range of non-negative safe-integer",
   );
 
   const b4 = Buffers.ByteSequence.create(4);

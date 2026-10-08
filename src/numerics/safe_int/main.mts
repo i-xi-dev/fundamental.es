@@ -4,7 +4,7 @@ import {
   _normalizeFinite,
   _roundToSafeInt,
 } from "../_internal/common.mts";
-import { _NumericTypeError } from "../_internal/type_error/mod.mts";
+import { _NumericException } from "../_internal/error/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
@@ -15,7 +15,7 @@ export function assertNonNegative(
   targetLabel: string,
 ): void {
   if ((_isNonNegativeSafeInt(test)) !== true) {
-    throw _NumericTypeError.mustBeNonNegativeSafeInteger(targetLabel);
+    throw _NumericException.mustBeNonNegativeSafeInteger(targetLabel);
   }
 }
 

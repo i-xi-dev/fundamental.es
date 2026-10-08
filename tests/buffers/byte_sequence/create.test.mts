@@ -104,18 +104,34 @@ Deno.test("Buffers.ByteSequence.create() - expandabe-length - 3", () => {
 Deno.test("Buffers.ByteSequence.create() - error", () => {
   assertThrows(
     () => {
-      Buffers.ByteSequence.create(-1);
+      Buffers.ByteSequence.create("1" as unknown as number);
     },
     TypeError,
-    "Capacity must be a non-negative safe-integer of type `number`",
+    "Capacity must be a safe-integer of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      Buffers.ByteSequence.create(-1);
+    },
+    RangeError,
+    "Capacity must be a `number` within the range of non-negative safe-integer",
+  );
+
+  assertThrows(
+    () => {
+      Buffers.ByteSequence.create(1, "2" as unknown as number);
+    },
+    TypeError,
+    "Max-capacity must be a safe-integer of type `number`",
   );
 
   assertThrows(
     () => {
       Buffers.ByteSequence.create(1, -1);
     },
-    TypeError,
-    "Max-capacity must be a non-negative safe-integer of type `number`",
+    RangeError,
+    "Max-capacity must be a `number` within the range of non-negative safe-integer",
   );
 
   assertThrows(

@@ -29,6 +29,14 @@ Deno.test("Buffers.ByteSequence.random() - error", () => {
       Buffers.ByteSequence.random("4" as unknown as number);
     },
     TypeError,
-    "Input must be a non-negative safe-integer of type `number`",
+    "Input must be a safe-integer of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      Buffers.ByteSequence.random(-1);
+    },
+    RangeError,
+    "Input must be a `number` within the range of non-negative safe-integer",
   );
 });

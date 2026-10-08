@@ -4,7 +4,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./../_internal/common.mts";
-import { _NumericTypeError } from "../../numerics/_internal/type_error/mod.mts";
+import { _NumericException } from "../../numerics/_internal/error/mod.mts";
 import { Base64 } from "../bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "../bytes_encoding/binary_string/mod.mts";
@@ -129,8 +129,10 @@ export class ByteSequence {
     capacity: TypeAlias.safeint,
     maxCapacity?: TypeAlias.safeint,
   ): ByteSequence {
+    TypeAlias.assertSafeInteger(capacity, "Capacity");
     SafeInteger.assertNonNegative(capacity, "Capacity");
     if (Type.isNullOrUndefined(maxCapacity) !== true) {
+      TypeAlias.assertSafeInteger(maxCapacity, "Max-capacity");
       SafeInteger.assertNonNegative(maxCapacity, "Max-capacity");
     }
 
@@ -430,6 +432,7 @@ export class ByteSequence {
 
   fillZeros(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
+    TypeAlias.assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
@@ -438,6 +441,7 @@ export class ByteSequence {
 
   fillRandom(byteLength: TypeAlias.safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
+    TypeAlias.assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
@@ -759,6 +763,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
+    TypeAlias.assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillZeros(byteLength);
   }
@@ -767,6 +772,7 @@ export namespace ByteSequence {
     byteLength: TypeAlias.safeint,
     options?: _FromOptions,
   ) {
+    TypeAlias.assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillRandom(byteLength);
   }
