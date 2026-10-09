@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "@std/assert";
+import { assertStrictEquals } from "@std/assert";
 import { Numerics } from "../../src/mod.mts";
 
 Deno.test("Numerics.isNonNegative()", () => {
