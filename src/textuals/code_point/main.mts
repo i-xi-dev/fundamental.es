@@ -19,9 +19,7 @@ export const DIGIT_ZERO = 0x30;
 export const TILDE = 0x7E;
 
 export function toString(codepoint: TypeAlias.codepoint): string {
-  if (TypeAlias.isCodePoint(codepoint) !== true) {
-    throw new Error("TODO");
-  }
+  TypeAlias.assertCodePoint(codepoint, "Input");
   return `U+${
     codepoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(
       4,
