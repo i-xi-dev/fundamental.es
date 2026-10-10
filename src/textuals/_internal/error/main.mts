@@ -1,8 +1,9 @@
 import { _encodingFailed } from "../../../_internal/utf8/main.mts";
-import { mustBe } from "../../../type/error.mts";
 
-export function mustBeNonEmptyString(target: string): TypeError { //XXX TypeErrorなのか？
-  return mustBe("a `string` with a length of at least 1.", target);
+export function mustBeNonEmptyString(target: string): RangeError {
+  return new RangeError(
+    `${target} must be a \`string\` with a length of at least 1`,
+  );
 }
 
 // TextDecoderのデコード失敗はTypeErrorなので、そちらに寄せた
