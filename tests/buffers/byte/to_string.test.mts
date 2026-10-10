@@ -1,5 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers } from "../../src/mod.mts";
+import { Buffers } from "../../../src/mod.mts";
 
 Deno.test("Buffers.Byte.toString()", () => {
   assertStrictEquals(Buffers.Byte.toString(0x0), "00");
