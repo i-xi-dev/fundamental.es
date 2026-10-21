@@ -21,3 +21,19 @@ export function _assertCodePoint(test: number, targetLabel: string): void {
     throw _TextualException.mustBeCodePoint(targetLabel);
   }
 }
+
+export function _isChar16(test: string): boolean {
+  return Type.isString(test) && (test.length === 1);
+}
+
+export function _isChar32(test: string): boolean {
+  if (Type.isString(test) === true) {
+    if (test.length === 1) {
+      return true;
+    } else if (test.length === 2) {
+      // return test.isWellFormed() && ([...test].length === 1);
+      return [...test].length === 1; // lone surrogate を許容
+    }
+  }
+  return false;
+}

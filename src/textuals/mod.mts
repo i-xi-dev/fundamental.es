@@ -1,4 +1,3 @@
-export { isChar16, isChar32 } from "../_internal/type_alias/main.mts";
 export { Char16 } from "./char16/mod.mts";
 export { Char32 } from "./char32/mod.mts";
 export { CodePoint } from "./code_point/mod.mts";
