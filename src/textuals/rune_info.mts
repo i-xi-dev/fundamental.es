@@ -20,7 +20,7 @@ export namespace RuneInfo {
     codePoint: TypeAlias.codepoint,
     options?: _FromOptions,
   ): RuneInfo {
-    TypeAlias.assertCodePoint(codePoint, "Input");
+    CodePoint.assert(codePoint, "Input");
 
     if (options?.allowLoneSurrogate !== true) {
       if (CodePointRange.SURROGATES.contains(codePoint) === true) {

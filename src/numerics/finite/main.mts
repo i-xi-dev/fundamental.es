@@ -1,11 +1,20 @@
-import { _clampFinite, _normalizeFinite } from "../_internal/common.mts";
+import {
+  _assertFinite,
+  _clampFinite,
+  _isFinite,
+  _normalizeFinite,
+} from "../_internal/common.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
+
+export { _isFinite as is };
+
+export { _assertFinite as assert };
 
 export function normalize<T extends TypeAlias.finite>(
   value: TypeAlias.finite,
 ): T {
-  TypeAlias.assertFinite(value, "Input");
+  _assertFinite(value, "Input");
   return _normalizeFinite(value);
 }
 
@@ -16,9 +25,9 @@ export function clamp<T extends TypeAlias.finite>(
   min: T,
   max: T,
 ): T {
-  TypeAlias.assertFinite(value, "Input");
-  TypeAlias.assertFinite(min, "Lower bound");
-  TypeAlias.assertFinite(max, "Upper bound");
+  _assertFinite(value, "Input");
+  _assertFinite(min, "Lower bound");
+  _assertFinite(max, "Upper bound");
   if (min > max) {
     throw RangeException.rangeInvalid();
   }

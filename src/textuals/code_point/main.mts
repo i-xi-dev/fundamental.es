@@ -1,3 +1,4 @@
+import { _assertCodePoint, _isCodePoint } from "../_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
@@ -18,8 +19,12 @@ export const DIGIT_ZERO = 0x30;
 /** U+007E `"~"` */
 export const TILDE = 0x7E;
 
+export { _isCodePoint as is };
+
+export { _assertCodePoint as assert };
+
 export function toString(codepoint: TypeAlias.codepoint): string {
-  TypeAlias.assertCodePoint(codepoint, "Input");
+  _assertCodePoint(codepoint, "Input");
   return `U+${
     codepoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(
       4,

@@ -1,4 +1,8 @@
-import { _clampFinite } from "../../_internal/common.mts";
+import {
+  _assertSafeInt,
+  _clampFinite,
+  _isSafeInt,
+} from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
@@ -47,7 +51,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
 
   constructor(bitLength: TypeAlias.safeint) {
     if (
-      Number.isSafeInteger(bitLength) && (bitLength > 0) && (bitLength <= 48)
+      _isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)
     ) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
@@ -180,7 +184,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
     }
-    TypeAlias.assertSafeInteger(offset, "Offset");
+    _assertSafeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -204,7 +208,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   truncateFrom(value: TypeAlias.safeint): T {
-    TypeAlias.assertSafeInteger(value, "Input");
+    _assertSafeInt(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -218,7 +222,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   saturateFrom(value: TypeAlias.safeint): T {
-    TypeAlias.assertSafeInteger(value, "Input");
+    _assertSafeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }

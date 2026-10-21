@@ -1,4 +1,8 @@
-import { _clampBigInt } from "../../_internal/common.mts";
+import {
+  _assertSafeInt,
+  _clampBigInt,
+  _isSafeInt,
+} from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
@@ -43,7 +47,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   readonly #range: ClosedRange<TypeAlias.bignnint, T>;
 
   constructor(bitLength: TypeAlias.safeint) {
-    if (Number.isSafeInteger(bitLength) && (bitLength > 0)) {
+    if (_isSafeInt(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2n ** BigInt(bitLength);
@@ -162,7 +166,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
-    TypeAlias.assertSafeInteger(offset, "Offset");
+    _assertSafeInt(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {

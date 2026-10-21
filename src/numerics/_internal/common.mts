@@ -1,6 +1,7 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { Type } from "../../type/mod.mts";
+import { _NumericException } from "./error/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
+import { Type } from "../../type/mod.mts";
 
 // numeric -----------------------------------------------------------
 
@@ -9,6 +10,19 @@ export function _isNonNegative(value: TypeAlias.finite | bigint): boolean {
 }
 
 // finite ------------------------------------------------------------
+
+export function _isFinite(test: number): boolean {
+  return Number.isFinite(test);
+}
+
+export function _assertFinite(
+  test: number,
+  targetLabel: string,
+): void {
+  if (Number.isFinite(test) !== true) {
+    throw _NumericException.mustBeFinite(targetLabel);
+  }
+}
 
 export function _normalizeFinite<T extends TypeAlias.finite>(
   value: TypeAlias.finite,
@@ -26,12 +40,25 @@ export function _clampFinite<T extends TypeAlias.finite>(
 
 // safeint -----------------------------------------------------------
 
+export function _isSafeInt(test: number): boolean {
+  return Number.isSafeInteger(test);
+}
+
+export function _assertSafeInt(
+  test: number,
+  targetLabel: string,
+): void {
+  if (_isSafeInt(test) !== true) {
+    throw _NumericException.mustBeSafeInteger(targetLabel);
+  }
+}
+
 export function _isNonNegativeSafeInt(test: TypeAlias.safeint): boolean {
-  return Number.isSafeInteger(test) && ((test as number) >= 0);
+  return _isSafeInt(test) && ((test as number) >= 0);
 }
 
 export function _isEvenSafeInt(test: TypeAlias.safeint): boolean {
-  return Number.isSafeInteger(test) && ((test % 2) === 0);
+  return _isSafeInt(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(
