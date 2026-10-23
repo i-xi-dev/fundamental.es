@@ -1,5 +1,4 @@
 import { CodePoint } from "./code_point/mod.mts";
-import { CodePointRange } from "./code_point_range/mod.mts";
 import { Type } from "../type/mod.mts";
 import { TypeAlias } from "../_internal/type_alias/mod.mts";
 
@@ -23,7 +22,7 @@ export namespace RuneInfo {
     CodePoint.assert(codePoint, "Input");
 
     if (options?.allowLoneSurrogate !== true) {
-      if (CodePointRange.SURROGATES.contains(codePoint) === true) {
+      if (CodePoint.isSurrogate(codePoint) === true) {
         throw new Error("TODO");
       }
     }

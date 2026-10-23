@@ -2,7 +2,7 @@ import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
-import { CodePointRange } from "../../code_point_range/mod.mts";
+import { CodePoint } from "../../code_point/mod.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { Fallback } from "../fallback.mts";
 import { Uint16 } from "../../../numerics/int_x/uint/mod.mts";
@@ -31,7 +31,7 @@ function _regulate(
         Uint8Array.of(x.at(-2)!, x.at(-1)!),
         littleEndian ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN,
       );
-      if (CodePointRange.HIGH_SURROGATES.contains(lastUnit) === true) {
+      if (CodePoint.isHighSurrogate(lastUnit) === true) {
         p.push(x.at(-1)!);
         p.push(x.at(-2)!);
         x = x.subarray(0, -2);
