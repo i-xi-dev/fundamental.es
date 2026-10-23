@@ -17,5 +17,3 @@ export const Plane = {
   SPUA_A: 15,
   SPUA_B: 16,
 } as const;
-
-export type Plane = typeof Plane[keyof typeof Plane];

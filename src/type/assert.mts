@@ -1,4 +1,4 @@
-import type { uint8 } from "./_def.mts";
+import type { plane, uint8 } from "./_def.mts";
 import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
@@ -6,6 +6,7 @@ import {
   isBigInt,
   isIterable,
   isNonSharedUint8Array,
+  isPlane,
   isString,
   isUint8,
 } from "./check.mts";
@@ -52,6 +53,16 @@ export function assertUint8(
 ): asserts test is uint8 {
   if (isUint8(test) !== true) {
     throw Exception.mustBeUintN(8, targetLabel);
+  }
+}
+
+//XXX 命名が抽象的すぎるか
+export function assertPlane(
+  test: unknown,
+  targetLabel: string,
+): asserts test is plane {
+  if (isPlane(test) !== true) {
+    throw Exception.mustBePlane(targetLabel);
   }
 }
 

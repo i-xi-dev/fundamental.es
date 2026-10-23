@@ -1,9 +1,9 @@
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _assertCodePoint, _isCodePoint } from "../_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
-import { Plane } from "../plane.mts";
 import { Radix } from "../../numerics/mod.mts";
-import { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { Type } from "../../type/mod.mts";
 
 /** U+0020 `" "` */
 export const SPACE = 0x20;
@@ -34,9 +34,9 @@ export function toString(codePoint: TypeAlias.codepoint): string {
   }`;
 }
 
-export function planeOf(codePoint: TypeAlias.codepoint): Plane {
+export function planeOf(codePoint: TypeAlias.codepoint): Type.plane {
   _assertCodePoint(codePoint, "Input");
-  return Math.trunc(codePoint / 0x10000) as Plane;
+  return Math.trunc(codePoint / 0x10000) as Type.plane;
 }
 
 // -------------------------------------------------------------------

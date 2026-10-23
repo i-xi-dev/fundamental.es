@@ -1,5 +1,5 @@
+import type { plane, uint8 } from "./_def.mts";
 import type { safeint } from "../_internal/type_alias/_def.mts";
-import type { uint8 } from "./_def.mts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -43,6 +43,11 @@ function _inRange(test: safeint, min: safeint, max: safeint): boolean {
 
 export function isUint8(test: unknown): test is uint8 {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
+}
+
+//XXX 命名が抽象的すぎるか
+export function isPlane(test: unknown): test is plane {
+  return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 16);
 }
 
 export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm違いの場合

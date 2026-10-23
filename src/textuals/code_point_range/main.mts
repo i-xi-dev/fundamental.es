@@ -3,33 +3,27 @@ import {
   type ClosedRange,
   SafeIntegerClosedRange,
 } from "../../numerics/mod.mts";
+import { Type } from "../../mod.mts";
 
 export type CodePointRange = ClosedRange<TypeAlias.codepoint>;
 
-let _surrogate: WeakRef<CodePointRange> | undefined;
+function _rangeOfPlane(
+  plane: Type.plane,
+): [min: TypeAlias.codepoint, max: TypeAlias.codepoint] {
+  const min = plane * 0x10000;
+  const max = min + 0xFFFF;
+  return [min, max];
+}
 
-let _highSurrogate: WeakRef<CodePointRange> | undefined;
+export namespace CodePointRange {
+  export function fromPlane(plane: Type.plane): CodePointRange {
+    Type.assertPlane(plane, "Input");
+    return SafeIntegerClosedRange.of(..._rangeOfPlane(plane)); //XXX インスタンスは1つで良いのでは
+  }
 
-export const CodePointRange = {
-  // export function ALL(): CodePointRange {
-  // }
-
-  get SURROGATES(): CodePointRange {
-    if (!_surrogate?.deref()) {
-      _surrogate = new WeakRef(SafeIntegerClosedRange.of(0xD800, 0xDFFF));
-    }
-    return _surrogate.deref()!;
-  },
-
-  get HIGH_SURROGATES(): CodePointRange {
-    if (!_highSurrogate?.deref()) {
-      _highSurrogate = new WeakRef(SafeIntegerClosedRange.of(0xD800, 0xDBFF));
-    }
-    return _highSurrogate.deref()!;
-  },
-  //TODO fromPlane
-  //TODO fromBlock
-};
+  //TODO fromBlock()
+  //TODO of()
+}
 
 // export namespace Block {
 //   export function HIGH_SURROGATES(): CodePointRange {
