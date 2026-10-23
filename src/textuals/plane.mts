@@ -1,0 +1,21 @@
+export const Plane = {
+  BMP: 0,
+  SMP: 1,
+  SIP: 2,
+  TIP: 3,
+  [Symbol("_UNASSIGNED_4")]: 4,
+  [Symbol("_UNASSIGNED_5")]: 5,
+  [Symbol("_UNASSIGNED_6")]: 6,
+  [Symbol("_UNASSIGNED_7")]: 7,
+  [Symbol("_UNASSIGNED_8")]: 8,
+  [Symbol("_UNASSIGNED_9")]: 9,
+  [Symbol("_UNASSIGNED_10")]: 10,
+  [Symbol("_UNASSIGNED_11")]: 11,
+  [Symbol("_UNASSIGNED_12")]: 12,
+  [Symbol("_UNASSIGNED_13")]: 13,
+  SSP: 14,
+  SPUA_A: 15,
+  SPUA_B: 16,
+} as const;
+
+export type Plane = typeof Plane[keyof typeof Plane];

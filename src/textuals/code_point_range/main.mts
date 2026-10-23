@@ -27,6 +27,8 @@ export const CodePointRange = {
     }
     return _highSurrogate.deref()!;
   },
+  //TODO fromPlane
+  //TODO fromBlock
 };
 
 // export namespace Block {
