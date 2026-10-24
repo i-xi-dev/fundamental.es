@@ -1,12 +1,12 @@
-import type { plane, uint8 } from "./_def.mts";
+import type { codeplane, uint8 } from "./_def.mts";
 import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
   isAsyncIterable,
   isBigInt,
+  isCodePlane,
   isIterable,
   isNonSharedUint8Array,
-  isPlane,
   isString,
   isUint8,
 } from "./check.mts";
@@ -56,13 +56,12 @@ export function assertUint8(
   }
 }
 
-//XXX 命名が抽象的すぎるか
-export function assertPlane(
+export function assertCodePlane(
   test: unknown,
   targetLabel: string,
-): asserts test is plane {
-  if (isPlane(test) !== true) {
-    throw Exception.mustBePlane(targetLabel);
+): asserts test is codeplane {
+  if (isCodePlane(test) !== true) {
+    throw Exception.mustBeCodePlane(targetLabel);
   }
 }
 

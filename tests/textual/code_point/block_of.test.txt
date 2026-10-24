@@ -1,0 +1,39 @@
+import { assertStrictEquals, assertThrows } from "@std/assert";
+import { Textuals } from "../../../src/mod.mts";
+
+const { CodePoint } = Textuals;
+
+Deno.test("Textuals.CodePoint.codeBlockOf()", () => {
+  assertStrictEquals(CodePoint.codeBlockOf(0x0), "Basic Latin");
+  assertStrictEquals(CodePoint.codeBlockOf(0x7F), "Basic Latin");
+  assertStrictEquals(CodePoint.codeBlockOf(0x80), "Latin-1 Supplement");
+  assertStrictEquals(
+    CodePoint.codeBlockOf(0x10FFFF),
+    "Supplementary Private Use Area-B",
+  );
+  assertStrictEquals(CodePoint.codeBlockOf(0x70000), "No_Block");
+
+  assertThrows(
+    () => {
+      CodePoint.codeBlockOf(-1);
+    },
+    TypeError,
+    "Input must be a Unicode code point of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      CodePoint.codeBlockOf(0x110000);
+    },
+    TypeError,
+    "Input must be a Unicode code point of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      CodePoint.codeBlockOf("0" as unknown as number);
+    },
+    TypeError,
+    "Input must be a Unicode code point of type `number`",
+  );
+});

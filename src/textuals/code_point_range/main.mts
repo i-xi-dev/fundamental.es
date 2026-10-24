@@ -1,4 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+// import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import {
   type ClosedRange,
   SafeIntegerClosedRange,
@@ -7,34 +8,29 @@ import { Type } from "../../mod.mts";
 
 export type CodePointRange = ClosedRange<TypeAlias.codepoint>;
 
-function _rangeOfPlane(
-  plane: Type.plane,
+function _rangeOfCodePlane(
+  planeNumber: Type.codeplane,
 ): [min: TypeAlias.codepoint, max: TypeAlias.codepoint] {
-  const min = plane * 0x10000;
+  const min = planeNumber * 0x10000;
   const max = min + 0xFFFF;
   return [min, max];
 }
 
 export namespace CodePointRange {
-  export function fromPlane(plane: Type.plane): CodePointRange {
-    Type.assertPlane(plane, "Input");
-    return SafeIntegerClosedRange.of(..._rangeOfPlane(plane)); //XXX インスタンスは1つで良いのでは
+  export function fromCodePlane(planeNumber: Type.codeplane): CodePointRange {
+    Type.assertCodePlane(planeNumber, "Input");
+    return SafeIntegerClosedRange.of(..._rangeOfCodePlane(planeNumber)); //XXX インスタンスは1つで良いのでは
   }
 
-  //TODO fromBlock()
+  // export function fromCodeBlock(blockName: string): CodePointRange {
+  //   Type.assertString(blockName, "Input");
+
+  //   const blockRange = _BLOCK_RANGE[blockName];
+  //   if (blockRange) {
+  //     return SafeIntegerClosedRange.of(...blockRange); //XXX インスタンスは1つで良いのでは
+  //   }
+  //   throw new RangeError("Input must be a Unicode block name");
+  // }
+
   //TODO of()
 }
-
-// export namespace Block {
-//   export function HIGH_SURROGATES(): CodePointRange {
-//     return SafeIntegerClosedRange.of(0xD800, 0xDB7F);
-//   }
-//
-//   export function HIGH_PRIVATE_USE_SURROGATES(): CodePointRange {
-//     return SafeIntegerClosedRange.of(0xDB80, 0xDBFF);
-//   }
-//
-//   export function LOW_SURROGATES(): CodePointRange {
-//     return SafeIntegerClosedRange.of(0xDC00, 0xDFFF);
-//   }
-// }

@@ -1,5 +1,6 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _assertCodePoint, _isCodePoint } from "../_internal/common.mts";
+// import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { Char16 } from "../char16/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
@@ -34,10 +35,20 @@ export function toString(codePoint: TypeAlias.codepoint): string {
   }`;
 }
 
-export function planeOf(codePoint: TypeAlias.codepoint): Type.plane {
+export function codePlaneOf(codePoint: TypeAlias.codepoint): Type.codeplane {
   _assertCodePoint(codePoint, "Input");
-  return Math.trunc(codePoint / 0x10000) as Type.plane;
+  return Math.trunc(codePoint / 0x10000) as Type.codeplane;
 }
+
+// export function codeBlockOf(codePoint: TypeAlias.codepoint): string {
+//   _assertCodePoint(codePoint, "Input");
+//   for (const [blockName, range] of Object.entries(_BLOCK_RANGE)) {
+//     if ((codePoint >= range[0]) && (codePoint <= range[1])) {
+//       return blockName;
+//     }
+//   }
+//   return "No_Block";
+// }
 
 // -------------------------------------------------------------------
 // shortcuts
@@ -50,10 +61,12 @@ function _inRanges(
   if (_isCodePoint(codePoint) !== true) {
     return false;
   }
-  return ranges.some((range) => codePoint >= range[0] && codePoint <= range[1]);
+  return ranges.some((range) =>
+    (codePoint >= range[0]) && (codePoint <= range[1])
+  );
 }
 
-// shortcut of ```CodePointRange.fromPlane(Plane.BMP).contains(codePoint)```
+// shortcut of ```CodePointRange.fromCodePlane(CodePlane.BMP).contains(codePoint)```
 export function inBmp(codePoint: TypeAlias.codepoint): boolean {
   return _inRanges(codePoint, [[0, 0xFFFF]]);
 }

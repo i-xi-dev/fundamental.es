@@ -1,4 +1,4 @@
-import type { plane, uint8 } from "./_def.mts";
+import type { codeplane, uint8 } from "./_def.mts";
 import type { safeint } from "../_internal/type_alias/_def.mts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -45,8 +45,7 @@ export function isUint8(test: unknown): test is uint8 {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
 }
 
-//XXX 命名が抽象的すぎるか
-export function isPlane(test: unknown): test is plane {
+export function isCodePlane(test: unknown): test is codeplane {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 16);
 }
 

@@ -39,8 +39,7 @@ export function mustBeBigUintN(
   return mustBe(`a ${bits}-bit unsigned integer of type \`bigint\``, target);
 }
 
-//XXX 命名が抽象的すぎるか
-export function mustBePlane(target: string): TypeError {
+export function mustBeCodePlane(target: string): TypeError {
   return mustBe(`a Unicode plane of type \`number\``, target);
 }
 

@@ -1,0 +1,34 @@
+import { assertStrictEquals, assertThrows } from "@std/assert";
+import { Textuals } from "../../../src/mod.mts";
+
+const { CodePointRange } = Textuals;
+
+Deno.test("Textuals.CodePointRange.fromCodeBlock()", () => {
+  const p0 = CodePointRange.fromCodeBlock("Basic Latin");
+  assertStrictEquals(p0.min, 0);
+  assertStrictEquals(p0.max, 0x7F);
+
+  assertThrows(
+    () => {
+      CodePointRange.fromCodeBlock("------------------------");
+    },
+    RangeError,
+    "Input must be a Unicode block name",
+  );
+
+  assertThrows(
+    () => {
+      CodePointRange.fromCodeBlock("");
+    },
+    RangeError,
+    "Input must be a Unicode block name",
+  );
+
+  assertThrows(
+    () => {
+      CodePointRange.fromCodeBlock(12 as unknown as string);
+    },
+    TypeError,
+    "Input must be a `string`",
+  );
+});

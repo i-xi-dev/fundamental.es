@@ -1,4 +1,5 @@
-export const Plane = {
+// Record<string | symbol, Type.codeplane>
+export const CodePlane = {
   BMP: 0,
   SMP: 1,
   SIP: 2,

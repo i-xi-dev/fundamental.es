@@ -258,7 +258,7 @@ export type uint8 =
   | 0xFE
   | 0xFF;
 
-export type plane =
+export type codeplane =
   | 0
   | 1
   | 2
