@@ -1,4 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _assertCodePoint } from "../_internal/common.mts";
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import {
   type ClosedRange,
@@ -32,5 +33,14 @@ export namespace CodePointRange {
   //   throw new RangeError("Input must be a Unicode block name");
   // }
 
-  //TODO of()
+  export function of(
+    min: TypeAlias.codepoint,
+    max: TypeAlias.codepoint,
+  ): CodePointRange {
+    _assertCodePoint(min, "Input");
+    _assertCodePoint(max, "Input");
+    // assert (min <= max) →SafeIntegerClosedRange.ofでチェックされる
+
+    return SafeIntegerClosedRange.of(min, max);
+  }
 }

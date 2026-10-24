@@ -28,6 +28,9 @@ export function of<T extends TypeAlias.safeint = TypeAlias.safeint>(
   min: T,
   max: T,
 ): ClosedRange<TypeAlias.safeint, T> {
-  //TODO assert min,max
+  // assert (min is safeint) →コンストラクターでチェックされる
+  // assert (max is safeint) →コンストラクターでチェックされる
+  // assert (min <= max) →コンストラクターでチェックされる
+
   return new _SafeIntClosedRangeImpl<T>(min, max);
 }
