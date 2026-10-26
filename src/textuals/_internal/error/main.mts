@@ -18,7 +18,10 @@ export function mustBeCodePoint(target: string): TypeError {
 }
 
 export function mustBeChar16(target: string): TypeError {
-  return mustBe("a TODO", target);
+  return mustBe(
+    "a single character with a code point of `0xFFFF` or lower",
+    target,
+  );
 }
 
 export function mustBeChar32(target: string): TypeError {
