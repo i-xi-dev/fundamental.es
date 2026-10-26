@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { Char16 } from "../../textuals/char16/mod.mts";
+import { Char16 } from "../../textuals/char_x/mod.mts";
 import { Radix } from "../../numerics/radix.mts";
 import { Type } from "../../type/mod.mts";
 

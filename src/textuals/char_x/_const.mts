@@ -1,5 +1,3 @@
-import { _assertChar16, _isChar16 } from "../_internal/common.mts";
-
 /** U+0020 `" "` */
 export const SPACE = " ";
 
@@ -14,7 +12,3 @@ export const DIGIT_ZERO = "0";
 
 /** U+007E `"~"` */
 export const TILDE = "~";
-
-export { _isChar16 as is };
-
-export { _assertChar16 as assert };
