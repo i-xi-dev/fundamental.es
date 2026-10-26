@@ -1,12 +1,14 @@
 import { assertStrictEquals } from "@std/assert";
 import { Textuals } from "../../../src/mod.mts";
 
-Deno.test("Textuals.Text.isNonEmpty()", () => {
-  assertStrictEquals(Textuals.Text.isNonEmpty(""), false);
-  assertStrictEquals(Textuals.Text.isNonEmpty("1"), true);
-  assertStrictEquals(Textuals.Text.isNonEmpty("11"), true);
+const { Text } = Textuals;
 
-  assertStrictEquals(Textuals.Text.isNonEmpty(1), false);
-  assertStrictEquals(Textuals.Text.isNonEmpty(null), false);
-  assertStrictEquals(Textuals.Text.isNonEmpty(undefined), false);
+Deno.test("Textuals.Text.isNonEmpty()", () => {
+  assertStrictEquals(Text.isNonEmpty(""), false);
+  assertStrictEquals(Text.isNonEmpty("1"), true);
+  assertStrictEquals(Text.isNonEmpty("11"), true);
+
+  assertStrictEquals(Text.isNonEmpty(1 as unknown as string), false);
+  assertStrictEquals(Text.isNonEmpty(null as unknown as string), false);
+  assertStrictEquals(Text.isNonEmpty(undefined as unknown as string), false);
 });

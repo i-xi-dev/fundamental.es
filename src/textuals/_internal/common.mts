@@ -3,8 +3,30 @@ import { _TextualException } from "./error/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
-export function _isNonEmptyString(test: unknown): boolean {
+export function _isNonEmptyString(test: string): boolean {
   return Type.isString(test) && (test.length > 0);
+}
+
+export function _assertNonEmptyString(
+  test: string,
+  targetLabel: string,
+): void {
+  if (_isNonEmptyString(test) !== true) {
+    throw _TextualException.mustBeNonEmptyString(targetLabel);
+  }
+}
+
+export function _isWellFormedString(test: string): boolean {
+  return Type.isString(test) && test.isWellFormed();
+}
+
+export function _assertWellFormedString(
+  test: string,
+  targetLabel: string,
+): void {
+  if (_isWellFormedString(test) !== true) {
+    throw _TextualException.mustBeWellFormedString(targetLabel);
+  }
 }
 
 const _MIN_CODE_POINT = 0;
@@ -26,6 +48,12 @@ export function _isChar16(test: string): boolean {
   return Type.isString(test) && (test.length === 1);
 }
 
+export function _assertChar16(test: string, targetLabel: string): void {
+  if (_isChar16(test) !== true) {
+    throw _TextualException.mustBeChar16(targetLabel);
+  }
+}
+
 export function _isChar32(test: string): boolean {
   if (Type.isString(test) === true) {
     if (test.length === 1) {
@@ -36,4 +64,10 @@ export function _isChar32(test: string): boolean {
     }
   }
   return false;
+}
+
+export function _assertChar32(test: string, targetLabel: string): void {
+  if (_isChar32(test) !== true) {
+    throw _TextualException.mustBeChar32(targetLabel);
+  }
 }
