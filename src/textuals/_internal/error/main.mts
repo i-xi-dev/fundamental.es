@@ -25,7 +25,7 @@ export function mustBeChar16(target: string): TypeError {
 }
 
 export function mustBeChar32(target: string): TypeError {
-  return mustBe("a TODO", target);
+  return mustBe("a single character", target);
 }
 
 // TextDecoderのデコード失敗はTypeErrorなので、そちらに寄せた
