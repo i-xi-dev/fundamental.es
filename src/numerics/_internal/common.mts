@@ -167,3 +167,12 @@ export function _clampBigInt<T extends bigint>(
 export function _isUint16(test: number): boolean {
   return Number.isSafeInteger(test) && (test >= 0) && (test < 0x10000);
 }
+
+export function _assertUint16(
+  test: number,
+  targetLabel: string,
+): void {
+  if (_isUint16(test) !== true) {
+    throw Type.Exception.mustBeUintN(16, targetLabel);
+  }
+}

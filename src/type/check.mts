@@ -45,7 +45,8 @@ export function isUint8(test: unknown): test is uint8 {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
 }
 
-const _char8Regex = /[\\u0000-\\u00FF]/;
+// deno-lint-ignore no-control-regex
+const _char8Regex = /^[\u0000-\u00FF]$/;
 export function isChar8(test: unknown): test is char8 {
   return isString(test) && _char8Regex.test(test);
 }
