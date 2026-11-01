@@ -1,4 +1,4 @@
-import { Char16, Text } from "../textuals/mod.mts";
+import { Char8, Text } from "../textuals/mod.mts";
 import { Finite, Radix } from "../numerics/mod.mts";
 import { TypeAlias } from "../_internal/type_alias/mod.mts";
 
@@ -60,11 +60,11 @@ function _degreesToDmsString(
 
   const msNum = (normalizedDegrees - dInt) * 60;
   const mInt = Math.trunc(msNum);
-  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, Char16.DIGIT_ZERO);
+  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, Char8.DIGIT_ZERO);
 
   const sNum = (msNum - mInt) * 60;
   const sInt = Math.trunc(sNum);
-  const sStr = ((sInt < 10) ? Char16.DIGIT_ZERO : Text.EMPTY) +
+  const sStr = ((sInt < 10) ? Char8.DIGIT_ZERO : Text.EMPTY) +
     sNum.toFixed(options?.fractionalSecondDigits);
 
   return `${dStr}°${mStr}′${sStr}″`;

@@ -64,14 +64,13 @@ export function toChar16Iterable(text: string, options?: Options): _char16s {
   })(text);
 }
 
-//XXX fromCharCodeIterable
-//XXX fromCharCodeAsyncIterable
+//XXX fromUint16Iterable
+//XXX fromUint16AsyncIterable
 
-//XXX 命名これで良い？
-export function toCharCodeIterable(
+export function toUint16Iterable(
   text: string,
   options?: Options,
-): IterableIterator<TypeAlias.codepoint & TypeAlias.uint16, void, void> {
+): IterableIterator<TypeAlias.uint16, void, void> {
   Type.assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");

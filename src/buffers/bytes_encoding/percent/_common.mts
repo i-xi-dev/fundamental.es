@@ -1,7 +1,11 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
+import {
+  _byteToChar8,
+  _char8ToByte,
+} from "../../../textuals/_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { Byte } from "../../byte/mod.mts";
-import { Char16, CodePoint, Text } from "../../../textuals/mod.mts";
+import { Char8, CodePoint, Text } from "../../../textuals/mod.mts";
 import { Type } from "../../../type/mod.mts";
 import { Uint8 } from "../../../numerics/int_x/uint/mod.mts";
 
@@ -56,27 +60,27 @@ export function _decode(
   let i = 0;
   let j = 0;
   while (i < text.length) {
-    const c = text.charAt(i);
+    const c = text.charAt(i) as Type.char8;
 
     let byte: Type.uint8;
-    if (c === Char16.PERCENT_SIGN) {
+    if (c === Char8.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
         byte = Number.parseInt(byteString, 16) as Type.uint8;
         i = i + 3;
       } else {
-        byte = c.charCodeAt(0) as Type.uint8;
+        byte = _char8ToByte(c);
         i = i + 1;
       }
-    } else if (c === Char16.PLUS_SIGN) {
+    } else if (c === Char8.PLUS_SIGN) {
       if (options.spaceAsPlus === true) {
         byte = CodePoint.SPACE;
       } else {
-        byte = CodePoint.PLUS_SIGN; // c.charCodeAt(0) as uint8;
+        byte = CodePoint.PLUS_SIGN; // _char8ToByte(c);
       }
       i = i + 1;
     } else {
-      byte = c.charCodeAt(0) as Type.uint8;
+      byte = _char8ToByte(c);
       i = i + 1;
     }
 
@@ -105,7 +109,7 @@ export function _encode(
 
   return Array.from(bytes, (byte) => {
     if ((byte === CodePoint.SPACE) && (options.spaceAsPlus === true)) {
-      return Char16.PLUS_SIGN;
+      return Char8.PLUS_SIGN;
     }
     if (
       (byte < CodePoint.SPACE) ||
@@ -113,9 +117,9 @@ export function _encode(
       (byte === CodePoint.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
-      return `${Char16.PERCENT_SIGN}${Byte.toString(byte).toUpperCase()}`;
+      return `${Char8.PERCENT_SIGN}${Byte.toString(byte).toUpperCase()}`;
     }
-    return String.fromCharCode(byte);
+    return _byteToChar8(byte as Type.uint8);
   }).join(Text.EMPTY);
 }
 

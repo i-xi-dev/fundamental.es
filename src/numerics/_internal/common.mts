@@ -161,3 +161,9 @@ export function _clampBigInt<T extends bigint>(
 ): T {
   return _minBigIntOf(_maxBigIntOf(value, min), max) as T;
 }
+
+// -------------------------------------------------------------------
+
+export function _isUint16(test: number): boolean {
+  return Number.isSafeInteger(test) && (test >= 0) && (test < 0x10000);
+}

@@ -1,5 +1,5 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { Char16 } from "../../textuals/char_x/mod.mts";
+import { Char8 } from "../../textuals/char_x/mod.mts";
 import { Radix } from "../../numerics/radix.mts";
 import { Type } from "../../type/mod.mts";
 
@@ -43,9 +43,9 @@ export function toString(byte: TypeAlias.safeint): string {
   // if (resolvedOptions.upperCase === true) {
   //   str = str.toUpperCase();
   // }
-  // return str.padStart(resolvedOptions.minLength, Char16.DIGIT_ZERO);
+  // return str.padStart(resolvedOptions.minLength, Char8.DIGIT_ZERO);
 
-  return byte.toString(Radix.HEXADECIMAL).padStart(2, Char16.DIGIT_ZERO);
+  return byte.toString(Radix.HEXADECIMAL).padStart(2, Char8.DIGIT_ZERO);
 }
 
 // function _isFormatMatch(radix: Radix, test: string): boolean {

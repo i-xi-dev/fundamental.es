@@ -1,4 +1,4 @@
-import { Char16, Text } from "../textuals/mod.mts";
+import { Char8, Text } from "../textuals/mod.mts";
 import { HttpUtils, StringUtils } from "../_common/mod.mts";
 import { Type } from "../type/mod.mts";
 
@@ -190,9 +190,9 @@ export class MediaType {
    * ```
    */
   get suffix(): string {
-    if (this.subtype.includes(Char16.PLUS_SIGN)) {
+    if (this.subtype.includes(Char8.PLUS_SIGN)) {
       const subtype = this.subtype;
-      return subtype.substring(subtype.lastIndexOf(Char16.PLUS_SIGN));
+      return subtype.substring(subtype.lastIndexOf(Char8.PLUS_SIGN));
     }
     return Text.EMPTY;
   }

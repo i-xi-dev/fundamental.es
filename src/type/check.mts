@@ -1,4 +1,4 @@
-import type { codeplane, uint8 } from "./_def.mts";
+import type { char8, codeplane, uint8 } from "./_def.mts";
 import type { safeint } from "../_internal/type_alias/_def.mts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -43,6 +43,11 @@ function _inRange(test: safeint, min: safeint, max: safeint): boolean {
 
 export function isUint8(test: unknown): test is uint8 {
   return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
+}
+
+const _char8Regex = /[\\u0000-\\u00FF]/;
+export function isChar8(test: unknown): test is char8 {
+  return isString(test) && _char8Regex.test(test);
 }
 
 export function isCodePlane(test: unknown): test is codeplane {

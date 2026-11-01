@@ -1,9 +1,10 @@
-import type { codeplane, uint8 } from "./_def.mts";
+import type { char8, codeplane, uint8 } from "./_def.mts";
 import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
   isAsyncIterable,
   isBigInt,
+  isChar8,
   isCodePlane,
   isIterable,
   isNonSharedUint8Array,
@@ -53,6 +54,15 @@ export function assertUint8(
 ): asserts test is uint8 {
   if (isUint8(test) !== true) {
     throw Exception.mustBeUintN(8, targetLabel);
+  }
+}
+
+export function assertChar8(
+  test: unknown,
+  targetLabel: string,
+): asserts test is char8 {
+  if (isChar8(test) !== true) {
+    throw Exception.mustBeChar8(targetLabel);
   }
 }
 

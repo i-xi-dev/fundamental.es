@@ -39,6 +39,13 @@ export function mustBeBigUintN(
   return mustBe(`a ${bits}-bit unsigned integer of type \`bigint\``, target);
 }
 
+export function mustBeChar8(target: string): TypeError {
+  return mustBe(
+    "a single character with a code point of `0xFF` or lower",
+    target,
+  );
+}
+
 export function mustBeCodePlane(target: string): TypeError {
   return mustBe(`a Unicode plane of type \`number\``, target);
 }

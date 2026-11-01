@@ -1,5 +1,5 @@
 import type { _DecoderStreamRegulator } from "../_decoder_stream_regulator.mts";
-import { Char16, Text } from "../../../textuals/mod.mts";
+import { Char8, Text } from "../../../textuals/mod.mts";
 
 export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
   #pending: string;
@@ -10,7 +10,7 @@ export class _PercentDecoderStreamRegulator implements _DecoderStreamRegulator {
 
   regulate(text: string): string {
     const temp = this.#pending + text;
-    const lastIdx = temp.lastIndexOf(Char16.PERCENT_SIGN);
+    const lastIdx = temp.lastIndexOf(Char8.PERCENT_SIGN);
 
     if (lastIdx >= (temp.length - 2)) {
       this.#pending = temp.substring(lastIdx);

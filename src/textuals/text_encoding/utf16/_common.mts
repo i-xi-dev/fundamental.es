@@ -46,7 +46,7 @@ export function _encodeShared(
       for (let i = 0; i < rune.length; i++) {
         dstView.setUint16(
           writtenByteCount,
-          rune.charCodeAt(i),
+          rune.charCodeAt(i), //TODO Char16.fromUint16
           littleEndian,
         );
         writtenByteCount += _BYTES_PER_CHAR;

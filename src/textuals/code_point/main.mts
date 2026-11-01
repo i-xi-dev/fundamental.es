@@ -2,7 +2,7 @@ import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _assertCodePoint, _isCodePoint } from "../_internal/common.mts";
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
-import { Char16 } from "../char_x/mod.mts";
+import { Char8 } from "../char_x/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
 import { Type } from "../../type/mod.mts";
 
@@ -17,7 +17,7 @@ export function toString(codePoint: TypeAlias.codepoint): string {
   return `U+${
     codePoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(
       4,
-      Char16.DIGIT_ZERO,
+      Char8.DIGIT_ZERO,
     )
   }`;
 }
@@ -36,6 +36,34 @@ export function codePlaneOf(codePoint: TypeAlias.codepoint): Type.codeplane {
 //   }
 //   return "No_Block";
 // }
+
+// export function fromUint16s(
+//   ...uint16s: Array<TypeAlias.uint16>
+// ): TypeAlias.codepoint {
+//   if ((uint16s.length > 0) && (uint16s.length <= 2)) {
+//     if (uint16s.every((code) => _isUint16(code)) !== true) {
+//       throw new Error("TODO");
+//     }
+
+//     return xxx;
+//   }
+
+//   throw new Error("TODO");
+// }
+
+export function toUint16s(
+  codePoint: TypeAlias.codepoint,
+): [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] {
+  _assertCodePoint(codePoint, "Input");
+  if (codePoint <= 0xFFFF) {
+    return [codePoint];
+  }
+
+  const p = codePoint - 0x10000;
+  const highSurrogate = (p >> 10) + 0xD800;
+  const lowSurrogate = (p & 0x3FF) + 0xDC00;
+  return [highSurrogate, lowSurrogate];
+}
 
 // -------------------------------------------------------------------
 // shortcuts

@@ -20,3 +20,20 @@ export function toCodePoint(char: TypeAlias.char32): TypeAlias.codepoint {
   _assertChar32(char, "Input");
   return char.codePointAt(0)!;
 }
+
+//TODO fromBytes
+//     toBytes
+//TODO fromUint16s
+
+export function toUint16s(
+  char: TypeAlias.char32,
+): [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] {
+  _assertChar32(char, "Input");
+
+  const codePoint = char.codePointAt(0)!;
+  if (codePoint <= 0xFFFF) {
+    return [codePoint];
+  }
+
+  return [char.charCodeAt(0), char.charCodeAt(1)];
+}

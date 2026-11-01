@@ -71,3 +71,11 @@ export function _assertChar32(test: string, targetLabel: string): void {
     throw _TextualException.mustBeChar32(targetLabel);
   }
 }
+
+export function _byteToChar8(byte: Type.uint8): Type.char8 {
+  return String.fromCharCode(byte) as Type.char8;
+}
+
+export function _char8ToByte(char: Type.char8): Type.uint8 {
+  return char.charCodeAt(0) as Type.uint8;
+}
