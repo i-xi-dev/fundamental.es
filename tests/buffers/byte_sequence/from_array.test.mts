@@ -56,7 +56,7 @@ Deno.test("Buffers.ByteSequence.fromArray() - error", () => {
       );
     },
     TypeError,
-    "Input must be an `Array` of safe-integers of type `number`",
+    "Input must be an `Array` of 8-bit unsigned integers of type `number`",
   );
 
   assertThrows(

@@ -804,8 +804,11 @@ export namespace ByteSequence {
     src: Array</* Type.uint8 */ TypeAlias.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
-    TypeAlias.assertSafeIntegerArray(src, "Input");
-    return _create(src.length, options).loadFromUint8Iterable(src);
+    if (Array.isArray(src) && src.every((i) => Type.isUint8(i))) {
+      return _create(src.length, options).loadFromUint8Iterable(src);
+    }
+
+    throw TypeAlias.Exception.mustBeArrayOfUintN(8, "Input");
   }
 
   //XXX fromUint8AsyncIterable() length不明なので見積を指定させる
