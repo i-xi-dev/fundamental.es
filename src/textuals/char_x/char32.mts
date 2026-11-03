@@ -4,7 +4,9 @@ import {
   _isChar32,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
+import { _TextualException } from "../_internal/error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { RangeException } from "../../_internal/range_error/mod.mts";
 
 export { _isChar32 as is };
 
@@ -25,15 +27,24 @@ export function toCodePoint(char: TypeAlias.char32): TypeAlias.codepoint {
 //TODO fromBytes
 //     toBytes
 
+//XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(
-  charCodes: [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16],
+  charCodes:
+    /* [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] */
+    Array<TypeAlias.uint16>,
 ): TypeAlias.char32 {
   if (Array.isArray(charCodes) && charCodes.every((c) => _isUint16(c))) {
-    if ((charCodes.length > 0) && (charCodes.length <= 2)) {
-      return String.fromCharCode(...charCodes);
-    } else {
-      throw new Error("TODO must be array of 1 or 2 uint16");
+    if (charCodes.length <= 0) {
+      throw RangeException.lengthTooShort("Input", 1);
+    } else if (charCodes.length > 2) {
+      throw RangeException.lengthTooLong("Input", 2);
     }
+
+    const result = String.fromCharCode(...charCodes);
+    if (_isChar32(result) === true) {
+      return result;
+    }
+    throw _TextualException.mustBeSurrogatePair("input");
   } else {
     throw TypeAlias.Exception.mustBeArrayOfUintN(16, "Input");
   }

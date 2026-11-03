@@ -28,6 +28,14 @@ export function mustBeChar32(target: string): TypeError {
   return mustBe("a single character", target);
 }
 
+// uint16の配列であることが確定しているとき、サロゲートペアではない事を示す用
+// （なのでTypeErrorではない）
+export function mustBeSurrogatePair(target: string): RangeError {
+  return new RangeError(
+    `When ${target} is a pair of values, ${target} must be a surrogate pair`,
+  );
+} //TODO 呼び出す側が target先頭を大文字にするか小文字にするか考えといけないのはちょっと。
+
 // TextDecoderのデコード失敗はTypeErrorなので、そちらに寄せた
 export function decodingFailed(
   encodingName: string,
