@@ -1,10 +1,12 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _assertCodePoint, _isCodePoint } from "../_internal/common.mts";
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
+import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { Char8 } from "../char_x/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
+import { RangeException } from "../../_internal/range_error/mod.mts";
 import { Type } from "../../type/mod.mts";
+import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 export * from "./_const.mts";
 
@@ -37,19 +39,36 @@ export function codePlaneOf(codePoint: TypeAlias.codepoint): Type.codeplane {
 //   return "No_Block";
 // }
 
-// export function fromUint16s(
-//   ...uint16s: Array<TypeAlias.uint16>
-// ): TypeAlias.codepoint {
-//   if ((uint16s.length > 0) && (uint16s.length <= 2)) {
-//     if (uint16s.every((code) => _isUint16(code)) !== true) {
-//       throw new Error("TODO");
-//     }
+//TODO fromBytes
+//     toBytes
 
-//     return xxx;
-//   }
+//XXX fromUint16s(...charCodes) の方が良いか？
+export function fromUint16s(
+  charCodes:
+    /* [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] */
+    Array<TypeAlias.uint16>,
+): TypeAlias.codepoint {
+  if (Array.isArray(charCodes) && charCodes.every((c) => _isUint16(c))) {
+    if (charCodes.length <= 0) {
+      throw RangeException.lengthTooShort("Input", 1);
+    } else if (charCodes.length > 2) {
+      throw RangeException.lengthTooLong("Input", 2);
+    }
 
-//   throw new Error("TODO");
-// }
+    if (charCodes.length === 1) {
+      return charCodes[0];
+    }
+
+    const [h, l] = charCodes;
+    if (isHighSurrogate(h) && isLowSurrogate(l)) {
+      return ((h - 0xD800) << 10) + (l - 0xDC00) + 0x10000;
+    }
+
+    throw _TextualException.mustBeSurrogatePair("input");
+  } else {
+    throw TypeAlias.Exception.mustBeArrayOfUintN(16, "Input");
+  }
+}
 
 export function toUint16s(
   codePoint: TypeAlias.codepoint,
