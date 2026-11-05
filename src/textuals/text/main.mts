@@ -6,8 +6,8 @@ import {
   _isWellFormedString,
 } from "../_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
+import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { Type } from "../../type/mod.mts";
-import { Utf8 } from "../../_internal/utf8/mod.mts";
 
 export { _isNonEmptyString as isNonEmpty };
 
@@ -33,13 +33,13 @@ export function fromBytes(
   options?: FromBytesOptions,
 ): string {
   //TODO assert bytes
-  return Utf8.decode(bytes, options?.allowMalformed !== true, false);
+  return _Utf8.decode(bytes, options?.allowMalformed !== true, false);
 }
 
 //TODO fromBytesAsyncIterable
 
 export function toBytes(text: string, options?: Options): TypeAlias.Bytes {
-  return Utf8.encode(text, options?.allowMalformed !== true);
+  return _Utf8.encode(text, options?.allowMalformed !== true);
 }
 
 //TODO from/toBase64
@@ -59,7 +59,7 @@ export function toChar16Iterable(text: string, options?: Options): _char16s {
 
   return (function* (s: string) {
     for (let i = 0; i < s.length; i++) {
-      yield s.charAt(i);
+      yield s.at(i)!;
     }
   })(text);
 }

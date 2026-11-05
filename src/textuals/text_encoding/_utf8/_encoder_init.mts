@@ -1,9 +1,9 @@
 import { _EncodeFunc, _EncoderInit } from "../_encoder_init.mts";
 import { _regulateForEncoder } from "../_common.mts";
 import { _TextualException } from "../../_internal/error/mod.mts";
+import { _Utf8 } from "../../../_internal/_utf8/mod.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 import { Fallback } from "../fallback.mts";
-import { Utf8 } from "../../../_internal/utf8/mod.mts";
 
 function _createEncode(fatal?: boolean): _EncodeFunc {
   const encoder = new TextEncoder();
@@ -16,7 +16,7 @@ function _createEncode(fatal?: boolean): _EncodeFunc {
 
     if (fatal === true) {
       if (textToEncode.isWellFormed() !== true) {
-        throw _TextualException.encodingFailed(Utf8.NAME, "Input");
+        throw _TextualException.encodingFailed(_Utf8.NAME, "Input");
       }
     }
 
@@ -31,7 +31,7 @@ function _createEncode(fatal?: boolean): _EncodeFunc {
 
 export function _createEncoderInit(options?: EncoderOptions): _EncoderInit {
   return {
-    name: Utf8.NAME.toLowerCase(),
+    name: _Utf8.NAME.toLowerCase(),
     fallback: (options?.fatal === true)
       ? Fallback.EXCEPTION
       : Fallback.REPLACEMENT,

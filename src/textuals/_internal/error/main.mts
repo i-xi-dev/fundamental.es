@@ -1,4 +1,4 @@
-import { _encodingFailed } from "../../../_internal/utf8/main.mts";
+import { _encodingFailed } from "../../../_internal/_utf8/main.mts";
 import { mustBe } from "../../../type/error.mts";
 
 export function mustBeNonEmptyString(target: string): RangeError {
@@ -9,7 +9,7 @@ export function mustBeNonEmptyString(target: string): RangeError {
 
 export function mustBeWellFormedString(target: string): RangeError {
   return new RangeError(
-    `${target} must be a xxxxxxxxxxxxxxxxxxxx`,
+    `${target} must be a well-formed \`string\``,
   );
 }
 
@@ -25,7 +25,7 @@ export function mustBeChar16(target: string): TypeError {
 }
 
 export function mustBeChar32(target: string): TypeError {
-  return mustBe("a single character", target);
+  return mustBe("a well-formed single character", target);
 }
 
 // uint16の配列であることが確定しているとき、サロゲートペアではない事を示す用

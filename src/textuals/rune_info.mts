@@ -33,7 +33,7 @@ export namespace RuneInfo {
       char32,
       char16s: (char32.length === 1)
         ? [char32]
-        : [char32.charAt(0), char32.charAt(1)],
+        : [char32.at(0)!, char32.at(1)!],
     };
   }
 

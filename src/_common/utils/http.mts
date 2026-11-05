@@ -1,3 +1,4 @@
+import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import * as StringUtils from "./string.mts";
 import { Text } from "../../textuals/mod.mts";
 
@@ -35,21 +36,21 @@ export function collectHttpQuotedString(
   let escaped = false;
   let i = 0;
   for (i = 0; i < text2.length; i++) {
-    const c: string = text2[i] as string;
+    const char = text2.at(i) as TypeAlias.char16;
 
     if (escaped === true) {
-      value = value + c;
+      value = value + char;
       escaped = false;
       continue;
     } else {
-      if (c === '"') {
+      if (char === '"') {
         i++;
         break;
-      } else if (c === "\\") {
+      } else if (char === "\\") {
         escaped = true;
         continue;
       } else {
-        value = value + c;
+        value = value + char;
         continue;
       }
     }

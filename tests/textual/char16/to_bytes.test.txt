@@ -1,0 +1,72 @@
+import { assertStrictEquals, assertThrows } from "@std/assert";
+import { Textuals } from "../../../src/mod.mts";
+
+const { Char16 } = Textuals;
+
+function _test(c32: string, ex: Array<number>): void {
+  assertStrictEquals(
+    JSON.stringify([...Char16.toBytes(c32)]),
+    JSON.stringify(ex),
+  );
+}
+
+Deno.test("Textuals.Char16.toBytes()", () => {
+  _test("\u0000", [0]);
+  _test("\uFFFF", [0xEF, 0xBF, 0xBF]);
+
+  assertThrows(
+    () => {
+      Char16.toBytes("\uD800");
+    },
+    RangeError,
+    "Input must be a well-formed `string`",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes("\uDFFF");
+    },
+    RangeError,
+    "Input must be a well-formed `string`",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes("\u{10000}");
+    },
+    TypeError,
+    "Input must be a single character with a code point of `0xFFFF` or lower",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes("\u{10FFFF}");
+    },
+    TypeError,
+    "Input must be a single character with a code point of `0xFFFF` or lower",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes("");
+    },
+    TypeError,
+    "Input must be a single character with a code point of `0xFFFF` or lower",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes("00");
+    },
+    TypeError,
+    "Input must be a single character with a code point of `0xFFFF` or lower",
+  );
+
+  assertThrows(
+    () => {
+      Char16.toBytes(0 as unknown as string);
+    },
+    TypeError,
+    "Input must be a single character with a code point of `0xFFFF` or lower",
+  );
+});

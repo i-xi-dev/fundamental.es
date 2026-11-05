@@ -40,7 +40,17 @@ export function codePlaneOf(codePoint: TypeAlias.codepoint): Type.codeplane {
 // }
 
 //TODO fromBytes
-//     toBytes
+
+//TODO export function toBytes(codePoint: TypeAlias.codepoint): TypeAlias.Bytes {
+//   _assertCodePoint(codePoint, "Input");
+
+//   if (codePoint < 0x80) {
+//     return Uint8Array.of(codePoint);
+//   } else if (codePoint < 0x800) {
+//   } else if (codePoint < 0x10000) {
+//   } else {
+//   }
+// }
 
 //XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(

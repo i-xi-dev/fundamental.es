@@ -23,7 +23,7 @@ export function decode(
   fatal: boolean,
   ignoreBom: boolean,
 ): string {
-  return _getDecoder(fatal, ignoreBom).decode(bytes);
+  return _getDecoder(fatal, ignoreBom).decode(bytes); //TODO TextDecoderはfatalに関係なく孤立サロゲートはU+FFFDに置換されるので、fatal=trueの時は孤立サロゲートが含まれていないかチェックする必要がある
 }
 
 let _encoder: TextEncoder | null = null;

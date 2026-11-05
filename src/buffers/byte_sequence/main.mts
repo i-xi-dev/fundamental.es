@@ -5,6 +5,7 @@ import {
   _randomBytes,
 } from "./../_internal/common.mts";
 import { _NumericException } from "../../numerics/_internal/error/mod.mts";
+import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { Base64 } from "../bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "../bytes_encoding/binary_string/mod.mts";
@@ -17,7 +18,6 @@ import { SafeInteger } from "../../numerics/safe_int/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Uint, Uint16, Uint32, Uint8 } from "../../numerics/int_x/uint/mod.mts";
-import { Utf8 } from "../../_internal/utf8/mod.mts";
 
 const _MAX_CAPACITY = 536_870_912;
 
@@ -860,7 +860,7 @@ export namespace ByteSequence {
   ): ByteSequence {
     Type.assertString(text, "Input");
 
-    const bytes = Utf8.encode(text, options?.fatal === true);
+    const bytes = _Utf8.encode(text, options?.fatal === true);
     return fromBytes(bytes, options);
   }
 

@@ -25,8 +25,8 @@ function _parseBytes(bytes: TypeAlias.Bytes): {
   version: Type.uint4;
   timestamp: TypeAlias.safeint | null;
 } {
-  const variant = ((bytes[8] as Type.uint8) >> 4) as Type.uint4;
-  const version = ((bytes[6] as Type.uint8) >> 4) as Type.uint4;
+  const variant = (bytes[8] >> 4) as Type.uint4;
+  const version = (bytes[6] >> 4) as Type.uint4;
 
   let timestamp: TypeAlias.safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
@@ -109,10 +109,10 @@ function _generateRandom(): TypeAlias.Bytes {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES_SIZE));
 
   // 7バイト目の上位4ビットは0100₂固定（13桁目の文字列表現は"4"固定）
-  bytes[6] = (bytes[6] as Type.uint8) & 0x0F | 0x40;
+  bytes[6] = bytes[6] & 0x0F | 0x40;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as Type.uint8) & 0x3F | 0x80;
+  bytes[8] = bytes[8] & 0x3F | 0x80;
 
   return bytes;
 }
@@ -160,10 +160,10 @@ function _generateUnixTimeBased(): TypeAlias.Bytes {
   bytes.set(new Uint8Array(tsBuffer, 0, 2), 6);
 
   // 7バイト目の上位4ビットは0111₂固定（13桁目の文字列表現は"7"固定）
-  bytes[6] = (bytes[6] as Type.uint8) & 0x0F | 0x70;
+  bytes[6] = bytes[6] & 0x0F | 0x70;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-  bytes[8] = (bytes[8] as Type.uint8) & 0x3F | 0x80;
+  bytes[8] = bytes[8] & 0x3F | 0x80;
 
   return bytes;
 }
@@ -258,14 +258,14 @@ export namespace Uuid {
 //
 //   if (version === 5) {
 //     // 7バイト目の上位4ビットは0101₂固定（13桁目の文字列表現は"5"固定）
-//     digestBytes[6] = (digestBytes[6] as Type.uint8) & 0x0F | 0x50;
+//     digestBytes[6] = digestBytes[6] & 0x0F | 0x50;
 //   } else { // if (version === 3) {
 //     // 7バイト目の上位4ビットは0011₂固定（13桁目の文字列表現は"3"固定）
-//     digestBytes[6] = (digestBytes[6] as Type.uint8) & 0x0F | 0x30;
+//     digestBytes[6] = digestBytes[6] & 0x0F | 0x30;
 //   }
 //
 //   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
-//   digestBytes[8] = (digestBytes[8] as Type.uint8) & 0x3F | 0x80;
+//   digestBytes[8] = digestBytes[8] & 0x3F | 0x80;
 //
 //   // 17バイト目以降は破棄
 //   return digestBytes.slice(0, 16);

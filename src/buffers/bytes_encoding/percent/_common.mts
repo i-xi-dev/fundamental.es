@@ -60,27 +60,27 @@ export function _decode(
   let i = 0;
   let j = 0;
   while (i < text.length) {
-    const c = text.charAt(i) as Type.char8;
+    const char = text.at(i) as Type.char8;
 
     let byte: Type.uint8;
-    if (c === Char8.PERCENT_SIGN) {
+    if (char === Char8.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
         byte = Number.parseInt(byteString, 16) as Type.uint8;
         i = i + 3;
       } else {
-        byte = _char8ToByte(c);
+        byte = _char8ToByte(char);
         i = i + 1;
       }
-    } else if (c === Char8.PLUS_SIGN) {
+    } else if (char === Char8.PLUS_SIGN) {
       if (options.spaceAsPlus === true) {
         byte = CodePoint.SPACE;
       } else {
-        byte = CodePoint.PLUS_SIGN; // _char8ToByte(c);
+        byte = CodePoint.PLUS_SIGN; // _char8ToByte(char);
       }
       i = i + 1;
     } else {
-      byte = _char8ToByte(c);
+      byte = _char8ToByte(char);
       i = i + 1;
     }
 

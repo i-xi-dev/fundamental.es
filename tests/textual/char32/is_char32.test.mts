@@ -11,8 +11,8 @@ Deno.test("Textuals.Char32.is()", () => {
   assertStrictEquals(Char32.is("\uFFFF"), true);
   assertStrictEquals(Char32.is("\u{10000}"), true);
   assertStrictEquals(Char32.is("\u{10000}\u{10000}"), false);
-  assertStrictEquals(Char32.is("\uD800"), true);
-  assertStrictEquals(Char32.is("\uDFFF"), true);
+  assertStrictEquals(Char32.is("\uD800"), false);
+  assertStrictEquals(Char32.is("\uDFFF"), false);
   assertStrictEquals(Char32.is("\uD800\uDFFF"), true);
   assertStrictEquals(Char32.is("\uDFFF\uD800"), false);
 

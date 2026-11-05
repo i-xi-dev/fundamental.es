@@ -1,12 +1,15 @@
 import {
   _assertChar32,
   _assertCodePoint,
+  _charsToBytes,
   _isChar32,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
+
+//TODO to～ で、結果が孤立サロゲートになるならエラーにする
 
 export { _isChar32 as is };
 
@@ -25,7 +28,12 @@ export function toCodePoint(char: TypeAlias.char32): TypeAlias.codepoint {
 }
 
 //TODO fromBytes
-//     toBytes
+
+// byteLengthは1～4になる
+export function toBytes(char: TypeAlias.char32): TypeAlias.Bytes {
+  _assertChar32(char, "Input");
+  return _charsToBytes(char);
+}
 
 //XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(

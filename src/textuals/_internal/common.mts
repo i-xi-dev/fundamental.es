@@ -1,5 +1,6 @@
 import { _isSafeInt } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "./error/mod.mts";
+import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
@@ -54,13 +55,13 @@ export function _assertChar16(test: string, targetLabel: string): void {
   }
 }
 
+// lone surrogate を許容しない
 export function _isChar32(test: string): boolean {
   if (Type.isString(test) === true) {
     if (test.length === 1) {
-      return true;
+      return test.isWellFormed();
     } else if (test.length === 2) {
-      // return test.isWellFormed() && ([...test].length === 1);
-      return [...test].length === 1; // lone surrogate を許容
+      return test.isWellFormed() && ([...test].length === 1);
     }
   }
   return false;
@@ -78,4 +79,12 @@ export function _byteToChar8(byte: Type.uint8): Type.char8 {
 
 export function _char8ToByte(char: Type.char8): Type.uint8 {
   return char.charCodeAt(0) as Type.uint8;
+}
+
+export function _bytesToChars(bytes: TypeAlias.Bytes): string {
+  return _Utf8.decode(bytes, false, true);
+}
+
+export function _charsToBytes(chars: string): TypeAlias.Bytes {
+  return _Utf8.encode(chars, false);
 }
