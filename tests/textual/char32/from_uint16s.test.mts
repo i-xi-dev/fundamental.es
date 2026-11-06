@@ -10,6 +10,22 @@ Deno.test("Textuals.Char32.fromUint16s()", () => {
 
   assertThrows(
     () => {
+      Char32.fromUint16s([0xD800]);
+    },
+    RangeError,
+    "Input must not be a lone surrogate",
+  );
+
+  assertThrows(
+    () => {
+      Char32.fromUint16s([0xDC00]);
+    },
+    RangeError,
+    "Input must not be a lone surrogate",
+  );
+
+  assertThrows(
+    () => {
       Char32.fromUint16s(0 as unknown as [number]);
     },
     TypeError,

@@ -3,6 +3,7 @@ import {
   _assertNonSurrogateCodePoint,
   _charsToBytes,
   _isChar32,
+  _isNonSurrogateCodePoint,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
@@ -49,7 +50,11 @@ export function fromUint16s(
     }
 
     if (charCodes.length === 1) {
-      //TODO 孤立サロゲートはエラー
+      const [charCode] = charCodes;
+      if (_isNonSurrogateCodePoint(charCode) === false) {
+        throw new RangeError("Input must not be a lone surrogate");
+      }
+      return String.fromCharCode(charCode);
     }
 
     const result = String.fromCharCode(...charCodes);
