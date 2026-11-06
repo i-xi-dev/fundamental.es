@@ -11,6 +11,22 @@ Deno.test("Textuals.Char32.fromCodePoint()", () => {
 
   assertThrows(
     () => {
+      Char32.fromCodePoint(0xD800);
+    },
+    RangeError,
+    "Input must be a non-surrogate Unicode code point of type `number`",
+  );
+
+  assertThrows(
+    () => {
+      Char32.fromCodePoint(0xDFFF);
+    },
+    RangeError,
+    "Input must be a non-surrogate Unicode code point of type `number`",
+  );
+
+  assertThrows(
+    () => {
       Char32.fromCodePoint(-1);
     },
     TypeError,

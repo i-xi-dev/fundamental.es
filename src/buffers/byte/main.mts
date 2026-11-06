@@ -45,7 +45,10 @@ export function toString(byte: TypeAlias.safeint): string {
   // }
   // return str.padStart(resolvedOptions.minLength, Char8.DIGIT_ZERO);
 
-  return byte.toString(Radix.HEXADECIMAL).padStart(2, Char8.DIGIT_ZERO);
+  return byte.toString(Radix.HEXADECIMAL).padStart(
+    2,
+    "0", /*TODO  Char8.DIGIT_ZERO */
+  );
 }
 
 // function _isFormatMatch(radix: Radix, test: string): boolean {
