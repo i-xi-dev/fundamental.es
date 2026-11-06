@@ -19,7 +19,7 @@ export { _assertChar16 as assert };
 //     throw 長さ3以下（長さ4はU+10000以上。Char16範囲外）
 //   }
 //
-//   return _bytesToChars(bytes); 不正シーケンスでU+FFFDになる場合エラーにする
+//   return _Utf8.decode(bytes, false, true); 不正シーケンスでU+FFFDになる場合エラーにする
 // }
 
 // 必要ないでしょ
@@ -29,7 +29,7 @@ export { _assertChar16 as assert };
 //   if (char.isWellFormed() !== true) {
 //     throw _TextualException.mustBeWellFormedString("Input");
 //   }
-//   return _charsToBytes(char);
+//   return _Utf8.encode(char, false);
 // }
 
 export function fromUint16(charCode: TypeAlias.uint16): TypeAlias.char16 {

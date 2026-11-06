@@ -1,4 +1,5 @@
 import { mustBe } from "../../../type/error.mts";
+import { RangeException } from "../../../_internal/range_error/mod.mts";
 
 export function mustBeFinite(target: string): TypeError {
   return mustBe("a finite number of type `number`", target);
@@ -9,7 +10,7 @@ export function mustBeSafeInteger(target: string): TypeError {
 }
 
 export function mustBeNonNegativeSafeInteger(target: string): RangeError {
-  return new RangeError(
+  return RangeException.of(
     `${target} must be a \`number\` within the range of non-negative safe-integer`,
   );
 }

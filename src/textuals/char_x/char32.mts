@@ -1,14 +1,15 @@
 import {
   _assertChar32,
   _assertNonSurrogateCodePoint,
-  _charsToBytes,
   _isChar32,
   _isNonSurrogateCodePoint,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
-import { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
+import { Type } from "../../type/mod.mts";
+import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 // 孤立サロゲートを許容しない
 
@@ -28,12 +29,33 @@ export function toCodePoint(char: TypeAlias.char32): TypeAlias.codepoint {
   return char.codePointAt(0)!;
 }
 
-//TODO fromBytes
+export function fromBytes(bytes: TypeAlias.Bytes): TypeAlias.char32 {
+  Type.assertNonSharedUint8Array(bytes, "Input");
+  if ((bytes.byteLength > 0) && (bytes.byteLength <= 4)) {
+    let t: string;
+    try {
+      t = _Utf8.decode(bytes, true, true);
+    } catch {
+      throw RangeException.of(
+        "Input must be a valid UTF-8 encoded byte sequence",
+      );
+    }
+    if (_isChar32(t) === true) {
+      return t;
+    }
+    throw RangeException.of(
+      "Input must be a valid UTF-8 encoded byte sequence representing a well-formed single character",
+    );
+  }
+  throw RangeException.of(
+    "Input must be a byte sequence consisting of 1 to 4 bytes",
+  );
+}
 
 // byteLengthは1～4になる
 export function toBytes(char: TypeAlias.char32): TypeAlias.Bytes {
   _assertChar32(char, "Input");
-  return _charsToBytes(char);
+  return _Utf8.encode(char, false); // 孤立サロゲートは_assertChar32で弾いているので第2引数はfalseで良い
 }
 
 //XXX fromUint16s(...charCodes) の方が良いか？
@@ -52,7 +74,7 @@ export function fromUint16s(
     if (charCodes.length === 1) {
       const [charCode] = charCodes;
       if (_isNonSurrogateCodePoint(charCode) === false) {
-        throw new RangeError("Input must not be a lone surrogate");
+        throw RangeException.of("Input must not be a lone surrogate");
       }
       return String.fromCharCode(charCode);
     }

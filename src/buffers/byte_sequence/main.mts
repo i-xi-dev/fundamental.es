@@ -680,7 +680,7 @@ export class ByteSequence {
       return;
     }
 
-    throw new RangeError("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
+    throw RangeException.of("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
   }
 
   #appendByte(byte: Type.uint8): void {
@@ -710,7 +710,7 @@ export class ByteSequence {
 
     if (this.#buffer.resizable !== true) {
       if (needed === true) {
-        throw new RangeError("`ArrayBuffer` cannot be resized");
+        throw RangeException.of("`ArrayBuffer` cannot be resized");
       }
     }
 
@@ -719,7 +719,7 @@ export class ByteSequence {
       const optSize = this.#loadedCount + _DEFAULT_EXTENT; //XXX 適切なサイズは？
 
       if (minSize > this.#buffer.maxByteLength) {
-        throw new RangeError("Exceeds the resize limit for `ArrayBuffer`");
+        throw RangeException.of("Exceeds the resize limit for `ArrayBuffer`");
       } else if (optSize > this.#buffer.maxByteLength) {
         this.#buffer.resize(minSize);
       } else {

@@ -30,7 +30,7 @@ export namespace CodePointRange {
   //   if (blockRange) {
   //     return SafeIntegerClosedRange.of(...blockRange); //XXX インスタンスは1つで良いのでは
   //   }
-  //   throw new RangeError("Input must be a Unicode block name");
+  //   throw RangeException.of("Input must be a Unicode block name");
   // }
 
   export function of(
