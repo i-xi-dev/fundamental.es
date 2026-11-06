@@ -1,12 +1,11 @@
 import {
   _assertChar32,
-  _assertCodePoint,
+  _assertNonSurrogateCodePoint,
   _charsToBytes,
   _isChar32,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
-import { isSurrogate } from "../code_point/main.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
 
@@ -19,10 +18,7 @@ export { _assertChar32 as assert };
 export function fromCodePoint(
   codePoint: TypeAlias.codepoint,
 ): TypeAlias.char32 {
-  _assertCodePoint(codePoint, "Input");
-  if (isSurrogate(codePoint) === true) {
-    throw _TextualException.mustBeNonSurrogateCodePoint("Input");
-  }
+  _assertNonSurrogateCodePoint(codePoint, "Input");
   return String.fromCodePoint(codePoint);
 }
 
@@ -52,7 +48,9 @@ export function fromUint16s(
       throw RangeException.lengthTooLong("Input", 2);
     }
 
-    //TODO 孤立サロゲートをエラー
+    if (charCodes.length === 1) {
+      //TODO 孤立サロゲートはエラー
+    }
 
     const result = String.fromCharCode(...charCodes);
     if (_isChar32(result) === true) {

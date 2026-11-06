@@ -13,7 +13,7 @@ Deno.test("Textuals.Char32.fromCodePoint()", () => {
     () => {
       Char32.fromCodePoint(0xD800);
     },
-    RangeError,
+    TypeError,
     "Input must be a non-surrogate Unicode code point of type `number`",
   );
 
@@ -21,7 +21,7 @@ Deno.test("Textuals.Char32.fromCodePoint()", () => {
     () => {
       Char32.fromCodePoint(0xDFFF);
     },
-    RangeError,
+    TypeError,
     "Input must be a non-surrogate Unicode code point of type `number`",
   );
 
@@ -30,7 +30,7 @@ Deno.test("Textuals.Char32.fromCodePoint()", () => {
       Char32.fromCodePoint(-1);
     },
     TypeError,
-    "Input must be a Unicode code point of type `number`",
+    "Input must be a non-surrogate Unicode code point of type `number`",
   );
 
   assertThrows(
@@ -38,6 +38,6 @@ Deno.test("Textuals.Char32.fromCodePoint()", () => {
       Char32.fromCodePoint(0x110000);
     },
     TypeError,
-    "Input must be a Unicode code point of type `number`",
+    "Input must be a non-surrogate Unicode code point of type `number`",
   );
 });

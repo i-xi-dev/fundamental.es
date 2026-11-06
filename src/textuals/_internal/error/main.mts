@@ -17,10 +17,8 @@ export function mustBeCodePoint(target: string): TypeError {
   return mustBe("a Unicode code point of type `number`", target);
 }
 
-export function mustBeNonSurrogateCodePoint(target: string): RangeError {
-  return new RangeError(
-    `${target} must be a non-surrogate Unicode code point of type \`number\``,
-  );
+export function mustBeNonSurrogateCodePoint(target: string): TypeError {
+  return mustBe("a non-surrogate Unicode code point of type `number`", target);
 }
 
 export function mustBeChar16(target: string): TypeError {

@@ -45,6 +45,19 @@ export function _assertCodePoint(test: number, targetLabel: string): void {
   }
 }
 
+export function _isNonSurrogateCodePoint(test: number): boolean {
+  return _isCodePoint(test) && ((test < 0xD800) || (test > 0xDFFF));
+}
+
+export function _assertNonSurrogateCodePoint(
+  test: number,
+  targetLabel: string,
+): void {
+  if (_isNonSurrogateCodePoint(test) !== true) {
+    throw _TextualException.mustBeNonSurrogateCodePoint(targetLabel);
+  }
+}
+
 export function _isChar16(test: string): boolean {
   return Type.isString(test) && (test.length === 1);
 }
