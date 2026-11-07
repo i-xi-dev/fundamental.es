@@ -14,7 +14,7 @@ const _L_MIN = 0;
 const _L_MAX = 1;
 
 export type Hsl = {
-  h: TypeAlias.degrees;
+  h: TypeAlias.finite;
   s: TypeAlias.finite;
   l: TypeAlias.finite;
 };

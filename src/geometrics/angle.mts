@@ -5,40 +5,40 @@ import { TypeAlias } from "../_internal/type_alias/mod.mts";
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
 
-function _normalizeDegrees(degs: number): TypeAlias.degrees {
-  Finite.assert(degs, "Input");
+function _normalizeDegrees(degrees: number): TypeAlias.finite {
+  Finite.assert(degrees, "Input");
 
-  const t = degs % _ONE_TURN_DEGS;
+  const t = degrees % _ONE_TURN_DEGS;
   return (t < _ZERO_TURN_DEGS) ? (t + _ONE_TURN_DEGS) : t;
 }
 
-function _radiansToDegrees(rads: number): TypeAlias.degrees {
-  Finite.assert(rads, "Input");
+function _radiansToDegrees(radians: number): TypeAlias.finite {
+  Finite.assert(radians, "Input");
 
-  const degs = rads * (180 / Math.PI);
-  return _normalizeDegrees(degs);
+  const degrees = radians * (180 / Math.PI);
+  return _normalizeDegrees(degrees);
 }
 
-function _degreesToRadians(degs: number): TypeAlias.radians {
-  Finite.assert(degs, "Input");
+function _degreesToRadians(degrees: number): TypeAlias.finite {
+  Finite.assert(degrees, "Input");
 
-  return _normalizeDegrees(degs) * (Math.PI / 180);
+  return _normalizeDegrees(degrees) * (Math.PI / 180);
 }
 
-function _gradiansToDegrees(grads: number): TypeAlias.degrees {
-  Finite.assert(grads, "Input");
+function _gradiansToDegrees(gradians: number): TypeAlias.finite {
+  Finite.assert(gradians, "Input");
 
-  const degs = grads * (180 / 200);
-  return _normalizeDegrees(degs);
+  const degrees = gradians * (180 / 200);
+  return _normalizeDegrees(degrees);
 }
 
 //XXX _degreesToGradians
 
-function _turnsToDegrees(turns: number): TypeAlias.degrees {
+function _turnsToDegrees(turns: number): TypeAlias.finite {
   Finite.assert(turns, "Input");
 
-  const degs = turns * _ONE_TURN_DEGS;
-  return _normalizeDegrees(degs);
+  const degrees = turns * _ONE_TURN_DEGS;
+  return _normalizeDegrees(degrees);
 }
 
 //XXX _degreesToTurns
@@ -48,12 +48,12 @@ type _DmsStringOptions = {
 };
 
 function _degreesToDmsString(
-  degs: TypeAlias.degrees,
+  degrees: TypeAlias.finite,
   options?: _DmsStringOptions,
 ): string {
-  Finite.assert(degs, "Input");
+  Finite.assert(degrees, "Input");
 
-  const normalizedDegrees = _normalizeDegrees(degs);
+  const normalizedDegrees = _normalizeDegrees(degrees);
 
   const dInt = Math.trunc(normalizedDegrees);
   const dStr = dInt.toString(Radix.DECIMAL);
@@ -71,30 +71,30 @@ function _degreesToDmsString(
 }
 
 export class Angle {
-  #degs: TypeAlias.degrees;
+  #degrees: TypeAlias.finite;
 
-  private constructor(degs: TypeAlias.degrees) {
-    this.#degs = _normalizeDegrees(degs);
+  private constructor(degrees: TypeAlias.finite) {
+    this.#degrees = _normalizeDegrees(degrees);
   }
 
-  static ofDegrees(degs: /* TypeAlias.degrees */ number): Angle {
-    return new Angle(degs);
+  static ofDegrees(degrees: /* TypeAlias.finite */ number): Angle {
+    return new Angle(degrees);
   }
 
-  static ofRadians(rads: /* TypeAlias.radians */ number): Angle {
-    return new Angle(_radiansToDegrees(rads));
+  static ofRadians(radians: /* TypeAlias.finite */ number): Angle {
+    return new Angle(_radiansToDegrees(radians));
   }
 
-  toDegrees(): TypeAlias.degrees {
-    return this.#degs;
+  toDegrees(): TypeAlias.finite {
+    return this.#degrees;
   }
 
-  toRadians(): TypeAlias.radians {
-    return _degreesToRadians(this.#degs);
+  toRadians(): TypeAlias.finite {
+    return _degreesToRadians(this.#degrees);
   }
 
-  valueOf(): TypeAlias.degrees {
-    return this.#degs;
+  valueOf(): TypeAlias.finite {
+    return this.#degrees;
   }
 
   // オプション指定したければIntl.NumberFormatでやれば良い
@@ -105,7 +105,7 @@ export class Angle {
   }
 
   toDmsString(options?: _DmsStringOptions): string {
-    return _degreesToDmsString(this.#degs, options);
+    return _degreesToDmsString(this.#degrees, options);
   }
 }
 

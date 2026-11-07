@@ -40,7 +40,7 @@ export class SRgbColor extends _RgbColor {
     return this.#_hwb;
   }
 
-  get hue(): TypeAlias.degrees {
+  get hue(): TypeAlias.finite {
     return this.#hsl.h;
   }
 
@@ -163,7 +163,7 @@ export class SRgbColor extends _RgbColor {
     }
   }
 
-  plusHue(relativeHue: TypeAlias.degrees): SRgbColor {
+  plusHue(relativeHue: TypeAlias.finite): SRgbColor {
     const { h, s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: h + relativeHue,
@@ -172,7 +172,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  withHue(absoluteHue: TypeAlias.degrees): SRgbColor {
+  withHue(absoluteHue: TypeAlias.finite): SRgbColor {
     const { s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: absoluteHue,

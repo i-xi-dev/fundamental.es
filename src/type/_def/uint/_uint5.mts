@@ -1,6 +1,6 @@
 import { uint4 } from "./uint4.mts";
 
-export type uint5 =
+export type _uint5 =
   | uint4
   | 0x10
   | 0x11

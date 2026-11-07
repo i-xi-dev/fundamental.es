@@ -1,25 +1,9 @@
-export * from "./_def_char.mts";
+export * from "./_def/uint/uint4.mts";
+export * from "./_def/uint/uint6.mts";
+export * from "./_def/uint/uint7.mts";
+export * from "./_def/uint/uint8.mts";
 
-export * from "./_def/uint4.mts";
-export * from "./_def/uint6.mts";
-export * from "./_def/uint7.mts";
-export * from "./_def/uint8.mts";
+export * from "./_def/char/char7.mts";
+export * from "./_def/char/char8.mts";
 
-export type codeplane =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16;
+export * from "./_def/code_plane.mts";
