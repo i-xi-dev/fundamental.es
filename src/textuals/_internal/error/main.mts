@@ -12,23 +12,8 @@ export function mustBeWellFormedString(target: string): RangeError {
   return RangeException.of(`${target} must be a well-formed \`string\``);
 }
 
-export function mustBeCodePoint(target: string): TypeError {
-  return mustBe("a Unicode code point of type `number`", target);
-}
-
 export function mustBeNonSurrogateCodePoint(target: string): TypeError {
   return mustBe("a non-surrogate Unicode code point of type `number`", target);
-}
-
-export function mustBeChar16(target: string): TypeError {
-  return mustBe(
-    "a single character with a code point of `0xFFFF` or lower",
-    target,
-  );
-}
-
-export function mustBeChar32(target: string): TypeError {
-  return mustBe("a well-formed single character", target);
 }
 
 // uint16の配列であることが確定しているとき、サロゲートペアではない事を示す用

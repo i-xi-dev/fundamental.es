@@ -1,7 +1,7 @@
+import type { _char32, _codepoint } from "../_type_alias/_def/_defs.mts";
+import { _assertChar32, _isChar32 } from "../_type_alias/_char32.mts";
 import {
-  _assertChar32,
   _assertNonSurrogateCodePoint,
-  _isChar32,
   _isNonSurrogateCodePoint,
 } from "../_internal/common.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
@@ -13,23 +13,17 @@ import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 // 孤立サロゲートを許容しない
 
-export { _isChar32 as is };
-
-export { _assertChar32 as assert };
-
-export function fromCodePoint(
-  codePoint: TypeAlias.codepoint,
-): TypeAlias.char32 {
+export function fromCodePoint(codePoint: _codepoint): _char32 {
   _assertNonSurrogateCodePoint(codePoint, "Input");
   return String.fromCodePoint(codePoint);
 }
 
-export function toCodePoint(char: TypeAlias.char32): TypeAlias.codepoint {
+export function toCodePoint(char: _char32): _codepoint {
   _assertChar32(char, "Input");
   return char.codePointAt(0)!;
 }
 
-export function fromBytes(bytes: TypeAlias.Bytes): TypeAlias.char32 {
+export function fromBytes(bytes: TypeAlias.Bytes): _char32 {
   Type.assertNonSharedUint8Array(bytes, "Input");
   if ((bytes.byteLength > 0) && (bytes.byteLength <= 4)) {
     let t: string;
@@ -53,7 +47,7 @@ export function fromBytes(bytes: TypeAlias.Bytes): TypeAlias.char32 {
 }
 
 // byteLengthは1～4になる
-export function toBytes(char: TypeAlias.char32): TypeAlias.Bytes {
+export function toBytes(char: _char32): TypeAlias.Bytes {
   _assertChar32(char, "Input");
   return _Utf8.encode(char, false); // 孤立サロゲートは_assertChar32で弾いているので第2引数はfalseで良い
 }
@@ -63,7 +57,7 @@ export function fromUint16s(
   charCodes:
     /* [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] */
     Array<TypeAlias.uint16>,
-): TypeAlias.char32 {
+): _char32 {
   if (Array.isArray(charCodes) && charCodes.every((c) => _isUint16(c))) {
     if (charCodes.length <= 0) {
       throw RangeException.lengthTooShort("Input", 1);
@@ -90,7 +84,7 @@ export function fromUint16s(
 }
 
 export function toUint16s(
-  char: TypeAlias.char32,
+  char: _char32,
 ): [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] {
   _assertChar32(char, "Input");
 

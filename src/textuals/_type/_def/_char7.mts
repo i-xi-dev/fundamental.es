@@ -1,6 +1,6 @@
 import { _char6 } from "./_char6.mts";
 
-export type char7 =
+export type _char7 =
   | _char6
   | "@" // 0x40
   | "A" // 0x41

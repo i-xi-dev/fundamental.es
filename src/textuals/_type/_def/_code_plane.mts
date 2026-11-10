@@ -1,4 +1,4 @@
-export type codeplane =
+export type _codeplane =
   | 0
   | 1
   | 2

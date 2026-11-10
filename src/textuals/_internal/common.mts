@@ -1,7 +1,8 @@
+import type { _char8 } from "../_type/_def/_char8.mts";
+import { _isCodePoint } from "../_type_alias/_code_point.mts";
 import { _isSafeInt } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "./error/mod.mts";
 import { Type } from "../../type/mod.mts";
-import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 export function _isNonEmptyString(test: string): boolean {
   return Type.isString(test) && (test.length > 0);
@@ -29,21 +30,6 @@ export function _assertWellFormedString(
   }
 }
 
-const _MIN_CODE_POINT = 0;
-const _MAX_CODE_POINT = 0x10FFFF;
-
-export function _isCodePoint(test: number): boolean {
-  return _isSafeInt(test) &&
-    ((test as TypeAlias.safeint) >= _MIN_CODE_POINT) &&
-    ((test as TypeAlias.safeint) <= _MAX_CODE_POINT);
-}
-
-export function _assertCodePoint(test: number, targetLabel: string): void {
-  if (_isCodePoint(test) !== true) {
-    throw _TextualException.mustBeCodePoint(targetLabel);
-  }
-}
-
 export function _isNonSurrogateCodePoint(test: number): boolean {
   return _isCodePoint(test) && ((test < 0xD800) || (test > 0xDFFF));
 }
@@ -57,38 +43,10 @@ export function _assertNonSurrogateCodePoint(
   }
 }
 
-export function _isChar16(test: string): boolean {
-  return Type.isString(test) && (test.length === 1);
+export function _byteToChar8(byte: Type.uint8): _char8 {
+  return String.fromCharCode(byte) as _char8;
 }
 
-export function _assertChar16(test: string, targetLabel: string): void {
-  if (_isChar16(test) !== true) {
-    throw _TextualException.mustBeChar16(targetLabel);
-  }
-}
-
-// lone surrogate を許容しない
-export function _isChar32(test: string): boolean {
-  if (Type.isString(test) === true) {
-    if (test.length === 1) {
-      return test.isWellFormed();
-    } else if (test.length === 2) {
-      return test.isWellFormed() && ([...test].length === 1);
-    }
-  }
-  return false;
-}
-
-export function _assertChar32(test: string, targetLabel: string): void {
-  if (_isChar32(test) !== true) {
-    throw _TextualException.mustBeChar32(targetLabel);
-  }
-}
-
-export function _byteToChar8(byte: Type.uint8): Type.char8 {
-  return String.fromCharCode(byte) as Type.char8;
-}
-
-export function _char8ToByte(char: Type.char8): Type.uint8 {
+export function _char8ToByte(char: _char8): Type.uint8 {
   return char.charCodeAt(0) as Type.uint8;
 }

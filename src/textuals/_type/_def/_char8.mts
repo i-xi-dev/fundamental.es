@@ -1,7 +1,7 @@
-import { char7 } from "./char7.mts";
+import { _char7 } from "./_char7.mts";
 
-export type char8 =
-  | char7
+export type _char8 =
+  | _char7
   | "\u{80}"
   | "\u{81}"
   | "\u{82}"

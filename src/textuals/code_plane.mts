@@ -1,4 +1,4 @@
-// Record<string | symbol, Type.codeplane>
+// Record<string | symbol, _codeplane>
 export const CodePlane = {
   BMP: 0,
   SMP: 1,

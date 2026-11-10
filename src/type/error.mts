@@ -9,6 +9,11 @@ export function mustBe(typeDesc: string, target: string): TypeError {
   return new TypeError(msg);
 }
 
+export function __mustBe(typeDesc: string, target: string): TypeError {
+  const msg = _message(target, typeDesc);
+  return new TypeError(msg);
+}
+
 export function mustBeBigInt(target: string): TypeError {
   return mustBe("a `bigint`", target);
 }
@@ -37,17 +42,6 @@ export function mustBeBigUintN(
   target: string,
 ): TypeError {
   return mustBe(`a ${bits}-bit unsigned integer of type \`bigint\``, target);
-}
-
-export function mustBeChar8(target: string): TypeError {
-  return mustBe(
-    "a single character with a code point of `0xFF` or lower",
-    target,
-  );
-}
-
-export function mustBeCodePlane(target: string): TypeError {
-  return mustBe(`a Unicode plane of type \`number\``, target);
 }
 
 export function mustBeArrayBuffer(target: string): TypeError {

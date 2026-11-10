@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _char16 } from "../../textuals/_type_alias/_def/_defs.mts";
 import * as StringUtils from "./string.mts";
 import { Text } from "../../textuals/mod.mts";
 
@@ -36,7 +36,7 @@ export function collectHttpQuotedString(
   let escaped = false;
   let i = 0;
   for (i = 0; i < text2.length; i++) {
-    const char = text2.at(i) as TypeAlias.char16;
+    const char = text2.at(i) as _char16;
 
     if (escaped === true) {
       value = value + char;

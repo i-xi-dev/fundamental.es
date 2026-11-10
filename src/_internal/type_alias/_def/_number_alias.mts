@@ -12,6 +12,3 @@ export type uint16 = nnint;
 export type uint24 = nnint;
 export type uint32 = nnint;
 export type uint48 = nnint;
-
-// number、かつ、0～0x10FFFF
-export type codepoint = nnint;

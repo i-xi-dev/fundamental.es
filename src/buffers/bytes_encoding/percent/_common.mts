@@ -1,3 +1,4 @@
+import type { _char8 } from "../../../textuals/_type/_def/_char8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import {
   _byteToChar8,
@@ -60,7 +61,7 @@ export function _decode(
   let i = 0;
   let j = 0;
   while (i < text.length) {
-    const char = text.at(i) as Type.char8;
+    const char = text.at(i) as _char8;
 
     let byte: Type.uint8;
     if (char === Char8.PERCENT_SIGN) {

@@ -1,11 +1,15 @@
+import type {
+  _char16,
+  _char32,
+  _codepoint,
+} from "./_type_alias/_def/_defs.mts";
+import { _assertCodePoint } from "./_type_alias/_code_point.mts";
 import { CodePoint } from "./code_point/mod.mts";
-import { Type } from "../type/mod.mts";
-import { TypeAlias } from "../_internal/type_alias/mod.mts";
 
 export type RuneInfo = {
-  codePoint: TypeAlias.codepoint;
-  char32: TypeAlias.char32;
-  char16s: [TypeAlias.char16, TypeAlias.char16] | [TypeAlias.char16];
+  codePoint: _codepoint;
+  char32: _char32;
+  char16s: [_char16, _char16] | [_char16];
 };
 
 type _FromOptions = {
@@ -16,10 +20,10 @@ export namespace RuneInfo {
   export type FromOptions = _FromOptions;
 
   export function fromCodePoint(
-    codePoint: TypeAlias.codepoint,
+    codePoint: _codepoint,
     options?: _FromOptions,
   ): RuneInfo {
-    CodePoint.assert(codePoint, "Input");
+    _assertCodePoint(codePoint, "Input");
 
     if (options?.allowLoneSurrogate !== true) {
       if (CodePoint.isSurrogate(codePoint) === true) {
@@ -43,13 +47,28 @@ export namespace RuneInfo {
 
 //TODO
 
-// export function inBmp(rune: TypeAlias.char32): boolean {
+// export function inBmp(rune: _char32): boolean {
 //   return Type.isString(rune) && (rune.length === 1);
 // }
 
 // const _HIGH_SURROGATE = /^[\uD800-\uDBFF]$/;
 
-// export function isHighSurrogate(rune: TypeAlias.char32): boolean {
+// export function isHighSurrogate(rune: _char32): boolean {
 //   //TODO isString &&
 //   return _HIGH_SURROGATE.test(rune);
 // }
+
+//TODO
+/*
+class CharSequence<T extends string> implements ... {
+  static fromChar8Iterable(): CharSequence<_char8> {
+  }
+  static fromChar16Iterable(): CharSequence<_char16> {
+  }
+  static fromChar32Iterable(): CharSequence<_char32> {
+  }
+
+  条件に合致するところまですすめる() "abc"が出現するところまで(abcを含む|含まない)とか
+  条件に従って配列or新たなIterator化() 3文字ずつとか、","で区切るとか
+}
+*/

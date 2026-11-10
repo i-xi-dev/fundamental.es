@@ -1,3 +1,8 @@
+import type {
+  _char16,
+  _char32,
+  _codepoint,
+} from "../_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import {
   _assertNonEmptyString,
@@ -44,9 +49,9 @@ export function toBytes(text: string, options?: Options): TypeAlias.Bytes {
 
 //TODO from/toBase64
 
-type _char16s = IterableIterator<TypeAlias.char16, void, void>;
+type _char16s = IterableIterator<_char16, void, void>;
 
-// export function fromChar16Iterable(chars: Iterable<TypeAlias.char16>): string {
+// export function fromChar16Iterable(chars: Iterable<_char16>): string {
 // }
 
 //XXX fromChar16AsyncIterable
@@ -76,7 +81,7 @@ export function toUint16Iterable(
     _assertWellFormedString(text, "Input");
   }
 
-  // return toChar16s(text).map((c) => c.codePointAt(0) as TypeAlias.codepoint); //XXX Iterator#map()がまだ使えない
+  // return toChar16s(text).map((c) => c.codePointAt(0) as _codepoint); //XXX Iterator#map()がまだ使えない
   return (function* (s: string) {
     for (let i = 0; i < s.length; i++) {
       yield s.charCodeAt(i);
@@ -84,9 +89,9 @@ export function toUint16Iterable(
   })(text);
 }
 
-type _char32s = IterableIterator<TypeAlias.char32, void, void>;
+type _char32s = IterableIterator<_char32, void, void>;
 
-// export function fromChar32Iterable(chars: Iterable<TypeAlias.char32>): string {
+// export function fromChar32Iterable(chars: Iterable<_char32>): string {
 // }
 
 //XXX fromChar32AsyncIterable
@@ -111,16 +116,16 @@ export function toChar32Iterable(text: string, options?: Options): _char32s {
 export function toCodePointIterable(
   text: string,
   options?: Options,
-): IterableIterator<TypeAlias.codepoint, void, void> {
+): IterableIterator<_codepoint, void, void> {
   Type.assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
 
-  // return toChar32s(text).map((c) => c.codePointAt(0) as TypeAlias.codepoint);
+  // return toChar32s(text).map((c) => c.codePointAt(0) as _codepoint);
   return (function* (s: string) {
     for (const i of s) {
-      yield i.codePointAt(0) as TypeAlias.codepoint;
+      yield i.codePointAt(0) as _codepoint;
     }
   })(text);
 }

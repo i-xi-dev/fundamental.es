@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _codepoint } from "../../textuals/_type_alias/_def/_defs.mts";
 import { CodePoint, Text } from "../../textuals/mod.mts";
 import { Type } from "../../type/mod.mts";
 
@@ -20,10 +20,7 @@ export type CollectResult = {
   following?: boolean;
 };
 
-export type CodePointRange = [TypeAlias.codepoint] | [
-  TypeAlias.codepoint,
-  TypeAlias.codepoint,
-];
+export type CodePointRange = [_codepoint] | [_codepoint, _codepoint];
 
 export type CodePointRangeSet = Array<CodePointRange>;
 

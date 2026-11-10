@@ -1,6 +1,3 @@
-import type { char7 } from "./_def/char/char7.mts";
-import type { char8 } from "./_def/char/char8.mts";
-import type { codeplane } from "./_def/code_plane.mts";
 import type { safeint } from "../_internal/type_alias/_def/_number_alias.mts";
 import type { uint7 } from "./_def/uint/uint7.mts";
 import type { uint8 } from "./_def/uint/uint8.mts";
@@ -14,6 +11,10 @@ export function isNumber(test: unknown): test is number {
 }
 
 export function isString(test: unknown): test is string {
+  return (typeof test === "string");
+}
+
+export function __isString(test: unknown): test is string {
   return (typeof test === "string");
 }
 
@@ -41,32 +42,16 @@ export function isAsyncIterable<T>(test: unknown): test is AsyncIterable<T> {
     ) !== true);
 }
 
-function _inRange(test: safeint, min: safeint, max: safeint): boolean {
+export function __inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }
 
 export function isUint7(test: unknown): test is uint7 {
-  return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0x7F);
+  return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0x7F);
 }
 
 export function isUint8(test: unknown): test is uint8 {
-  return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 0xFF);
-}
-
-// deno-lint-ignore no-control-regex
-const _char7Regex = /^[\u0000-\u007F]$/;
-export function isChar7(test: unknown): test is char7 {
-  return isString(test) && _char7Regex.test(test);
-}
-
-// deno-lint-ignore no-control-regex
-const _char8Regex = /^[\u0000-\u00FF]$/;
-export function isChar8(test: unknown): test is char8 {
-  return isString(test) && _char8Regex.test(test);
-}
-
-export function isCodePlane(test: unknown): test is codeplane {
-  return Number.isSafeInteger(test) && _inRange(test as safeint, 0, 16);
+  return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0xFF);
 }
 
 export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm違いの場合

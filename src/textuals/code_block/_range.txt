@@ -4,7 +4,7 @@ import { CodeBlock } from "./main.mts";
 // https://www.unicode.org/Public/UNIDATA/Blocks.txt 18.0.0
 export const _BLOCK_RANGE: Record<
   string,
-  [TypeAlias.codepoint, TypeAlias.codepoint]
+  [_codepoint, _codepoint]
 > = {
   [CodeBlock.BASIC_LATIN]: [0x0000, 0x007F],
   [CodeBlock.LATIN_1_SUPPLEMENT]: [0x0080, 0x00FF],

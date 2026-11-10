@@ -1,3 +1,4 @@
+import type { _char32 } from "../../_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
@@ -16,7 +17,7 @@ export function _decodeShared(
   allowPending?: boolean,
 ): _DecodeResult {
   const srcView = new DataView(input);
-  const dstRunes: Array<TypeAlias.char32> = [];
+  const dstRunes: Array<_char32> = [];
 
   // let writtenRuneCount = 0;
   const p: Array<TypeAlias.safeint> = [];

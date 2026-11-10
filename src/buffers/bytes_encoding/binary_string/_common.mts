@@ -1,3 +1,4 @@
+import type { _char8 } from "../../../textuals/_type/_def/_char8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import {
   _byteToChar8,
@@ -16,7 +17,7 @@ export function _decode(text: string): TypeAlias.Bytes {
     throw _Error.Syntax.mustBeBinaryString("Input");
   }
 
-  return Uint8Array.from(text, (char) => _char8ToByte(char as Type.char8)); // 第1引数はIterable<コードポイント単位>になるが、0xFF以上は弾いているので問題ない
+  return Uint8Array.from(text, (char) => _char8ToByte(char as _char8)); // 第1引数はIterable<コードポイント単位>になるが、0xFF以上は弾いているので問題ない
 }
 
 export function _encode(bytes: TypeAlias.Bytes): string {
