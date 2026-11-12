@@ -1,5 +1,5 @@
-import { __isString } from "../../type/check.mts";
-import { __mustBe } from "../../type/error.mts";
+import { __isString } from "../../../type/check.mts";
+import { __mustBe } from "../../../type/error.mts";
 import { _char8 } from "./_def/_char8.mts";
 
 // deno-lint-ignore no-control-regex

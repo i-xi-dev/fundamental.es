@@ -66,7 +66,7 @@ export function toString(byte: TypeAlias.safeint): string {
 
 // export function fromString(str: string): Type.uint8 {
 //   Type.assertString(input, "Input");
-//   Text.assertNonEmpty(str, "Input");
+//   _assertNonEmptyString(str, "Input");
 //
 //   const { radix } = _resolveFromStringOptions(options);
 //

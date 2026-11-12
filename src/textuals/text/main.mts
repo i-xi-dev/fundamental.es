@@ -2,21 +2,20 @@ import type {
   _char16,
   _char32,
   _codepoint,
-} from "../_type_alias/_def/_defs.mts";
+} from "../_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import {
-  _assertNonEmptyString,
   _assertWellFormedString,
-  _isNonEmptyString,
   _isWellFormedString,
 } from "../_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { Type } from "../../type/mod.mts";
 
-export { _isNonEmptyString as isNonEmpty };
-
-export { _assertNonEmptyString as assertNonEmpty };
+export {
+  _assertNonEmptyString as assertNonEmpty,
+  _isNonEmptyString as isNonEmpty,
+} from "../_/_.mts";
 
 export { _isWellFormedString as isWellFormed };
 

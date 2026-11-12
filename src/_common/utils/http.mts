@@ -1,4 +1,4 @@
-import type { _char16 } from "../../textuals/_type_alias/_def/_defs.mts";
+import type { _char16 } from "../../textuals/_/_type_alias/_def/_defs.mts";
 import * as StringUtils from "./string.mts";
 import { Text } from "../../textuals/mod.mts";
 

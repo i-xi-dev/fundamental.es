@@ -1,5 +1,5 @@
-import type { _char8 } from "../_type/_def/_char8.mts";
-import { _assertChar8 } from "../_type/_char8.mts";
+import type { _char8 } from "../_/_type/_def/_char8.mts";
+import { _assertChar8 } from "../_/_type/_char8.mts";
 import { _byteToChar8, _char8ToByte } from "../_internal/common.mts";
 import { Type } from "../../mod.mts";
 

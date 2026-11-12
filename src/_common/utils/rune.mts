@@ -1,4 +1,4 @@
-import type { _char32 } from "../../textuals/_type_alias/_def/_defs.mts";
+import type { _char32 } from "../../textuals/_/_type_alias/_def/_defs.mts";
 
 //TODO 移動
 

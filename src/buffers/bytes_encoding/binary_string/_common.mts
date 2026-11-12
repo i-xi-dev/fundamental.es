@@ -1,4 +1,4 @@
-import type { _char8 } from "../../../textuals/_type/_def/_char8.mts";
+import type { _char8 } from "../../../textuals/_/_type/_def/_char8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import {
   _byteToChar8,

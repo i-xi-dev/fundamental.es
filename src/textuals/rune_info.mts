@@ -2,8 +2,8 @@ import type {
   _char16,
   _char32,
   _codepoint,
-} from "./_type_alias/_def/_defs.mts";
-import { _assertCodePoint } from "./_type_alias/_code_point.mts";
+} from "./_/_type_alias/_def/_defs.mts";
+import { _assertCodePoint } from "./_/_type_alias/_code_point.mts";
 import { CodePoint } from "./code_point/mod.mts";
 
 export type RuneInfo = {

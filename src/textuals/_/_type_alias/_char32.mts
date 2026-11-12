@@ -1,5 +1,5 @@
-import { __isString } from "../../type/check.mts";
-import { __mustBe } from "../../type/error.mts";
+import { __isString } from "../../../type/check.mts";
+import { __mustBe } from "../../../type/error.mts";
 
 // lone surrogate を許容しない
 export function _isChar32(test: string): boolean {

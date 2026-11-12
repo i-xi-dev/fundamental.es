@@ -1,4 +1,5 @@
-import type { _codepoint } from "../../textuals/_type_alias/_def/_defs.mts";
+import type { _codepoint } from "../../textuals/_/_type_alias/_def/_defs.mts";
+import { _assertNonEmptyString } from "../../textuals/_/_.mts";
 import { CodePoint, Text } from "../../textuals/mod.mts";
 import { Type } from "../../type/mod.mts";
 
@@ -138,7 +139,7 @@ export function rangesCollectStart(
 
 export function patternCollectStart(input: string, pattern: string): string {
   Type.assertString(input, "Input");
-  Text.assertNonEmpty(pattern, "Pattern");
+  _assertNonEmptyString(pattern, "Pattern");
 
   return _patternCollectStart(input, pattern);
 }

@@ -1,5 +1,5 @@
-import { __inRange } from "../../type/check.mts";
-import { __mustBe } from "../../type/error.mts";
+import { __inRange } from "../../../type/check.mts";
+import { __mustBe } from "../../../type/error.mts";
 import { _codeplane } from "./_def/_code_plane.mts";
 
 export function _isCodePlane(test: unknown): test is _codeplane {

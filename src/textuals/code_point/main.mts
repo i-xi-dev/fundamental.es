@@ -1,6 +1,9 @@
-import type { _codeplane } from "../_type/_def/_code_plane.mts";
-import type { _codepoint } from "../_type_alias/_def/_defs.mts";
-import { _assertCodePoint, _isCodePoint } from "../_type_alias/_code_point.mts";
+import type { _codeplane } from "../_/_type/_def/_code_plane.mts";
+import type { _codepoint } from "../_/_type_alias/_def/_defs.mts";
+import {
+  _assertCodePoint,
+  _isCodePoint,
+} from "../_/_type_alias/_code_point.mts";
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";

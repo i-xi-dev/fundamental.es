@@ -1,4 +1,4 @@
-import type { _char32 } from "../../_type_alias/_def/_defs.mts";
+import type { _char32 } from "../../_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";

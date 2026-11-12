@@ -1,21 +1,9 @@
-import type { _char8 } from "../_type/_def/_char8.mts";
-import { _isCodePoint } from "../_type_alias/_code_point.mts";
+//削除
+import type { _char8 } from "../_/_type/_def/_char8.mts";
+import { _isCodePoint } from "../_/_type_alias/_code_point.mts";
 import { _isSafeInt } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "./error/mod.mts";
 import { Type } from "../../type/mod.mts";
-
-export function _isNonEmptyString(test: string): boolean {
-  return Type.isString(test) && (test.length > 0);
-}
-
-export function _assertNonEmptyString(
-  test: string,
-  targetLabel: string,
-): void {
-  if (_isNonEmptyString(test) !== true) {
-    throw _TextualException.mustBeNonEmptyString(targetLabel);
-  }
-}
 
 export function _isWellFormedString(test: string): boolean {
   return Type.isString(test) && test.isWellFormed();

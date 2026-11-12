@@ -1,5 +1,5 @@
-import type { _char32, _codepoint } from "../_type_alias/_def/_defs.mts";
-import { _assertChar32, _isChar32 } from "../_type_alias/_char32.mts";
+import type { _char32, _codepoint } from "../_/_type_alias/_def/_defs.mts";
+import { _assertChar32, _isChar32 } from "../_/_type_alias/_char32.mts";
 import {
   _assertNonSurrogateCodePoint,
   _isNonSurrogateCodePoint,

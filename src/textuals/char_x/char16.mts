@@ -1,5 +1,5 @@
-import type { _char16 } from "../_type_alias/_def/_defs.mts";
-import { _assertChar16 } from "../_type_alias/_char16.mts";
+import type { _char16 } from "../_/_type_alias/_def/_defs.mts";
+import { _assertChar16 } from "../_/_type_alias/_char16.mts";
 import { _assertUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";

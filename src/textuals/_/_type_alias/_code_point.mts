@@ -1,5 +1,5 @@
-import { __inRange } from "../../type/check.mts";
-import { __mustBe } from "../../type/error.mts";
+import { __inRange } from "../../../type/check.mts";
+import { __mustBe } from "../../../type/error.mts";
 
 export function _isCodePoint(test: number): boolean {
   return Number.isSafeInteger(test) && __inRange(test as number, 0, 0x10FFFF);

@@ -1,12 +1,8 @@
+//削除
+
 import { _encodingFailed } from "../../../_internal/_utf8/main.mts";
 import { mustBe } from "../../../type/error.mts";
 import { RangeException } from "../../../_internal/range_error/mod.mts";
-
-export function mustBeNonEmptyString(target: string): RangeError {
-  return RangeException.of(
-    `${target} must be a \`string\` with a length of at least 1`,
-  );
-}
 
 export function mustBeWellFormedString(target: string): RangeError {
   return RangeException.of(`${target} must be a well-formed \`string\``);
