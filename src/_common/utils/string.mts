@@ -1,5 +1,5 @@
 import type { _codepoint } from "../../textuals/_/_type_alias/_def/_defs.mts";
-import { _assertNonEmptyString } from "../../textuals/_/_.mts";
+import { _assertNonEmptyString } from "../../textuals/_/_type_ext/_non_empty_string.mts";
 import { CodePoint, Text } from "../../textuals/mod.mts";
 import { Type } from "../../type/mod.mts";
 

@@ -1,3 +1,4 @@
+import type { _uint4 } from "./numerics/_/_type/_def/_uint4.mts";
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
@@ -9,8 +10,8 @@ export type _ToStringOptions = {
 };
 
 export interface Uuid {
-  get variant(): Type.uint4;
-  get version(): Type.uint4;
+  get variant(): _uint4;
+  get version(): _uint4;
   get timestamp(): TypeAlias.safeint | null;
   toString(options?: _ToStringOptions): string;
   // toBigUint128(): TypeAlias.biguint128;
@@ -21,12 +22,12 @@ export interface Uuid {
 const _BYTES_SIZE = 16;
 
 function _parseBytes(bytes: TypeAlias.Bytes): {
-  variant: Type.uint4;
-  version: Type.uint4;
+  variant: _uint4;
+  version: _uint4;
   timestamp: TypeAlias.safeint | null;
 } {
-  const variant = (bytes[8] >> 4) as Type.uint4;
-  const version = (bytes[6] >> 4) as Type.uint4;
+  const variant = (bytes[8] >> 4) as _uint4;
+  const version = (bytes[6] >> 4) as _uint4;
 
   let timestamp: TypeAlias.safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
@@ -40,8 +41,8 @@ function _parseBytes(bytes: TypeAlias.Bytes): {
 
 class _Uuid implements Uuid {
   readonly #bytes: TypeAlias.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
-  readonly #type: Type.uint4;
-  readonly #subtype: Type.uint4;
+  readonly #type: _uint4;
+  readonly #subtype: _uint4;
   readonly #timestamp: TypeAlias.safeint | null; // v7専用
 
   constructor(bytes: TypeAlias.Bytes) {
@@ -53,11 +54,11 @@ class _Uuid implements Uuid {
     this.#timestamp = timestamp;
   }
 
-  get variant(): Type.uint4 {
+  get variant(): _uint4 {
     return this.#type;
   }
 
-  get version(): Type.uint4 {
+  get version(): _uint4 {
     return this.#subtype;
   }
 

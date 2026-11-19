@@ -1,4 +1,5 @@
 import type { _char8 } from "../../../textuals/_/_type/_def/_char8.mts";
+import type { _uint8 } from "../../../numerics/_/_type/_def/_uint8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import {
   _byteToChar8,
@@ -23,7 +24,7 @@ export function _decode(text: string): TypeAlias.Bytes {
 export function _encode(bytes: TypeAlias.Bytes): string {
   Type.assertNonSharedUint8Array(bytes, "Input");
 
-  return Array.from(bytes, (byte) => _byteToChar8(byte as Type.uint8)).join(
+  return Array.from(bytes, (byte) => _byteToChar8(byte as _uint8)).join(
     Text.EMPTY,
   );
 }

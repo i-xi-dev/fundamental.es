@@ -3,7 +3,7 @@ import { _assertChar32, _isChar32 } from "../_/_type_alias/_char32.mts";
 import {
   _assertNonSurrogateCodePoint,
   _isNonSurrogateCodePoint,
-} from "../_internal/common.mts";
+} from "../_/_type_ext/_non_surrogate_code_point.mts";
 import { _isUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";

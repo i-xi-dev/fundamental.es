@@ -29,29 +29,6 @@ export function codePlaneOf(codePoint: _codepoint): _codeplane {
   return Math.trunc(codePoint / 0x10000) as _codeplane;
 }
 
-// export function codeBlockOf(codePoint: _codepoint): string {
-//   _assertCodePoint(codePoint, "Input");
-//   for (const [blockName, range] of Object.entries(_BLOCK_RANGE)) {
-//     if ((codePoint >= range[0]) && (codePoint <= range[1])) {
-//       return blockName;
-//     }
-//   }
-//   return "No_Block";
-// }
-
-//TODO fromBytes
-
-//TODO export function toBytes(codePoint: _codepoint): TypeAlias.Bytes {
-//   _assertCodePoint(codePoint, "Input");
-
-//   if (codePoint < 0x80) {
-//     return Uint8Array.of(codePoint);
-//   } else if (codePoint < 0x800) {
-//   } else if (codePoint < 0x10000) {
-//   } else {
-//   }
-// }
-
 //XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(
   charCodes:

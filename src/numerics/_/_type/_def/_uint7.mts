@@ -1,7 +1,7 @@
-import { uint6 } from "./uint6.mts";
+import { _uint6 } from "./_uint6.mts";
 
-export type uint7 =
-  | uint6
+export type _uint7 =
+  | _uint6
   | 0x40
   | 0x41
   | 0x42

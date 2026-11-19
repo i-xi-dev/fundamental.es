@@ -1,4 +1,5 @@
 import type { _char8 } from "../../../textuals/_/_type/_def/_char8.mts";
+import type { _uint8 } from "../../../numerics/_/_type/_def/_uint8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import {
   _byteToChar8,
@@ -11,13 +12,13 @@ import { Type } from "../../../type/mod.mts";
 import { Uint8 } from "../../../numerics/int_x/uint/mod.mts";
 
 export type _PercentOptions = {
-  encodeSet?: Array</* Type.uint8 */ number>;
+  encodeSet?: Array</* _uint8 */ number>;
   spaceAsPlus?: boolean;
 };
 
 function* _defaultEncodeSet() {
   for (let i = 0; i <= Uint8.MAX_VALUE; i++) {
-    yield i as Type.uint8;
+    yield i as _uint8;
   }
 }
 
@@ -25,7 +26,7 @@ export namespace _PercentOptions {
   export function resolve(
     options?: _PercentOptions,
   ): Required<_PercentOptions> {
-    const set: Set<Type.uint8> = new Set();
+    const set: Set<_uint8> = new Set();
 
     if (Array.isArray(options?.encodeSet) === true) {
       for (const b of options.encodeSet) {
@@ -63,11 +64,11 @@ export function _decode(
   while (i < text.length) {
     const char = text.at(i) as _char8;
 
-    let byte: Type.uint8;
+    let byte: _uint8;
     if (char === Char8.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
-        byte = Number.parseInt(byteString, 16) as Type.uint8;
+        byte = Number.parseInt(byteString, 16) as _uint8;
         i = i + 3;
       } else {
         byte = _char8ToByte(char);
@@ -120,7 +121,7 @@ export function _encode(
     ) {
       return `${Char8.PERCENT_SIGN}${Byte.toString(byte).toUpperCase()}`;
     }
-    return _byteToChar8(byte as Type.uint8);
+    return _byteToChar8(byte as _uint8);
   }).join(Text.EMPTY);
 }
 

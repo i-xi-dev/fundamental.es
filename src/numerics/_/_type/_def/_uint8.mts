@@ -1,7 +1,7 @@
-import { uint7 } from "./uint7.mts";
+import { _uint7 } from "./_uint7.mts";
 
-export type uint8 =
-  | uint7
+export type _uint8 =
+  | _uint7
   | 0x80
   | 0x81
   | 0x82

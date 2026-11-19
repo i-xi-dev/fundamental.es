@@ -1,7 +1,7 @@
-import { uint4 } from "./uint4.mts";
+import { _uint4 } from "./_uint4.mts";
 
 export type _uint5 =
-  | uint4
+  | _uint4
   | 0x10
   | 0x11
   | 0x12

@@ -1,3 +1,4 @@
+import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
   _assertSafeInt,
   _clampBigInt,
@@ -34,10 +35,10 @@ export interface BigUint<T extends bigint> {
 function _extractByte(
   unit: TypeAlias.bignnint,
   pos: TypeAlias.safeint,
-): Type.uint8 {
+): _uint8 {
   const x1 = 0x100n ** BigInt(pos);
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as Type.uint8;
+  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _uint8;
 }
 
 class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
@@ -114,8 +115,8 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
       return Uint8Array.of(Number(uint));
     }
 
-    const bytes: Array<Type.uint8> = [];
-    bytes.push(Number(uint % 0x100n) as Type.uint8);
+    const bytes: Array<_uint8> = [];
+    bytes.push(Number(uint % 0x100n) as _uint8);
     for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));

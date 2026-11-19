@@ -1,16 +1,7 @@
 //削除
 
 import { _encodingFailed } from "../../../_internal/_utf8/main.mts";
-import { mustBe } from "../../../type/error.mts";
 import { RangeException } from "../../../_internal/range_error/mod.mts";
-
-export function mustBeWellFormedString(target: string): RangeError {
-  return RangeException.of(`${target} must be a well-formed \`string\``);
-}
-
-export function mustBeNonSurrogateCodePoint(target: string): TypeError {
-  return mustBe("a non-surrogate Unicode code point of type `number`", target);
-}
 
 // uint16の配列であることが確定しているとき、サロゲートペアではない事を示す用
 // （なのでTypeErrorではない）

@@ -1,6 +1,6 @@
+import type { _uint7 } from "../numerics/_/_type/_def/_uint7.mts";
+import type { _uint8 } from "../numerics/_/_type/_def/_uint8.mts";
 import type { safeint } from "../_internal/type_alias/_def/_number_alias.mts";
-import type { uint7 } from "./_def/uint/uint7.mts";
-import type { uint8 } from "./_def/uint/uint8.mts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -46,11 +46,11 @@ export function __inRange(test: safeint, min: safeint, max: safeint): boolean {
   return (test >= min) && (test <= max);
 }
 
-export function isUint7(test: unknown): test is uint7 {
+export function isUint7(test: unknown): test is _uint7 {
   return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0x7F);
 }
 
-export function isUint8(test: unknown): test is uint8 {
+export function isUint8(test: unknown): test is _uint8 {
   return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0xFF);
 }
 
@@ -76,6 +76,6 @@ export function isNonSharedUint8Array(
   return isUint8Array(test) && isArrayBuffer(test.buffer);
 }
 
-export function isArrayOfUint8(test: unknown): test is Array<uint8> {
+export function isArrayOfUint8(test: unknown): test is Array<_uint8> {
   return Array.isArray(test) && test.every((i) => isUint8(i));
 }

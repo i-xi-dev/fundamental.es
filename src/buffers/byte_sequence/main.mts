@@ -1,3 +1,4 @@
+import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
@@ -464,9 +465,9 @@ export class ByteSequence {
     return new Uint8Array(this.toArrayBuffer());
   }
 
-  toArray(): Array<Type.uint8> {
+  toArray(): Array<_uint8> {
     // this.#assertAccessible(); toArrayBufferで実施
-    return Array.from(this.toBytes()) as Array<Type.uint8>;
+    return Array.from(this.toBytes()) as Array<_uint8>;
   }
 
   toBase64Encoded(options?: Base64.EncoderOptions): string {
@@ -602,7 +603,7 @@ export class ByteSequence {
     return ByteSequence.#wrap(buffer);
   }
 
-  byteAt(index: TypeAlias.safeint): Type.uint8 {
+  byteAt(index: TypeAlias.safeint): _uint8 {
     this.#assertAccessible();
 
     SafeInteger.assert(index, "Input");
@@ -613,10 +614,10 @@ export class ByteSequence {
       throw RangeException.rangeOverflow(this.#loadedCount, "Input");
     }
 
-    return this.#view[index] as Type.uint8;
+    return this.#view[index] as _uint8;
   }
 
-  [Symbol.iterator](): IterableIterator</* Type.uint8 */ number> {
+  [Symbol.iterator](): IterableIterator</* _uint8 */ number> {
     // this.#assertAccessible(); toBytesで実施
     return this.toBytes()[Symbol.iterator]();
   }
@@ -683,7 +684,7 @@ export class ByteSequence {
     throw RangeException.of("Insertion position is out of range"); // number型ですらないかもしれないが、そこまでは知らん
   }
 
-  #appendByte(byte: Type.uint8): void {
+  #appendByte(byte: _uint8): void {
     this.#growIfNeeded(1);
     this.#view[this.#loadedCount] = byte;
     this.#loadedCount += 1;
@@ -801,7 +802,7 @@ export namespace ByteSequence {
   }
 
   export function fromArray(
-    src: Array</* Type.uint8 */ TypeAlias.safeint>,
+    src: Array</* _uint8 */ TypeAlias.safeint>,
     options?: _FromOptions,
   ): ByteSequence {
     if (Array.isArray(src) && src.every((i) => Type.isUint8(i))) {

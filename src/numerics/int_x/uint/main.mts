@@ -1,3 +1,6 @@
+import type { _uint6 } from "../../_/_type/_def/_uint6.mts";
+import type { _uint7 } from "../../_/_type/_def/_uint7.mts";
+import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
   _assertSafeInt,
   _clampFinite,
@@ -37,10 +40,10 @@ export interface Uint<T extends TypeAlias.safeint> {
 function _extractByte(
   unit: TypeAlias.nnint,
   pos: TypeAlias.safeint,
-): Type.uint8 {
+): _uint8 {
   const x1 = 0x100 ** pos;
   const x2 = (unit >= x1) ? (unit % x1) : unit;
-  return Math.trunc(x2 / (0x100 ** (pos - 1))) as Type.uint8;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as _uint8;
 }
 
 class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
@@ -121,8 +124,8 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
       return Uint8Array.of(uint);
     }
 
-    const bytes: Array<Type.uint8> = [];
-    bytes.push((uint % 0x100) as Type.uint8);
+    const bytes: Array<_uint8> = [];
+    bytes.push((uint % 0x100) as _uint8);
     for (let i = 2; i <= 6; i++) { // 16-48
       if (this.#bitLength >= (Byte.BITS * i)) {
         bytes.push(_extractByte(uint, i));
@@ -228,9 +231,9 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 }
 
-export const Uint6: Uint<Type.uint6> = new _UintImpl(6);
-export const Uint7: Uint<Type.uint7> = new _UintImpl(7);
-export const Uint8: Uint<Type.uint8> = new _UintImpl(8);
+export const Uint6: Uint<_uint6> = new _UintImpl(6);
+export const Uint7: Uint<_uint7> = new _UintImpl(7);
+export const Uint8: Uint<_uint8> = new _UintImpl(8);
 export const Uint16: Uint<TypeAlias.uint16> = new _UintImpl(16);
 export const Uint24: Uint<TypeAlias.uint24> = new _UintImpl(24);
 export const Uint32: Uint<TypeAlias.uint32> = new _UintImpl(32);

@@ -1,3 +1,4 @@
+import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Uint16 } from "../../numerics/int_x/uint/mod.mts";
@@ -7,11 +8,11 @@ export type _Comparable =
   | SharedArrayBuffer
   | ArrayBufferView<ArrayBuffer>
   | ArrayBufferView<SharedArrayBuffer>
-  | Array</* Type.uint8 */ number>;
+  | Array</* _uint8 */ number>;
 
 export function _comparableToBytes(
   input: _Comparable,
-): TypeAlias.Bytes | Array<Type.uint8> | null {
+): TypeAlias.Bytes | Array<_uint8> | null {
   if (Type.isNonSharedUint8Array(input) === true) {
     return input;
   } else if (Type.isArrayBuffer(input) === true) {
