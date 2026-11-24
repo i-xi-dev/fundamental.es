@@ -1,10 +1,10 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
+import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
 import { RgbComponents } from "./rgb_components.mts";
 
 export abstract class _RgbColor {
-  readonly #r: TypeAlias.finite;
-  readonly #g: TypeAlias.finite;
-  readonly #b: TypeAlias.finite;
+  readonly #r: _finite;
+  readonly #g: _finite;
+  readonly #b: _finite;
 
   protected constructor(rgb: RgbComponents) {
     this.#r = rgb.r;
@@ -12,15 +12,15 @@ export abstract class _RgbColor {
     this.#b = rgb.b;
   }
 
-  get red(): TypeAlias.finite {
+  get red(): _finite {
     return this.#r;
   }
 
-  get green(): TypeAlias.finite {
+  get green(): _finite {
     return this.#g;
   }
 
-  get blue(): TypeAlias.finite {
+  get blue(): _finite {
     return this.#b;
   }
 

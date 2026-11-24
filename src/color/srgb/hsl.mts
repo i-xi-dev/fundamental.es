@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
@@ -14,9 +14,9 @@ const _L_MIN = 0;
 const _L_MAX = 1;
 
 export type Hsl = {
-  h: TypeAlias.finite;
-  s: TypeAlias.finite;
-  l: TypeAlias.finite;
+  h: _finite;
+  s: _finite;
+  l: _finite;
 };
 
 function _f(n: number, { h, s, l }: Hsl): number {

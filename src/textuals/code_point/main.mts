@@ -1,5 +1,6 @@
 import type { _codeplane } from "../_/_type/_def/_code_plane.mts";
 import type { _codepoint } from "../_/_type_alias/_def/_defs.mts";
+import type { _uint16 } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import {
   _assertCodePoint,
   _isCodePoint,
@@ -32,8 +33,8 @@ export function codePlaneOf(codePoint: _codepoint): _codeplane {
 //XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(
   charCodes:
-    /* [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] */
-    Array<TypeAlias.uint16>,
+    /* [_uint16] | [_uint16, _uint16] */
+    Array<_uint16>,
 ): _codepoint {
   if (Array.isArray(charCodes) && charCodes.every((c) => _isUint16(c))) {
     if (charCodes.length <= 0) {
@@ -59,7 +60,7 @@ export function fromUint16s(
 
 export function toUint16s(
   codePoint: _codepoint,
-): [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] {
+): [_uint16] | [_uint16, _uint16] {
   _assertCodePoint(codePoint, "Input");
   if (codePoint <= 0xFFFF) {
     return [codePoint];

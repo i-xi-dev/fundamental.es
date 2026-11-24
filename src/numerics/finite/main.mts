@@ -1,3 +1,4 @@
+import type { _finite } from "../_/_type_alias/_def/_defs.mts";
 import {
   _assertFinite,
   _clampFinite,
@@ -5,26 +6,19 @@ import {
   _normalizeFinite,
 } from "../_internal/common.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
-import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 export { _isFinite as is };
 
 export { _assertFinite as assert };
 
-export function normalize<T extends TypeAlias.finite>(
-  value: TypeAlias.finite,
-): T {
+export function normalize<T extends _finite>(value: _finite): T {
   _assertFinite(value, "Input");
   return _normalizeFinite(value);
 }
 
 // export isNonNegativeFinite
 
-export function clamp<T extends TypeAlias.finite>(
-  value: TypeAlias.finite,
-  min: T,
-  max: T,
-): T {
+export function clamp<T extends _finite>(value: _finite, min: T, max: T): T {
   _assertFinite(value, "Input");
   _assertFinite(min, "Lower bound");
   _assertFinite(max, "Upper bound");

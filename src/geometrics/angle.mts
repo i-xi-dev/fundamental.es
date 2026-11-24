@@ -1,31 +1,31 @@
+import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
 import { Char8, Text } from "../textuals/mod.mts";
 import { Finite, Radix } from "../numerics/mod.mts";
-import { TypeAlias } from "../_internal/type_alias/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
 
-function _normalizeDegrees(degrees: number): TypeAlias.finite {
+function _normalizeDegrees(degrees: number): _finite {
   Finite.assert(degrees, "Input");
 
   const t = degrees % _ONE_TURN_DEGS;
   return (t < _ZERO_TURN_DEGS) ? (t + _ONE_TURN_DEGS) : t;
 }
 
-function _radiansToDegrees(radians: number): TypeAlias.finite {
+function _radiansToDegrees(radians: number): _finite {
   Finite.assert(radians, "Input");
 
   const degrees = radians * (180 / Math.PI);
   return _normalizeDegrees(degrees);
 }
 
-function _degreesToRadians(degrees: number): TypeAlias.finite {
+function _degreesToRadians(degrees: number): _finite {
   Finite.assert(degrees, "Input");
 
   return _normalizeDegrees(degrees) * (Math.PI / 180);
 }
 
-function _gradiansToDegrees(gradians: number): TypeAlias.finite {
+function _gradiansToDegrees(gradians: number): _finite {
   Finite.assert(gradians, "Input");
 
   const degrees = gradians * (180 / 200);
@@ -34,7 +34,7 @@ function _gradiansToDegrees(gradians: number): TypeAlias.finite {
 
 //XXX _degreesToGradians
 
-function _turnsToDegrees(turns: number): TypeAlias.finite {
+function _turnsToDegrees(turns: number): _finite {
   Finite.assert(turns, "Input");
 
   const degrees = turns * _ONE_TURN_DEGS;
@@ -48,7 +48,7 @@ type _DmsStringOptions = {
 };
 
 function _degreesToDmsString(
-  degrees: TypeAlias.finite,
+  degrees: _finite,
   options?: _DmsStringOptions,
 ): string {
   Finite.assert(degrees, "Input");
@@ -71,29 +71,29 @@ function _degreesToDmsString(
 }
 
 export class Angle {
-  #degrees: TypeAlias.finite;
+  #degrees: _finite;
 
-  private constructor(degrees: TypeAlias.finite) {
+  private constructor(degrees: _finite) {
     this.#degrees = _normalizeDegrees(degrees);
   }
 
-  static ofDegrees(degrees: /* TypeAlias.finite */ number): Angle {
+  static ofDegrees(degrees: /* _finite */ number): Angle {
     return new Angle(degrees);
   }
 
-  static ofRadians(radians: /* TypeAlias.finite */ number): Angle {
+  static ofRadians(radians: /* _finite */ number): Angle {
     return new Angle(_radiansToDegrees(radians));
   }
 
-  toDegrees(): TypeAlias.finite {
+  toDegrees(): _finite {
     return this.#degrees;
   }
 
-  toRadians(): TypeAlias.finite {
+  toRadians(): _finite {
     return _degreesToRadians(this.#degrees);
   }
 
-  valueOf(): TypeAlias.finite {
+  valueOf(): _finite {
     return this.#degrees;
   }
 

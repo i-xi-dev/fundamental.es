@@ -1,3 +1,4 @@
+import type { _safeint } from "./numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint4 } from "./numerics/_/_type/_def/_uint4.mts";
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
@@ -12,7 +13,7 @@ export type _ToStringOptions = {
 export interface Uuid {
   get variant(): _uint4;
   get version(): _uint4;
-  get timestamp(): TypeAlias.safeint | null;
+  get timestamp(): _safeint | null;
   toString(options?: _ToStringOptions): string;
   // toBigUint128(): TypeAlias.biguint128;
   toBytes(): TypeAlias.Bytes;
@@ -24,12 +25,12 @@ const _BYTES_SIZE = 16;
 function _parseBytes(bytes: TypeAlias.Bytes): {
   variant: _uint4;
   version: _uint4;
-  timestamp: TypeAlias.safeint | null;
+  timestamp: _safeint | null;
 } {
   const variant = (bytes[8] >> 4) as _uint4;
   const version = (bytes[6] >> 4) as _uint4;
 
-  let timestamp: TypeAlias.safeint | null = null;
+  let timestamp: _safeint | null = null;
   if ([0x8, 0x9, 0xA, 0xB].includes(variant) && (version === 7)) {
     let work = (new DataView(bytes.buffer)).getBigUint64(0);
     work = work >> 16n;
@@ -43,7 +44,7 @@ class _Uuid implements Uuid {
   readonly #bytes: TypeAlias.Bytes; // 16バイトかつ（バリアントが8,9,A,B or Nil UUID or MAX UUID）
   readonly #type: _uint4;
   readonly #subtype: _uint4;
-  readonly #timestamp: TypeAlias.safeint | null; // v7専用
+  readonly #timestamp: _safeint | null; // v7専用
 
   constructor(bytes: TypeAlias.Bytes) {
     this.#bytes = bytes;
@@ -62,7 +63,7 @@ class _Uuid implements Uuid {
     return this.#subtype;
   }
 
-  get timestamp(): TypeAlias.safeint | null {
+  get timestamp(): _safeint | null {
     return this.#timestamp;
   }
 
@@ -118,14 +119,14 @@ function _generateRandom(): TypeAlias.Bytes {
   return bytes;
 }
 
-function _timestamp(): TypeAlias.safeint {
+function _timestamp(): _safeint {
   const { performance } = globalThis;
   return Math.trunc(performance.timeOrigin + performance.now());
 }
 
 const _v7Counter = (function* () {
-  let last: TypeAlias.safeint = Number.MIN_SAFE_INTEGER;
-  let cnt: TypeAlias.safeint = 0;
+  let last: _safeint = Number.MIN_SAFE_INTEGER;
+  let cnt: _safeint = 0;
   while (true) {
     const curr = _timestamp();
     if (last < curr) {
@@ -238,7 +239,7 @@ export namespace Uuid {
   }
 }
 
-// const _nameBasedVersions = new Map<DigestAlgorithm, Type.safeint>([
+// const _nameBasedVersions = new Map<DigestAlgorithm, _safeint>([
 //   [Md5, 3],
 //   [Sha1, 5],
 // ]);

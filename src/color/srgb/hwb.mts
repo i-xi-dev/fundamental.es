@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
 import { _Hsl } from "./hsl.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
@@ -15,9 +15,9 @@ const _B_MIN = 0;
 const _B_MAX = 1;
 
 export type Hwb = {
-  h: TypeAlias.finite;
-  w: TypeAlias.finite;
-  b: TypeAlias.finite;
+  h: _finite;
+  w: _finite;
+  b: _finite;
 };
 
 export namespace _Hwb {

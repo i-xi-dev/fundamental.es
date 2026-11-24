@@ -3,11 +3,12 @@ import type {
   _char32,
   _codepoint,
 } from "../_/_type_alias/_def/_defs.mts";
+import type {
+  _safeint,
+  _uint16,
+} from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import {
-  _assertWellFormedString,
-  _isWellFormedString,
-} from "../_internal/common.mts";
+import { _assertWellFormedString } from "../_/_type_ext/_well_formed_string.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { Type } from "../../type/mod.mts";
@@ -15,9 +16,11 @@ import { Type } from "../../type/mod.mts";
 export {
   _assertNonEmptyString as assertNonEmpty,
   _isNonEmptyString as isNonEmpty,
-} from "../_/_.mts";
+} from "../_/_type_ext/_non_empty_string.mts";
 
-export { _isWellFormedString as isWellFormed };
+export {
+  _isWellFormedString as isWellFormed,
+} from "../_/_type_ext/_well_formed_string.mts";
 
 export { _assertWellFormedString as assertWellFormed };
 
@@ -74,7 +77,7 @@ export function toChar16Iterable(text: string, options?: Options): _char16s {
 export function toUint16Iterable(
   text: string,
   options?: Options,
-): IterableIterator<TypeAlias.uint16, void, void> {
+): IterableIterator<_uint16, void, void> {
   Type.assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
@@ -131,10 +134,7 @@ export function toCodePointIterable(
 
 //TODO toGraphemeIterable
 
-export function char16CountOf(
-  text: string,
-  options?: Options,
-): TypeAlias.safeint {
+export function char16CountOf(text: string, options?: Options): _safeint {
   Type.assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
@@ -143,10 +143,7 @@ export function char16CountOf(
   return text.length;
 }
 
-export function char32CountOf(
-  text: string,
-  options?: Options,
-): TypeAlias.safeint {
+export function char32CountOf(text: string, options?: Options): _safeint {
   Type.assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");

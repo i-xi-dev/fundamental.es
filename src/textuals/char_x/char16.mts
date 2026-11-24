@@ -1,8 +1,8 @@
 import type { _char16 } from "../_/_type_alias/_def/_defs.mts";
+import type { _uint16 } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _assertChar16 } from "../_/_type_alias/_char16.mts";
 import { _assertUint16 } from "../../numerics/_internal/common.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
-import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 
 // 孤立サロゲートを許容するが、
 // 孤立サロゲートはUTF-8符号化/復号 は出来ないので、fromBytes/toBytesでは孤立サロゲートはエラーになる
@@ -29,12 +29,12 @@ import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 //   return _Utf8.encode(char, false);
 // }
 
-export function fromUint16(charCode: TypeAlias.uint16): _char16 {
+export function fromUint16(charCode: _uint16): _char16 {
   _assertUint16(charCode, "Input");
   return String.fromCharCode(charCode); // as _char16;
 }
 
-export function toUint16(char: _char16): TypeAlias.uint16 {
+export function toUint16(char: _char16): _uint16 {
   _assertChar16(char, "Input");
-  return char.charCodeAt(0); // as TypeAlias.uint16;
+  return char.charCodeAt(0); // as _uint16;
 }

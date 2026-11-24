@@ -1,4 +1,4 @@
-import type { uint8 } from "./_def.mts";
+import type { _uint8 } from "../numerics/_/_type/_def/_uint8.mts";
 import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
@@ -7,7 +7,6 @@ import {
   isIterable,
   isNonSharedUint8Array,
   isString,
-  isUint8,
 } from "./check.mts";
 
 export function assertBigInt(
@@ -43,15 +42,6 @@ export function assertAsyncIterable<T>(
 ): asserts test is AsyncIterable<T> {
   if (isAsyncIterable(test) !== true) {
     throw Exception.mustBeAsyncIterable(targetLabel);
-  }
-}
-
-export function assertUint8(
-  test: unknown,
-  targetLabel: string,
-): asserts test is uint8 {
-  if (isUint8(test) !== true) {
-    throw Exception.mustBeUintN(8, targetLabel);
   }
 }
 

@@ -1,3 +1,4 @@
+import type { _safeint } from "../../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _BYTES_PER_CHAR } from "./_common.mts";
 import { _DecodeFunc, _DecoderInit } from "../_decoder_init.mts";
@@ -15,7 +16,7 @@ function _regulate(
   bytesToDecode: TypeAlias.Bytes;
   pendingBytes: TypeAlias.Bytes | null;
 } {
-  const p: Array<TypeAlias.safeint> = [];
+  const p: Array<_safeint> = [];
   let x: TypeAlias.Bytes = bytes;
 
   if ((allowPending === true) && (x.length > 0)) {

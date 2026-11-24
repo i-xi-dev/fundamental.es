@@ -5,7 +5,7 @@ type _FromOptions = {
 };
 
 export class CharSequence {
-  readonly #char16Count: TypeAlias.safeint;
+  readonly #char16Count: _safeint;
   readonly #value: string;
 
   private constructor(value: string) {

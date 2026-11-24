@@ -1,11 +1,12 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _finite, _safeint } from "../_/_type_alias/_def/_defs.mts";
+import { _mustBeUintN } from "../_/_type/_uint_n.mts";
 import { _NumericException } from "./error/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
 import { Type } from "../../type/mod.mts";
 
 // numeric -----------------------------------------------------------
 
-export function _isNonNegative(value: TypeAlias.finite | bigint): boolean {
+export function _isNonNegative(value: _finite | bigint): boolean {
   return (Type.isNumber(value) || Type.isBigInt(value)) && (value >= 0);
 }
 
@@ -24,14 +25,12 @@ export function _assertFinite(
   }
 }
 
-export function _normalizeFinite<T extends TypeAlias.finite>(
-  value: TypeAlias.finite,
-): T {
+export function _normalizeFinite<T extends _finite>(value: _finite): T {
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
-export function _clampFinite<T extends TypeAlias.finite>(
-  value: TypeAlias.finite,
+export function _clampFinite<T extends _finite>(
+  value: _finite,
   min: T,
   max: T,
 ): T {
@@ -53,27 +52,27 @@ export function _assertSafeInt(
   }
 }
 
-export function _isNonNegativeSafeInt(test: TypeAlias.safeint): boolean {
+export function _isNonNegativeSafeInt(test: _safeint): boolean {
   return _isSafeInt(test) && ((test as number) >= 0);
 }
 
-export function _isEvenSafeInt(test: TypeAlias.safeint): boolean {
+export function _isEvenSafeInt(test: _safeint): boolean {
   return _isSafeInt(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(
-  value: TypeAlias.finite,
+  value: _finite,
   roundingMode?: RoundingMode,
-): TypeAlias.safeint {
+): _safeint {
   if (Number.isInteger(value)) {
-    return _normalizeFinite<TypeAlias.safeint>(value);
+    return _normalizeFinite<_safeint>(value);
   }
 
-  const integralPart = _normalizeFinite<TypeAlias.safeint>(Math.trunc(value));
+  const integralPart = _normalizeFinite<_safeint>(Math.trunc(value));
   const integralPartIsEven = _isEvenSafeInt(integralPart);
 
-  const nearestP = _normalizeFinite<TypeAlias.safeint>(Math.ceil(value));
-  const nearestN = _normalizeFinite<TypeAlias.safeint>(Math.floor(value));
+  const nearestP = _normalizeFinite<_safeint>(Math.ceil(value));
+  const nearestN = _normalizeFinite<_safeint>(Math.floor(value));
   const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
@@ -173,6 +172,6 @@ export function _assertUint16(
   targetLabel: string,
 ): void {
   if (_isUint16(test) !== true) {
-    throw Type.Exception.mustBeUintN(16, targetLabel);
+    throw _mustBeUintN(16, targetLabel);
   }
 }

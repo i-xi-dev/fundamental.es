@@ -1,7 +1,6 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
-import { Char8 } from "../../textuals/char_x/mod.mts";
+import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
+import { _assertUint8 } from "../../numerics/_/_type/_uint8.mts";
 import { Radix } from "../../numerics/radix.mts";
-import { Type } from "../../type/mod.mts";
 
 /** Bits per byte */
 export const BITS = 8;
@@ -9,7 +8,7 @@ export const BITS = 8;
 // export type ToStringOptions = {
 //   radix?: Radix;
 //   upperCase?: boolean;
-//   minLength?: TypeAlias.safeint;
+//   minLength?: _safeint;
 // };
 
 // const _minPaddedLength = {
@@ -17,7 +16,7 @@ export const BITS = 8;
 //   [Radix.OCTAL]: 3,
 //   [Radix.DECIMAL]: 3,
 //   [Radix.HEXADECIMAL]: 2,
-// } as const satisfies Record<Radix, TypeAlias.safeint>;
+// } as const satisfies Record<Radix, _safeint>;
 
 // function _resolveToStringOptions(
 //   options?: ToStringOptions,
@@ -35,8 +34,8 @@ export const BITS = 8;
 //   return { radix, upperCase, minLength };
 // }
 
-export function toString(byte: TypeAlias.safeint): string {
-  Type.assertUint8(byte, "Input");
+export function toString(byte: _safeint): string {
+  _assertUint8(byte, "Input");
 
   // const resolvedOptions = _resolveToStringOptions(options);
   // let str = byte.toString(resolvedOptions.radix);
@@ -64,7 +63,7 @@ export function toString(byte: TypeAlias.safeint): string {
 //   }
 // }
 
-// export function fromString(str: string): Type.uint8 {
+// export function fromString(str: string): _uint8 {
 //   Type.assertString(input, "Input");
 //   _assertNonEmptyString(str, "Input");
 //
@@ -74,5 +73,5 @@ export function toString(byte: TypeAlias.safeint): string {
 //     throw new Error("TODO");
 //   }
 //
-//   return Number.parseInt(str, radix) as Type.uint8;
+//   return Number.parseInt(str, radix) as _uint8;
 // }

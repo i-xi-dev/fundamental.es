@@ -1,6 +1,7 @@
+import type { _safeint } from "../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint7 } from "../numerics/_/_type/_def/_uint7.mts";
 import type { _uint8 } from "../numerics/_/_type/_def/_uint8.mts";
-import type { safeint } from "../_internal/type_alias/_def/_number_alias.mts";
+import { _isUint8 } from "../numerics/_/_type/_uint8.mts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -42,16 +43,16 @@ export function isAsyncIterable<T>(test: unknown): test is AsyncIterable<T> {
     ) !== true);
 }
 
-export function __inRange(test: safeint, min: safeint, max: safeint): boolean {
+export function __inRange(
+  test: _safeint,
+  min: _safeint,
+  max: _safeint,
+): boolean {
   return (test >= min) && (test <= max);
 }
 
 export function isUint7(test: unknown): test is _uint7 {
-  return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0x7F);
-}
-
-export function isUint8(test: unknown): test is _uint8 {
-  return Number.isSafeInteger(test) && __inRange(test as safeint, 0, 0xFF);
+  return Number.isSafeInteger(test) && __inRange(test as _safeint, 0, 0x7F);
 }
 
 export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm違いの場合
@@ -77,5 +78,5 @@ export function isNonSharedUint8Array(
 }
 
 export function isArrayOfUint8(test: unknown): test is Array<_uint8> {
-  return Array.isArray(test) && test.every((i) => isUint8(i));
+  return Array.isArray(test) && test.every((i) => _isUint8(i));
 }

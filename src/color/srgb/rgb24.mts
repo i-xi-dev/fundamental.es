@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/_internal/common.mts";
 import { _SRgbRgb } from "./_rgb.mts";
@@ -6,9 +6,9 @@ import { RoundingMode, SafeInteger, Uint8 } from "../../numerics/mod.mts";
 import { Type } from "../../type/mod.mts";
 
 export type Rgb24 = {
-  r: /* Type.uint8 */ TypeAlias.safeint;
-  g: /* Type.uint8 */ TypeAlias.safeint;
-  b: /* Type.uint8 */ TypeAlias.safeint;
+  r: /* _uint8 */ _safeint;
+  g: /* _uint8 */ _safeint;
+  b: /* _uint8 */ _safeint;
 };
 
 export namespace _Rgb24 {

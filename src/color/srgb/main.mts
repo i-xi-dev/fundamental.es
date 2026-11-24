@@ -1,3 +1,4 @@
+import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
@@ -40,23 +41,23 @@ export class SRgbColor extends _RgbColor {
     return this.#_hwb;
   }
 
-  get hue(): TypeAlias.finite {
+  get hue(): _finite {
     return this.#hsl.h;
   }
 
-  get saturation(): TypeAlias.finite {
+  get saturation(): _finite {
     return this.#hsl.s;
   }
 
-  get lightness(): TypeAlias.finite {
+  get lightness(): _finite {
     return this.#hsl.l;
   }
 
-  get whiteness(): TypeAlias.finite {
+  get whiteness(): _finite {
     return this.#hwb.w;
   }
 
-  get blackness(): TypeAlias.finite {
+  get blackness(): _finite {
     return this.#hwb.b;
   }
 
@@ -163,7 +164,7 @@ export class SRgbColor extends _RgbColor {
     }
   }
 
-  plusHue(relativeHue: TypeAlias.finite): SRgbColor {
+  plusHue(relativeHue: _finite): SRgbColor {
     const { h, s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: h + relativeHue,
@@ -172,7 +173,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  withHue(absoluteHue: TypeAlias.finite): SRgbColor {
+  withHue(absoluteHue: _finite): SRgbColor {
     const { s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h: absoluteHue,
@@ -181,7 +182,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  plusSaturation(relativeSaturation: TypeAlias.finite): SRgbColor {
+  plusSaturation(relativeSaturation: _finite): SRgbColor {
     const { h, s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h,
@@ -190,7 +191,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  withSaturation(absoluteSaturation: TypeAlias.finite): SRgbColor {
+  withSaturation(absoluteSaturation: _finite): SRgbColor {
     const { h, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h,
@@ -199,7 +200,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  plusLightness(relativeLightness: TypeAlias.finite): SRgbColor {
+  plusLightness(relativeLightness: _finite): SRgbColor {
     const { h, s, l } = this.#hsl;
     return SRgbColor.fromHsl({
       h,
@@ -208,7 +209,7 @@ export class SRgbColor extends _RgbColor {
     });
   }
 
-  withLightness(absoluteLightness: TypeAlias.finite): SRgbColor {
+  withLightness(absoluteLightness: _finite): SRgbColor {
     const { h, s } = this.#hsl;
     return SRgbColor.fromHsl({
       h,

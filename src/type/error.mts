@@ -1,4 +1,4 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
+import type { _safeint } from "../numerics/_/_type_alias/_def/_defs.mts";
 
 function _message(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
@@ -30,15 +30,8 @@ export function mustBeAsyncIterable(target: string): TypeError {
   return mustBe("an `AsyncIterable`", target);
 }
 
-export function mustBeUintN(
-  bits: TypeAlias.safeint,
-  target: string,
-): TypeError {
-  return mustBe(`a ${bits}-bit unsigned integer of type \`number\``, target);
-}
-
 export function mustBeBigUintN(
-  bits: TypeAlias.safeint,
+  bits: _safeint,
   target: string,
 ): TypeError {
   return mustBe(`a ${bits}-bit unsigned integer of type \`bigint\``, target);

@@ -1,11 +1,11 @@
-import type { TypeAlias } from "../_internal/type_alias/mod.mts";
+import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../numerics/_internal/common.mts";
 import { Type } from "../type/mod.mts";
 
 export interface RgbComponents {
-  readonly r: TypeAlias.finite;
-  readonly g: TypeAlias.finite;
-  readonly b: TypeAlias.finite;
+  readonly r: _finite;
+  readonly g: _finite;
+  readonly b: _finite;
 }
 
 export namespace _RgbComponents {
@@ -35,8 +35,8 @@ export namespace _RgbComponents {
 
   export function normalize(
     src: RgbComponents,
-    min: TypeAlias.finite,
-    max: TypeAlias.finite,
+    min: _finite,
+    max: _finite,
   ): RgbComponents {
     // 型チェック済みであるものとする
 

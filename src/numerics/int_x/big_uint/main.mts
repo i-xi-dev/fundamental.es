@@ -1,3 +1,4 @@
+import type { _safeint } from "../../_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
   _assertSafeInt,
@@ -17,8 +18,8 @@ import { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 export interface BigUint<T extends bigint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
-  get BIT_LENGTH(): TypeAlias.safeint;
-  get BYTE_LENGTH(): TypeAlias.safeint;
+  get BIT_LENGTH(): _safeint;
+  get BYTE_LENGTH(): _safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T;
   toBytes(uint: /* T */ bigint, byteOrder?: ByteOrder): TypeAlias.Bytes;
@@ -26,28 +27,25 @@ export interface BigUint<T extends bigint> {
   bitwiseOr(a: /* T */ bigint, b: /* T */ bigint): T;
   bitwiseXOr(a: /* T */ bigint, b: /* T */ bigint): T;
   //XXX bitwiseNot()
-  rotateLeft(value: /* T */ bigint, offset: TypeAlias.safeint): T;
+  rotateLeft(value: /* T */ bigint, offset: _safeint): T;
   //XXX rotateRight()
   truncateFrom(value: bigint): T;
   saturateFrom(value: bigint): T;
 }
 
-function _extractByte(
-  unit: TypeAlias.bignnint,
-  pos: TypeAlias.safeint,
-): _uint8 {
+function _extractByte(unit: TypeAlias.bignnint, pos: _safeint): _uint8 {
   const x1 = 0x100n ** BigInt(pos);
   const x2 = (unit >= x1) ? (unit % x1) : unit;
   return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _uint8;
 }
 
 class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
-  readonly #bitLength: TypeAlias.safeint; // non-negative integer
-  readonly #byteLength: TypeAlias.safeint; // non-negative integer
+  readonly #bitLength: _safeint; // non-negative integer
+  readonly #byteLength: _safeint; // non-negative integer
   readonly #size: TypeAlias.bignnint;
   readonly #range: ClosedRange<TypeAlias.bignnint, T>;
 
-  constructor(bitLength: TypeAlias.safeint) {
+  constructor(bitLength: _safeint) {
     if (_isSafeInt(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
@@ -69,11 +67,11 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     return this.#range.max;
   }
 
-  get BIT_LENGTH(): TypeAlias.safeint {
+  get BIT_LENGTH(): _safeint {
     return this.#bitLength;
   }
 
-  get BYTE_LENGTH(): TypeAlias.safeint {
+  get BYTE_LENGTH(): _safeint {
     return this.#byteLength;
   }
 
@@ -163,7 +161,7 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
     return this.#bitwiseOp(a, b, this.#xOr);
   }
 
-  rotateLeft(value: bigint, offset: TypeAlias.safeint): T {
+  rotateLeft(value: bigint, offset: _safeint): T {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }

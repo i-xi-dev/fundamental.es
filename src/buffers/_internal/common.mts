@@ -1,3 +1,4 @@
+import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
@@ -69,7 +70,7 @@ export function _bytesEquals(
   return _bytesStartsWith(self, other);
 }
 
-export function _randomBytes(byteLength: TypeAlias.safeint): ArrayBuffer {
+export function _randomBytes(byteLength: _safeint): ArrayBuffer {
   const buffer = new ArrayBuffer(byteLength);
   let bytesSpan: Uint8Array<ArrayBuffer>;
   let filled = 0;

@@ -1,5 +1,5 @@
 import type { _char32 } from "../../_/_type_alias/_def/_defs.mts";
-import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
+import type { _safeint } from "../../../numerics/_/_type_alias/_def/_defs.mts";
 import { _DecodeResult } from "../_decoder_init.mts";
 import { _EncodeResult } from "../_encoder_init.mts";
 import { _regulateForEncoder } from "../_common.mts";
@@ -20,7 +20,7 @@ export function _decodeShared(
   const dstRunes: Array<_char32> = [];
 
   // let writtenRuneCount = 0;
-  const p: Array<TypeAlias.safeint> = [];
+  const p: Array<_safeint> = [];
 
   const srcByteCount = srcView.byteLength;
   const loopCount = (srcByteCount % _BYTES_PER_RUNE)

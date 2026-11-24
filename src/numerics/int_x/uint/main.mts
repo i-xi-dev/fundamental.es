@@ -1,3 +1,10 @@
+import type {
+  _safeint,
+  _uint16,
+  _uint24,
+  _uint32,
+  _uint48,
+} from "../../_/_type_alias/_def/_defs.mts";
 import type { _uint6 } from "../../_/_type/_def/_uint6.mts";
 import type { _uint7 } from "../../_/_type/_def/_uint7.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
@@ -7,6 +14,7 @@ import {
   _isSafeInt,
 } from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
+import { _mustBeUintN } from "../../_/_type/_uint_n.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { Byte } from "../../../buffers/byte/mod.mts";
 import { ByteOrder } from "../../../buffers/byte_order.mts";
@@ -16,43 +24,43 @@ import { RangeException } from "../../../_internal/range_error/mod.mts";
 import { Type } from "../../../type/mod.mts";
 import { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 
-export interface Uint<T extends TypeAlias.safeint> {
+export interface Uint<T extends _safeint> {
   get MIN_VALUE(): T;
   get MAX_VALUE(): T;
-  get BIT_LENGTH(): TypeAlias.safeint;
-  get BYTE_LENGTH(): TypeAlias.safeint;
+  get BIT_LENGTH(): _safeint;
+  get BYTE_LENGTH(): _safeint;
   get [Symbol.toStringTag](): string;
   fromBytes(bytes: TypeAlias.Bytes, byteOrder?: ByteOrder): T;
   toBytes(
-    uint: /* T */ TypeAlias.safeint,
+    uint: /* T */ _safeint,
     byteOrder?: ByteOrder,
   ): TypeAlias.Bytes;
-  bitwiseAnd(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
-  bitwiseOr(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
-  bitwiseXOr(a: /* T */ TypeAlias.safeint, b: /* T */ TypeAlias.safeint): T;
+  bitwiseAnd(a: /* T */ _safeint, b: /* T */ _safeint): T;
+  bitwiseOr(a: /* T */ _safeint, b: /* T */ _safeint): T;
+  bitwiseXOr(a: /* T */ _safeint, b: /* T */ _safeint): T;
   //XXX bitwiseNot()
-  rotateLeft(value: /* T */ TypeAlias.safeint, offset: TypeAlias.safeint): T;
+  rotateLeft(value: /* T */ _safeint, offset: _safeint): T;
   //XXX rotateRight()
-  truncateFrom(value: TypeAlias.safeint): T;
-  saturateFrom(value: TypeAlias.safeint): T;
+  truncateFrom(value: _safeint): T;
+  saturateFrom(value: _safeint): T;
 }
 
 function _extractByte(
-  unit: TypeAlias.nnint,
-  pos: TypeAlias.safeint,
+  unit: _safeint,
+  pos: _safeint,
 ): _uint8 {
   const x1 = 0x100 ** pos;
   const x2 = (unit >= x1) ? (unit % x1) : unit;
   return Math.trunc(x2 / (0x100 ** (pos - 1))) as _uint8;
 }
 
-class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
-  readonly #bitLength: TypeAlias.safeint; // non-negative integer
-  readonly #byteLength: TypeAlias.safeint; // non-negative integer
-  readonly #size: TypeAlias.nnint;
-  readonly #range: ClosedRange<TypeAlias.safeint, T>;
+class _UintImpl<T extends _safeint> implements Uint<T> {
+  readonly #bitLength: _safeint; // non-negative integer
+  readonly #byteLength: _safeint; // non-negative integer
+  readonly #size: _safeint;
+  readonly #range: ClosedRange<_safeint, T>;
 
-  constructor(bitLength: TypeAlias.safeint) {
+  constructor(bitLength: _safeint) {
     if (
       _isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)
     ) {
@@ -76,11 +84,11 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     return this.#range.max;
   }
 
-  get BIT_LENGTH(): TypeAlias.safeint {
+  get BIT_LENGTH(): _safeint {
     return this.#bitLength;
   }
 
-  get BYTE_LENGTH(): TypeAlias.safeint {
+  get BYTE_LENGTH(): _safeint {
     return this.#byteLength;
   }
 
@@ -113,9 +121,9 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     return result as T;
   }
 
-  toBytes(uint: TypeAlias.safeint, byteOrder?: ByteOrder): TypeAlias.Bytes {
+  toBytes(uint: _safeint, byteOrder?: ByteOrder): TypeAlias.Bytes {
     if (this.#range.contains(uint) !== true) {
-      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
+      throw _mustBeUintN(this.#bitLength, "Input");
     }
 
     const resolvedByteOrder = Io.resolveByteOrder(byteOrder);
@@ -137,12 +145,12 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
   }
 
   #bitwiseOp(
-    a: TypeAlias.safeint,
-    b: TypeAlias.safeint,
-    f: (fa: TypeAlias.safeint, fb: TypeAlias.safeint) => T,
+    a: _safeint,
+    b: _safeint,
+    f: (fa: _safeint, fb: _safeint) => T,
   ): T {
     if ((this.#range.contains(a) && this.#range.contains(b)) !== true) {
-      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
+      throw _mustBeUintN(this.#bitLength, "Input");
     }
 
     if (this.#bitLength < 32) {
@@ -159,33 +167,33 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     return this.fromBytes(r);
   }
 
-  #and(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  #and(a: _safeint, b: _safeint): T {
     return (a & b) as T;
   }
 
-  #or(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  #or(a: _safeint, b: _safeint): T {
     return (a | b) as T;
   }
 
-  #xOr(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  #xOr(a: _safeint, b: _safeint): T {
     return (a ^ b) as T;
   }
 
-  bitwiseAnd(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  bitwiseAnd(a: _safeint, b: _safeint): T {
     return this.#bitwiseOp(a, b, this.#and);
   }
 
-  bitwiseOr(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  bitwiseOr(a: _safeint, b: _safeint): T {
     return this.#bitwiseOp(a, b, this.#or);
   }
 
-  bitwiseXOr(a: TypeAlias.safeint, b: TypeAlias.safeint): T {
+  bitwiseXOr(a: _safeint, b: _safeint): T {
     return this.#bitwiseOp(a, b, this.#xOr);
   }
 
-  rotateLeft(value: TypeAlias.safeint, offset: TypeAlias.safeint): T {
+  rotateLeft(value: _safeint, offset: _safeint): T {
     if (this.#range.contains(value) !== true) {
-      throw Type.Exception.mustBeUintN(this.#bitLength, "Input");
+      throw _mustBeUintN(this.#bitLength, "Input");
     }
     _assertSafeInt(offset, "Offset");
 
@@ -210,7 +218,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     //TODO bigint使うと遅い
   }
 
-  truncateFrom(value: TypeAlias.safeint): T {
+  truncateFrom(value: _safeint): T {
     _assertSafeInt(value, "Input");
 
     if (this.#range.contains(value)) {
@@ -224,7 +232,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
     }
   }
 
-  saturateFrom(value: TypeAlias.safeint): T {
+  saturateFrom(value: _safeint): T {
     _assertSafeInt(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
@@ -234,7 +242,7 @@ class _UintImpl<T extends TypeAlias.nnint> implements Uint<T> {
 export const Uint6: Uint<_uint6> = new _UintImpl(6);
 export const Uint7: Uint<_uint7> = new _UintImpl(7);
 export const Uint8: Uint<_uint8> = new _UintImpl(8);
-export const Uint16: Uint<TypeAlias.uint16> = new _UintImpl(16);
-export const Uint24: Uint<TypeAlias.uint24> = new _UintImpl(24);
-export const Uint32: Uint<TypeAlias.uint32> = new _UintImpl(32);
-export const Uint48: Uint<TypeAlias.uint48> = new _UintImpl(48);
+export const Uint16: Uint<_uint16> = new _UintImpl(16);
+export const Uint24: Uint<_uint24> = new _UintImpl(24);
+export const Uint32: Uint<_uint32> = new _UintImpl(32);
+export const Uint48: Uint<_uint48> = new _UintImpl(48);

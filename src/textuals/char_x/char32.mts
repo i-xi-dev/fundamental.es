@@ -1,4 +1,5 @@
 import type { _char32, _codepoint } from "../_/_type_alias/_def/_defs.mts";
+import type { _uint16 } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _assertChar32, _isChar32 } from "../_/_type_alias/_char32.mts";
 import {
   _assertNonSurrogateCodePoint,
@@ -55,8 +56,8 @@ export function toBytes(char: _char32): TypeAlias.Bytes {
 //XXX fromUint16s(...charCodes) の方が良いか？
 export function fromUint16s(
   charCodes:
-    /* [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] */
-    Array<TypeAlias.uint16>,
+    /* [_uint16] | [_uint16, _uint16] */
+    Array<_uint16>,
 ): _char32 {
   if (Array.isArray(charCodes) && charCodes.every((c) => _isUint16(c))) {
     if (charCodes.length <= 0) {
@@ -83,9 +84,7 @@ export function fromUint16s(
   }
 }
 
-export function toUint16s(
-  char: _char32,
-): [TypeAlias.uint16] | [TypeAlias.uint16, TypeAlias.uint16] {
+export function toUint16s(char: _char32): [_uint16] | [_uint16, _uint16] {
   _assertChar32(char, "Input");
 
   const codePoint = char.codePointAt(0)!;

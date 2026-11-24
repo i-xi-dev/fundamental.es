@@ -6,6 +6,7 @@ import {
   _char8ToByte,
 } from "../../../textuals/_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
+import { _isUint8 } from "../../../numerics/_/_type/_uint8.mts";
 import { Byte } from "../../byte/mod.mts";
 import { Char8, CodePoint, Text } from "../../../textuals/mod.mts";
 import { Type } from "../../../type/mod.mts";
@@ -30,7 +31,7 @@ export namespace _PercentOptions {
 
     if (Array.isArray(options?.encodeSet) === true) {
       for (const b of options.encodeSet) {
-        if (Type.isUint8(b) === true) {
+        if (_isUint8(b) === true) {
           set.add(b);
         }
       }

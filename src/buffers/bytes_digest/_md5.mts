@@ -1,3 +1,7 @@
+import type {
+  _safeint,
+  _uint32,
+} from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Byte } from "../byte/mod.mts";
 import { ByteOrder } from "../byte_order.mts";
@@ -9,10 +13,10 @@ const _BLOCK_BYTES = 64;
 const _DATA_SIZE_BYTES = 8;
 
 type _ContextState = [
-  a: TypeAlias.uint32,
-  b: TypeAlias.uint32,
-  c: TypeAlias.uint32,
-  d: TypeAlias.uint32,
+  a: _uint32,
+  b: _uint32,
+  c: _uint32,
+  d: _uint32,
 ];
 
 const _S = {
@@ -46,10 +50,10 @@ function _initContextState(): _ContextState {
 }
 
 function _f(
-  x: TypeAlias.uint32,
-  y: TypeAlias.uint32,
-  z: TypeAlias.uint32,
-): /*uint32*/ TypeAlias.safeint {
+  x: _uint32,
+  y: _uint32,
+  z: _uint32,
+): /* _uint32 */ _safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, y),
   //   Uint32.bitwiseAnd(Uint32.bitwiseXOr(x, 0xFFFFFFFF), z),
@@ -58,10 +62,10 @@ function _f(
 }
 
 function _g(
-  x: TypeAlias.uint32,
-  y: TypeAlias.uint32,
-  z: TypeAlias.uint32,
-): /*uint32*/ TypeAlias.safeint {
+  x: _uint32,
+  y: _uint32,
+  z: _uint32,
+): /* _uint32 */ _safeint {
   // return Uint32.bitwiseOr(
   //   Uint32.bitwiseAnd(x, z),
   //   Uint32.bitwiseAnd(y, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
@@ -70,19 +74,19 @@ function _g(
 }
 
 function _h(
-  x: TypeAlias.uint32,
-  y: TypeAlias.uint32,
-  z: TypeAlias.uint32,
-): /*uint32*/ TypeAlias.safeint {
+  x: _uint32,
+  y: _uint32,
+  z: _uint32,
+): /* _uint32 */ _safeint {
   // return Uint32.bitwiseXOr(Uint32.bitwiseXOr(x, y), z); この後ビット演算するわけではないので
   return (x ^ y ^ z);
 }
 
 function _i(
-  x: TypeAlias.uint32,
-  y: TypeAlias.uint32,
-  z: TypeAlias.uint32,
-): /*uint32*/ TypeAlias.safeint {
+  x: _uint32,
+  y: _uint32,
+  z: _uint32,
+): /* _uint32 */ _safeint {
   // return Uint32.bitwiseXOr(
   //   y,
   //   Uint32.bitwiseOr(x, Uint32.bitwiseXOr(z, 0xFFFFFFFF)),
@@ -90,62 +94,62 @@ function _i(
   return (y ^ (x | (z ^ 0xFFFFFFFF)));
 }
 
-function _rotateLeft(x: TypeAlias.safeint, n: _S): TypeAlias.uint32 {
+function _rotateLeft(x: _safeint, n: _S): _uint32 {
   const sx = Uint32.truncateFrom(x);
   return Uint32.rotateLeft(sx, n);
 }
 
 function _ff(
-  a: TypeAlias.uint32,
-  b: TypeAlias.uint32,
-  c: TypeAlias.uint32,
-  d: TypeAlias.uint32,
-  x: TypeAlias.uint32,
+  a: _uint32,
+  b: _uint32,
+  c: _uint32,
+  d: _uint32,
+  x: _uint32,
   s: _S,
-  ac: TypeAlias.uint32,
-): TypeAlias.uint32 {
+  ac: _uint32,
+): _uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _f(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _gg(
-  a: TypeAlias.uint32,
-  b: TypeAlias.uint32,
-  c: TypeAlias.uint32,
-  d: TypeAlias.uint32,
-  x: TypeAlias.uint32,
+  a: _uint32,
+  b: _uint32,
+  c: _uint32,
+  d: _uint32,
+  x: _uint32,
   s: _S,
-  ac: TypeAlias.uint32,
-): TypeAlias.uint32 {
+  ac: _uint32,
+): _uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _g(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _hh(
-  a: TypeAlias.uint32,
-  b: TypeAlias.uint32,
-  c: TypeAlias.uint32,
-  d: TypeAlias.uint32,
-  x: TypeAlias.uint32,
+  a: _uint32,
+  b: _uint32,
+  c: _uint32,
+  d: _uint32,
+  x: _uint32,
   s: _S,
-  ac: TypeAlias.uint32,
-): TypeAlias.uint32 {
+  ac: _uint32,
+): _uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _h(b, c, d) + x + ac, s) + b,
   );
 }
 
 function _ii(
-  a: TypeAlias.uint32,
-  b: TypeAlias.uint32,
-  c: TypeAlias.uint32,
-  d: TypeAlias.uint32,
-  x: TypeAlias.uint32,
+  a: _uint32,
+  b: _uint32,
+  c: _uint32,
+  d: _uint32,
+  x: _uint32,
   s: _S,
-  ac: TypeAlias.uint32,
-): TypeAlias.uint32 {
+  ac: _uint32,
+): _uint32 {
   return Uint32.truncateFrom(
     _rotateLeft(a + _i(b, c, d) + x + ac, s) + b,
   );
@@ -153,7 +157,7 @@ function _ii(
 
 function _readBlock(
   buffer: ArrayBuffer,
-  byteOffset: TypeAlias.safeint,
+  byteOffset: _safeint,
 ): Uint32Array {
   const result = new Uint32Array(_BLOCK_BYTES / Uint32.BYTE_LENGTH);
 
@@ -166,7 +170,7 @@ function _readBlock(
 
 function _updateContextState(
   sourceBuffer: ArrayBuffer,
-  byteOffset: TypeAlias.safeint,
+  byteOffset: _safeint,
   contextState: _ContextState,
 ): void {
   const block = _readBlock(sourceBuffer, byteOffset);
