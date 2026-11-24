@@ -1,4 +1,8 @@
 import type { _finite, _safeint } from "../_/_type_alias/_def/_defs.mts";
+import {
+  _isSafeInteger,
+  _mustBeSafeInteger,
+} from "../_/_type_alias/_safe_int.mts";
 import { _mustBeUintN } from "../_/_type/_uint_n.mts";
 import { _NumericException } from "./error/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
@@ -26,22 +30,12 @@ export function _clampFinite<T extends _finite>(
 
 // safeint -----------------------------------------------------------
 
-export function _isSafeInt(test: number): boolean {
-  return Number.isSafeInteger(test);
-}
-
-export function _assertSafeInt(test: number, label: string): void {
-  if (_isSafeInt(test) !== true) {
-    throw _NumericException.mustBeSafeInteger(label);
-  }
-}
-
 export function _isNonNegativeSafeInt(test: _safeint): boolean {
-  return _isSafeInt(test) && ((test as number) >= 0);
+  return _isSafeInteger(test) && ((test as number) >= 0);
 }
 
 export function _isEvenSafeInt(test: _safeint): boolean {
-  return _isSafeInt(test) && ((test % 2) === 0);
+  return _isSafeInteger(test) && ((test % 2) === 0);
 }
 
 export function _roundToSafeInt(

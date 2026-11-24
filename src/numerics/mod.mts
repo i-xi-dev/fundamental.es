@@ -3,6 +3,11 @@ export {
   _isFinite as isFinite,
 } from "./_/_type_alias/_finite.mts";
 
+export {
+  _assertSafeInteger as assertSafeInteger,
+  _isSafeInteger as isSafeInteger,
+} from "./_/_type_alias/_safe_int.mts";
+
 //TODO
 
 export { _isNonNegative as isNonNegative } from "./_internal/common.mts";

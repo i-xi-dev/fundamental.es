@@ -1,6 +1,11 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
 import {
+  _assertSafeInteger,
+  _isSafeInteger,
+  _mustBeSafeInteger,
+} from "../../numerics/_/_type_alias/_safe_int.mts";
+import {
   _bytesEquals,
   _bytesStartsWith,
   _Comparable,
@@ -129,10 +134,10 @@ export class ByteSequence {
   }
 
   static create(capacity: _safeint, maxCapacity?: _safeint): ByteSequence {
-    SafeInteger.assert(capacity, "Capacity");
+    _assertSafeInteger(capacity, "Capacity");
     SafeInteger.assertNonNegative(capacity, "Capacity");
     if (Type.isNullOrUndefined(maxCapacity) !== true) {
-      SafeInteger.assert(maxCapacity, "Max-capacity");
+      _assertSafeInteger(maxCapacity, "Max-capacity");
       SafeInteger.assertNonNegative(maxCapacity, "Max-capacity");
     }
 
@@ -160,10 +165,7 @@ export class ByteSequence {
       ? Uint8.saturateFrom(byte)
       : Uint8.truncateFrom(byte);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       this.#view[options.insertAt] = clamped;
     } else {
       this.#appendByte(clamped);
@@ -182,10 +184,7 @@ export class ByteSequence {
     Type.assertArrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       this.#setBytes(new Uint8Array(sourceBuffer), options.insertAt);
     } else {
       this.#appendBytes(new Uint8Array(sourceBuffer));
@@ -205,10 +204,7 @@ export class ByteSequence {
     // これだと例えば["1"]は通ってしまう（Uint8Array.fromは"1"を1に暗黙変換するので）
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for (const uint8 of uint8s) {
         if (offset < this.#loadedCount) {
@@ -239,10 +235,7 @@ export class ByteSequence {
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for await (const uint8 of uint8s) {
         if (offset < this.#loadedCount) {
@@ -271,10 +264,7 @@ export class ByteSequence {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for (const uintN of uintNs) {
         if (offset < this.#loadedCount) {
@@ -303,10 +293,7 @@ export class ByteSequence {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for (const biguintN of biguintNs) {
         if (offset < this.#loadedCount) {
@@ -335,10 +322,7 @@ export class ByteSequence {
 
     const f = _uintClamper(uT, options?.clampMode);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for await (const uintN of uintNs) {
         if (offset < this.#loadedCount) {
@@ -367,10 +351,7 @@ export class ByteSequence {
 
     const f = _biguintClamper(uT, options?.clampMode);
 
-    if (
-      Type.isNumber(options?.insertAt) &&
-      SafeInteger.is(options.insertAt)
-    ) {
+    if (Type.isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
       let offset = options.insertAt;
       for await (const biguintN of biguintNs) {
         if (offset < this.#loadedCount) {
@@ -432,7 +413,7 @@ export class ByteSequence {
 
   fillZeros(byteLength: _safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    SafeInteger.assert(byteLength, "Input");
+    _assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
@@ -441,7 +422,7 @@ export class ByteSequence {
 
   fillRandom(byteLength: _safeint, options?: _LoadOptions_2): this {
     this.#assertAccessible();
-    SafeInteger.assert(byteLength, "Input");
+    _assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
@@ -563,15 +544,15 @@ export class ByteSequence {
 
     if (
       (Type.isNullOrUndefined(start) ||
-        (Type.isNumber(start) && SafeInteger.is(start))) !== true
+        (Type.isNumber(start) && _isSafeInteger(start))) !== true
     ) {
-      throw _NumericException.mustBeSafeInteger("Start index");
+      throw _mustBeSafeInteger("Start index");
     }
     if (
       (Type.isNullOrUndefined(end) ||
-        (Type.isNumber(end) && SafeInteger.is(end))) !== true
+        (Type.isNumber(end) && _isSafeInteger(end))) !== true
     ) {
-      throw _NumericException.mustBeSafeInteger("End index");
+      throw _mustBeSafeInteger("End index");
     }
 
     const adjStart = start ?? 0;
@@ -602,7 +583,7 @@ export class ByteSequence {
   byteAt(index: _safeint): _uint8 {
     this.#assertAccessible();
 
-    SafeInteger.assert(index, "Input");
+    _assertSafeInteger(index, "Input");
     if (index < 0) {
       throw RangeException.rangeUnderflow(0, "Input");
     }
@@ -760,7 +741,7 @@ export namespace ByteSequence {
     byteLength: _safeint,
     options?: _FromOptions,
   ) {
-    SafeInteger.assert(byteLength, "Input");
+    _assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillZeros(byteLength);
   }
@@ -769,7 +750,7 @@ export namespace ByteSequence {
     byteLength: _safeint,
     options?: _FromOptions,
   ) {
-    SafeInteger.assert(byteLength, "Input");
+    _assertSafeInteger(byteLength, "Input");
     SafeInteger.assertNonNegative(byteLength, "Input");
     return _create(byteLength, options).fillRandom(byteLength);
   }

@@ -5,10 +5,10 @@ import type {
 } from "../../_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
-  _assertSafeInt,
-  _clampBigInt,
-  _isSafeInt,
-} from "../../_internal/common.mts";
+  _assertSafeInteger,
+  _isSafeInteger,
+} from "../../_/_type_alias/_safe_int.mts";
+import { _clampBigInt } from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _normalizeOffset } from "../_utils.mts";
 import { BigIntegerClosedRange, type ClosedRange } from "../../range/mod.mts";
@@ -50,7 +50,7 @@ class _BigUintImpl<T extends bigint> implements BigUint<T> {
   readonly #range: ClosedRange<bigint, T>;
 
   constructor(bitLength: _safeint) {
-    if (_isSafeInt(bitLength) && (bitLength > 0)) {
+    if (_isSafeInteger(bitLength) && (bitLength > 0)) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
       this.#size = 2n ** BigInt(bitLength);
@@ -169,7 +169,7 @@ class _BigUintImpl<T extends bigint> implements BigUint<T> {
     if (this.#range.contains(value) !== true) {
       throw Type.Exception.mustBeBigUintN(this.#bitLength, "Input");
     }
-    _assertSafeInt(offset, "Offset");
+    _assertSafeInteger(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {

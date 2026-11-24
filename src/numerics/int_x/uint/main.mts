@@ -9,10 +9,10 @@ import type { _uint6 } from "../../_/_type/_def/_uint6.mts";
 import type { _uint7 } from "../../_/_type/_def/_uint7.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
-  _assertSafeInt,
-  _clampFinite,
-  _isSafeInt,
-} from "../../_internal/common.mts";
+  _assertSafeInteger,
+  _isSafeInteger,
+} from "../../_/_type_alias/_safe_int.mts";
+import { _clampFinite } from "../../_internal/common.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _mustBeUintN } from "../../_/_type/_uint_n.mts";
 import { _normalizeOffset } from "../_utils.mts";
@@ -62,7 +62,7 @@ class _UintImpl<T extends _safeint> implements Uint<T> {
 
   constructor(bitLength: _safeint) {
     if (
-      _isSafeInt(bitLength) && (bitLength > 0) && (bitLength <= 48)
+      _isSafeInteger(bitLength) && (bitLength > 0) && (bitLength <= 48) //TODO inrange
     ) {
       this.#bitLength = bitLength;
       this.#byteLength = Math.ceil(bitLength / Byte.BITS);
@@ -195,7 +195,7 @@ class _UintImpl<T extends _safeint> implements Uint<T> {
     if (this.#range.contains(value) !== true) {
       throw _mustBeUintN(this.#bitLength, "Input");
     }
-    _assertSafeInt(offset, "Offset");
+    _assertSafeInteger(offset, "Offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.#bitLength);
     if (normalizedOffset === 0) {
@@ -219,7 +219,7 @@ class _UintImpl<T extends _safeint> implements Uint<T> {
   }
 
   truncateFrom(value: _safeint): T {
-    _assertSafeInt(value, "Input");
+    _assertSafeInteger(value, "Input");
 
     if (this.#range.contains(value)) {
       return value as T;
@@ -233,7 +233,7 @@ class _UintImpl<T extends _safeint> implements Uint<T> {
   }
 
   saturateFrom(value: _safeint): T {
-    _assertSafeInt(value, "Input");
+    _assertSafeInteger(value, "Input");
 
     return _clampFinite<T>(value, this.#range.min, this.#range.max);
   }
