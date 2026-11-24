@@ -24,14 +24,11 @@ export namespace _Rgb24 {
     return false;
   }
 
-  export function assert(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is Rgb24 {
+  export function assert(test: unknown, label: string): asserts test is Rgb24 {
     if (is(test) !== true) {
       throw Type.Exception.mustBe(
         "an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
-        targetLabel,
+        label,
       );
     }
   }

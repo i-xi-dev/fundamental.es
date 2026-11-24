@@ -23,12 +23,12 @@ export namespace _RgbComponents {
 
   export function assert(
     test: unknown,
-    targetLabel: string,
+    label: string,
   ): asserts test is RgbComponents {
     if (is(test) !== true) {
       throw Type.Exception.mustBe(
         "an object with the `number`-type properties `r`, `g`, and `b`",
-        targetLabel,
+        label,
       );
     }
   }

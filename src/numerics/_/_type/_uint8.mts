@@ -9,9 +9,9 @@ export function _isUint8(test: unknown): test is _uint8 {
 
 export function _assertUint8(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is _uint8 {
   if (_isUint8(test) !== true) {
-    throw _mustBeUintN(8, targetLabel);
+    throw _mustBeUintN(8, label);
   }
 }

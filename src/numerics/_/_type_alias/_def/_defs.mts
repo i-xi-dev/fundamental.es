@@ -9,3 +9,7 @@ export type _uint16 = _safeint;
 export type _uint24 = _safeint;
 export type _uint32 = _safeint;
 export type _uint48 = _safeint;
+
+// biguintN
+export type _biguint64 = bigint;
+export type _biguint128 = bigint;

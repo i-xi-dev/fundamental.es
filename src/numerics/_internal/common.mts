@@ -16,12 +16,9 @@ export function _isFinite(test: number): boolean {
   return Number.isFinite(test);
 }
 
-export function _assertFinite(
-  test: number,
-  targetLabel: string,
-): void {
+export function _assertFinite(test: number, label: string): void {
   if (Number.isFinite(test) !== true) {
-    throw _NumericException.mustBeFinite(targetLabel);
+    throw _NumericException.mustBeFinite(label);
   }
 }
 
@@ -43,12 +40,9 @@ export function _isSafeInt(test: number): boolean {
   return Number.isSafeInteger(test);
 }
 
-export function _assertSafeInt(
-  test: number,
-  targetLabel: string,
-): void {
+export function _assertSafeInt(test: number, label: string): void {
   if (_isSafeInt(test) !== true) {
-    throw _NumericException.mustBeSafeInteger(targetLabel);
+    throw _NumericException.mustBeSafeInteger(label);
   }
 }
 
@@ -159,19 +153,4 @@ export function _clampBigInt<T extends bigint>(
   max: T,
 ): T {
   return _minBigIntOf(_maxBigIntOf(value, min), max) as T;
-}
-
-// -------------------------------------------------------------------
-
-export function _isUint16(test: number): boolean {
-  return Number.isSafeInteger(test) && (test >= 0) && (test < 0x10000);
-}
-
-export function _assertUint16(
-  test: number,
-  targetLabel: string,
-): void {
-  if (_isUint16(test) !== true) {
-    throw _mustBeUintN(16, targetLabel);
-  }
 }

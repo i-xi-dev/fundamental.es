@@ -1,4 +1,7 @@
-import type { _safeint } from "./numerics/_/_type_alias/_def/_defs.mts";
+import type {
+  _biguint128,
+  _safeint,
+} from "./numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint4 } from "./numerics/_/_type/_def/_uint4.mts";
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
@@ -15,7 +18,7 @@ export interface Uuid {
   get version(): _uint4;
   get timestamp(): _safeint | null;
   toString(options?: _ToStringOptions): string;
-  // toBigUint128(): TypeAlias.biguint128;
+  // toBigUint128(): _biguint128;
   toBytes(): TypeAlias.Bytes;
   equals(other: Uuid | TypeAlias.Bytes | string): boolean;
 }
@@ -80,7 +83,7 @@ class _Uuid implements Uuid {
     return (options?.asUrn === true) ? `urn:uuid:${str}` : str;
   }
 
-  // toBigUint128(): TypeAlias.biguint128 {
+  // toBigUint128(): _biguint128 {
   //   return BigInt(`0x${this.#bytes.toHex()}`);
   // }
 
@@ -177,7 +180,7 @@ function _isUuidString(test: unknown): test is string {
   return Type.isString(test) && _uuidRegex.test(test);
 }
 
-function _isUuidBigInt(test: unknown): test is TypeAlias.biguint128 {
+function _isUuidBigInt(test: unknown): test is _biguint128 {
   return Type.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
     (test <= BigUint128.MAX_VALUE);
 }
@@ -218,7 +221,7 @@ export namespace Uuid {
     return _fromString(str);
   }
 
-  // export function fromBigUint128(uint: TypeAlias.biguint128): Uuid {
+  // export function fromBigUint128(uint: _biguint128): Uuid {
   //   if (_isUuidBigInt(uint) !== true) {
   //     throw Type.Exception.mustBe("an UUID of type `bigint`", "Input");
   //   }

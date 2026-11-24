@@ -9,8 +9,8 @@ function _mustBeCodePoint(target: string): TypeError {
   return __mustBe("a Unicode code point of type `number`", target);
 }
 
-export function _assertCodePoint(test: number, targetLabel: string): void {
+export function _assertCodePoint(test: number, label: string): void {
   if (_isCodePoint(test) !== true) {
-    throw _mustBeCodePoint(targetLabel);
+    throw _mustBeCodePoint(label);
   }
 }

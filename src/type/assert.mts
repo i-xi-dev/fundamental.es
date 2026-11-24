@@ -11,54 +11,54 @@ import {
 
 export function assertBigInt(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is bigint {
   if (isBigInt(test) !== true) {
-    throw Exception.mustBeBigInt(targetLabel);
+    throw Exception.mustBeBigInt(label);
   }
 }
 
 export function assertString(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is string {
   if (isString(test) !== true) {
-    throw Exception.mustBeString(targetLabel);
+    throw Exception.mustBeString(label);
   }
 }
 
 export function assertIterable<T>(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is Iterable<T> {
   if (isIterable(test) !== true) {
-    throw Exception.mustBeIterable(targetLabel);
+    throw Exception.mustBeIterable(label);
   }
 }
 
 export function assertAsyncIterable<T>(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is AsyncIterable<T> {
   if (isAsyncIterable(test) !== true) {
-    throw Exception.mustBeAsyncIterable(targetLabel);
+    throw Exception.mustBeAsyncIterable(label);
   }
 }
 
 export function assertArrayBuffer(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is ArrayBuffer {
   if (isArrayBuffer(test) !== true) {
-    throw Exception.mustBeArrayBuffer(targetLabel);
+    throw Exception.mustBeArrayBuffer(label);
   }
 }
 
 export function assertNonSharedUint8Array(
   test: unknown,
-  targetLabel: string,
+  label: string,
 ): asserts test is Uint8Array<ArrayBuffer> {
   if (isNonSharedUint8Array(test) !== true) {
-    throw Exception.mustBeNonSharedUint8Array(targetLabel);
+    throw Exception.mustBeNonSharedUint8Array(label);
   }
 }

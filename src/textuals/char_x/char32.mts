@@ -5,7 +5,7 @@ import {
   _assertNonSurrogateCodePoint,
   _isNonSurrogateCodePoint,
 } from "../_/_type_ext/_non_surrogate_code_point.mts";
-import { _isUint16 } from "../../numerics/_internal/common.mts";
+import { _isUint16 } from "../../numerics/_/_type_alias/_uint16.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";

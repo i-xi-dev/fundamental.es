@@ -1,4 +1,8 @@
-import type { _safeint } from "../../_/_type_alias/_def/_defs.mts";
+import type {
+  _biguint128,
+  _biguint64,
+  _safeint,
+} from "../../_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
 import {
   _assertSafeInt,
@@ -33,17 +37,17 @@ export interface BigUint<T extends bigint> {
   saturateFrom(value: bigint): T;
 }
 
-function _extractByte(unit: TypeAlias.bignnint, pos: _safeint): _uint8 {
+function _extractByte(unit: bigint, pos: _safeint): _uint8 {
   const x1 = 0x100n ** BigInt(pos);
   const x2 = (unit >= x1) ? (unit % x1) : unit;
   return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as _uint8;
 }
 
-class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
+class _BigUintImpl<T extends bigint> implements BigUint<T> {
   readonly #bitLength: _safeint; // non-negative integer
   readonly #byteLength: _safeint; // non-negative integer
-  readonly #size: TypeAlias.bignnint;
-  readonly #range: ClosedRange<TypeAlias.bignnint, T>;
+  readonly #size: bigint;
+  readonly #range: ClosedRange<bigint, T>;
 
   constructor(bitLength: _safeint) {
     if (_isSafeInt(bitLength) && (bitLength > 0)) {
@@ -191,5 +195,5 @@ class _BigUintImpl<T extends TypeAlias.bignnint> implements BigUint<T> {
   }
 }
 
-export const BigUint64: BigUint<TypeAlias.biguint64> = new _BigUintImpl(64);
-export const BigUint128: BigUint<TypeAlias.biguint128> = new _BigUintImpl(128);
+export const BigUint64: BigUint<_biguint64> = new _BigUintImpl(64);
+export const BigUint128: BigUint<_biguint128> = new _BigUintImpl(128);

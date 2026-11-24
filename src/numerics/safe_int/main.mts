@@ -17,12 +17,9 @@ export { _assertSafeInt as assert };
 
 export { _isNonNegativeSafeInt as isNonNegative };
 
-export function assertNonNegative(
-  test: _safeint,
-  targetLabel: string,
-): void {
+export function assertNonNegative(test: _safeint, label: string): void {
   if ((_isNonNegativeSafeInt(test)) !== true) {
-    throw _NumericException.mustBeNonNegativeSafeInteger(targetLabel);
+    throw _NumericException.mustBeNonNegativeSafeInteger(label);
   }
 }
 

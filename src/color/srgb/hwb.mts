@@ -33,14 +33,11 @@ export namespace _Hwb {
     return false;
   }
 
-  export function assert(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is Hwb {
+  export function assert(test: unknown, label: string): asserts test is Hwb {
     if (is(test) !== true) {
       throw Type.Exception.mustBe(
         "an object with the `number`-type properties `h`, `w`, and `b`",
-        targetLabel,
+        label,
       );
     }
   }

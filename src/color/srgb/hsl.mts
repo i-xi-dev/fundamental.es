@@ -38,14 +38,11 @@ export namespace _Hsl {
     return false;
   }
 
-  export function assert(
-    test: unknown,
-    targetLabel: string,
-  ): asserts test is Hsl {
+  export function assert(test: unknown, label: string): asserts test is Hsl {
     if (is(test) !== true) {
       throw Type.Exception.mustBe(
         "an object with the `number`-type properties `h`, `s`, and `l`",
-        targetLabel,
+        label,
       );
     }
   }

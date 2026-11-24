@@ -1,7 +1,7 @@
 import type { _char16 } from "../_/_type_alias/_def/_defs.mts";
 import type { _uint16 } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _assertChar16 } from "../_/_type_alias/_char16.mts";
-import { _assertUint16 } from "../../numerics/_internal/common.mts";
+import { _assertUint16 } from "../../numerics/_/_type_alias/_uint16.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 
 // 孤立サロゲートを許容するが、
