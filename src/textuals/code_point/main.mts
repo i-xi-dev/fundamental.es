@@ -6,7 +6,7 @@ import {
   _isCodePoint,
 } from "../_/_type_alias/_code_point.mts";
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
-import { _isUint16 } from "../../numerics/_internal/common.mts";
+import { _isUint16 } from "../../numerics/_/_type_alias/_uint16.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { Char8 } from "../char_x/mod.mts";
 import { Radix } from "../../numerics/mod.mts";

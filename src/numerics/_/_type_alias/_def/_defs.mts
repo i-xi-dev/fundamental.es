@@ -13,3 +13,6 @@ export type _uint48 = _safeint;
 // biguintN
 export type _biguint64 = bigint;
 export type _biguint128 = bigint;
+
+// number | bigint
+export type _numeric = number | bigint;

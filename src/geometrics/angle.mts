@@ -1,32 +1,33 @@
 import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
+import { _assertFinite } from "../numerics/_/_type_alias/_finite.mts";
 import { Char8, Text } from "../textuals/mod.mts";
-import { Finite, Radix } from "../numerics/mod.mts";
+import { Radix } from "../numerics/mod.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
 
 function _normalizeDegrees(degrees: number): _finite {
-  Finite.assert(degrees, "Input");
+  _assertFinite(degrees, "Input");
 
   const t = degrees % _ONE_TURN_DEGS;
   return (t < _ZERO_TURN_DEGS) ? (t + _ONE_TURN_DEGS) : t;
 }
 
 function _radiansToDegrees(radians: number): _finite {
-  Finite.assert(radians, "Input");
+  _assertFinite(radians, "Input");
 
   const degrees = radians * (180 / Math.PI);
   return _normalizeDegrees(degrees);
 }
 
 function _degreesToRadians(degrees: number): _finite {
-  Finite.assert(degrees, "Input");
+  _assertFinite(degrees, "Input");
 
   return _normalizeDegrees(degrees) * (Math.PI / 180);
 }
 
 function _gradiansToDegrees(gradians: number): _finite {
-  Finite.assert(gradians, "Input");
+  _assertFinite(gradians, "Input");
 
   const degrees = gradians * (180 / 200);
   return _normalizeDegrees(degrees);
@@ -35,7 +36,7 @@ function _gradiansToDegrees(gradians: number): _finite {
 //XXX _degreesToGradians
 
 function _turnsToDegrees(turns: number): _finite {
-  Finite.assert(turns, "Input");
+  _assertFinite(turns, "Input");
 
   const degrees = turns * _ONE_TURN_DEGS;
   return _normalizeDegrees(degrees);
@@ -51,7 +52,7 @@ function _degreesToDmsString(
   degrees: _finite,
   options?: _DmsStringOptions,
 ): string {
-  Finite.assert(degrees, "Input");
+  _assertFinite(degrees, "Input");
 
   const normalizedDegrees = _normalizeDegrees(degrees);
 

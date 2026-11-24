@@ -1,15 +1,7 @@
 import type { _finite } from "../_/_type_alias/_def/_defs.mts";
-import {
-  _assertFinite,
-  _clampFinite,
-  _isFinite,
-  _normalizeFinite,
-} from "../_internal/common.mts";
+import { _assertFinite } from "../_/_type_alias/_finite.mts";
+import { _clampFinite, _normalizeFinite } from "../_internal/common.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
-
-export { _isFinite as is };
-
-export { _assertFinite as assert };
 
 export function normalize<T extends _finite>(value: _finite): T {
   _assertFinite(value, "Input");

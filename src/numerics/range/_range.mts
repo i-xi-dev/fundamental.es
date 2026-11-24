@@ -1,7 +1,7 @@
-import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import type { _numeric } from "../_/_type_alias/_def/_defs.mts";
 
 export interface _Range<
-  BaseT extends TypeAlias.numeric,
+  BaseT extends _numeric,
   T extends BaseT = BaseT,
 > {
   contains(test: BaseT): /* test is T */ boolean;

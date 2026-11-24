@@ -1,3 +1,10 @@
+export {
+  _assertFinite as assertFinite,
+  _isFinite as isFinite,
+} from "./_/_type_alias/_finite.mts";
+
+//TODO
+
 export { _isNonNegative as isNonNegative } from "./_internal/common.mts";
 export {
   type BigUint,

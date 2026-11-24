@@ -12,16 +12,6 @@ export function _isNonNegative(value: _finite | bigint): boolean {
 
 // finite ------------------------------------------------------------
 
-export function _isFinite(test: number): boolean {
-  return Number.isFinite(test);
-}
-
-export function _assertFinite(test: number, label: string): void {
-  if (Number.isFinite(test) !== true) {
-    throw _NumericException.mustBeFinite(label);
-  }
-}
-
 export function _normalizeFinite<T extends _finite>(value: _finite): T {
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }

@@ -1,6 +1,6 @@
 import type { _finite, _safeint } from "../_/_type_alias/_def/_defs.mts";
+import { _assertFinite } from "../_/_type_alias/_finite.mts";
 import {
-  _assertFinite,
   _assertSafeInt,
   _isEvenSafeInt,
   _isNonNegativeSafeInt,
