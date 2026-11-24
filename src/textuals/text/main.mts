@@ -8,10 +8,10 @@ import type {
   _uint16,
 } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _assertString } from "../../_/_type/_string.mts";
 import { _assertWellFormedString } from "../_/_type_ext/_well_formed_string.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
-import { Type } from "../../type/mod.mts";
 
 export {
   _assertNonEmptyString as assertNonEmpty,
@@ -59,7 +59,7 @@ type _char16s = IterableIterator<_char16, void, void>;
 //XXX fromChar16AsyncIterable
 
 export function toChar16Iterable(text: string, options?: Options): _char16s {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
@@ -78,7 +78,7 @@ export function toUint16Iterable(
   text: string,
   options?: Options,
 ): IterableIterator<_uint16, void, void> {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
@@ -99,7 +99,7 @@ type _char32s = IterableIterator<_char32, void, void>;
 //XXX fromChar32AsyncIterable
 
 export function toChar32Iterable(text: string, options?: Options): _char32s {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
@@ -119,7 +119,7 @@ export function toCodePointIterable(
   text: string,
   options?: Options,
 ): IterableIterator<_codepoint, void, void> {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
@@ -135,7 +135,7 @@ export function toCodePointIterable(
 //TODO toGraphemeIterable
 
 export function char16CountOf(text: string, options?: Options): _safeint {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }
@@ -144,7 +144,7 @@ export function char16CountOf(text: string, options?: Options): _safeint {
 }
 
 export function char32CountOf(text: string, options?: Options): _safeint {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (options?.allowMalformed !== true) {
     _assertWellFormedString(text, "Input");
   }

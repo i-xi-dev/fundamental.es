@@ -1,9 +1,9 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
+import { _isString } from "../../_/_type/_string.mts";
 import { EMPTY } from "../text/main.mts";
 import { EncoderStream } from "./encoder_stream.mts";
 import { Fallback } from "./fallback.mts";
-import { Type } from "../../type/mod.mts";
 
 export abstract class _EncoderStreamBase implements EncoderStream {
   readonly #init: _EncoderInit;
@@ -34,7 +34,7 @@ export abstract class _EncoderStreamBase implements EncoderStream {
         controller: TransformStreamDefaultController<TypeAlias.Bytes>,
       ): void {
         try {
-          if (Type.isString(self()._pendingText) === true) {
+          if (_isString(self()._pendingText) === true) {
             const { encodedBytes } = init.encode(self()._pendingText!); // エンコードエラーになるはず
             controller.enqueue(encodedBytes);
           }

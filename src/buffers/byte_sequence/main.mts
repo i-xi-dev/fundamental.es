@@ -5,6 +5,7 @@ import {
   _isSafeInteger,
   _mustBeSafeInteger,
 } from "../../numerics/_/_type_alias/_safe_int.mts";
+import { _assertString } from "../../_/_type/_string.mts";
 import {
   _bytesEquals,
   _bytesStartsWith,
@@ -795,7 +796,7 @@ export namespace ByteSequence {
     base64: string,
     options?: Base64.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.assertString(base64, "Input");
+    _assertString(base64, "Input");
 
     const bytes = Uint8Array.fromBase64(base64, options);
     return fromBytes(bytes, options);
@@ -805,7 +806,7 @@ export namespace ByteSequence {
     binstr: string,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.assertString(binstr, "Input");
+    _assertString(binstr, "Input");
 
     const bytes = BinaryString.decode(binstr);
     return fromBytes(bytes, options);
@@ -815,7 +816,7 @@ export namespace ByteSequence {
     hex: string,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.assertString(hex, "Input");
+    _assertString(hex, "Input");
 
     const bytes = Uint8Array.fromHex(hex);
     return fromBytes(bytes, options);
@@ -825,7 +826,7 @@ export namespace ByteSequence {
     percent: string,
     options?: Percent.DecoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.assertString(percent, "Input");
+    _assertString(percent, "Input");
 
     const bytes = Percent.decode(percent, options);
     return fromBytes(bytes, options);
@@ -836,7 +837,7 @@ export namespace ByteSequence {
     text: string,
     options?: TextEncoderOptions & _FromOptions,
   ): ByteSequence {
-    Type.assertString(text, "Input");
+    _assertString(text, "Input");
 
     const bytes = _Utf8.encode(text, options?.fatal === true);
     return fromBytes(bytes, options);

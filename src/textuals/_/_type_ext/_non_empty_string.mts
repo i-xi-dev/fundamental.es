@@ -1,8 +1,8 @@
+import { _isString } from "../../../_/_type/_string.mts";
 import { RangeException as __RangeException } from "../../../_internal/range_error/mod.mts";
-import { __isString } from "../../../type/check.mts";
 
 export function _isNonEmptyString(test: string): boolean {
-  return __isString(test) && (test.length > 0);
+  return _isString(test) && (test.length > 0);
 }
 
 function _mustBeNonEmptyString(target: string): RangeError {

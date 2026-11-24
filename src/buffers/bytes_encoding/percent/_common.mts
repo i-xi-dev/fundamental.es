@@ -1,6 +1,7 @@
 import type { _char8 } from "../../../textuals/_/_type/_def/_char8.mts";
 import type { _uint8 } from "../../../numerics/_/_type/_def/_uint8.mts";
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
+import { _assertString } from "../../../_/_type/_string.mts";
 import {
   _byteToChar8,
   _char8ToByte,
@@ -52,7 +53,7 @@ export function _decode(
   text: string,
   options: Required<_PercentOptions>,
 ): TypeAlias.Bytes {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
   if (_regex.test(text) !== true) {
     throw _Error.Syntax.mustBePercentEncoded("Input");
   }

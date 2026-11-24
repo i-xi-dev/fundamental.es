@@ -1,8 +1,8 @@
+import { _isString } from "../../../_/_type/_string.mts";
 import { RangeException as __RangeException } from "../../../_internal/range_error/mod.mts";
-import { __isString } from "../../../type/check.mts";
 
 export function _isWellFormedString(test: string): boolean {
-  return __isString(test) && test.isWellFormed();
+  return _isString(test) && test.isWellFormed();
 }
 
 function _mustBeWellFormedString(target: string): RangeError {

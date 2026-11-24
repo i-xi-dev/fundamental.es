@@ -37,7 +37,7 @@ export function encode(
   littleEndian: boolean,
   options?: EncoderOptions,
 ): TypeAlias.Bytes {
-  Type.assertString(text, "Input");
+  _assertString(text, "Input");
 
   if (littleEndian === true) {
     return _staticEncodeLe(text, options);

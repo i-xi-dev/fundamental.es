@@ -18,10 +18,6 @@ export function mustBeBigInt(target: string): TypeError {
   return mustBe("a `bigint`", target);
 }
 
-export function mustBeString(target: string): TypeError {
-  return mustBe("a `string`", target);
-}
-
 export function mustBeIterable(target: string): TypeError {
   return mustBe("an `Iterable`", target);
 }

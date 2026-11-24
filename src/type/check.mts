@@ -11,14 +11,6 @@ export function isNumber(test: unknown): test is number {
   return (typeof test === "number");
 }
 
-export function isString(test: unknown): test is string {
-  return (typeof test === "string");
-}
-
-export function __isString(test: unknown): test is string {
-  return (typeof test === "string");
-}
-
 export function isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);
 }
@@ -49,10 +41,6 @@ export function __inRange(
   max: _safeint,
 ): boolean {
   return (test >= min) && (test <= max);
-}
-
-export function isUint7(test: unknown): test is _uint7 {
-  return Number.isSafeInteger(test) && __inRange(test as _safeint, 0, 0x7F);
 }
 
 export function isArrayBuffer(test: unknown): test is ArrayBuffer { //XXX realm違いの場合

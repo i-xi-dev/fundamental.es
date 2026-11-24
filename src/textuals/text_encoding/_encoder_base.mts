@@ -1,8 +1,8 @@
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _assertString } from "../../_/_type/_string.mts";
 import { _EncoderInit } from "./_encoder_init.mts";
 import { Encoder } from "./encoder.mts";
 import { Fallback } from "./fallback.mts";
-import { Type } from "../../type/mod.mts";
 
 export abstract class _EncoderBase implements Encoder {
   readonly #init: _EncoderInit;
@@ -20,7 +20,7 @@ export abstract class _EncoderBase implements Encoder {
   }
 
   encode(input: string): TypeAlias.Bytes {
-    Type.assertString(input, "Input");
+    _assertString(input, "Input");
 
     const {
       encodedBytes,

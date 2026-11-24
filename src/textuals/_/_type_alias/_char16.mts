@@ -1,8 +1,8 @@
-import { __isString } from "../../../type/check.mts";
+import { _isString } from "../../../_/_type/_string.mts";
 import { __mustBe } from "../../../type/error.mts";
 
 export function _isChar16(test: string): boolean {
-  return __isString(test) && (test.length === 1);
+  return _isString(test) && (test.length === 1);
 }
 
 function _mustBeChar16(target: string): TypeError {

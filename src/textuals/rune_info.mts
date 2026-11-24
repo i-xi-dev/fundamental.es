@@ -48,13 +48,13 @@ export namespace RuneInfo {
 //TODO
 
 // export function inBmp(rune: _char32): boolean {
-//   return Type.isString(rune) && (rune.length === 1);
+//   return _isString(rune) && (rune.length === 1);
 // }
 
 // const _HIGH_SURROGATE = /^[\uD800-\uDBFF]$/;
 
 // export function isHighSurrogate(rune: _char32): boolean {
-//   //TODO isString &&
+//   //TODO _isString &&
 //   return _HIGH_SURROGATE.test(rune);
 // }
 

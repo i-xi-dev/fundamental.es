@@ -1,9 +1,9 @@
-import { __isString } from "../../../type/check.mts";
+import { _isString } from "../../../_/_type/_string.mts";
 import { __mustBe } from "../../../type/error.mts";
 
 // lone surrogate を許容しない
 export function _isChar32(test: string): boolean {
-  if (__isString(test) === true) {
+  if (_isString(test) === true) {
     if (test.length === 1) {
       return test.isWellFormed();
     } else if (test.length === 2) {

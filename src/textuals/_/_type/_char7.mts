@@ -1,11 +1,11 @@
-import { __isString } from "../../../type/check.mts";
+import type { _char7 } from "./_def/_char7.mts";
+import { _isString } from "../../../_/_type/_string.mts";
 import { __mustBe } from "../../../type/error.mts";
-import { _char7 } from "./_def/_char7.mts";
 
 // deno-lint-ignore no-control-regex
 const _char7Regex = /^[\u0000-\u007F]$/;
 export function _isChar7(test: unknown): test is _char7 {
-  return __isString(test) && _char7Regex.test(test);
+  return _isString(test) && _char7Regex.test(test);
 }
 
 function _mustBeChar7(target: string): TypeError {

@@ -5,6 +5,7 @@ import type {
 import type { _uint4 } from "./numerics/_/_type/_def/_uint4.mts";
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
+import { _isString } from "./_/_type/_string.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
 import { Type } from "./type/mod.mts";
@@ -177,7 +178,7 @@ const _uuidRegex =
   /^(?:(?:urn:uuid:)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
 
 function _isUuidString(test: unknown): test is string {
-  return Type.isString(test) && _uuidRegex.test(test);
+  return _isString(test) && _uuidRegex.test(test);
 }
 
 function _isUuidBigInt(test: unknown): test is _biguint128 {

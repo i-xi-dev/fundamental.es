@@ -6,7 +6,6 @@ import {
   isBigInt,
   isIterable,
   isNonSharedUint8Array,
-  isString,
 } from "./check.mts";
 
 export function assertBigInt(
@@ -15,15 +14,6 @@ export function assertBigInt(
 ): asserts test is bigint {
   if (isBigInt(test) !== true) {
     throw Exception.mustBeBigInt(label);
-  }
-}
-
-export function assertString(
-  test: unknown,
-  label: string,
-): asserts test is string {
-  if (isString(test) !== true) {
-    throw Exception.mustBeString(label);
   }
 }
 

@@ -1,5 +1,6 @@
 import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
+import { _assertString } from "../../_/_type/_string.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
@@ -104,7 +105,7 @@ export class SRgbColor extends _RgbColor {
   }
 
   static fromHexEncoded(hex: string): SRgbColor {
-    Type.assertString(hex, "Input");
+    _assertString(hex, "Input");
     if (_hexRegex.test(hex) !== true) {
       throw Type.Exception.mustBe(
         'a hexadecimal color value in the "RRGGBB" format',

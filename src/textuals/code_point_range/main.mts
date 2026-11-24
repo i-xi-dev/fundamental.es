@@ -25,7 +25,7 @@ export namespace CodePointRange {
   }
 
   // export function fromCodeBlock(blockName: string): CodePointRange {
-  //   Type.assertString(blockName, "Input");
+  //   _assertString(blockName, "Input");
 
   //   const blockRange = _BLOCK_RANGE[blockName];
   //   if (blockRange) {

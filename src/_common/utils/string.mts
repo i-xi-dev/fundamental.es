@@ -1,11 +1,11 @@
 import type { _codepoint } from "../../textuals/_/_type_alias/_def/_defs.mts";
 import { _assertNonEmptyString } from "../../textuals/_/_type_ext/_non_empty_string.mts";
+import { _assertString, _isString } from "../../_/_type/_string.mts";
 import { CodePoint, Text } from "../../textuals/mod.mts";
-import { Type } from "../../type/mod.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {
-  Type.assertString(a, "Input-1");
-  Type.assertString(b, "Input-2");
+  _assertString(a, "Input-1");
+  _assertString(b, "Input-2");
 
   if (a < b) {
     return -1;
@@ -90,11 +90,11 @@ export function rangesMatches(
 
   const pattern = _patternFrom(rangeSet);
   const regex = new RegExp(`^${pattern}$`, "u");
-  return Type.isString(test) && regex.test(test);
+  return _isString(test) && regex.test(test);
 }
 
 export function rangesTrim(input: string, rangeSet: CodePointRangeSet): string {
-  Type.assertString(input, "Input");
+  _assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -110,7 +110,7 @@ export function rangesTrimEnd(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  Type.assertString(input, "Input");
+  _assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -126,7 +126,7 @@ export function rangesCollectStart(
   input: string,
   rangeSet: CodePointRangeSet,
 ): string {
-  Type.assertString(input, "Input");
+  _assertString(input, "Input");
   //TODO assert rangeSet
 
   if (rangeSet.length <= 0) {
@@ -138,7 +138,7 @@ export function rangesCollectStart(
 }
 
 export function patternCollectStart(input: string, pattern: string): string {
-  Type.assertString(input, "Input");
+  _assertString(input, "Input");
   _assertNonEmptyString(pattern, "Pattern");
 
   return _patternCollectStart(input, pattern);
