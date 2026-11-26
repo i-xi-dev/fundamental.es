@@ -1,7 +1,7 @@
 import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../numerics/_internal/common.mts";
 import { _isNonNullObject } from "../_/_type/_non_null_object.mts";
-import { Type } from "../type/mod.mts";
+import { _mustBe } from "../_/_.mts";
 
 export interface RgbComponents {
   readonly r: _finite;
@@ -27,7 +27,7 @@ export namespace _RgbComponents {
     label: string,
   ): asserts test is RgbComponents {
     if (is(test) !== true) {
-      throw Type.Exception.mustBe(
+      throw _mustBe(
         "an object with the `number`-type properties `r`, `g`, and `b`",
         label,
       );

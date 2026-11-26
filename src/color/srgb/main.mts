@@ -3,6 +3,7 @@ import type { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { _assertString } from "../../_/_type/_string.mts";
 import { _Hsl, Hsl as _HslType } from "./hsl.mts";
 import { _Hwb, Hwb as _HwbType } from "./hwb.mts";
+import { _mustBe } from "../../_/_.mts";
 import { _Rgb24, Rgb24 as _Rgb24Type } from "./rgb24.mts";
 import { _RgbColor } from "../_rgb_color.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
@@ -78,7 +79,7 @@ export class SRgbColor extends _RgbColor {
   static fromBytes(bytes: TypeAlias.Bytes): SRgbColor {
     Type.assertNonSharedUint8Array(bytes, "Input");
     if (bytes.byteLength !== 3) {
-      throw Type.Exception.mustBe(
+      throw _mustBe(
         // "an `Uint8Array` with a length of 3 or greater",
         "an `Uint8Array` with a length of 3",
         "Input",
@@ -107,7 +108,7 @@ export class SRgbColor extends _RgbColor {
   static fromHexEncoded(hex: string): SRgbColor {
     _assertString(hex, "Input");
     if (_hexRegex.test(hex) !== true) {
-      throw Type.Exception.mustBe(
+      throw _mustBe(
         'a hexadecimal color value in the "RRGGBB" format',
         "Input",
       );
@@ -161,7 +162,7 @@ export class SRgbColor extends _RgbColor {
 
   #assert(test: unknown): asserts test is SRgbColor {
     if ((test instanceof SRgbColor) !== true) {
-      throw Type.Exception.mustBe("a `SRgbColor` object", "Input");
+      throw _mustBe("a `SRgbColor` object", "Input");
     }
   }
 

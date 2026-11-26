@@ -1,11 +1,11 @@
-import { __mustBe } from "../../type/error.mts";
+import { _mustBe } from "../_.mts";
 
 export function _isBigInteger(test: unknown): test is bigint {
   return (typeof test === "bigint");
 }
 
 export function _mustBeBigInteger(target: string): TypeError {
-  return __mustBe("a `bigint`", target);
+  return _mustBe("a `bigint`", target);
 }
 
 export function _assertBigInteger(

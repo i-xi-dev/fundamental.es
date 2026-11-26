@@ -2,11 +2,11 @@ import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _isNonNullObject } from "../../_/_type/_non_null_object.mts";
 import { _isNumber } from "../../_/_type/_number.mts";
 import { _isSafeInteger } from "../../numerics/_/_type_alias/_safe_int.mts";
+import { _mustBe } from "../../_/_.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/_internal/common.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { RoundingMode, Uint8 } from "../../numerics/mod.mts";
-import { Type } from "../../type/mod.mts";
 
 export type Rgb24 = {
   r: /* _uint8 */ _safeint;
@@ -32,7 +32,7 @@ export namespace _Rgb24 {
 
   export function assert(test: unknown, label: string): asserts test is Rgb24 {
     if (is(test) !== true) {
-      throw Type.Exception.mustBe(
+      throw _mustBe(
         "an object with properties `r`, `g`, and `b`, which are 8-bit unsigned integers of type `number`",
         label,
       );

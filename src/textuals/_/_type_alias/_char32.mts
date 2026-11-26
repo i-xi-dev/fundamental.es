@@ -1,5 +1,5 @@
 import { _isString } from "../../../_/_type/_string.mts";
-import { __mustBe } from "../../../type/error.mts";
+import { _mustBe } from "../../../_/_.mts";
 
 // lone surrogate を許容しない
 export function _isChar32(test: string): boolean {
@@ -14,7 +14,7 @@ export function _isChar32(test: string): boolean {
 }
 
 function _mustBeChar32(target: string): TypeError {
-  return __mustBe("a well-formed single character", target);
+  return _mustBe("a well-formed single character", target);
 }
 
 export function _assertChar32(test: string, label: string): void {

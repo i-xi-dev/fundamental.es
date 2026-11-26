@@ -1,12 +1,12 @@
 import { _isString } from "../../../_/_type/_string.mts";
-import { __mustBe } from "../../../type/error.mts";
+import { _mustBe } from "../../../_/_.mts";
 
 export function _isChar16(test: string): boolean {
   return _isString(test) && (test.length === 1);
 }
 
 function _mustBeChar16(target: string): TypeError {
-  return __mustBe(
+  return _mustBe(
     "a single character with a code point of `0xFFFF` or lower",
     target,
   );

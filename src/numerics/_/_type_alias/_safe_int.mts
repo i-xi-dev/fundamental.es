@@ -1,11 +1,11 @@
-import { __mustBe } from "../../../type/error.mts";
+import { _mustBe } from "../../../_/_.mts";
 
 export function _isSafeInteger(test: number): boolean {
   return Number.isSafeInteger(test);
 }
 
 export function _mustBeSafeInteger(target: string): TypeError {
-  return __mustBe("a safe-integer of type `number`", target);
+  return _mustBe("a safe-integer of type `number`", target);
 }
 
 export function _assertSafeInteger(test: number, label: string): void {

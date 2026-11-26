@@ -1,6 +1,6 @@
 import type { _char8 } from "./_def/_char8.mts";
 import { _isString } from "../../../_/_type/_string.mts";
-import { __mustBe } from "../../../type/error.mts";
+import { _mustBe } from "../../../_/_.mts";
 
 // deno-lint-ignore no-control-regex
 const _char8Regex = /^[\u0000-\u00FF]$/;
@@ -9,7 +9,7 @@ export function _isChar8(test: unknown): test is _char8 {
 }
 
 function _mustBeChar8(target: string): TypeError {
-  return __mustBe(
+  return _mustBe(
     "a single character with a code point of `0xFF` or lower",
     target,
   );

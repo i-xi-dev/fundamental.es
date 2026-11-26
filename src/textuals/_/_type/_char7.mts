@@ -1,6 +1,6 @@
 import type { _char7 } from "./_def/_char7.mts";
 import { _isString } from "../../../_/_type/_string.mts";
-import { __mustBe } from "../../../type/error.mts";
+import { _mustBe } from "../../../_/_.mts";
 
 // deno-lint-ignore no-control-regex
 const _char7Regex = /^[\u0000-\u007F]$/;
@@ -9,7 +9,7 @@ export function _isChar7(test: unknown): test is _char7 {
 }
 
 function _mustBeChar7(target: string): TypeError {
-  return __mustBe(
+  return _mustBe(
     "a single character with a code point of `0x7F` or lower",
     target,
   );

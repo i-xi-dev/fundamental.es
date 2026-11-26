@@ -1,5 +1,4 @@
-import { _inNumericRange } from "../../../_/_.mts";
-import { __mustBe } from "../../../type/error.mts";
+import { _inNumericRange, _mustBe } from "../../../_/_.mts";
 
 export function _isCodePoint(test: number): boolean {
   return Number.isSafeInteger(test) &&
@@ -7,7 +6,7 @@ export function _isCodePoint(test: number): boolean {
 }
 
 function _mustBeCodePoint(target: string): TypeError {
-  return __mustBe("a Unicode code point of type `number`", target);
+  return _mustBe("a Unicode code point of type `number`", target);
 }
 
 export function _assertCodePoint(test: number, label: string): void {

@@ -1,11 +1,11 @@
-import { __mustBe } from "../../type/error.mts";
+import { _mustBe } from "../_.mts";
 
 export function _isString(test: unknown): test is string {
   return (typeof test === "string");
 }
 
 function _mustBeString(target: string): TypeError {
-  return __mustBe("a `string`", target);
+  return _mustBe("a `string`", target);
 }
 
 export function _assertString(

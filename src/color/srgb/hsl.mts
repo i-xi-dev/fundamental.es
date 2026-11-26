@@ -1,10 +1,10 @@
 import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
 import { _isNonNullObject } from "../../_/_type/_non_null_object.mts";
+import { _mustBe } from "../../_/_.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
-import { Type } from "../../type/mod.mts";
 
 const _S_MIN = 0;
 
@@ -41,7 +41,7 @@ export namespace _Hsl {
 
   export function assert(test: unknown, label: string): asserts test is Hsl {
     if (is(test) !== true) {
-      throw Type.Exception.mustBe(
+      throw _mustBe(
         "an object with the `number`-type properties `h`, `s`, and `l`",
         label,
       );

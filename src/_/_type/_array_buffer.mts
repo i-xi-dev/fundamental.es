@@ -1,4 +1,4 @@
-import { __mustBe } from "../../type/error.mts";
+import { _mustBe } from "../_.mts";
 
 // realm違いは偽になる
 export function _isArrayBuffer(test: unknown): test is ArrayBuffer {
@@ -6,7 +6,7 @@ export function _isArrayBuffer(test: unknown): test is ArrayBuffer {
 }
 
 function _mustBeArrayBuffer(target: string): TypeError {
-  return __mustBe("an `ArrayBuffer`", target);
+  return _mustBe("an `ArrayBuffer`", target);
 }
 
 export function _assertArrayBuffer(
