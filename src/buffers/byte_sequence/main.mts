@@ -1,6 +1,8 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
 import { _assertArrayBuffer } from "../../_/_type/_array_buffer.mts";
+import { _assertAsyncIterable } from "../../_/_type/_async_iterable.mts";
+import { _assertIterable } from "../../_/_type/_iterable.mts";
 import {
   _assertSafeInteger,
   _isSafeInteger,
@@ -198,7 +200,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): this {
     this.#assertAccessible();
-    Type.assertIterable(uint8s, "Input");
+    _assertIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     // this.loadFromArrayBuffer(Uint8Array.from(uint8s).buffer);
@@ -232,7 +234,7 @@ export class ByteSequence {
     options?: _LoadOptions_1,
   ): Promise<this> {
     this.#assertAccessible();
-    Type.assertAsyncIterable(uint8s, "Input");
+    _assertAsyncIterable(uint8s, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(Uint8, options?.clampMode);
@@ -260,7 +262,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    Type.assertIterable(uintNs, "Input");
+    _assertIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -289,7 +291,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): this {
     this.#assertAccessible();
-    Type.assertIterable(biguintNs, "Input");
+    _assertIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -318,7 +320,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ) {
     this.#assertAccessible();
-    Type.assertAsyncIterable(uintNs, "Input");
+    _assertAsyncIterable(uintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _uintClamper(uT, options?.clampMode);
@@ -347,7 +349,7 @@ export class ByteSequence {
     options?: _LoadOptions,
   ): Promise<this> {
     this.#assertAccessible();
-    Type.assertAsyncIterable(biguintNs, "Input");
+    _assertAsyncIterable(biguintNs, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     const f = _biguintClamper(uT, options?.clampMode);
@@ -608,7 +610,7 @@ export class ByteSequence {
   //   sourceBuffers: AsyncIterable<ArrayBuffer>, options?
   // ): Promise<this> {
   //   this.#assertAccessible();
-  //   Type.assertAsyncIterable(sourceBuffers, "Input");
+  //   _assertAsyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
   //     _assertArrayBuffer(sourceBuffer);

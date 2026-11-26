@@ -12,22 +12,6 @@ export function __isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);
 }
 
-export function isIterable<T>(test: unknown): test is Iterable<T> {
-  return (isNullOrUndefined(test) !== true) &&
-    (isNullOrUndefined(
-      // deno-lint-ignore no-explicit-any
-      (test as { [Symbol.iterator]: any })[Symbol.iterator], // inやReflectだとプリミティブを検査できない
-    ) !== true);
-}
-
-export function isAsyncIterable<T>(test: unknown): test is AsyncIterable<T> {
-  return (isNullOrUndefined(test) !== true) &&
-    (isNullOrUndefined(
-      // deno-lint-ignore no-explicit-any
-      (test as { [Symbol.asyncIterator]: any })[Symbol.asyncIterator], // inやReflectだとプリミティブを検査できない
-    ) !== true);
-}
-
 export function isSharedArrayBuffer(test: unknown): test is SharedArrayBuffer { //XXX realm違いの場合
   // ブラウザだと非securecontxtの場合そもそも存在しない
   return ("SharedArrayBuffer" in globalThis) &&

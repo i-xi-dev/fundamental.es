@@ -1,9 +1,9 @@
-function _message(target: string, expectedType: string): string {
+function _typeErrorMessage(target: string, expectedType: string): string {
   return `${target} must be ${expectedType}`;
 }
 
 export function _mustBe(typeDesc: string, target: string): TypeError {
-  const msg = _message(target, typeDesc);
+  const msg = _typeErrorMessage(target, typeDesc);
   return new TypeError(msg);
 }
 

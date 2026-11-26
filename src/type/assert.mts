@@ -1,28 +1,7 @@
 import type { _uint8 } from "../numerics/_/_type/_def/_uint8.mts";
 import * as Exception from "./error.mts";
-import {
-  isAsyncIterable,
-  isIterable,
-  isNonSharedUint8Array,
-} from "./check.mts";
-
-export function assertIterable<T>(
-  test: unknown,
-  label: string,
-): asserts test is Iterable<T> {
-  if (isIterable(test) !== true) {
-    throw Exception.mustBeIterable(label);
-  }
-}
-
-export function assertAsyncIterable<T>(
-  test: unknown,
-  label: string,
-): asserts test is AsyncIterable<T> {
-  if (isAsyncIterable(test) !== true) {
-    throw Exception.mustBeAsyncIterable(label);
-  }
-}
+import { isNonSharedUint8Array } from "./check.mts";
+import { _isAsyncIterable } from "../_/_type/_async_iterable.mts";
 
 export function assertNonSharedUint8Array(
   test: unknown,
