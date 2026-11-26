@@ -1,4 +1,5 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
+import { _isNumber } from "../../_/_type/_number.mts";
 import { _isSafeInteger } from "../../numerics/_/_type_alias/_safe_int.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _roundToSafeInt } from "../../numerics/_internal/common.mts";
@@ -16,11 +17,11 @@ export namespace _Rgb24 {
   export function is(test: unknown): test is Rgb24 {
     if (Type.isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
-        return Type.isNumber(test.r) &&
+        return _isNumber(test.r) &&
           _isSafeInteger(test.r) &&
-          Type.isNumber(test.g) &&
+          _isNumber(test.g) &&
           _isSafeInteger(test.g) &&
-          Type.isNumber(test.b) &&
+          _isNumber(test.b) &&
           _isSafeInteger(test.b);
       }
     }

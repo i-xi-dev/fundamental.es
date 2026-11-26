@@ -3,14 +3,6 @@ import type { _uint7 } from "../numerics/_/_type/_def/_uint7.mts";
 import type { _uint8 } from "../numerics/_/_type/_def/_uint8.mts";
 import { _isUint8 } from "../numerics/_/_type/_uint8.mts";
 
-export function isBigInt(test: unknown): test is bigint {
-  return (typeof test === "bigint");
-}
-
-export function isNumber(test: unknown): test is number {
-  return (typeof test === "number");
-}
-
 export function isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);
 }

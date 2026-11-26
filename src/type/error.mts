@@ -14,10 +14,6 @@ export function __mustBe(typeDesc: string, target: string): TypeError {
   return new TypeError(msg);
 }
 
-export function mustBeBigInt(target: string): TypeError {
-  return mustBe("a `bigint`", target);
-}
-
 export function mustBeIterable(target: string): TypeError {
   return mustBe("an `Iterable`", target);
 }

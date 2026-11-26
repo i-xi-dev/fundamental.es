@@ -5,6 +5,7 @@ import type {
 import type { _uint4 } from "./numerics/_/_type/_def/_uint4.mts";
 import type { TypeAlias } from "./_internal/type_alias/mod.mts";
 import { _bytesEquals } from "./buffers/_internal/common.mts";
+import { _isBigInteger } from "./_/_type/_bigint.mts";
 import { _isString } from "./_/_type/_string.mts";
 import { BigUint128, Uint8 } from "./numerics/mod.mts";
 import { Text } from "./textuals/mod.mts";
@@ -182,7 +183,7 @@ function _isUuidString(test: unknown): test is string {
 }
 
 function _isUuidBigInt(test: unknown): test is _biguint128 {
-  return Type.isBigInt(test) && (test >= BigUint128.MIN_VALUE) &&
+  return _isBigInteger(test) && (test >= BigUint128.MIN_VALUE) &&
     (test <= BigUint128.MAX_VALUE);
 }
 

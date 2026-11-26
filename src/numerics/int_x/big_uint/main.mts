@@ -4,6 +4,7 @@ import type {
   _safeint,
 } from "../../_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../_/_type/_def/_uint8.mts";
+import { _assertBigInteger } from "../../../_/_type/_bigint.mts";
 import {
   _assertSafeInteger,
   _isSafeInteger,
@@ -183,13 +184,13 @@ class _BigUintImpl<T extends bigint> implements BigUint<T> {
   }
 
   truncateFrom(value: bigint): T {
-    Type.assertBigInt(value, "Input");
+    _assertBigInteger(value, "Input");
 
     return BigInt.asUintN(this.#bitLength, value) as T;
   }
 
   saturateFrom(value: bigint): T {
-    Type.assertBigInt(value, "Input");
+    _assertBigInteger(value, "Input");
 
     return _clampBigInt<T>(value, this.#range.min, this.#range.max);
   }

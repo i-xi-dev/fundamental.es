@@ -1,15 +1,15 @@
+import { _assertBigInteger } from "../../_/_type/_bigint.mts";
 import { _clampBigInt } from "../_internal/common.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
-import { Type } from "../../type/mod.mts";
 
 export function clamp<T extends bigint>(
   value: bigint,
   min: T,
   max: T,
 ): T {
-  Type.assertBigInt(value, "Input");
-  Type.assertBigInt(min, "Lower bound");
-  Type.assertBigInt(max, "Upper bound");
+  _assertBigInteger(value, "Input");
+  _assertBigInteger(min, "Lower bound");
+  _assertBigInteger(max, "Upper bound");
   if (min > max) {
     throw RangeException.rangeInvalid();
   }

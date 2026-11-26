@@ -3,19 +3,9 @@ import * as Exception from "./error.mts";
 import {
   isArrayBuffer,
   isAsyncIterable,
-  isBigInt,
   isIterable,
   isNonSharedUint8Array,
 } from "./check.mts";
-
-export function assertBigInt(
-  test: unknown,
-  label: string,
-): asserts test is bigint {
-  if (isBigInt(test) !== true) {
-    throw Exception.mustBeBigInt(label);
-  }
-}
 
 export function assertIterable<T>(
   test: unknown,

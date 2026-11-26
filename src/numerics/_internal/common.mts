@@ -1,4 +1,6 @@
 import type { _finite, _safeint } from "../_/_type_alias/_def/_defs.mts";
+import { _isBigInteger } from "../../_/_type/_bigint.mts";
+import { _isNumber } from "../../_/_type/_number.mts";
 import {
   _isSafeInteger,
   _mustBeSafeInteger,
@@ -6,12 +8,11 @@ import {
 import { _mustBeUintN } from "../_/_type/_uint_n.mts";
 import { _NumericException } from "./error/mod.mts";
 import { RoundingMode } from "../rounding_mode.mts";
-import { Type } from "../../type/mod.mts";
 
 // numeric -----------------------------------------------------------
 
 export function _isNonNegative(value: _finite | bigint): boolean {
-  return (Type.isNumber(value) || Type.isBigInt(value)) && (value >= 0);
+  return (_isNumber(value) || _isBigInteger(value)) && (value >= 0);
 }
 
 // finite ------------------------------------------------------------

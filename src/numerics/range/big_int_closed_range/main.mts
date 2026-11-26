@@ -1,7 +1,7 @@
 import { _ClosedRangeBase } from "../_closed_range_base.mts";
 import { _Error } from "../../../_common/mod.mts";
+import { _isBigInteger, _mustBeBigInteger } from "../../../_/_type/_bigint.mts";
 import { ClosedRange } from "../closed_range.mts";
-import { Type } from "../../../type/mod.mts";
 
 class _BigIntClosedRangeImpl<T extends bigint = bigint>
   extends _ClosedRangeBase<bigint, T> {
@@ -10,11 +10,11 @@ class _BigIntClosedRangeImpl<T extends bigint = bigint>
   }
 
   protected override _isBaseT(test: unknown): test is bigint {
-    return Type.isBigInt(test);
+    return _isBigInteger(test);
   }
 
   protected override _typeError(): TypeError {
-    return Type.Exception.mustBeBigInt("Input");
+    return _mustBeBigInteger("Input");
   }
 }
 
