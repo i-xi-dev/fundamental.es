@@ -1,6 +1,7 @@
 import type { _finite } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import { _clampFinite } from "../../numerics/_internal/common.mts";
 import { _Hsl } from "./hsl.mts";
+import { _isNonNullObject } from "../../_/_type/_non_null_object.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
 import { _SRgbRgb } from "./_rgb.mts";
 import { Angle } from "../../geometrics/mod.mts";
@@ -22,7 +23,7 @@ export type Hwb = {
 
 export namespace _Hwb {
   export function is(test: unknown): test is Hwb {
-    if (Type.isNonNullObject(test) === true) {
+    if (_isNonNullObject(test) === true) {
       if (("h" in test) && ("w" in test) && ("b" in test)) {
         return Number.isFinite(test.h) &&
           Number.isFinite(test.w) &&

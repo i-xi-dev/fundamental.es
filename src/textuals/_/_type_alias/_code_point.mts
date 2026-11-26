@@ -1,8 +1,9 @@
-import { __inRange } from "../../../type/check.mts";
+import { _inNumericRange } from "../../../_/_.mts";
 import { __mustBe } from "../../../type/error.mts";
 
 export function _isCodePoint(test: number): boolean {
-  return Number.isSafeInteger(test) && __inRange(test as number, 0, 0x10FFFF);
+  return Number.isSafeInteger(test) &&
+    _inNumericRange(test as number, 0, 0x10FFFF);
 }
 
 function _mustBeCodePoint(target: string): TypeError {

@@ -29,10 +29,6 @@ export function mustBeBigUintN(
   return mustBe(`a ${bits}-bit unsigned integer of type \`bigint\``, target);
 }
 
-export function mustBeArrayBuffer(target: string): TypeError {
-  return mustBe("an `ArrayBuffer`", target);
-}
-
 export function mustBeNonSharedUint8Array(target: string): TypeError {
   return mustBe("an `Uint8Array` that references an `ArrayBuffer`", target);
 }

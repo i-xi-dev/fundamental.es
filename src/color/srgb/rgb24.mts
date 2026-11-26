@@ -1,4 +1,5 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
+import { _isNonNullObject } from "../../_/_type/_non_null_object.mts";
 import { _isNumber } from "../../_/_type/_number.mts";
 import { _isSafeInteger } from "../../numerics/_/_type_alias/_safe_int.mts";
 import { _RgbComponents, RgbComponents } from "../rgb_components.mts";
@@ -15,7 +16,7 @@ export type Rgb24 = {
 
 export namespace _Rgb24 {
   export function is(test: unknown): test is Rgb24 {
-    if (Type.isNonNullObject(test) === true) {
+    if (_isNonNullObject(test) === true) {
       if (("r" in test) && ("g" in test) && ("b" in test)) {
         return _isNumber(test.r) &&
           _isSafeInteger(test.r) &&

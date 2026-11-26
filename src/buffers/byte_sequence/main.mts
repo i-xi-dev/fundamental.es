@@ -1,5 +1,6 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
+import { _assertArrayBuffer } from "../../_/_type/_array_buffer.mts";
 import {
   _assertSafeInteger,
   _isSafeInteger,
@@ -181,7 +182,7 @@ export class ByteSequence {
     options?: _LoadOptions_2,
   ): this {
     this.#assertAccessible();
-    Type.assertArrayBuffer(sourceBuffer, "Input");
+    _assertArrayBuffer(sourceBuffer, "Input");
     this.#assertOffsetInRangeOrNull(options?.insertAt);
 
     if (_isNumber(options?.insertAt) && _isSafeInteger(options.insertAt)) {
@@ -610,7 +611,7 @@ export class ByteSequence {
   //   Type.assertAsyncIterable(sourceBuffers, "Input");
   //
   //   for await (const sourceBuffer of sourceBuffers) {
-  //     Type.assertArrayBuffer(sourceBuffer);
+  //     _assertArrayBuffer(sourceBuffer);
   //     this.#appendBytes(new Uint8Array(sourceBuffer));
   //   }
   //   return this;
@@ -759,7 +760,7 @@ export namespace ByteSequence {
     src: ArrayBuffer,
     options?: _FromOptions,
   ): ByteSequence {
-    Type.assertArrayBuffer(src, "Input");
+    _assertArrayBuffer(src, "Input");
     return _create(src.byteLength, options).loadFromArrayBuffer(src);
   }
 

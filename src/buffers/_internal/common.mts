@@ -1,5 +1,6 @@
 import type { _safeint } from "../../numerics/_/_type_alias/_def/_defs.mts";
 import type { _uint8 } from "../../numerics/_/_type/_def/_uint8.mts";
+import { _isArrayBuffer } from "../../_/_type/_array_buffer.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
 import { Uint16 } from "../../numerics/int_x/uint/mod.mts";
@@ -16,12 +17,12 @@ export function _comparableToBytes(
 ): TypeAlias.Bytes | Array<_uint8> | null {
   if (Type.isNonSharedUint8Array(input) === true) {
     return input;
-  } else if (Type.isArrayBuffer(input) === true) {
+  } else if (_isArrayBuffer(input) === true) {
     return new Uint8Array(input);
   } else if (Type.isSharedArrayBuffer(input) === true) {
     return Uint8Array.from(new Uint8Array(input));
   } else if (ArrayBuffer.isView(input) === true) {
-    if (Type.isArrayBuffer(input.buffer) === true) {
+    if (_isArrayBuffer(input.buffer) === true) {
       return new Uint8Array(input.buffer);
     }
     if (Type.isSharedArrayBuffer(input.buffer) === true) {

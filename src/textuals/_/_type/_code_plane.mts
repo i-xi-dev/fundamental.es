@@ -1,9 +1,9 @@
-import { __inRange } from "../../../type/check.mts";
+import type { _codeplane } from "./_def/_code_plane.mts";
+import { _inNumericRange } from "../../../_/_.mts";
 import { __mustBe } from "../../../type/error.mts";
-import { _codeplane } from "./_def/_code_plane.mts";
 
 export function _isCodePlane(test: unknown): test is _codeplane {
-  return Number.isSafeInteger(test) && __inRange(test as number, 0, 16);
+  return Number.isSafeInteger(test) && _inNumericRange(test as number, 0, 16);
 }
 
 function _mustBeCodePlane(target: string): TypeError {
