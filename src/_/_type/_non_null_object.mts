@@ -1,5 +1,5 @@
-import { __isNullOrUndefined } from "../../type/check.mts";
+import { _isNullOrUndefined } from "../_.mts";
 
 export function _isNonNullObject(test: unknown): test is NonNullable<object> {
-  return (typeof test === "object") && (__isNullOrUndefined(test) !== true);
+  return (typeof test === "object") && (_isNullOrUndefined(test) !== true);
 }

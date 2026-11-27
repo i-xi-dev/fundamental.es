@@ -1,11 +1,10 @@
 import { _isFunction } from "./_function.mts";
-import { _mustBe } from "../_.mts";
-import { __isNullOrUndefined } from "../../type/check.mts";
+import { _isNullOrUndefined, _mustBe } from "../_.mts";
 
 // ・[Symbol.iterator]が関数であるかしかチェックしない（本当にイテレーターを返すかどうかはわからない）
 // ・Iterable<T>のTは検査しようがない（検査したらイテレーターを消費してしまう）
 export function _isIterable(test: unknown): test is Iterable<unknown> {
-  return (__isNullOrUndefined(test) !== true) &&
+  return (_isNullOrUndefined(test) !== true) &&
     (_isFunction(
       // deno-lint-ignore no-explicit-any
       (test as { [Symbol.iterator]: any })[Symbol.iterator],

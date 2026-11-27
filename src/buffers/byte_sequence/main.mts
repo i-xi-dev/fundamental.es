@@ -15,6 +15,7 @@ import {
   _Comparable,
   _randomBytes,
 } from "./../_internal/common.mts";
+import { _isNullOrUndefined } from "../../_/_.mts";
 import { _isNumber } from "../../_/_type/_number.mts";
 import { _isUint8 } from "../../numerics/_/_type/_uint8.mts";
 import { _NumericException } from "../../numerics/_internal/error/mod.mts";
@@ -139,7 +140,7 @@ export class ByteSequence {
   static create(capacity: _safeint, maxCapacity?: _safeint): ByteSequence {
     _assertSafeInteger(capacity, "Capacity");
     SafeInteger.assertNonNegative(capacity, "Capacity");
-    if (Type.isNullOrUndefined(maxCapacity) !== true) {
+    if (_isNullOrUndefined(maxCapacity) !== true) {
       _assertSafeInteger(maxCapacity, "Max-capacity");
       SafeInteger.assertNonNegative(maxCapacity, "Max-capacity");
     }
@@ -546,13 +547,13 @@ export class ByteSequence {
     this.#assertAccessible();
 
     if (
-      (Type.isNullOrUndefined(start) ||
+      (_isNullOrUndefined(start) ||
         (_isNumber(start) && _isSafeInteger(start))) !== true
     ) {
       throw _mustBeSafeInteger("Start index");
     }
     if (
-      (Type.isNullOrUndefined(end) ||
+      (_isNullOrUndefined(end) ||
         (_isNumber(end) && _isSafeInteger(end))) !== true
     ) {
       throw _mustBeSafeInteger("End index");
@@ -648,7 +649,7 @@ export class ByteSequence {
   #assertOffsetInRangeOrNull(
     test: unknown,
   ): asserts test is _safeint | null | undefined {
-    if (Type.isNullOrUndefined(test) === true) {
+    if (_isNullOrUndefined(test) === true) {
       // null | undefined はok
       return;
     }
