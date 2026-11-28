@@ -8,19 +8,17 @@ import {
 // import { _BLOCK_RANGE } from "../code_block/_range.mts";
 import { _isUint16 } from "../../numerics/_/_type_alias/_uint16.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
-import { Char8 } from "../char_x/mod.mts";
 import { Radix } from "../../numerics/mod.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
-
-export * from "./_const.mts";
+import _Char from "../_char/_enum.mts";
 
 export function toString(codePoint: _codepoint): string {
   _assertCodePoint(codePoint, "Input");
   return `U+${
     codePoint.toString(Radix.HEXADECIMAL).toUpperCase().padStart(
       4,
-      Char8.DIGIT_ZERO,
+      _Char.DIGIT_ZERO,
     )
   }`;
 }

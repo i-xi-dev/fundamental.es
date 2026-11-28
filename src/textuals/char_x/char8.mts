@@ -4,8 +4,6 @@ import { _assertChar8 } from "../_/_type/_char8.mts";
 import { _assertUint8 } from "../../numerics/_/_type/_uint8.mts";
 import { _byteToChar8, _char8ToByte } from "../_internal/common.mts";
 
-export * from "./_const8.mts";
-
 export function fromByte(byte: /* _uint8 */ number): _char8 {
   _assertUint8(byte, "Input");
   return _byteToChar8(byte);

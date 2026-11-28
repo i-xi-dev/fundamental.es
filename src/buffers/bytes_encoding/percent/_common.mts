@@ -9,9 +9,11 @@ import {
 import { _Error } from "../../../_common/mod.mts";
 import { _isUint8 } from "../../../numerics/_/_type/_uint8.mts";
 import { Byte } from "../../byte/mod.mts";
-import { Char8, CodePoint, Text } from "../../../textuals/mod.mts";
+import { Text } from "../../../textuals/mod.mts";
 import { Type } from "../../../type/mod.mts";
 import { Uint8 } from "../../../numerics/int_x/uint/mod.mts";
+import _Char from "../../../textuals/_char/_enum.mts";
+import _CodePoint from "../../../textuals/_code_point/_enum.mts";
 
 export type _PercentOptions = {
   encodeSet?: Array</* _uint8 */ number>;
@@ -42,7 +44,7 @@ export namespace _PercentOptions {
     return {
       encodeSet,
       spaceAsPlus: (options?.spaceAsPlus === true) &&
-        encodeSet.includes(CodePoint.PLUS_SIGN),
+        encodeSet.includes(_CodePoint.PLUS_SIGN),
     };
   }
 }
@@ -67,7 +69,7 @@ export function _decode(
     const char = text.at(i) as _char8;
 
     let byte: _uint8;
-    if (char === Char8.PERCENT_SIGN) {
+    if (char === _Char.PERCENT_SIGN) {
       const byteString = text.substring(i + 1, i + 3);
       if (hexRegExp.test(byteString)) {
         byte = Number.parseInt(byteString, 16) as _uint8;
@@ -76,11 +78,11 @@ export function _decode(
         byte = _char8ToByte(char);
         i = i + 1;
       }
-    } else if (char === Char8.PLUS_SIGN) {
+    } else if (char === _Char.PLUS_SIGN) {
       if (options.spaceAsPlus === true) {
-        byte = CodePoint.SPACE;
+        byte = _CodePoint.SPACE;
       } else {
-        byte = CodePoint.PLUS_SIGN; // _char8ToByte(char);
+        byte = _CodePoint.PLUS_SIGN; // _char8ToByte(char);
       }
       i = i + 1;
     } else {
@@ -112,16 +114,16 @@ export function _encode(
   Type.assertNonSharedUint8Array(bytes, "Input");
 
   return Array.from(bytes, (byte) => {
-    if ((byte === CodePoint.SPACE) && (options.spaceAsPlus === true)) {
-      return Char8.PLUS_SIGN;
+    if ((byte === _CodePoint.SPACE) && (options.spaceAsPlus === true)) {
+      return _Char.PLUS_SIGN;
     }
     if (
-      (byte < CodePoint.SPACE) ||
-      (byte > CodePoint.TILDE) ||
-      (byte === CodePoint.PERCENT_SIGN) ||
+      (byte < _CodePoint.SPACE) ||
+      (byte > _CodePoint.TILDE) ||
+      (byte === _CodePoint.PERCENT_SIGN) ||
       (options.encodeSet.includes(byte) === true)
     ) {
-      return `${Char8.PERCENT_SIGN}${Byte.toString(byte).toUpperCase()}`;
+      return `${_Char.PERCENT_SIGN}${Byte.toString(byte).toUpperCase()}`;
     }
     return _byteToChar8(byte as _uint8);
   }).join(Text.EMPTY);

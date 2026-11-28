@@ -1,7 +1,8 @@
 import type { _codepoint } from "../../textuals/_/_type_alias/_def/_defs.mts";
 import { _assertNonEmptyString } from "../../textuals/_/_type_ext/_non_empty_string.mts";
 import { _assertString, _isString } from "../../_/_type/_string.mts";
-import { CodePoint, Text } from "../../textuals/mod.mts";
+import { Text } from "../../textuals/mod.mts";
+import _CodePoint from "../../textuals/_code_point/_enum.mts";
 
 export function charSequenceSortComparator(a: string, b: string): number {
   _assertString(a, "Input-1");
@@ -31,14 +32,14 @@ export namespace RangeSet {
   /** [HTTP quoted-string token code point](https://mimesniff.spec.whatwg.org/#http-quoted-string-token-code-point) */
   export const HTTP_QUOTED_STRING_TOKEN: CodePointRangeSet = [
     [0x9],
-    [CodePoint.SPACE, CodePoint.TILDE], // 0x20-0x7E
+    [_CodePoint.SPACE, _CodePoint.TILDE], // 0x20-0x7E
     [0x80, 0xFF],
   ] as const;
 
   /** [HTTP tab or space](https://fetch.spec.whatwg.org/#http-tab-or-space) */
   export const HTTP_TAB_OR_SPACE: CodePointRangeSet = [
     [0x9],
-    [CodePoint.SPACE], // 0x20
+    [_CodePoint.SPACE], // 0x20
   ] as const;
 
   /** [HTTP token code point](https://mimesniff.spec.whatwg.org/#http-token-code-point) */
@@ -46,15 +47,15 @@ export namespace RangeSet {
     [0x21],
     [0x23, 0x27],
     [0x2A],
-    [CodePoint.PLUS_SIGN], // 0x2B
+    [_CodePoint.PLUS_SIGN], // 0x2B
     [0x2D],
     [0x2E],
-    [CodePoint.DIGIT_ZERO, 0x39], // 0x30-0x39
+    [_CodePoint.DIGIT_ZERO, 0x39], // 0x30-0x39
     [0x41, 0x5A],
     [0x5E, 0x60],
     [0x61, 0x7A],
     [0x7C],
-    [CodePoint.TILDE], // 0x7E
+    [_CodePoint.TILDE], // 0x7E
   ] as const;
 
   /** [HTTP whitespace](https://fetch.spec.whatwg.org/#http-whitespace) */
@@ -63,7 +64,7 @@ export namespace RangeSet {
     [0xA],
     [0xC],
     [0xD],
-    [CodePoint.SPACE], // 0x20
+    [_CodePoint.SPACE], // 0x20
   ] as const;
 }
 

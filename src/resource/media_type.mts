@@ -1,6 +1,7 @@
 import { _mustBe } from "../_/_.mts";
-import { Char8, Text } from "../textuals/mod.mts";
 import { HttpUtils, StringUtils } from "../_common/mod.mts";
+import { Text } from "../textuals/mod.mts";
+import _Char from "../textuals/_char/_enum.mts";
 
 const { RangeSet } = StringUtils;
 
@@ -190,9 +191,9 @@ export class MediaType {
    * ```
    */
   get suffix(): string {
-    if (this.subtype.includes(Char8.PLUS_SIGN)) {
+    if (this.subtype.includes(_Char.PLUS_SIGN)) {
       const subtype = this.subtype;
-      return subtype.substring(subtype.lastIndexOf(Char8.PLUS_SIGN));
+      return subtype.substring(subtype.lastIndexOf(_Char.PLUS_SIGN));
     }
     return Text.EMPTY;
   }

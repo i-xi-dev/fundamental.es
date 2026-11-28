@@ -1,7 +1,8 @@
 import type { _finite } from "../numerics/_/_type_alias/_def/_defs.mts";
 import { _assertFinite } from "../numerics/_/_type_alias/_finite.mts";
-import { Char8, Text } from "../textuals/mod.mts";
 import { Radix } from "../numerics/mod.mts";
+import { Text } from "../textuals/mod.mts";
+import _Char from "../textuals/_char/_enum.mts";
 
 const _ZERO_TURN_DEGS = 0;
 const _ONE_TURN_DEGS = 360;
@@ -61,11 +62,11 @@ function _degreesToDmsString(
 
   const msNum = (normalizedDegrees - dInt) * 60;
   const mInt = Math.trunc(msNum);
-  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, Char8.DIGIT_ZERO);
+  const mStr = mInt.toString(Radix.DECIMAL).padStart(2, _Char.DIGIT_ZERO);
 
   const sNum = (msNum - mInt) * 60;
   const sInt = Math.trunc(sNum);
-  const sStr = ((sInt < 10) ? Char8.DIGIT_ZERO : Text.EMPTY) +
+  const sStr = ((sInt < 10) ? _Char.DIGIT_ZERO : Text.EMPTY) +
     sNum.toFixed(options?.fractionalSecondDigits);
 
   return `${dStr}°${mStr}′${sStr}″`;
