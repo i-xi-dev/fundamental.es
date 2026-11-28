@@ -20,6 +20,7 @@ import { _isNumber } from "../../_/_type/_number.mts";
 import { _isUint8 } from "../../numerics/_/_type/_uint8.mts";
 import { _NumericException } from "../../numerics/_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
+import { _utf8Encode } from "../../textuals/_utf_8/_func.mts";
 import { Base64 } from "../bytes_encoding/base64/mod.mts";
 import { BigUint, BigUint64 } from "../../numerics/int_x/big_uint/mod.mts";
 import { BinaryString } from "../bytes_encoding/binary_string/mod.mts";
@@ -842,7 +843,7 @@ export namespace ByteSequence {
   ): ByteSequence {
     _assertString(text, "Input");
 
-    const bytes = _Utf8.encode(text, options?.fatal === true);
+    const bytes = _utf8Encode(text, options?.fatal === true);
     return fromBytes(bytes, options);
   }
 

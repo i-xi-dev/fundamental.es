@@ -12,6 +12,7 @@ import { _assertString } from "../../_/_type/_string.mts";
 import { _assertWellFormedString } from "../_/_type_ext/_well_formed_string.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
+import { _utf8Encode } from "../_utf_8/_func.mts";
 
 export {
   _assertNonEmptyString as assertNonEmpty,
@@ -46,7 +47,7 @@ export function fromBytes(
 //TODO fromBytesAsyncIterable
 
 export function toBytes(text: string, options?: Options): TypeAlias.Bytes {
-  return _Utf8.encode(text, options?.allowMalformed !== true);
+  return _utf8Encode(text, options?.allowMalformed !== true);
 }
 
 //TODO from/toBase64

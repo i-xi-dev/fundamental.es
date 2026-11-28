@@ -1,6 +1,7 @@
 import type { TypeAlias } from "../../../_internal/type_alias/mod.mts";
 import { _Error } from "../../../_common/mod.mts";
 import { _Utf8 } from "../../../_internal/_utf8/mod.mts";
+import { _utf8Encode } from "../../_utf_8/_func.mts";
 import { DecoderOptions } from "../decoder_options.mts";
 import { EncoderOptions } from "../encoder_options.mts";
 
@@ -16,5 +17,5 @@ export function _staticEncode(
   text: string,
   options?: EncoderOptions,
 ): TypeAlias.Bytes {
-  return _Utf8.encode(text, options?.fatal === true);
+  return _utf8Encode(text, options?.fatal === true);
 }

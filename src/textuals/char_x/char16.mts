@@ -26,7 +26,7 @@ import { _TextualException } from "../_internal/error/mod.mts";
 //   if (char.isWellFormed() !== true) {
 //     throw _TextualException.mustBeWellFormedString("Input");
 //   }
-//   return _Utf8.encode(char, false);
+//   return _utf8Encode(char, false);
 // }
 
 export function fromUint16(charCode: _uint16): _char16 {

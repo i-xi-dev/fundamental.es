@@ -1,42 +1,42 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { stringifyNumbers } from "../../../_.mts";
-import { _Utf8 } from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
+import { _utf8Encode } from "../../../../src/textuals/text_encoding/_utf8/mod.mts";
 
-Deno.test("_Utf8.encode()", () => {
-  assertStrictEquals(stringifyNumbers(_Utf8.encode("01")), "48,49");
+Deno.test("_utf8Encode()", () => {
+  assertStrictEquals(stringifyNumbers(_utf8Encode("01")), "48,49");
 
   // assertStrictEquals(
-  //   stringifyNumbers(_Utf8.encode("01", { prependBOM: true })),
+  //   stringifyNumbers(_utf8Encode("01", { prependBOM: true })),
   //   "239,187,191,48,49",
   // );
 
   // assertStrictEquals(
   //   stringifyNumbers(
-  //     _Utf8.encode("\uFEFF01", { prependBOM: true }),
+  //     _utf8Encode("\uFEFF01", { prependBOM: true }),
   //   ),
   //   "239,187,191,48,49",
   // );
 
   assertStrictEquals(
-    stringifyNumbers(_Utf8.encode("\uFEFF01")),
+    stringifyNumbers(_utf8Encode("\uFEFF01")),
     "239,187,191,48,49",
   );
 
   assertStrictEquals(
-    stringifyNumbers(_Utf8.encode("01", { fatal: true })),
+    stringifyNumbers(_utf8Encode("01", { fatal: true })),
     "48,49",
   );
 
   assertStrictEquals(
     stringifyNumbers(
-      _Utf8.encode("0\uD800\uDFFF1", { fatal: true }),
+      _utf8Encode("0\uD800\uDFFF1", { fatal: true }),
     ),
     "48,240,144,143,191,49",
   );
 
   assertThrows(
     () => {
-      _Utf8.encode([] as unknown as string);
+      _utf8Encode([] as unknown as string);
     },
     TypeError,
     "Input must be a `string`",
@@ -44,14 +44,14 @@ Deno.test("_Utf8.encode()", () => {
 
   assertThrows(
     () => {
-      _Utf8.encode("0\uD8001", { fatal: true });
+      _utf8Encode("0\uD8001", { fatal: true });
     },
     TypeError,
     "Input must be a string that can be encoded in UTF-8",
   );
 
   assertStrictEquals(
-    stringifyNumbers(_Utf8.encode("0\uD8001")),
+    stringifyNumbers(_utf8Encode("0\uD8001")),
     "48,239,191,189,49",
   );
 });

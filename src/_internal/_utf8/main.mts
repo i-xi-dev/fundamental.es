@@ -26,14 +26,6 @@ export function decode(
   return _getDecoder(fatal, ignoreBom).decode(bytes); //TODO TextDecoderはfatalに関係なく孤立サロゲートはU+FFFDに置換されるので、fatal=trueの時は孤立サロゲートが含まれていないかチェックする必要がある
 }
 
-let _encoder: TextEncoder | null = null;
-function _getEncoder(): TextEncoder {
-  if (_encoder === null) {
-    _encoder = new TextEncoder();
-  }
-  return _encoder;
-}
-
 export function _encodingFailed(
   encodingName: string,
   target: string,
@@ -41,17 +33,4 @@ export function _encodingFailed(
   const msg =
     `${target} must be a string that can be encoded in ${encodingName}`;
   return new TypeError(msg);
-}
-
-export function encode(
-  text: string,
-  fatal: boolean,
-): TypeAlias.Bytes {
-  if (fatal === true) {
-    if (text.isWellFormed() !== true) {
-      throw _encodingFailed(NAME, "Input");
-    }
-  }
-
-  return _getEncoder().encode(text);
 }

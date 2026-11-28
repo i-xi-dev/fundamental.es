@@ -21,9 +21,17 @@ Deno.test("Buffers.ByteSequence.fromText()", () => {
 
   assertThrows(
     () => {
-      Buffers.ByteSequence.fromText("\uDFFF", { fatal: true });
+      Buffers.ByteSequence.fromText(null as unknown as string, { fatal: true });
     },
     TypeError,
-    "Input must be a string that can be encoded in UTF-8",
+    "Input must be a `string`",
+  );
+
+  assertThrows(
+    () => {
+      Buffers.ByteSequence.fromText("\uDFFF", { fatal: true });
+    },
+    RangeError,
+    "Input must be a well-formed `string`",
   );
 });

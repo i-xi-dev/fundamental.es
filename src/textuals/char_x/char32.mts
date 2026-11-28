@@ -8,6 +8,7 @@ import {
 import { _isUint16 } from "../../numerics/_/_type_alias/_uint16.mts";
 import { _TextualException } from "../_internal/error/mod.mts";
 import { _Utf8 } from "../../_internal/_utf8/mod.mts";
+import { _utf8Encode } from "../_utf_8/_func.mts";
 import { RangeException } from "../../_internal/range_error/mod.mts";
 import { Type } from "../../type/mod.mts";
 import { TypeAlias } from "../../_internal/type_alias/mod.mts";
@@ -50,7 +51,7 @@ export function fromBytes(bytes: TypeAlias.Bytes): _char32 {
 // byteLengthは1～4になる
 export function toBytes(char: _char32): TypeAlias.Bytes {
   _assertChar32(char, "Input");
-  return _Utf8.encode(char, false); // 孤立サロゲートは_assertChar32で弾いているので第2引数はfalseで良い
+  return _utf8Encode(char, false); // 孤立サロゲートは_assertChar32で弾いているので第2引数はfalseで良い
 }
 
 //XXX fromUint16s(...charCodes) の方が良いか？
